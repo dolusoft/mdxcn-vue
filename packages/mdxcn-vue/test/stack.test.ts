@@ -43,6 +43,29 @@ const items = () =>
 afterEach(() => vi.restoreAllMocks())
 
 describe('limited VNode adapter', () => {
+  it('reads h array and string item children', () => {
+    expect(
+      stackModel(undefined, [h(Bar, { label: 'bundle' }, [h(Segment, { value: 1 }, 'js')])]),
+    ).toEqual([{ label: 'bundle', segments: [{ label: 'js', value: 1 }] }])
+  })
+  it('collapses multiline prose before slicing rich labels', () => {
+    const model = stackModel(undefined, [
+      h('ul', [h('li', ['\n  ', h('strong', 'marketing\n  site'), ' \n :\n 48 js,\n 22 css  \n'])]),
+    ])
+    expect(model).toEqual([
+      {
+        label: 'marketing site',
+        labelContent: [{ type: 'strong', children: [{ type: 'text', value: 'marketing site' }] }],
+        segments: [
+          { label: 'js', value: 48 },
+          { label: 'css', value: 22 },
+        ],
+      },
+    ])
+    expect(stackModel(undefined, [h('ul', [h('li', '\n simple:\n 1 js\n')])])).toEqual([
+      { label: 'simple', segments: [{ label: 'js', value: 1 }] },
+    ])
+  })
   it('unwraps fragments and drops comments without opening wrappers', () => {
     const wrapped = defineComponent({ setup: () => () => list() })
     expect(flattenNodes([h(Fragment, [h(Comment), items()]), h(wrapped)])).toHaveLength(2)
@@ -125,6 +148,55 @@ describe('limited VNode adapter', () => {
 })
 
 describe('GraphStack rendering', () => {
+  it('accepts string ticks without Vue warnings and normalizes invalid strings', async () => {
+    const warn = vi.spyOn(console, 'warn')
+    const wrapper = mount(GraphStack, { props: { title: 'string', rows, ticks: '5' } })
+    expect(wrapper.get('li[aria-label]').findAll('span[aria-hidden] > span')).toHaveLength(5)
+    await wrapper.setProps({ ticks: 'bad' })
+    expect(wrapper.get('li[aria-label]').findAll('span[aria-hidden] > span')).toHaveLength(24)
+    expect(warn).not.toHaveBeenCalled()
+    wrapper.unmount()
+  })
+  it('caps stagger at 300ms after the seventh row', () => {
+    const delays: number[] = []
+    vi.stubGlobal('matchMedia', () => ({
+      matches: false,
+      addEventListener() {},
+      removeEventListener() {},
+    }))
+    vi.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockReturnValue({
+      top: 2000,
+      bottom: 2020,
+    } as DOMRect)
+    vi.stubGlobal(
+      'IntersectionObserver',
+      class {
+        constructor(private callback: IntersectionObserverCallback) {}
+        observe(target: Element) {
+          this.callback(
+            [{ target, isIntersecting: true } as IntersectionObserverEntry],
+            this as unknown as IntersectionObserver,
+          )
+        }
+        disconnect() {}
+      },
+    )
+    const animate = vi.fn((_: unknown, options: KeyframeAnimationOptions) => {
+      delays.push(Number(options.delay))
+      return { cancel() {}, onfinish: null }
+    })
+    Object.defineProperty(HTMLElement.prototype, 'animate', { configurable: true, value: animate })
+    const wrapper = mount(GraphStack, {
+      props: {
+        title: 'long',
+        rows: Array.from({ length: 9 }, (_, index) => ({ label: String(index), segments: [] })),
+      },
+    })
+    expect(delays).toEqual([0, 50, 100, 150, 200, 250, 300, 300, 300])
+    wrapper.unmount()
+    delete (HTMLElement.prototype as Partial<HTMLElement>).animate
+    vi.unstubAllGlobals()
+  })
   it('renders frame, 24 ticks, legend and accessible summaries', () => {
     const wrapper = mount(GraphStack, { props: { title: 'BUNDLE', rows, palette: 'multi' } })
     expect(wrapper.get('figcaption').text()).toBe('[ BUNDLE ]')

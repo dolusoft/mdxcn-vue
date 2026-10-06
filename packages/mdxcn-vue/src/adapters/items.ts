@@ -1,5 +1,5 @@
 import { Comment, Fragment, Text, createTextVNode, defineComponent, isVNode } from 'vue'
-import type { Component, VNode } from 'vue'
+import type { Component, DefineComponent, VNode } from 'vue'
 import { numberOf } from '../core/stack'
 
 export interface ItemField {
@@ -10,10 +10,13 @@ export type ItemSchema = Record<string, ItemField>
 const schemas = new WeakMap<object, ItemSchema>()
 
 /** Declarative item markers are consumed by the parent, never rendered. */
-export function defineItem(name: string, schema: ItemSchema) {
+export function defineItem<Props extends object = Record<string, unknown>>(
+  name: string,
+  schema: ItemSchema,
+) {
   const component = defineComponent({ name, setup: () => () => null })
   schemas.set(component, schema)
-  return component
+  return component as DefineComponent<Props>
 }
 
 /** Only fragments are transparent. Custom component wrappers stay opaque. */
@@ -26,6 +29,8 @@ export function flattenNodes(input: unknown): VNode[] {
 }
 
 export function childrenOf(node: VNode): VNode[] {
+  if (Array.isArray(node.children) || typeof node.children === 'string')
+    return flattenNodes(node.children)
   if (typeof node.type === 'string' || node.type === Fragment) return flattenNodes(node.children)
   const slots = node.children
   return slots &&

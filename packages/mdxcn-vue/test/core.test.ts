@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest'
 import {
-  GLYPH_SETS,
   intensityClass,
   intensityGlyph,
   intensityLevel,
@@ -157,8 +156,10 @@ describe('paintRow independent fixtures', () => {
 
 describe('motion pure functions', () => {
   it('resolves all named glyph sets and empty-array fallback', () => {
-    for (const name of ['shade', 'ascii', 'hash', 'bar'] as const)
-      expect(resolveGlyphs(name)).toEqual(GLYPH_SETS[name])
+    expect(resolveGlyphs('shade')).toEqual(['·', '░', '▒', '▓', '█'])
+    expect(resolveGlyphs('ascii')).toEqual(['.', '-', '=', '#', '@'])
+    expect(resolveGlyphs('hash')).toEqual(['.', ':', '+', '#', '█'])
+    expect(resolveGlyphs('bar')).toEqual(['▁', '▂', '▃', '▅', '█'])
     expect(resolveGlyphs()).toEqual(['·', '░', '▒', '▓', '█'])
     expect(resolveGlyphs([])).toEqual(['·', '░', '▒', '▓', '█'])
     expect(resolveGlyphs(['x'])).toEqual(['x'])

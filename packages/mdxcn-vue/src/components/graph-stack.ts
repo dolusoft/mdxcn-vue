@@ -4,7 +4,7 @@ import type { PropType } from 'vue'
 import type { StackRow } from '../core/model'
 import type { Glyphs, GraphPalette } from '../core/motion'
 import { isMonoPalette, resolveGlyphs, seriesClass, seriesDim } from '../core/motion'
-import { DEFAULT_STACK_GLYPHS, paintRow, stackLegend } from '../core/stack'
+import { DEFAULT_STACK_GLYPHS, numberOf, paintRow, stackLegend } from '../core/stack'
 import { stackModel } from '../adapters/stack'
 import { vReveal } from '../directives/reveal'
 import { Graph, GraphBody, GraphTick, GraphTrack, renderProse } from './graph-frame'
@@ -13,7 +13,7 @@ export interface GraphStackProps {
   title: string
   rows?: StackRow[] | null
   accent?: string
-  ticks?: number
+  ticks?: number | string
   glyphs?: Glyphs
   palette?: GraphPalette
   corner?: string
@@ -27,7 +27,7 @@ export const GraphStack = defineComponent({
     title: { type: String, required: true },
     rows: Array as PropType<StackRow[] | null>,
     accent: String,
-    ticks: { type: Number, default: 24 },
+    ticks: { type: [Number, String], default: 24 },
     glyphs: [String, Array] as PropType<Glyphs>,
     palette: String as PropType<GraphPalette>,
     corner: String,
@@ -63,27 +63,31 @@ export const GraphStack = defineComponent({
                         row.labelContent ? renderProse(row.labelContent) : row.label,
                       ),
                       h(GraphTrack, null, () =>
-                        paintRow(row.segments, props.ticks, set, props.accent).flatMap(
-                          (piece, pieceIndex) =>
-                            Array.from({ length: piece.count }, (_, index) =>
-                              h(
-                                GraphTick,
-                                {
-                                  key: `${pieceIndex}-${index}`,
-                                  class: seriesClass(props.palette, legend.indexOf(piece.label)),
-                                  style: seriesDim(
-                                    props.palette,
-                                    isMonoPalette(props.palette) ? piece.accent : true,
-                                  ),
-                                },
-                                () => piece.glyph,
-                              ),
+                        paintRow(
+                          row.segments,
+                          numberOf(props.ticks, 24),
+                          set,
+                          props.accent,
+                        ).flatMap((piece, pieceIndex) =>
+                          Array.from({ length: piece.count }, (_, index) =>
+                            h(
+                              GraphTick,
+                              {
+                                key: `${pieceIndex}-${index}`,
+                                class: seriesClass(props.palette, legend.indexOf(piece.label)),
+                                style: seriesDim(
+                                  props.palette,
+                                  isMonoPalette(props.palette) ? piece.accent : true,
+                                ),
+                              },
+                              () => piece.glyph,
                             ),
+                          ),
                         ),
                       ),
                     ],
                   ),
-                  [[vReveal, { delay: rowIndex * 50 }]],
+                  [[vReveal, { delay: Math.min(rowIndex, 6) * 50 }]],
                 ),
               ),
             ),
