@@ -3,6 +3,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { defineComponent, h, withDirectives } from 'vue'
 import { vReveal } from '../src/directives/reveal'
 import type { RevealOptions } from '../src/directives/reveal'
+import { Annotate } from '../src/components/annotate'
+import { Env } from '../src/components/env'
 import { Terminal } from '../src/components/terminal'
 
 let reduced: boolean
@@ -89,6 +91,28 @@ afterEach(() => {
 })
 
 describe('v-reveal lifecycle', () => {
+  it('caps Annotate stagger at 250 ms when the last of 60 notes enters alone', () => {
+    const wrapper = mount(Annotate, { props: { notes: Array(60).fill('note') } })
+    wrappers.push(wrapper)
+    expect(observe).toHaveBeenCalledTimes(61)
+    intersect()
+    expect(animate.mock.calls[0]?.[1].delay).toBe(250)
+    expect(wrapper.findAll('li').at(-1)?.element.style.opacity).toBe('')
+    expect(animate).toHaveBeenCalledTimes(1)
+  })
+  it('caps Env stagger at 200 ms when the last of 60 variables enters alone', () => {
+    const wrapper = mount(Env, {
+      props: {
+        vars: Array.from({ length: 60 }, (_, index) => ({ name: `KEY_${index}`, value: 'value' })),
+      },
+    })
+    wrappers.push(wrapper)
+    expect(observe).toHaveBeenCalledTimes(60)
+    intersect()
+    expect(animate.mock.calls[0]?.[1].delay).toBe(200)
+    expect(wrapper.findAll('li').at(-1)?.element.style.opacity).toBe('')
+    expect(animate).toHaveBeenCalledTimes(1)
+  })
   it('caps Terminal stagger at 200 ms even when the last of 60 lines enters alone', () => {
     const wrapper = mount(Terminal, { props: { text: Array(60).fill('output').join('\n') } })
     wrappers.push(wrapper)
