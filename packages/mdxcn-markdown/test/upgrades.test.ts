@@ -297,7 +297,7 @@ describe('host fallback preservation and registration order', () => {
       expect(props(output)).toMatchObject({
         method: 'POST',
         path: '/api',
-        blocks: [{ label: 'console', code: '$ run' }],
+        blocks: [{ label: 'request', code: '$ run' }],
       })
       expect(warnings).toEqual([])
     },
