@@ -1,13 +1,13 @@
 /* Derived from mdxcn, Copyright (c) 2026 Keshav Bagaade. MIT; see LICENSE. */
 import { defineComponent, h, mergeProps, withDirectives } from 'vue'
 import type { PropType } from 'vue'
-import type { StackRow } from '../core/model'
-import type { Glyphs, GraphPalette } from '../core/motion'
-import { isMonoPalette, resolveGlyphs, seriesClass, seriesDim } from '../core/motion'
-import { DEFAULT_STACK_GLYPHS, numberOf, paintRow, stackLegend } from '../core/stack'
-import { stackModel } from '../adapters/stack'
-import { vReveal } from '../directives/reveal'
-import { Graph, GraphBody, GraphTick, GraphTrack, renderProse } from './graph-frame'
+import type { StackRow } from '../core/model.js'
+import type { Glyphs, GraphPalette } from '../core/motion.js'
+import { isMonoPalette, resolveGlyphs, seriesClass, seriesDim } from '../core/motion.js'
+import { DEFAULT_STACK_GLYPHS, numberOf, paintRow, stackLegend } from '../core/stack.js'
+import { stackModel } from '../adapters/stack.js'
+import { vReveal } from '../directives/reveal.js'
+import { Graph, GraphBody, GraphTick, GraphTrack, renderProse } from './graph-frame.js'
 
 export interface GraphStackProps {
   title: string

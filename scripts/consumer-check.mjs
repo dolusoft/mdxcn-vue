@@ -121,7 +121,7 @@ write(app, 'package.json', {
   name: 'consumer-app',
   private: true,
   type: 'module',
-  dependencies: { ...common, 'mdxcn-vue': vueTar },
+  dependencies: { ...common, 'mdxcn-vue': vueTar, 'mdxcn-markdown': markdownTar, 'markdown-it': '14.1.0' },
 })
 write(app, 'tsconfig.json', tsconfig)
 write(app, 'vite.config.ts', viteConfig)
@@ -147,7 +147,32 @@ write(
   'src/main.ts',
   "import {createApp} from 'vue';import App from './App.vue';import './style.css';createApp(App).mount('#app');",
 )
+write(app, 'src/type-contract.ts', `import {splitLabel} from 'mdxcn-vue/core';
+import type {StackRow} from 'mdxcn-vue/core';
+import type {GraphStackProps} from 'mdxcn-vue';
+import {mdxcnMarkdown,withMdxcn} from 'mdxcn-markdown';
+import type {MdxcnOptions} from 'mdxcn-markdown';
+import MarkdownIt from 'markdown-it';
+const row:StackRow={label:splitLabel('Web: 1 js').label,segments:[{label:'js',value:1}]};
+const graph:GraphStackProps={rows:[row]};
+const options:MdxcnOptions={components:['Terminal']};
+new MarkdownIt().use(mdxcnMarkdown).use(withMdxcn,options);
+// @ts-expect-error Unknown fields must not silently become any.
+row.nonexistent=1;
+// @ts-expect-error The root entry must preserve prop types.
+graph.rows='wrong';
+// @ts-expect-error Markdown declarations must preserve component names.
+options.components=['Missing'];
+// @ts-expect-error Subpath functions must preserve their return types.
+splitLabel('Web').nonexistent;
+`)
+write(app, 'tsconfig.nodenext.json', {
+  compilerOptions: {...tsconfig.compilerOptions, module:'NodeNext',moduleResolution:'NodeNext'},
+  include:['src/type-contract.ts'],
+})
 run(['install'], app)
+run(['exec','tsc','--noEmit','-p','tsconfig.nodenext.json'],app)
+console.log('TYPE CONTRACT PASSED: NodeNext, skipLibCheck=false; invalid fields rejected')
 run(['exec', 'vue-tsc', '--noEmit'], app)
 run(['exec', 'vite', 'build'], app)
 const fullBytes = files(join(app, 'dist/assets'), '.js').reduce(

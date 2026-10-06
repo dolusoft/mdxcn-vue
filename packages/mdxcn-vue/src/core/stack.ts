@@ -1,5 +1,5 @@
 /* Derived from mdxcn, Copyright (c) 2026 Keshav Bagaade. MIT; see LICENSE. */
-import type { BarRow, SegmentRow, StackRow } from './model'
+import type { BarRow, SegmentRow, StackRow } from './model.js'
 
 export const DEFAULT_STACK_GLYPHS = ['█', '▓', '▒', '░', '#', '=', '+', '-'] as const
 

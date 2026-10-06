@@ -1,10 +1,10 @@
 /* Derived from mdxcn, Copyright (c) 2026 Keshav Bagaade. MIT; see LICENSE. */
 import { defineComponent, h, isVNode, mergeProps, withDirectives } from 'vue'
 import type { PropType, VNode } from 'vue'
-import type { TableCell, TableData, GraphAlign } from '../core/table'
-import { tableModel } from '../adapters/table'
-import { vReveal } from '../directives/reveal'
-import { Graph, GraphRule, renderProse } from './graph-frame'
+import type { TableCell, TableData, GraphAlign } from '../core/table.js'
+import { tableModel } from '../adapters/table.js'
+import { vReveal } from '../directives/reveal.js'
+import { Graph, GraphRule, renderProse } from './graph-frame.js'
 
 export interface GraphTableProps extends TableData<VNode> {
   title: string

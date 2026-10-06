@@ -1,7 +1,7 @@
 /* Derived from mdxcn, Copyright (c) 2026 Keshav Bagaade. MIT; see LICENSE. */
 import { Fragment, defineComponent, h, mergeProps, useId } from 'vue'
 import type { PropType, VNode } from 'vue'
-import type { ProseNode } from '../core/model'
+import type { ProseNode } from '../core/model.js'
 
 function host(name: string, tag: string, classes: string, hidden = false) {
   return defineComponent({

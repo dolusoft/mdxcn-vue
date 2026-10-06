@@ -1,14 +1,14 @@
 /* Derived from mdxcn, Copyright (c) 2026 Keshav Bagaade. MIT; see LICENSE. */
 import { defineComponent, h, mergeProps, withDirectives } from 'vue'
 import type { PropType } from 'vue'
-import { formatAgo, formatClock, formatHms, parseInstant } from '../core/clock'
-import { splitDash } from '../core/markdown'
-import type { GraphPalette } from '../core/motion'
-import { toneClass } from '../core/motion'
-import { textOf } from '../adapters/items'
-import { useGraphNow } from '../composables/graph-now'
-import { vReveal } from '../directives/reveal'
-import { Graph, GraphBody } from './graph-frame'
+import { formatAgo, formatClock, formatHms, parseInstant } from '../core/clock.js'
+import { splitDash } from '../core/markdown.js'
+import type { GraphPalette } from '../core/motion.js'
+import { toneClass } from '../core/motion.js'
+import { textOf } from '../adapters/items.js'
+import { useGraphNow } from '../composables/graph-now.js'
+import { vReveal } from '../directives/reveal.js'
+import { Graph, GraphBody } from './graph-frame.js'
 
 export type TimerKind = 'elapsed' | 'ago' | 'clock'
 export interface GraphTimerProps {

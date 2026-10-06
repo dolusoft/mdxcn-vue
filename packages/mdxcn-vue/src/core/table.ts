@@ -1,7 +1,7 @@
 /* Derived from mdxcn, Copyright (c) 2026 Keshav Bagaade. MIT; see LICENSE. */
-import type { ProseNode } from './model'
-import { proseText } from './model'
-import { words } from './markdown'
+import type { ProseNode } from './model.js'
+import { proseText } from './model.js'
+import { words } from './markdown.js'
 
 export type GraphAlign = 'left' | 'right'
 export type TableCell<Rich = never> =

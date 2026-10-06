@@ -1,7 +1,7 @@
 // Public entry of `mdxcn-vue`; internal helpers belong to the core subpath.
-export type { ProseNode, StackSegment, StackRow, SegmentRow, BarRow } from './core/model'
-export { proseText, sliceProse } from './core/model'
-export type { GlyphSetName, Glyphs, GraphPalette } from './core/motion'
+export type { ProseNode, StackSegment, StackRow, SegmentRow, BarRow } from './core/model.js'
+export { proseText, sliceProse } from './core/model.js'
+export type { GlyphSetName, Glyphs, GraphPalette } from './core/motion.js'
 export {
   DIM_OPACITY,
   GLYPH_SETS,
@@ -16,8 +16,8 @@ export {
   seriesClass,
   seriesDim,
   toneClass,
-} from './core/motion'
-export type { Painted } from './core/stack'
+} from './core/motion.js'
+export type { Painted } from './core/stack.js'
 export {
   DEFAULT_STACK_GLYPHS,
   numberOf,
@@ -27,8 +27,8 @@ export {
   paintRow,
   stackLegend,
   resolveStackRows,
-} from './core/stack'
-export type { ItemField, ItemSchema } from './adapters/items'
+} from './core/stack.js'
+export type { ItemField, ItemSchema } from './adapters/items.js'
 export {
   defineItem,
   flattenNodes,
@@ -36,8 +36,8 @@ export {
   textOf,
   normalizeItemProps,
   childItems,
-} from './adapters/items'
-export type { BarProps, SegmentProps } from './adapters/stack'
+} from './adapters/items.js'
+export type { BarProps, SegmentProps } from './adapters/stack.js'
 export {
   Bar,
   Segment,
@@ -46,9 +46,9 @@ export {
   readStackList,
   readStackItems,
   stackModel,
-} from './adapters/stack'
-export type { RevealOptions } from './directives/reveal'
-export { vReveal } from './directives/reveal'
+} from './adapters/stack.js'
+export type { RevealOptions } from './directives/reveal.js'
+export { vReveal } from './directives/reveal.js'
 export {
   Graph,
   GraphBody,
@@ -61,12 +61,12 @@ export {
   GraphProse,
   graphProseClass,
   renderProse,
-} from './components/graph-frame'
-export type { GraphStackProps } from './components/graph-stack'
-export { GraphStack } from './components/graph-stack'
-export type { GraphAlign, TableCell, TableModel, TableData, TableItems } from './core/table'
-export { cellText, splitCells, resolveTable, toLabeledTable } from './core/table'
-export type { RowProps, CellProps, MarkdownTable } from './adapters/table'
+} from './components/graph-frame.js'
+export type { GraphStackProps } from './components/graph-stack.js'
+export { GraphStack } from './components/graph-stack.js'
+export type { GraphAlign, TableCell, TableModel, TableData, TableItems } from './core/table.js'
+export { cellText, splitCells, resolveTable, toLabeledTable } from './core/table.js'
+export type { RowProps, CellProps, MarkdownTable } from './adapters/table.js'
 export {
   Head,
   Row,
@@ -77,14 +77,14 @@ export {
   tableOf,
   labeledTable,
   tableModel,
-} from './adapters/table'
-export type { GraphTableProps } from './components/graph-table'
-export { GraphTable } from './components/graph-table'
-export type { EndpointParam, EndpointBlock, EndpointData } from './adapters/endpoint'
-export { endpointModel } from './adapters/endpoint'
-export type { EndpointProps } from './components/endpoint'
-export { Endpoint } from './components/endpoint'
-export { parseInstant, formatHms, formatAgo, formatClock } from './core/clock'
-export { useGraphNow } from './composables/graph-now'
-export type { TimerKind, GraphTimerProps } from './components/graph-timer'
-export { GraphTimer } from './components/graph-timer'
+} from './adapters/table.js'
+export type { GraphTableProps } from './components/graph-table.js'
+export { GraphTable } from './components/graph-table.js'
+export type { EndpointParam, EndpointBlock, EndpointData } from './adapters/endpoint.js'
+export { endpointModel } from './adapters/endpoint.js'
+export type { EndpointProps } from './components/endpoint.js'
+export { Endpoint } from './components/endpoint.js'
+export { parseInstant, formatHms, formatAgo, formatClock } from './core/clock.js'
+export { useGraphNow } from './composables/graph-now.js'
+export type { TimerKind, GraphTimerProps } from './components/graph-timer.js'
+export { GraphTimer } from './components/graph-timer.js'

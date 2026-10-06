@@ -1,12 +1,12 @@
 import type { VNode } from 'vue'
 import { Text } from 'vue'
-import type { BarRow, ProseNode } from '../core/model'
-import { proseText, sliceProse, normalizeProseWhitespace } from '../core/model'
-import { numberOf, splitLabel, segmentsFromText, resolveStackRows } from '../core/stack'
-import type { StackRow } from '../core/model'
-import { childItems, childrenOf, defineItem, flattenNodes, textOf } from './items'
+import type { BarRow, ProseNode } from '../core/model.js'
+import { proseText, sliceProse, normalizeProseWhitespace } from '../core/model.js'
+import { numberOf, splitLabel, segmentsFromText, resolveStackRows } from '../core/stack.js'
+import type { StackRow } from '../core/model.js'
+import { childItems, childrenOf, defineItem, flattenNodes, textOf } from './items.js'
 
-export { normalizeProseWhitespace } from '../core/model'
+export { normalizeProseWhitespace } from '../core/model.js'
 
 export interface BarProps {
   label?: string

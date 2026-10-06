@@ -1,9 +1,9 @@
 /* Derived from mdxcn, Copyright (c) 2026 Keshav Bagaade. MIT; see LICENSE. */
 import type { VNode } from 'vue'
 import { normalizeClass } from 'vue'
-import type { ProseNode } from '../core/model'
-import { childrenOf, flattenNodes, textOf } from './items'
-import { hostCells, rowsIn } from './table'
+import type { ProseNode } from '../core/model.js'
+import { childrenOf, flattenNodes, textOf } from './items.js'
+import { hostCells, rowsIn } from './table.js'
 
 export interface EndpointParam {
   name: string

@@ -1,13 +1,13 @@
 /* Derived from mdxcn, Copyright (c) 2026 Keshav Bagaade. MIT; see LICENSE. */
 import { defineComponent, h, isVNode, mergeProps, withDirectives } from 'vue'
 import type { PropType, VNode } from 'vue'
-import type { ProseNode } from '../core/model'
-import type { GraphPalette } from '../core/motion'
-import { toneClass } from '../core/motion'
-import type { EndpointData, EndpointParam } from '../adapters/endpoint'
-import { endpointModel } from '../adapters/endpoint'
-import { vReveal } from '../directives/reveal'
-import { Graph, GraphBody, GraphProse, GraphRule, renderProse } from './graph-frame'
+import type { ProseNode } from '../core/model.js'
+import type { GraphPalette } from '../core/motion.js'
+import { toneClass } from '../core/motion.js'
+import type { EndpointData, EndpointParam } from '../adapters/endpoint.js'
+import { endpointModel } from '../adapters/endpoint.js'
+import { vReveal } from '../directives/reveal.js'
+import { Graph, GraphBody, GraphProse, GraphRule, renderProse } from './graph-frame.js'
 
 export interface EndpointProps extends EndpointData {
   title?: string

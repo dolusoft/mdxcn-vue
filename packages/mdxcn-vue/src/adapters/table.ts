@@ -1,12 +1,12 @@
 /* Derived from mdxcn, Copyright (c) 2026 Keshav Bagaade. MIT; see LICENSE. */
 import type { VNode } from 'vue'
 import { normalizeStyle } from 'vue'
-import type { ProseNode } from '../core/model'
-import { normalizeProseWhitespace, proseText } from '../core/model'
-import type { GraphAlign, TableCell, TableData, TableModel } from '../core/table'
-import { cellText, resolveTable, splitCells, toLabeledTable } from '../core/table'
-import { childItems, childrenOf, defineItem, flattenNodes, textOf } from './items'
-import { readProse } from './stack'
+import type { ProseNode } from '../core/model.js'
+import { normalizeProseWhitespace, proseText } from '../core/model.js'
+import type { GraphAlign, TableCell, TableData, TableModel } from '../core/table.js'
+import { cellText, resolveTable, splitCells, toLabeledTable } from '../core/table.js'
+import { childItems, childrenOf, defineItem, flattenNodes, textOf } from './items.js'
+import { readProse } from './stack.js'
 
 export interface RowProps {
   label?: string
