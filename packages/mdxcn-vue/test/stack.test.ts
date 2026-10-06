@@ -80,9 +80,7 @@ describe('limited VNode adapter', () => {
     ]
     expect(stackModel(rows, [])).toEqual(expected)
     expect(stackModel(undefined, [items()])).toEqual(expected)
-    expect(
-      stackModel(undefined, [list()]).map((row) => ({ label: row.label, segments: row.segments })),
-    ).toEqual(expected)
+    expect(stackModel(undefined, [list()])).toEqual(expected)
   })
   it('prioritizes rows, then lists, then items, including empty rows', () => {
     const children = [list(), h(Bar, { label: 'ignored' })]

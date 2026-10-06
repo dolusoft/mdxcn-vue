@@ -46,9 +46,10 @@ export function readStackList(nodes: readonly VNode[]): BarRow[] {
           const text = proseText(prose)
           const { label, rest } = splitLabel(text)
           const start = text.indexOf(label)
+          const labelContent = sliceProse(prose, start, start + label.length)
           return {
             label,
-            labelContent: sliceProse(prose, start, start + label.length),
+            ...(labelContent.some((node) => node.type !== 'text') ? { labelContent } : {}),
             segments: segmentsFromText(rest),
           }
         }),

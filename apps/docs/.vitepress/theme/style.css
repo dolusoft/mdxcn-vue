@@ -1,1 +1,6 @@
 @import 'tailwindcss';
+@import 'mdxcn-vue/theme.css';
+
+.vp-doc .graph-frame {
+  margin: 2rem 0;
+}
