@@ -14,7 +14,7 @@
 
 <GraphTable title="SPACE">
 
-| Name | Count |
+| First   name | Count |
 | --- | ---: |
 | A   *B  C*   D | 2 |
 
@@ -22,7 +22,7 @@
 
 <GraphTable title="SPACE" v-if="true">
 
-| Name | Count |
+| First   name | Count |
 | --- | ---: |
 | A   *B  C*   D | 2 |
 

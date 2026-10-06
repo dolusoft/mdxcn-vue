@@ -186,7 +186,7 @@ export function tokensToProps(
           'left' | 'right' | undefined,
     )
     return {
-      headers: head.children.map((block) => proseText(trim(content(block)))),
+      headers: head.children.map((block) => proseText(normalizeProseWhitespace(content(block)))),
       rows: (total ? rows.slice(0, -1) : rows).map((row) => row.children.map(cell)),
       ...(total && last ? { footer: last.children.map(cell) } : {}),
       ...(align.some(Boolean)

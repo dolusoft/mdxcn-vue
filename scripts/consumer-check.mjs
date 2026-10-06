@@ -12,7 +12,8 @@ const root = mkdtempSync(join(scratch, 'consumer-'))
 const pnpmCli = process.env.npm_execpath
 assert.ok(pnpmCli, 'Run this script with pnpm consumer:check')
 function run(args, cwd, capture = false) {
-  const native = pnpmCli.endsWith('.exe')
+  // pnpm 12 can expose a native executable (Windows .exe / Linux no suffix).
+  const native = !/\.[cm]?js$/i.test(pnpmCli)
   const result = spawnSync(
     native ? pnpmCli : process.execPath,
     native ? args : [pnpmCli, ...args],

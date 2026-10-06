@@ -105,7 +105,10 @@ test('boundary inputs independently match expected values and both paths produce
   const items = [...doc.querySelectorAll('figure')]
   assert.equal(items.length, 8)
   for (const index of [0, 1]) assert.equal(items[index].querySelector('li[aria-label]').getAttribute('aria-label'), 'Web 🎉 & app: js 2, css 1')
-  for (const index of [2, 3]) assert.deepEqual(texts(items[index], 'tbody td'), ['A B C D', '2'])
+  for (const index of [2, 3]) {
+    assert.deepEqual(texts(items[index], 'th[scope]'), ['First name', 'Count'])
+    assert.deepEqual(texts(items[index], 'tbody td'), ['A B C D', '2'])
+  }
   for (const index of [4, 5]) {
     assert.deepEqual(texts(items[index], 'pre code'), ['one\ntwo\nthree', 'value', 'value', 'value', 'unmarked'])
     assert.deepEqual(texts(items[index], '.text-graph-muted'), ['js', 'ts', 'cpp', 'c++'])

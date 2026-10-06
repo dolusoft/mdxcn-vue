@@ -29,8 +29,9 @@ const text = (value: string) => ({ type: 'text', value })
 describe('raw tokens to independent expected models', () => {
   it('normalizes table whitespace across rich inline boundaries', () => {
     expect(
-      tokensToProps('GraphTable', raw('| Name |\n| --- |\n| A   *B  C*   D |\n'), md),
+      tokensToProps('GraphTable', raw('| First   name |\n| --- |\n| A   *B  C*   D |\n'), md),
     ).toMatchObject({
+      headers: ['First name'],
       rows: [
         [
           [
