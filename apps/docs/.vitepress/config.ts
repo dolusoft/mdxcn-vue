@@ -7,7 +7,7 @@ export default defineConfig({
   title: 'mdxcn-vue',
   description: 'Vue 3 port of mdxcn',
   themeConfig: {
-    sidebar: [{ text: 'Components', items: [{ text: 'GraphStack', link: '/components/graph-stack' }, { text: 'GraphTable', link: '/components/graph-table' }] }],
+    sidebar: [{ text: 'Components', items: [{ text: 'GraphStack', link: '/components/graph-stack' }, { text: 'GraphTable', link: '/components/graph-table' }, { text: 'Endpoint', link: '/components/endpoint' }, { text: 'GraphTimer', link: '/components/graph-timer' }] }],
   },
   vite: {
     // Vue DevTools: in-page overlay plus standalone UI at `/__devtools__/`.

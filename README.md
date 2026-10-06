@@ -4,8 +4,9 @@ Vue 3 port of [mdxcn](https://github.com/shadcn-labs/mdxcn) — ASCII-style grap
 prose components (tables, bars, timelines, invoices, terminals, ...) that can be fed
 by typed props, item components or Markdown.
 
-> **Status:** work in progress. Phase 2B-1 includes the shared frame, typed core,
-> `v-reveal`, `GraphStack` and `GraphTable`; the remaining components are still pending.
+> **Status:** work in progress. Phase 2B-2 includes the shared frame, typed core,
+> `v-reveal`, `GraphStack`, `GraphTable`, `Endpoint` and `GraphTimer`;
+> the remaining components and Markdown compiler are still pending.
 
 ## Upstream
 
@@ -95,6 +96,34 @@ tables or `Head`/`Row`/`Foot`/`Cell` items. Each field chooses data before items
 before Markdown; empty `Head` and `Foot` items still win. Shared `tableOf` and
 `labeledTable` readers are available for future table-family components.
 See the [three input forms and upstream datasets](apps/docs/components/graph-table.md).
+
+Typed row/footer cells also accept VNodes. Plain headers and alignment strings
+split on whitespace and commas. The table and keyboard-focusable scroll region
+share the figcaption's accessible name.
+
+## Endpoint
+
+```vue
+<Endpoint method="POST" path="/v1/graphs"
+  :params="[{ name: 'slug', type: 'string', required: true }]"
+  :blocks="[{ label: 'json', code: '{ &quot;ok&quot;: true }' }]" />
+```
+
+Import `Endpoint` from `mdxcn-vue`. It reads typed data or direct host paragraphs,
+parameter tables and `pre > code` blocks. Code/link descriptions remain rich;
+each prop selects its input independently. See the
+[upstream example and input contract](apps/docs/components/endpoint.md).
+
+## GraphTimer
+
+```vue
+<GraphTimer title="LOCAL" kind="clock" />
+```
+
+Import `GraphTimer` from `mdxcn-vue`. The `elapsed`, `ago` and `clock` modes share
+a deterministic SSR/first-client placeholder and update once per second after
+mount. `useGraphNow` clears its interval on unmount. See the
+[three upstream examples](apps/docs/components/graph-timer.md) for instant and caption inputs.
 
 ## License
 

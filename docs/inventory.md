@@ -150,6 +150,21 @@ Bunlar onaylanmış hedef sözleşmelerdir; Faz 1’de henüz bileşen uygulamas
 6. React `motion` yerine Vue `v-reveal` + WAAPI kullanılacak; `0.4` opacity ve glif gecikmeleri korunacak. Markdown derleme zamanı adaptörü ve runtime adaptörü ayrı tutulacak; framework iç API çağrıları taşınmayacak.
 7. `GraphTable` yatay kaydırma kabı `tabindex="0"`, `role="region"` ve `aria-labelledby` taşır. Hem bu bölge hem `<table>` aynı `figcaption` kimliğiyle adlandırılır; klavye erişimi upstream'den bilinçli iyileştirmedir.
 
+## Faz 2B-2 uygulama durumu
+
+`Endpoint` ve `GraphTimer` üst tablodaki sabit kaynaklara göre Vue 3 için uygulandı.
+`Endpoint` her alanı bağımsız seçer; ilk doğrudan host tabloyu kendi parametre
+kurallarıyla okur. Ortak `rowsIn`/`hostCells` VNode okuyucuları tekrar kullanılır;
+`GraphTable` toplam satırı algılaması parametrelere uygulanmaz. Açıklama paragrafları,
+parametrelerdeki code/link içeriği ve request/response boşlukları korunur. VitePress
+fence çıktısının `div` kapsayıcısı upstream doğrudan `pre` sözleşmesinde yoktur;
+docs örneğinde `pre > code` veya `blocks` kullanılır. Markdown derleyicisi kapsam dışıdır.
+
+`GraphTimer` ve `useGraphNow` ilk render sırasında upstream gibi `null` saat kullanır;
+SSR ile ilk istemci render aynı placeholder değerini üretir. Mount sonrası saniyelik
+interval başlar, unmount sırasında temizlenir. Görünmez sekmede interval devam eder;
+upstream davranışı korunur. Saat testlerinde `TZ=UTC` ve sahte saat sabittir.
+
 ## Lisans ve telif
 
 [Upstream LICENSE](https://github.com/shadcn-labs/mdxcn/blob/16d817a/LICENSE) MIT; özgün satır `Copyright (c) 2026 Keshav Bagaade`. Repo ve iki yayımlanabilir paketin `LICENSE` dosyaları bu bildirimi, izin metnini ve Dolusoft port bildirimini içerir. `package.json` içindeki `files` alanı lisansı npm paketine alır. Registry kaynakları üretildiğinde de bildirim ve izin metni dağıtılmalıdır.

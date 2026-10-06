@@ -73,6 +73,10 @@ test('actual VitePress rules lose to graph resets and generated layered prose ut
   assert.equal(resolve(a, 'text-underline-offset').layer, 'utilities')
   assert.equal(resolve(code, 'color').layer, 'utilities')
   assert.equal(resolve(code, 'font-weight').layer, 'utilities')
+  assert.equal(resolve(prose.querySelector('p'), 'margin').layer, 'utilities')
+  const timerHtml = readFileSync(new URL('../.vitepress/dist/components/graph-timer.html', import.meta.url), 'utf8')
+  const timer = new JSDOM(timerHtml).window.document.querySelector('figure .tabular-nums')
+  assert.equal(resolve(timer, 'line-height').layer, 'utilities')
   assert.equal(resolve(a, 'color', true).layer, 'utilities')
   assert.equal(resolve(code, 'color', true).layer, 'utilities')
   for (const property of ['padding', 'background-color', 'border-radius', 'font-size']) {

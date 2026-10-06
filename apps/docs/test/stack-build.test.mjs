@@ -1,6 +1,7 @@
 import { readFileSync, readdirSync, mkdirSync, mkdtempSync, writeFileSync, rmSync, cpSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { tmpdir } from 'node:os'
 import { compile } from '@tailwindcss/node'
 import { Scanner } from '@tailwindcss/oxide'
 import assert from 'node:assert/strict'
@@ -36,12 +37,17 @@ test('built CSS contains graph rules and the docs font', () => {
 test('isolated consumer discovers package classes only through @source', async () => {
   const scratch = fileURLToPath(new URL('../../../../tmp/mdxcn-vue/', import.meta.url))
   mkdirSync(scratch, { recursive: true })
-  const fixture = mkdtempSync(join(scratch, 'source-consumer-'))
+  // Honor the workspace scratch policy while exercising the platform temp API.
+  const tempKey = process.platform === 'win32' ? 'TEMP' : 'TMPDIR'
+  const previousTemp = process.env[tempKey]
+  process.env[tempKey] = scratch
+  let fixture
   const distributed = dirname(fileURLToPath(import.meta.resolve('mdxcn-vue/theme.css')))
   const css = '@import "tailwindcss" source(none);\n@import "mdxcn-vue/theme.css";'
-  writeFileSync(join(fixture, 'input.css'), css)
-  writeFileSync(join(fixture, 'index.html'), '<main>Consumer fixture</main>')
   try {
+    fixture = mkdtempSync(join(tmpdir(), 'source-consumer-'))
+    writeFileSync(join(fixture, 'input.css'), css)
+    writeFileSync(join(fixture, 'index.html'), '<main>Consumer fixture</main>')
     for (const registered of [true, false]) {
       const target = registered ? distributed : join(fixture, 'control')
       if (!registered) {
@@ -66,6 +72,8 @@ test('isolated consumer discovers package classes only through @source', async (
       assert.equal(candidates.includes('text-graph-muted'), registered)
     }
   } finally {
-    rmSync(fixture, { recursive: true, force: true })
+    if (fixture) rmSync(fixture, { recursive: true, force: true })
+    if (previousTemp === undefined) delete process.env[tempKey]
+    else process.env[tempKey] = previousTemp
   }
 })

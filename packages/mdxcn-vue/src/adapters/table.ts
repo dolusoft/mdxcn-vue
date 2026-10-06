@@ -53,9 +53,9 @@ export function alignsOf(nodes: readonly VNode[] = []): GraphAlign[] | undefined
   )
 }
 
-const rowsIn = (section?: VNode) =>
+export const rowsIn = (section?: VNode) =>
   section ? childrenOf(section).filter((node) => node.type === 'tr') : []
-const hostCells = (row: VNode) =>
+export const hostCells = (row: VNode) =>
   childrenOf(row).filter((node) => node.type === 'th' || node.type === 'td')
 function isTotal(row: VNode): boolean {
   const first = hostCells(row)[0]

@@ -31,5 +31,6 @@ export default defineConfig({
   },
   test: {
     environment: 'jsdom',
+    env: { TZ: 'UTC' },
   },
 })
