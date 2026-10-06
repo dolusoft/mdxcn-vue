@@ -1,0 +1,31 @@
+{
+  "name": "@mdxcn-vue/docs",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vitepress dev",
+    "build": "vitepress build",
+    "preview": "vitepress preview",
+    "test": "echo \"docs: no unit tests yet\"",
+    "typecheck": "vue-tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "mdxcn-vue": "workspace:*"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "4.3.3",
+    "@vitejs/devtools": "0.7.6",
+    "@vitejs/devtools-oxc": "0.7.6",
+    "@vitejs/devtools-rolldown": "0.7.6",
+    "@vitejs/devtools-vite": "0.7.6",
+    "@vitejs/devtools-vitest": "0.7.6",
+    "tailwindcss": "4.3.3",
+    "typescript": "6.0.3",
+    "vite": "8.3.3",
+    "vite-plugin-vue-devtools": "8.2.1",
+    "vitepress": "2.0.0-alpha.20",
+    "vue": "3.5.43",
+    "vue-tsc": "3.3.12"
+  }
+}

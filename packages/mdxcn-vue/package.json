@@ -1,0 +1,41 @@
+{
+  "name": "mdxcn-vue",
+  "version": "0.0.0",
+  "description": "Vue 3 port of mdxcn: ASCII-style graph and prose components.",
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "files": [
+    "dist",
+    "LICENSE"
+  ],
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "vite build && vue-tsc -p tsconfig.build.json",
+    "test": "vitest run",
+    "typecheck": "vue-tsc -p tsconfig.json --noEmit"
+  },
+  "peerDependencies": {
+    "vue": "^3.5.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "6.0.9",
+    "@vue/test-utils": "2.5.1",
+    "jsdom": "30.1.2",
+    "typescript": "6.0.3",
+    "vite": "8.3.3",
+    "vitest": "5.0.3",
+    "vue": "3.5.43",
+    "vue-tsc": "3.3.12"
+  }
+}
