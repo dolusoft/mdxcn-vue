@@ -52,7 +52,7 @@
   padding: 0;
 }
 .graph-frame.graph-frame li + li {
-  margin: 0;
+  margin: revert-layer;
 }
 
 /* Discard the unlayered host values so layered utilities and preflight win. */

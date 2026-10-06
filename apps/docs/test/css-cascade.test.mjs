@@ -64,11 +64,35 @@ test('actual VitePress rules lose to graph resets and generated layered prose ut
   const li = prose.querySelector('li + li')
   const a = prose.querySelector('a[data-cascade]')
   const code = a.querySelector('code')
-  for (const [element, property] of [[ul, 'padding'], [ul, 'margin'], [ul, 'list-style'], [li, 'margin']])
+  for (const [element, property] of [[ul, 'padding'], [ul, 'margin'], [ul, 'list-style']])
     assert.match(resolve(element, property).selector, /graph-frame/)
   assert.equal(resolve(li, 'padding-left').layer, 'utilities')
   assert.equal(resolve(ul, 'padding-left').layer, '')
-  assert.match(resolve(li, 'margin-top').selector, /graph-frame/)
+  assert.equal(resolve(li, 'margin-top').layer, 'base')
+  assert.equal(resolve(li, 'margin-top').value, '0')
+  // Real compiled Chat utilities must survive the unlayered host reset.
+  for (const [utility, amount] of [['mt-4', '4'], ['mt-1', '1']]) {
+    li.className = utility
+    const winner = resolve(li, 'margin-top')
+    assert.equal(winner.layer, 'utilities')
+    assert.equal(winner.value, amount === '1' ? 'var(--spacing)' : 'calc(var(--spacing) * 4)')
+  }
+  li.className = ''
+  for (const slug of ['steps', 'changelog', 'decision', 'env', 'keys', 'graph-stack', 'graph-score', 'graph-rank', 'graph-funnel', 'graph-stat', 'graph-slope', 'graph-bullet']) {
+    const page = new JSDOM(readFileSync(new URL(`../.vitepress/dist/components/${slug}.html`, import.meta.url), 'utf8')).window.document
+    const siblings = [...page.querySelectorAll('figure li + li')]
+    if (slug === 'keys') {
+      assert.equal(page.querySelectorAll('figure li').length, 0)
+      assert.ok(page.querySelectorAll('figure table tr').length > 1)
+      continue
+    }
+    assert.ok(siblings.length, `${slug} needs adjacent list rows`)
+    for (const row of siblings) {
+      const winner = resolve(row, 'margin-top')
+      assert.equal(winner.layer, 'base', `${slug} must retain preflight spacing`)
+      assert.equal(winner.value, '0')
+    }
+  }
   assert.equal(resolve(a, 'color').layer, 'utilities')
   assert.equal(resolve(a, 'text-underline-offset').layer, 'utilities')
   assert.equal(resolve(code, 'color').layer, 'utilities')
