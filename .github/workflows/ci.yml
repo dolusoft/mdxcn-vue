@@ -49,16 +49,23 @@ jobs:
         if: runner.os == 'Windows'
         shell: pwsh
         run: |
-          $nodeDirectory = Split-Path (Get-Command node).Source
-          foreach ($name in @('corepack', 'corepack.cmd', 'corepack.ps1')) {
-            $launcher = Join-Path $nodeDirectory $name
+          $commands = Get-Command corepack -All -ErrorAction SilentlyContinue
+          foreach ($command in $commands) {
+            $launcher = $command.Source
+            if ([IO.Path]::GetFileName($launcher) -notin @('corepack', 'corepack.cmd', 'corepack.ps1')) {
+              throw "Unexpected Corepack launcher: $launcher"
+            }
             if (Test-Path -LiteralPath $launcher) {
               Remove-Item -LiteralPath $launcher
             }
           }
-          if (Get-Command corepack -ErrorAction SilentlyContinue) {
+          # Hosted runners can expose Corepack from a second Node installation.
+          & where.exe corepack
+          if ($LASTEXITCODE -eq 0) {
             throw 'Corepack is still on PATH; native pnpm 12 must be used.'
           }
+          $global:LASTEXITCODE = 0
+          Add-Content -LiteralPath $env:GITHUB_PATH -Value $env:PNPM_HOME
       - run: pnpm install --frozen-lockfile
       - run: pnpm --filter mdxcn-vue --filter mdxcn-markdown build
       - run: pnpm consumer:check
