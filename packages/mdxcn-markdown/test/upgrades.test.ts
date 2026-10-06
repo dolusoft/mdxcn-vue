@@ -116,10 +116,10 @@ describe('independent upstream Markdown upgrade fixtures', () => {
   })
   it('escapes native attribution and component bindings while retaining rich quote bodies', () => {
     const { md } = parser()
-    const output = md.render('> **Rich**\n> — Ada & Bob, Book <name>')
+    const output = md.render('> **Rich**\n> — Ada & Bob, Book &lt;name&gt;')
     expect(output).toContain('<strong>Rich</strong>')
     expect(output).toContain('<cite>Ada &amp; Bob</cite>')
-    expect(output).not.toContain('<name>')
+    expect(output).toContain('<footer>— <cite>Ada &amp; Bob</cite>, Book &lt;name&gt;</footer>')
   })
   it('allows every feature to be disabled independently', () => {
     const { md, warnings } = parser({

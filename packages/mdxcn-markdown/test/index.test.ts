@@ -43,11 +43,11 @@ describe('raw tokens to independent expected models', () => {
       ],
     })
   })
-  it.each(['js{1,3}', 'ts:line-numbers', 'cpp{1}', 'c++'])(
+  it.each([['js{1,3}', 'js'], ['ts:line-numbers', 'ts'], ['cpp{1}', 'cpp'], ['c++', 'c++']])(
     'reads the fence language from %s',
-    (info) => {
+    (info, label) => {
       expect(tokensToProps('Endpoint', raw(`\`\`\`${info}\nvalue\n\`\`\`\n`), md)).toMatchObject({
-        blocks: [{ label: info.match(/^[^\s:{[]+/)?.[0], code: 'value' }],
+        blocks: [{ label, code: 'value' }],
       })
     },
   )
@@ -171,15 +171,13 @@ describe('component block plugin', () => {
     expect(md.renderer.render(tokens, md.options, {})).not.toContain('v-bind="{&quot;rows')
   })
   it.each([
-    [':tada:', '🎉'],
-    ['&amp;', '&'],
-    ['&nbsp;', ' '],
+    [':tada:', 'Web 🎉 app'],
+    ['&amp;', 'Web &amp; app'],
+    ['&nbsp;', 'Web app'],
   ])('uses host inline processing for %s', (input, output) => {
     const tokens = compile(`<GraphStack>\n\n- Web ${input} app: 1 js\n\n</GraphStack>`)
     expect(warnings).toEqual([])
-    expect(tokens[0]?.content).toContain(
-      `Web ${output === '&' ? '&amp;' : output === ' ' ? '' : output}${output === ' ' ? '' : ' '}app`,
-    )
+    expect(tokens[0]?.content).toContain(output)
   })
   it('reports source lines including frontmatter and does not leak offsets to later files', () => {
     compile('---\ntitle: Test\n---\n\n<GraphStack>\n\n- {{ value }}\n\n</GraphStack>')
