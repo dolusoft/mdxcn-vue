@@ -26,7 +26,7 @@ export const Foot = defineItem<RowProps>('Foot', {
 })
 export const Cell = defineItem<CellProps>('Cell', { align: { type: 'string' } })
 
-function inlineCell(nodes: readonly VNode[], trim = false): TableCell {
+function inlineCell(nodes: readonly VNode[], trim = false): string | ProseNode[] {
   const prose = readProse(nodes)
   const text = proseText(prose)
   const content: ProseNode[] = trim
@@ -68,7 +68,7 @@ function isTotal(row: VNode): boolean {
 }
 
 /** Read only the first direct host table, preserving supported inline prose. */
-export function tableOf(nodes: readonly VNode[]): TableModel | null {
+export function tableOf(nodes: readonly VNode[]): MarkdownTable | null {
   const table = flattenNodes(nodes).find((node) => node.type === 'table')
   if (!table) return null
   const sections = childrenOf(table)
@@ -97,6 +97,12 @@ export function tableOf(nodes: readonly VNode[]): TableModel | null {
       ? { align: aligns.map((value, index) => value ?? (index === 0 ? 'left' : 'right')) }
       : {}),
   }
+}
+
+/** Host-table readers never produce numeric, null, or framework-native data cells. */
+export interface MarkdownTable extends TableModel {
+  rows: (string | ProseNode[])[][]
+  footer?: (string | ProseNode[])[]
 }
 
 export function labeledTable(nodes: readonly VNode[]) {
