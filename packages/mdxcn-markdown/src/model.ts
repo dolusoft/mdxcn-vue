@@ -213,7 +213,7 @@ export function tokensToProps(
         return {
           label: /^\s*(\$ |curl\b)/.test(code)
             ? 'request'
-            : token.info.trim().split(/\s+/)[0] || undefined,
+            : token.info.trim().match(/^[^\s:{[]+/)?.[0],
           code,
         }
       }),

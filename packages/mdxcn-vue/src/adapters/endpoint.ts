@@ -59,9 +59,10 @@ function blocksOf(elements: readonly VNode[]): EndpointBlock[] {
     })
     .map(({ pre, wrapperClass }) => {
       const code = childrenOf(pre).find((node) => node.type === 'code')
-      const language =
+      const rawLanguage =
         wrapperClass.match(/language-(\S+)/)?.[1] ??
         normalizeClass(code?.props?.class ?? code?.props?.className).match(/language-(\S+)/)?.[1]
+      const language = rawLanguage?.match(/^[^\s:{[]+/)?.[0]
       const text = textOf([pre]).replace(/\n$/, '')
       return { label: /^\s*(\$ |curl\b)/.test(text) ? 'request' : language, code: text }
     })

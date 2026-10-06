@@ -27,6 +27,14 @@ const compile = (source: string) => {
 const text = (value: string) => ({ type: 'text', value })
 
 describe('raw tokens to independent expected models', () => {
+  it.each(['js{1,3}', 'ts:line-numbers', 'cpp{1}', 'c++'])(
+    'reads the fence language from %s',
+    (info) => {
+      expect(tokensToProps('Endpoint', raw(`\`\`\`${info}\nvalue\n\`\`\`\n`), md)).toMatchObject({
+        blocks: [{ label: info.match(/^[^\s:{[]+/)?.[0], code: 'value' }],
+      })
+    },
+  )
   it('keeps rich stack labels and parses comma-separated numeric segments', () => {
     expect(
       tokensToProps(

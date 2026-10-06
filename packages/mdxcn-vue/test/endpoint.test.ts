@@ -30,6 +30,14 @@ const nodes = () => [
   h('pre', [h('code', { class: 'language-json' }, '{ "slug": "graph-meter" }\n')]),
 ]
 describe('Endpoint reader', () => {
+  it.each(['js{1,3}', 'ts:line-numbers', 'cpp{1}', 'c++'])(
+    'normalizes runtime fence language %s',
+    (info) => {
+      expect(
+        endpointModel({}, [h('pre', [h('code', { class: `language-${info}` }, 'value\n')])]).blocks,
+      ).toEqual([{ label: info.match(/^[^\s:{[]+/)?.[0], code: 'value' }])
+    },
+  )
   it('normalizes array/object classes and unwraps only one VitePress fence level', () => {
     expect(
       endpointModel({}, [
