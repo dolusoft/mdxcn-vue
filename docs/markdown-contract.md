@@ -52,7 +52,7 @@ host core kurallarına bırakır. Model dönüşümü `inline`, emoji, typograph
 renderer işlevinin metin anlamı bir kez çözülür; `text_special` metin sayılır.
 JSON, HTML attribute için escape edilir ve bileşene `v-bind` ile
 aktarılır; başarılı blokta Markdown slotu kaldırılır. Çok satırlı açılış etiketi
-en fazla 33 satırdır; açılış/kapanış kendi satırlarında olmalıdır. Dış HTML
+model derleyicisinin desteklediği bileşenlerde en fazla 33 satırdır; açılış/kapanış kendi satırlarında olmalıdır. Dış HTML
 sarmalayıcı ile bileşen arasında Markdown blok sınırı için boş satır gerekir.
 Açılışın ardından liste varsa önüne boş satır konur. Aksi halde VitePress
 listeyi ham HTML metni sayar; iki yol da bu davranışı korur ve uyarı verir.
@@ -143,3 +143,18 @@ elenir. Özel bileşen sınırları ve iç içe listeler yorumlanmaz. Item şema
 bildirilen alanları okur; kebab-case anahtarları camelCase biçimine çevirir,
 boolean boş değeri `true` yapar ve varsayılanları uygular. Slotlar `computed`
 içinde önbelleğe alınmaz; her render sırasında okunur.
+
+## Terminal açılış etiketi sınırı
+
+`Terminal`, yukarıdaki model derleyicisinin desteklediği bileşenler arasında
+bulunmaz. Açık `Terminal` etiketi tek satırda yazılmalıdır; çok satırlı açılış
+etiketi Markdown host yolunda desteklenmez:
+
+```md
+<Terminal prompt="$">
+```
+
+`<Terminal` / `prompt="$"` / `>` biçiminde üç satıra bölünmüş açılış,
+`markdown-it` tarafından paragraph ve blockquote olarak okunur. İçindeki console
+fence ayrıca otomatik `Terminal` dönüşümü alabilir; dış etiket korunmuş bir
+runtime bileşen sayılmaz. 33 satırlık destek bu etikete uygulanmaz.
