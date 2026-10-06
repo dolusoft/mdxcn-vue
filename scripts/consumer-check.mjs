@@ -206,12 +206,12 @@ write(
   app,
   'src/App.vue',
   `<script setup lang="ts">
-import {GraphStack,GraphTable,Endpoint,GraphTimer,Callout,Quote,Terminal,Annotate,Env} from 'mdxcn-vue';
+import {GraphStack,GraphTable,Endpoint,GraphTimer,Callout,Quote,Terminal,Annotate,Env,Steps,Step,Changelog,Change,Decision} from 'mdxcn-vue';
 import {splitLabel} from 'mdxcn-vue/core';
 import type {StackRow,TableModel} from 'mdxcn-vue/core';
 const rows: StackRow[]=[{label:splitLabel('Web: 1 js').label,segments:[{label:'js',value:1}]}];
 const table:TableModel={headers:['A'],rows:[['B']]};
-</script><template><GraphStack title="STACK" :rows="rows"/><GraphTable title="TABLE" v-bind="table"/><Endpoint/><GraphTimer title="TIMER" kind="clock"/><Callout type="warning"><p>Registry source</p></Callout><Quote by="Paul Graham" source="Taste for Makers"><p>Voices in tune.</p></Quote><Terminal :text="'$ run'"/><Annotate code="run // (1)" :notes="['One']"/><Env :vars="[{name:'A',value:'one',required:true}]"/></template>`,
+</script><template><GraphStack title="STACK" :rows="rows"/><GraphTable title="TABLE" v-bind="table"/><Endpoint/><GraphTimer title="TIMER" kind="clock"/><Callout type="warning"><p>Registry source</p></Callout><Quote by="Paul Graham" source="Taste for Makers"><p>Voices in tune.</p></Quote><Terminal :text="'$ run'"/><Annotate code="run // (1)" :notes="['One']"/><Env :vars="[{name:'A',value:'one',required:true}]"/><Steps><Step title="Install" state="now">Run.</Step></Steps><Changelog version="1"><Change type="add">New.</Change></Changelog><Decision :options="[{label:'Vue',state:'chosen'}]"/></template>`,
 )
 write(
   app,
@@ -223,7 +223,7 @@ write(
   'src/type-contract.ts',
   `import {splitLabel} from 'mdxcn-vue/core';
 import type {StackRow} from 'mdxcn-vue/core';
-import type {GraphStackProps,CalloutProps,QuoteProps,TerminalProps,AnnotateProps,EnvProps} from 'mdxcn-vue';
+import type {GraphStackProps,CalloutProps,QuoteProps,TerminalProps,AnnotateProps,EnvProps,StepsProps,StepProps,ChangelogProps,ChangeProps,DecisionProps} from 'mdxcn-vue';
 import {mdxcnMarkdown,withMdxcn} from 'mdxcn-markdown';
 import type {MdxcnOptions} from 'mdxcn-markdown';
 import MarkdownIt from 'markdown-it';
@@ -234,6 +234,21 @@ const quote:QuoteProps={by:'Paul Graham'};
 const terminal:TerminalProps={text:'$ run',prompt:'$'};
 const annotate:AnnotateProps={code:'run // (1)',notes:['One']};
 const env:EnvProps={vars:[{name:'A',required:true}]};
+const steps:StepsProps={title:'INSTALL'};
+const step:StepProps={state:'now'};
+const changelog:ChangelogProps={version:'1'};
+const change:ChangeProps={type:'add'};
+const decision:DecisionProps={options:[{label:'Vue',state:'chosen'}]};
+// @ts-expect-error Step state must remain a closed union.
+step.state='unknown';
+// @ts-expect-error Change type must remain a closed union.
+change.type='unknown';
+// @ts-expect-error Version must remain a string.
+changelog.version=42;
+// @ts-expect-error Decision states must remain a closed union.
+decision.options=[{label:'Vue',state:'now'}];
+// @ts-expect-error Steps title must remain a string.
+steps.title=42;
 // @ts-expect-error Code must remain a string.
 annotate.code=42;
 // @ts-expect-error Notes must remain an array.
@@ -408,7 +423,7 @@ write(
   site,
   'index.md',
   readFileSync(join(site, 'index.md'), 'utf8') +
-    '\n\n<Annotate>\n\n```python\nrun() # (1)\n```\n\n1. One **note**.\n\n</Annotate>\n\n<Env>\n\n```bash\n# Required.\nCONSUMER_KEY=one\n```\n\n</Env>\n',
+    '\n\n<Annotate>\n\n```python\nrun() # (1)\n```\n\n1. One **note**.\n\n</Annotate>\n\n<Env>\n\n```bash\n# Required.\nCONSUMER_KEY=one\n```\n\n</Env>\n\n<Steps>\n\n1. Copy — Run the CLI.\n2. **Register**\n\n</Steps>\n\n<Changelog version="1">\n\n- added: Vue state lists\n\n</Changelog>\n\n<Decision>\n\n- **Vue** — typed components\n\nKeep rich `prose`.\n\n</Decision>\n',
 )
 write(
   site,
@@ -421,7 +436,7 @@ write(
 write(
   site,
   '.vitepress/theme/index.ts',
-  `import DefaultTheme from 'vitepress/theme';import {GraphStack,GraphTable,Endpoint,Callout,Quote,Terminal,Annotate,Env} from 'mdxcn-vue';import './style.css';export default {...DefaultTheme,enhanceApp({app}) {for(const [name,component] of Object.entries({GraphStack,GraphTable,Endpoint,Callout,Quote,Terminal,Annotate,Env}))app.component(name,component);}};`,
+  `import DefaultTheme from 'vitepress/theme';import {GraphStack,GraphTable,Endpoint,Callout,Quote,Terminal,Annotate,Env,Steps,Step,Changelog,Change,Decision} from 'mdxcn-vue';import './style.css';export default {...DefaultTheme,enhanceApp({app}) {for(const [name,component] of Object.entries({GraphStack,GraphTable,Endpoint,Callout,Quote,Terminal,Annotate,Env,Steps,Step,Changelog,Change,Decision}))app.component(name,component);}};`,
 )
 const registeredOutput = run(['exec', 'vitepress', 'build'], site, true)
 assert.deepEqual(
@@ -429,7 +444,7 @@ assert.deepEqual(
   ['Footnotes'],
 )
 const registeredHtml = readFileSync(join(site, '.vitepress/dist/index.html'), 'utf8')
-assert.equal((registeredHtml.match(/<figure\b/g) ?? []).length, 8)
+assert.equal((registeredHtml.match(/<figure\b/g) ?? []).length, 11)
 for (const value of [
   'role="note"',
   '[ note ]',
@@ -442,13 +457,22 @@ for (const value of [
   '[ python ]',
   '>run()</span>',
   '>One <strong>note</strong>.</div>',
+  '>01</span>',
+  '>Register</p>',
+  '>added</span>',
+  'Vue state lists',
+  'Chose Vue over 0 other options.',
+  '<code>prose</code>',
   'CONSUMER_KEY',
   ' (required)</span>',
 ])
   assert.ok(registeredHtml.includes(value), `Missing registered upgrade ${value}`)
-assert.doesNotMatch(registeredHtml, /<(?:Callout|Quote|Terminal|Footnotes|Annotate|Env)\b/)
+assert.doesNotMatch(
+  registeredHtml,
+  /<(?:Callout|Quote|Terminal|Footnotes|Annotate|Env|Steps|Step|Changelog|Change|Decision)\b/,
+)
 console.log(
-  'REGISTERED VITEPRESS CONSUMER PASSED: 8 figures, Callout/Quote/Terminal/Annotate/Env rendered; Footnotes fallback preserved',
+  'REGISTERED VITEPRESS CONSUMER PASSED: 11 figures, Callout/Quote/Terminal/Annotate/Env/Steps/Changelog/Decision rendered; Footnotes fallback preserved',
 )
 
 // Install generated registry payloads with the real CLI, without a server.
@@ -492,8 +516,8 @@ write(
 )
 const registryApp = readFileSync(join(app, 'src/App.vue'), 'utf8')
   .replace(
-    "import {GraphStack,GraphTable,Endpoint,GraphTimer,Callout,Quote,Terminal,Annotate,Env} from 'mdxcn-vue';",
-    "import {GraphStack} from './components/mdxcn/components/graph-stack';import {GraphTable} from './components/mdxcn/components/graph-table';import {Endpoint} from './components/mdxcn/components/endpoint';import {GraphTimer} from './components/mdxcn/components/graph-timer';import {Callout} from './components/mdxcn/components/callout';import {Quote} from './components/mdxcn/components/quote';import {Terminal} from './components/mdxcn/components/terminal';import {Annotate} from './components/mdxcn/components/annotate';import {Env} from './components/mdxcn/components/env';",
+    "import {GraphStack,GraphTable,Endpoint,GraphTimer,Callout,Quote,Terminal,Annotate,Env,Steps,Step,Changelog,Change,Decision} from 'mdxcn-vue';",
+    "import {GraphStack} from './components/mdxcn/components/graph-stack';import {GraphTable} from './components/mdxcn/components/graph-table';import {Endpoint} from './components/mdxcn/components/endpoint';import {GraphTimer} from './components/mdxcn/components/graph-timer';import {Callout} from './components/mdxcn/components/callout';import {Quote} from './components/mdxcn/components/quote';import {Terminal} from './components/mdxcn/components/terminal';import {Annotate} from './components/mdxcn/components/annotate';import {Env} from './components/mdxcn/components/env';import {Steps,Step} from './components/mdxcn/components/steps';import {Changelog,Change} from './components/mdxcn/components/changelog';import {Decision} from './components/mdxcn/components/decision';",
   )
   .replaceAll("'mdxcn-vue/core'", "'./components/mdxcn/core'")
 write(registry, 'src/App.vue', registryApp)
@@ -553,7 +577,7 @@ const results = {
   stackLibraryBytes,
   vueRuntimeEntries: vueEntries.length,
   vitepressFigures: 3,
-  registeredVitepressFigures: 8,
+  registeredVitepressFigures: 11,
   upgradeFallbacks: fallbackNames,
   registryItems: registryPaths.length,
   registryFiles: copied.size,

@@ -14,3 +14,11 @@ export type { CodeLine } from './annotate.js'
 export { parseAnnotatedCode } from './annotate.js'
 export type { EnvVar } from './env.js'
 export { parseEnv, envVarFromList } from './env.js'
+export type {
+  StateListItem,
+  StepState,
+  ChangeType,
+  OptionState,
+  DecisionOption,
+} from './state-list.js'
+export { stepFromList, changeFromList, optionFromList } from './state-list.js'

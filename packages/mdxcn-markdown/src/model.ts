@@ -11,13 +11,18 @@ import {
 import type { EndpointBlock, EndpointParam } from 'mdxcn-vue'
 import type { EnvVar } from 'mdxcn-vue/core'
 import { parseEnv, envVarFromList } from 'mdxcn-vue/core'
+import { optionFromList } from 'mdxcn-vue/core'
+import type { StateListItem, DecisionOption } from 'mdxcn-vue/core'
 
-export type ComponentName = 'GraphStack' | 'GraphTable' | 'Endpoint' | 'Annotate' | 'Env'
+export type ComponentName =
+  'GraphStack' | 'GraphTable' | 'Endpoint' | 'Annotate' | 'Env' | 'Steps' | 'Changelog' | 'Decision'
 export type CompiledProps =
   | { rows: StackRow[] }
   | TableModel
   | { code: string; notes: ProseNode[][]; title: string }
   | { vars: EnvVar[] }
+  | { list: StateListItem[] }
+  | { options: DecisionOption[]; after: ProseNode[][] }
   | {
       method: string
       path: string
@@ -156,7 +161,34 @@ export function tokensToProps(
   env: object = {},
   options: TokenModelOptions = {},
 ): CompiledProps {
-  const tree = blocks(tokens, md, env, options, name === 'Annotate' || name === 'Env')
+  const stateList = ['Steps', 'Changelog', 'Decision'].includes(name)
+  const tree = blocks(tokens, md, env, options, stateList || name === 'Annotate' || name === 'Env')
+  if (stateList) {
+    if (tree.some((block) => !['ul', 'ol', 'p'].includes(block.tag)))
+      throw new Error(`${name} requires lists and paragraphs`)
+    const items = tree
+      .filter((block) => block.tag === 'ul' || block.tag === 'ol')
+      .flatMap((list) => list.children)
+    if (items.some((item) => item.children.some((block) => !['p', 'inline'].includes(block.tag))))
+      throw new Error('Nested list items require runtime resolution')
+    const has = (nodes: ProseNode[], type: 'strong' | 'em'): boolean =>
+      nodes.some((node) => node.type !== 'text' && (node.type === type || has(node.children, type)))
+    const list: StateListItem[] = items.map((item) => ({
+      text: proseText(content(item)).replace(/\s+/g, ' ').trim(),
+      // Hidden paragraph tokens in tight lists have no host p in the rendered DOM.
+      paragraphs: item.children
+        .filter((block) => block.tag === 'p' && !block.token.hidden)
+        .map((block) => content(block).filter((node) => node.type !== 'text' || node.value !== '')),
+      strong: has(content(item), 'strong'),
+      em: has(content(item), 'em'),
+    }))
+    return name === 'Decision'
+      ? {
+          options: list.map(optionFromList),
+          after: tree.filter((block) => block.tag === 'p').map(content),
+        }
+      : { list }
+  }
   if (name === 'Annotate' || name === 'Env') {
     if (tree.some((block) => !['fence', 'ol', 'ul', 'p'].includes(block.tag)))
       throw new Error(`${name} requires fences, lists or paragraphs`)

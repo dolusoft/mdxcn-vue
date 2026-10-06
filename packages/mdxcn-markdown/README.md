@@ -12,7 +12,8 @@ export default {
 }
 ```
 
-Register `GraphStack`, `GraphTable`, `Endpoint`, `Annotate` and `Env` from `mdxcn-vue` in your Vue
+Register `GraphStack`, `GraphTable`, `Endpoint`, `Annotate`, `Env`, `Steps`,
+`Changelog` and `Decision` from `mdxcn-vue` in your Vue
 host. The plugin compiles their Markdown into typed props after host inline
 processing and before anchors/highlighting. Unsupported content retains runtime
 slots with file/line warnings. Tags need their own lines; lists need a preceding

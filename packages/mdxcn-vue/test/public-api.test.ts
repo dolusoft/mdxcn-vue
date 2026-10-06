@@ -7,6 +7,11 @@ import ts from 'typescript'
 
 // Deliberately maintained independently of export declarations.
 const publicNames = [
+  'Steps',
+  'Step',
+  'Changelog',
+  'Change',
+  'Decision',
   'Callout',
   'Quote',
   'Terminal',
@@ -97,6 +102,15 @@ it('exposes grammar and clock helpers only through core', () => {
 })
 
 const publicTypes = [
+  'StepState',
+  'StepProps',
+  'StepsProps',
+  'ChangeType',
+  'ChangeProps',
+  'ChangelogProps',
+  'OptionState',
+  'DecisionOption',
+  'DecisionProps',
   'CalloutType',
   'CalloutProps',
   'QuoteProps',
@@ -137,6 +151,14 @@ const publicTypes = [
   'GraphTimerProps',
 ]
 const coreNames = [
+  'StateListItem',
+  'StepState',
+  'ChangeType',
+  'OptionState',
+  'DecisionOption',
+  'stepFromList',
+  'changeFromList',
+  'optionFromList',
   'CodeLine',
   'parseAnnotatedCode',
   'EnvVar',
