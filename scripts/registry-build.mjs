@@ -24,6 +24,8 @@ const definitions = [
   ['decision', ['components/decision.ts']],
   ['chat', ['components/chat.ts']],
   ['keys', ['components/keys.ts']],
+  ['graph-timeline', ['components/graph-timeline.ts']],
+  ['graph-spec', ['components/graph-spec.ts']],
   ['graph-frame', ['components/graph-frame.ts']],
   ['core', ['core/index.ts']],
   ['css', ['styles/graph.css', 'styles/host.css', 'styles/theme.css']],

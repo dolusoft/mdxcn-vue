@@ -29,6 +29,9 @@ export function dropText(nodes: readonly VNode[], count: number): VNode[] {
       const clone = cloneVNode(node)
       clone.children = inner
       clone.shapeFlag = (clone.shapeFlag & ~8) | 16
+      // The compiler's TEXT/block hints describe the original children shape.
+      clone.patchFlag = 0
+      Reflect.set(clone, 'dynamicChildren', null)
       return [clone]
     })
   return walk(nodes)

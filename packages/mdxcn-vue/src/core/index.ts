@@ -24,3 +24,6 @@ export type {
 export { stepFromList, changeFromList, optionFromList } from './state-list.js'
 export type { ChatListItem, KeyBinding } from './chat-keys.js'
 export { speakerPrefix, chatFromList, bindingFromList, chordsOf } from './chat-keys.js'
+
+export type { TimelineState } from './timeline-spec.js'
+export { timelineFromList, specFromList } from './timeline-spec.js'

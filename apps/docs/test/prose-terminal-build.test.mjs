@@ -84,3 +84,13 @@ test('real docs config upgrades the three new pages and keeps explicit terminal 
     assert.doesNotMatch(html, /<(?:Callout|Quote|Terminal)\b/)
   }
 })
+
+test('Callout fence retains the documented VitePress wrapper and copy controls', async () => {
+  const config = await resolveConfig(root, 'build')
+  const md = await createMarkdownRenderer(root, config.markdown)
+  const html = await md.renderAsync('<Callout>\n\n```js\nconst answer = 42\n```\n\n</Callout>', { path: 'callout-fence.md' })
+  const document = new JSDOM(html).window.document
+  assert.ok(document.querySelector('callout div.language-js > pre > code'))
+  assert.ok(document.querySelector('callout button.copy'))
+  assert.ok(document.querySelector('callout span.lang'))
+})

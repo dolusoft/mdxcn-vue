@@ -33,11 +33,7 @@ export const Quote = defineComponent({
                     },
                     '“',
                   ),
-                  h(
-                    GraphProse,
-                    { class: 'text-base text-foreground sm:text-lg' },
-                    slots.default,
-                  ),
+                  h(GraphProse, { class: 'text-base text-foreground sm:text-lg' }, slots.default),
                 ]),
                 ...(props.by || props.source
                   ? [

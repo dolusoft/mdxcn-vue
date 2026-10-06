@@ -27,6 +27,8 @@ export type ComponentName =
   | 'Decision'
   | 'Chat'
   | 'Keys'
+  | 'GraphTimeline'
+  | 'GraphSpec'
 export type CompiledProps =
   | { rows: StackRow[] }
   | TableModel
@@ -174,7 +176,15 @@ export function tokensToProps(
   env: object = {},
   options: TokenModelOptions = {},
 ): CompiledProps {
-  const stateList = ['Steps', 'Changelog', 'Decision', 'Chat', 'Keys'].includes(name)
+  const stateList = [
+    'Steps',
+    'Changelog',
+    'Decision',
+    'Chat',
+    'Keys',
+    'GraphTimeline',
+    'GraphSpec',
+  ].includes(name)
   const tree = blocks(tokens, md, env, options, stateList || name === 'Annotate' || name === 'Env')
   if (stateList) {
     if (tree.some((block) => !['ul', 'ol', 'p'].includes(block.tag)))
@@ -184,6 +194,29 @@ export function tokensToProps(
       .flatMap((list) => list.children)
     if (items.some((item) => item.children.some((block) => !['p', 'inline'].includes(block.tag))))
       throw new Error('Nested list items require runtime resolution')
+    const has = (nodes: ProseNode[], type: 'strong' | 'em'): boolean =>
+      nodes.some((node) => node.type !== 'text' && (node.type === type || has(node.children, type)))
+    if (name === 'GraphTimeline' || name === 'GraphSpec')
+      return {
+        list: items.map((item) => {
+          const paragraphs = item.children
+            .filter((block) => block.tag === 'p' && !block.token.hidden)
+            .map((block) =>
+              content(block).filter((node) => node.type !== 'text' || node.value !== ''),
+            )
+          const head =
+            paragraphs[0] ??
+            content(item).filter((node) => node.type !== 'text' || node.value !== '')
+          return {
+            head,
+            body: paragraphs.slice(1),
+            text: proseText(content(item)).replace(/\s+/g, ' ').trim(),
+            paragraphs,
+            strong: bold(head),
+            em: has(head, 'em'),
+          }
+        }),
+      }
     if (name === 'Chat')
       return {
         list: items.map((item) => {
@@ -198,8 +231,6 @@ export function tokensToProps(
           }
         }),
       }
-    const has = (nodes: ProseNode[], type: 'strong' | 'em'): boolean =>
-      nodes.some((node) => node.type !== 'text' && (node.type === type || has(node.children, type)))
     const list: StateListItem[] = items.map((item) => ({
       text: proseText(content(item)).replace(/\s+/g, ' ').trim(),
       // Hidden paragraph tokens in tight lists have no host p in the rendered DOM.

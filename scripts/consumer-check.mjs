@@ -207,12 +207,12 @@ write(
   app,
   'src/App.vue',
   `<script setup lang="ts">
-import {GraphStack,GraphTable,Endpoint,GraphTimer,Callout,Quote,Terminal,Annotate,Env,Steps,Step,Changelog,Change,Decision,Chat,Keys} from 'mdxcn-vue';
+import {GraphStack,GraphTable,Endpoint,GraphTimer,Callout,Quote,Terminal,Annotate,Env,Steps,Step,Changelog,Change,Decision,Chat,Keys,GraphTimeline,Event,GraphSpec,Field} from 'mdxcn-vue';
 import {splitLabel} from 'mdxcn-vue/core';
 import type {StackRow,TableModel} from 'mdxcn-vue/core';
 const rows: StackRow[]=[{label:splitLabel('Web: 1 js').label,segments:[{label:'js',value:1}]}];
 const table:TableModel={headers:['A'],rows:[['B']]};
-</script><template><GraphStack title="STACK" :rows="rows"/><GraphTable title="TABLE" v-bind="table"/><Endpoint/><GraphTimer title="TIMER" kind="clock"/><Callout type="warning"><p>Registry source</p></Callout><Quote by="Paul Graham" source="Taste for Makers"><p>Voices in tune.</p></Quote><Terminal :text="'$ run'"/><Annotate code="run // (1)" :notes="['One']"/><Env :vars="[{name:'A',value:'one',required:true}]"/><Steps><Step title="Install" state="now">Run.</Step></Steps><Changelog version="1"><Change type="add">New.</Change></Changelog><Decision :options="[{label:'Vue',state:'chosen'}]"/><Chat :turns="[{by:'you',children:'hello'}]"/><Keys :bindings="[{keys:'Ctrl+K',action:'search'}]"/></template>`,
+</script><template><GraphStack title="STACK" :rows="rows"/><GraphTable title="TABLE" v-bind="table"/><Endpoint/><GraphTimer title="TIMER" kind="clock"/><Callout type="warning"><p>Registry source</p></Callout><Quote by="Paul Graham" source="Taste for Makers"><p>Voices in tune.</p></Quote><Terminal :text="'$ run'"/><Annotate code="run // (1)" :notes="['One']"/><Env :vars="[{name:'A',value:'one',required:true}]"/><Steps><Step title="Install" state="now">Run.</Step></Steps><Changelog version="1"><Change type="add">New.</Change></Changelog><Decision :options="[{label:'Vue',state:'chosen'}]"/><Chat :turns="[{by:'you',children:'hello'}]"/><Keys :bindings="[{keys:'Ctrl+K',action:'search'}]"/><GraphTimeline title="T"><Event date="one">Event</Event></GraphTimeline><GraphSpec title="S"><Field label="One" accent>Value</Field></GraphSpec></template>`,
 )
 write(
   app,
@@ -224,7 +224,7 @@ write(
   'src/type-contract.ts',
   `import {splitLabel} from 'mdxcn-vue/core';
 import type {StackRow} from 'mdxcn-vue/core';
-import type {GraphStackProps,CalloutProps,QuoteProps,TerminalProps,AnnotateProps,EnvProps,StepsProps,StepProps,ChangelogProps,ChangeProps,DecisionProps,ChatProps,ChatTurn,KeysProps,KeyBinding} from 'mdxcn-vue';
+import type {GraphStackProps,CalloutProps,QuoteProps,TerminalProps,AnnotateProps,EnvProps,StepsProps,StepProps,ChangelogProps,ChangeProps,DecisionProps,ChatProps,ChatTurn,KeysProps,KeyBinding,GraphTimelineProps,TimelineEvent,TimelineState,GraphSpecProps,SpecRow} from 'mdxcn-vue';
 import {mdxcnMarkdown,withMdxcn} from 'mdxcn-markdown';
 import type {MdxcnOptions} from 'mdxcn-markdown';
 import MarkdownIt from 'markdown-it';
@@ -244,6 +244,19 @@ const turn:ChatTurn={by:'you',children:'hello',aside:true};
 const binding:KeyBinding={keys:'Ctrl+K',action:'search',accent:true};
 const chat:ChatProps={turns:[turn]};
 const keys:KeysProps={bindings:[binding]};
+const state:TimelineState='now';
+const event:TimelineEvent={date:'one',label:'event',state,note:'note'};
+const specRow:SpecRow={label:'One',value:'Value',accent:true,note:'note'};
+const timeline:GraphTimelineProps={title:'T',events:[event]};
+const spec:GraphSpecProps={title:'S',rows:[specRow]};
+// @ts-expect-error Date must remain a string.
+event.date=42;
+// @ts-expect-error State must remain a closed union.
+timeline.events=[{date:'one',state:'later'}];
+// @ts-expect-error Value must remain a string.
+specRow.value=42;
+// @ts-expect-error Accent must remain a boolean.
+spec.rows=[{label:'One',accent:'yes'}];
 // @ts-expect-error Speaker must remain a string.
 turn.by=42;
 // @ts-expect-error Aside must remain a boolean.
@@ -436,7 +449,7 @@ write(
   site,
   'index.md',
   readFileSync(join(site, 'index.md'), 'utf8') +
-    '\n\n<Annotate>\n\n```python\nrun() # (1)\n```\n\n1. One **note**.\n\n</Annotate>\n\n<Env>\n\n```bash\n# Required.\nCONSUMER_KEY=one\n```\n\n</Env>\n\n<Steps>\n\n1. Copy — Run the CLI.\n2. **Register**\n\n</Steps>\n\n<Changelog version="1">\n\n- added: Vue state lists\n\n</Changelog>\n\n<Decision>\n\n- **Vue** — typed components\n\nKeep rich `prose`.\n\n</Decision>\n\n<Chat>\n\n- you: consumer hello\n- agent: *consumer aside*\n\n</Chat>\n\n<Keys>\n\n- **Ctrl+K: consumer search**\n\n</Keys>\n',
+    '\n\n<Annotate>\n\n```python\nrun() # (1)\n```\n\n1. One **note**.\n\n</Annotate>\n\n<Env>\n\n```bash\n# Required.\nCONSUMER_KEY=one\n```\n\n</Env>\n\n<Steps>\n\n1. Copy — Run the CLI.\n2. **Register**\n\n</Steps>\n\n<Changelog version="1">\n\n- added: Vue state lists\n\n</Changelog>\n\n<Decision>\n\n- **Vue** — typed components\n\nKeep rich `prose`.\n\n</Decision>\n\n<Chat>\n\n- you: consumer hello\n- agent: *consumer aside*\n\n</Chat>\n\n<Keys>\n\n- **Ctrl+K: consumer search**\n\n</Keys>\n\n<GraphTimeline title="TIMELINE">\n\n- **14:02: consumer event** — consumer note\n\n</GraphTimeline>\n\n<GraphSpec title="SPEC">\n\n- Path: `consumer/code`\n\n  consumer spec note\n\n</GraphSpec>\n',
 )
 write(
   site,
@@ -449,7 +462,7 @@ write(
 write(
   site,
   '.vitepress/theme/index.ts',
-  `import DefaultTheme from 'vitepress/theme';import {GraphStack,GraphTable,Endpoint,Callout,Quote,Terminal,Annotate,Env,Steps,Step,Changelog,Change,Decision,Chat,Keys} from 'mdxcn-vue';import './style.css';export default {...DefaultTheme,enhanceApp({app}) {for(const [name,component] of Object.entries({GraphStack,GraphTable,Endpoint,Callout,Quote,Terminal,Annotate,Env,Steps,Step,Changelog,Change,Decision,Chat,Keys}))app.component(name,component);}};`,
+  `import DefaultTheme from 'vitepress/theme';import {GraphStack,GraphTable,Endpoint,Callout,Quote,Terminal,Annotate,Env,Steps,Step,Changelog,Change,Decision,Chat,Keys,GraphTimeline,Event,GraphSpec,Field} from 'mdxcn-vue';import './style.css';export default {...DefaultTheme,enhanceApp({app}) {for(const [name,component] of Object.entries({GraphStack,GraphTable,Endpoint,Callout,Quote,Terminal,Annotate,Env,Steps,Step,Changelog,Change,Decision,Chat,Keys,GraphTimeline,Event,GraphSpec,Field}))app.component(name,component);}};`,
 )
 const registeredOutput = run(['exec', 'vitepress', 'build'], site, true)
 assert.deepEqual(
@@ -457,8 +470,12 @@ assert.deepEqual(
   ['Footnotes'],
 )
 const registeredHtml = readFileSync(join(site, '.vitepress/dist/index.html'), 'utf8')
-assert.equal((registeredHtml.match(/<figure\b/g) ?? []).length, 13)
+assert.equal((registeredHtml.match(/<figure\b/g) ?? []).length, 15)
 for (const value of [
+  'consumer event',
+  'consumer note',
+  '<code>consumer/code</code>',
+  'consumer spec note',
   'consumer hello',
   '<em>consumer aside</em>',
   'consumer search',
@@ -486,10 +503,10 @@ for (const value of [
   assert.ok(registeredHtml.includes(value), `Missing registered upgrade ${value}`)
 assert.doesNotMatch(
   registeredHtml,
-  /<(?:Callout|Quote|Terminal|Footnotes|Annotate|Env|Steps|Step|Changelog|Change|Decision|Chat|Keys)\b/,
+  /<(?:Callout|Quote|Terminal|Footnotes|Annotate|Env|Steps|Step|Changelog|Change|Decision|Chat|Keys|GraphTimeline|Event|GraphSpec|Field)\b/,
 )
 console.log(
-  'REGISTERED VITEPRESS CONSUMER PASSED: 13 figures, Callout/Quote/Terminal/Annotate/Env/Steps/Changelog/Decision/Chat/Keys rendered; Footnotes fallback preserved',
+  'REGISTERED VITEPRESS CONSUMER PASSED: 15 figures, Callout/Quote/Terminal/Annotate/Env/Steps/Changelog/Decision/Chat/Keys/GraphTimeline/GraphSpec rendered; Footnotes fallback preserved',
 )
 
 // Install generated registry payloads with the real CLI, without a server.
@@ -533,8 +550,8 @@ write(
 )
 const registryApp = readFileSync(join(app, 'src/App.vue'), 'utf8')
   .replace(
-    "import {GraphStack,GraphTable,Endpoint,GraphTimer,Callout,Quote,Terminal,Annotate,Env,Steps,Step,Changelog,Change,Decision,Chat,Keys} from 'mdxcn-vue';",
-    "import {GraphStack} from './components/mdxcn/components/graph-stack';import {GraphTable} from './components/mdxcn/components/graph-table';import {Endpoint} from './components/mdxcn/components/endpoint';import {GraphTimer} from './components/mdxcn/components/graph-timer';import {Callout} from './components/mdxcn/components/callout';import {Quote} from './components/mdxcn/components/quote';import {Terminal} from './components/mdxcn/components/terminal';import {Annotate} from './components/mdxcn/components/annotate';import {Env} from './components/mdxcn/components/env';import {Steps,Step} from './components/mdxcn/components/steps';import {Changelog,Change} from './components/mdxcn/components/changelog';import {Decision} from './components/mdxcn/components/decision';import {Chat} from './components/mdxcn/components/chat';import {Keys} from './components/mdxcn/components/keys';",
+    "import {GraphStack,GraphTable,Endpoint,GraphTimer,Callout,Quote,Terminal,Annotate,Env,Steps,Step,Changelog,Change,Decision,Chat,Keys,GraphTimeline,Event,GraphSpec,Field} from 'mdxcn-vue';",
+    "import {GraphStack} from './components/mdxcn/components/graph-stack';import {GraphTable} from './components/mdxcn/components/graph-table';import {Endpoint} from './components/mdxcn/components/endpoint';import {GraphTimer} from './components/mdxcn/components/graph-timer';import {Callout} from './components/mdxcn/components/callout';import {Quote} from './components/mdxcn/components/quote';import {Terminal} from './components/mdxcn/components/terminal';import {Annotate} from './components/mdxcn/components/annotate';import {Env} from './components/mdxcn/components/env';import {Steps,Step} from './components/mdxcn/components/steps';import {Changelog,Change} from './components/mdxcn/components/changelog';import {Decision} from './components/mdxcn/components/decision';import {Chat} from './components/mdxcn/components/chat';import {Keys} from './components/mdxcn/components/keys';import {GraphTimeline,Event} from './components/mdxcn/components/graph-timeline';import {GraphSpec,Field} from './components/mdxcn/components/graph-spec';",
   )
   .replaceAll("'mdxcn-vue/core'", "'./components/mdxcn/core'")
 write(registry, 'src/App.vue', registryApp)
@@ -594,7 +611,7 @@ const results = {
   stackLibraryBytes,
   vueRuntimeEntries: vueEntries.length,
   vitepressFigures: 3,
-  registeredVitepressFigures: 13,
+  registeredVitepressFigures: 15,
   upgradeFallbacks: fallbackNames,
   registryItems: registryPaths.length,
   registryFiles: copied.size,
@@ -605,6 +622,4 @@ writeFileSync(resultsPath, JSON.stringify(results, null, 2))
 assert.equal(dirname(root), scratch)
 assert.ok(basename(root).startsWith('consumer-'))
 rmSync(root, { recursive: true, force: true })
-console.log(
-  `CONSUMER CHECK PASSED; fixture removed; results: ${resultsPath}`,
-)
+console.log(`CONSUMER CHECK PASSED; fixture removed; results: ${resultsPath}`)

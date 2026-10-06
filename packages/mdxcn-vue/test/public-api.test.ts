@@ -7,6 +7,10 @@ import ts from 'typescript'
 
 // Deliberately maintained independently of export declarations.
 const publicNames = [
+  'GraphTimeline',
+  'Event',
+  'GraphSpec',
+  'Field',
   'Chat',
   'Keys',
   'Steps',
@@ -104,6 +108,12 @@ it('exposes grammar and clock helpers only through core', () => {
 })
 
 const publicTypes = [
+  'GraphTimelineProps',
+  'TimelineEvent',
+  'TimelineState',
+  'GraphSpecProps',
+  'SpecRow',
+  'SpecLine',
   'ChatProps',
   'ChatTurn',
   'KeysProps',
@@ -157,6 +167,9 @@ const publicTypes = [
   'GraphTimerProps',
 ]
 const coreNames = [
+  'TimelineState',
+  'timelineFromList',
+  'specFromList',
   'ChatListItem',
   'KeyBinding',
   'speakerPrefix',

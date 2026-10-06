@@ -45,6 +45,21 @@ sağlanan parser kullanılır; runtime Markdown renderer eklenmez.
   üretir. Core `parseEnv` upstream gösterim grammar davranışını korur: boş
   satır yorumları temizler, geçersiz satır atlanır ve ` #` dizisi tırnak içinde
   bile inline yorum başlatır. Bu bir dotenv yükleyicisi değildir.
+- `GraphTimeline`: `ol`/`ul` listeleri → `list`; ilk görünür paragraf `head`,
+  sonraki paragraflar `body` olur. `date: label — note` metni ayrıştırılır;
+  `body` varsa inline notun önüne geçer. `strong`/`em` durum işaretleri yalnız
+  `head` içinde aranır, `strong` önceliklidir. Saat metni tarih alanında korunur.
+- `GraphSpec`: aynı başlık/gövde modeli → `list`; `label: value` ayrıştırılır.
+  `head` içindeki kod ve linkler zengin değer olarak korunur; etiket öneki ham
+  metin ofsetiyle kırpılır. `strong` yalnız başlıkta accent üretir. Gövde nottur.
+  `del`/`s` gibi desteklenmeyen token değerleri runtime yolunda korunur.
+
+Bu iki bileşende veri props (`events`/`rows`) → derleyici `list` girdisi veya
+boş olmayan host listesi → `Event`/`Field` sırası kullanılır. Boş veri dizisi
+slotu bastırır; `null`/`undefined` fallback kullanır. Veri ve item notları Vue
+`VNodeChild` içerir. `StateListItem.head`/`body` alanları mevcut kullanıcıların
+eski girdilerini bozmamak için isteğe bağlıdır; 5C derleyicisi bunları üretir.
+Eski `Steps`, `Changelog`, `Decision` ve `Keys` grammar/payload davranışı korunur.
 
 Plugin, `html_block` kuralından önce ham blokları alır; gövde token değerlerini
 host core kurallarına bırakır. Model dönüşümü `inline`, emoji, typographer ve
@@ -117,9 +132,8 @@ Varsayılan boş liste kaynak konumlu uyarıyla HTML üretir: host alert çıkt�
 (kendi alert renderer işlevi yoksa `aside`), byline içeren `blockquote`, host
 `pre > code` yapısı ve özgün footnote bölümü. Zengin gövde biçimleri korunur.
 Seçenekler yalnız bu plugin'in dönüşümlerini kapatır; VitePress'in kendi alert
-işlevi gibi host özelliklerini kapatmaz. Registry dört mevcut bileşeni, üç yeni
-prose/fence bileşenini, `Annotate`, `Env`, frame, core ve CSS dosyalarını içerir;
-toplam on iki öğedir.
+işlevi gibi host özelliklerini kapatmaz. Registry on altı bileşen ile frame,
+core ve CSS dosyalarını içerir; toplam on dokuz öğedir.
 
 Runtime Endpoint, VitePress `div.language-* > pre` sarmalayıcısını tek seviyede
 açar; `button.copy` ve `span.lang` içerik sayılmaz. Highlighter kaynak kodun
@@ -147,8 +161,10 @@ içinde önbelleğe alınmaz; her render sırasında okunur.
 ## Callout içindeki VitePress fence görünümü
 
 `Callout` gövdesi host tarafından üretilen slotu korur. VitePress bir kod fence
-için `div.language-*` sarmalayıcısı, koyu arka plan, `button.copy`, `span.lang`
-ve 16 px dış boşluk üretir. Bunlar upstream `GraphProse` sözleşmesinin parçası
+için `div.language-*` sarmalayıcısı, temaya bağlı arka plan, `button.copy`,
+`span.lang` ve dikey `1rem` dış boşluk üretir (varsayılan kök fontta 16 px).
+Dar ekranda yatay boşluk `-1.5rem`, `40rem` üzerindeyse `0` olur.
+Bunlar upstream `GraphProse` sözleşmesinin parçası
 değildir; mevcut `host.css` bu fence arayüzünü nötrleştirmez. Dolayısıyla bu
 girdi biçiminde görsel upstream paritesi garanti edilmez. Düz `pre > code`
 slotu, VitePress fence arayüzü olmadan upstream prose yapısını kullanır.

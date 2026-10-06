@@ -3,7 +3,7 @@ import type { Component, DefineComponent, VNode } from 'vue'
 import { numberOf } from '../core/stack.js'
 
 export interface ItemField {
-  type: 'string' | 'number' | 'boolean' | 'array'
+  type: 'string' | 'number' | 'boolean' | 'array' | 'node'
   default?: unknown
 }
 export type ItemSchema = Record<string, ItemField>

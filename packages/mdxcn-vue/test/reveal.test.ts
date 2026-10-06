@@ -2,10 +2,11 @@ import { mount } from '@vue/test-utils'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { defineComponent, h, withDirectives } from 'vue'
 import { vReveal } from '../src/directives/reveal'
+import type { Component } from 'vue'
 import type { RevealOptions } from '../src/directives/reveal'
 import { Annotate } from '../src/components/annotate'
 import { Env } from '../src/components/env'
-import { Chat, Keys } from '../src'
+import { Chat, Keys, GraphTimeline, GraphSpec } from '../src'
 import { Terminal } from '../src/components/terminal'
 
 let reduced: boolean
@@ -100,6 +101,24 @@ describe('v-reveal lifecycle', () => {
       selector: 'li',
     },
     {
+      component: GraphTimeline,
+      props: {
+        title: 'T',
+        events: Array.from({ length: 60 }, () => ({ date: 'one', label: 'event' })),
+      },
+      cap: 250,
+      selector: 'li',
+    },
+    {
+      component: GraphSpec,
+      props: {
+        title: 'S',
+        rows: Array.from({ length: 60 }, () => ({ label: 'one', value: 'value' })),
+      },
+      cap: 200,
+      selector: 'dl > div',
+    },
+    {
       component: Keys,
       props: { bindings: Array.from({ length: 60 }, () => ({ keys: 'K', action: 'search' })) },
       cap: 200,
@@ -108,7 +127,9 @@ describe('v-reveal lifecycle', () => {
   ])(
     'caps $component.name stagger at $cap ms for the last of 60 rows',
     ({ component, props, cap, selector }) => {
-      const wrapper = mount(defineComponent({ setup: () => () => h(component, props) }))
+      const wrapper = mount(
+        defineComponent({ setup: () => () => h(component as Component, props) }),
+      )
       wrappers.push(wrapper)
       expect(observe).toHaveBeenCalledTimes(60)
       intersect()

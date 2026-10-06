@@ -51,6 +51,8 @@ export default tseslint.config(
             'Decision',
             'Chat',
             'Keys',
+            'Event',
+            'Field',
           ],
         },
       ],

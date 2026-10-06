@@ -1,6 +1,6 @@
 import type { Theme } from 'vitepress'
 import DefaultTheme from 'vitepress/theme'
-import { Chat, Keys, Steps, Step, Changelog, Change, Decision, Annotate, Env, Bar, Callout, Quote, Terminal, Endpoint, GraphStack, GraphTable, GraphTimer, Head, Row, Foot, Cell, Segment } from 'mdxcn-vue'
+import { GraphTimeline, Event, GraphSpec, Field, Chat, Keys, Steps, Step, Changelog, Change, Decision, Annotate, Env, Bar, Callout, Quote, Terminal, Endpoint, GraphStack, GraphTable, GraphTimer, Head, Row, Foot, Cell, Segment } from 'mdxcn-vue'
 import './style.css'
 import '@fontsource/geist-mono/400.css'
 import '@fontsource/geist-mono/600.css'
@@ -8,6 +8,10 @@ import '@fontsource/geist-mono/600.css'
 export default {
   extends: DefaultTheme,
   enhanceApp({ app }) {
+    app.component('GraphTimeline', GraphTimeline)
+    app.component('Event', Event)
+    app.component('GraphSpec', GraphSpec)
+    app.component('Field', Field)
     app.component('Chat', Chat)
     app.component('Keys', Keys)
     app.component('Steps', Steps)
