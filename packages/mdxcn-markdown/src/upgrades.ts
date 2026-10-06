@@ -1,7 +1,7 @@
 /* Derived from mdxcn, Copyright (c) 2026 Keshav Bagaade. MIT; see LICENSE. */
 import type MarkdownIt from 'markdown-it'
 import type Token from 'markdown-it/lib/token.mjs'
-import { emitWarning, escapeAttribute, trackSource } from './diagnostics.js'
+import { emitWarning, escapeAttribute, trackSource, registerFinalizer } from './diagnostics.js'
 import type { UpgradeComponent, WarningOptions } from './diagnostics.js'
 
 export interface MdxcnOptions extends WarningOptions {
@@ -198,11 +198,7 @@ export function withMdxcn(md: MarkdownIt, options: MdxcnOptions = {}): void {
       }
     }
   }
-  try {
-    md.core.ruler.before('anchor', 'mdxcn_upgrades_finalize', finalize)
-  } catch {
-    md.core.ruler.push('mdxcn_upgrades_finalize', finalize)
-  }
+  registerFinalizer(md, 'upgrades', finalize)
   const binding = (upgrade: Upgrade) => `v-bind="${escapeAttribute(JSON.stringify(upgrade.props))}"`
   md.renderer.rules.mdxcn_callout_open = (tokens, index) => {
     const upgrade = tokens[index]!.meta.upgrade as Upgrade

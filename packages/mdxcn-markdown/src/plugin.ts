@@ -2,7 +2,7 @@ import type MarkdownIt from 'markdown-it'
 import type Token from 'markdown-it/lib/token.mjs'
 import { tokensToProps } from './model.js'
 import type { ComponentName } from './model.js'
-import { emitWarning, escapeAttribute, trackSource } from './diagnostics.js'
+import { emitWarning, escapeAttribute, trackSource, registerFinalizer } from './diagnostics.js'
 import type { WarningOptions } from './diagnostics.js'
 export type { MarkdownWarning } from './diagnostics.js'
 
@@ -155,9 +155,5 @@ export function mdxcnMarkdown(md: MarkdownIt, options: MarkdownOptions = {}): vo
     }
   }
   // Run after host inline transformations (emoji/typographer), before anchors.
-  try {
-    md.core.ruler.before('anchor', 'mdxcn_props', convert)
-  } catch {
-    md.core.ruler.push('mdxcn_props', convert)
-  }
+  registerFinalizer(md, 'compile', convert)
 }
