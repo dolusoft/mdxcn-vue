@@ -6,6 +6,12 @@ Sayım: 46 kullanıcı bileşeni + `graph-frame` temel bileşeni (`Graph`) + `md
 
 ## Okuma kuralları
 
+- Faz 6B: `GraphStat`, `GraphSlope`, `GraphBullet` ve `Stat`, `Slope`, `Target`
+  Vue portları tamamlandı. Upstream giriş sırası aşağıdaki üç satırdaki gibidir;
+  Vue derleyicisinin açık `list` alanı runtime liste ve item girdilerini bastırır.
+  Stat token ve ipucu metnini korur; Slope ok ayracı, Bullet hedef/üst sınır
+  ayracı kullanır. Ayrıntılar: [Faz 6B raporu](phase-6b-report.md).
+
 - Faz 2B-3 bilinçli erişilebilirlik farkı: Endpoint kod kaydırma bölgeleri tablo
   bölgesi gibi `tabindex="0"`, `role="region"` ve caption adı taşır. Başlık yoksa
   bölgeye `aria-label` verilir; mevcut olmayan caption kimliğine referans üretilmez.

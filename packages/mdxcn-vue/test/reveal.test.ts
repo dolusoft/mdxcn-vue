@@ -6,7 +6,18 @@ import type { Component } from 'vue'
 import type { RevealOptions } from '../src/directives/reveal'
 import { Annotate } from '../src/components/annotate'
 import { Env } from '../src/components/env'
-import { Chat, Keys, GraphTimeline, GraphSpec, GraphScore, GraphRank, GraphFunnel } from '../src'
+import {
+  GraphStat,
+  GraphSlope,
+  GraphBullet,
+  Chat,
+  Keys,
+  GraphTimeline,
+  GraphSpec,
+  GraphScore,
+  GraphRank,
+  GraphFunnel,
+} from '../src'
 import { Terminal } from '../src/components/terminal'
 
 let reduced: boolean
@@ -94,6 +105,35 @@ afterEach(() => {
 
 describe('v-reveal lifecycle', () => {
   it.each([
+    {
+      component: GraphStat,
+      props: {
+        title: 'STAT',
+        items: Array.from({ length: 60 }, (_, i) => ({ label: String(i), value: 2 })),
+      },
+      cap: 300,
+      selector: 'li',
+    },
+    {
+      component: GraphSlope,
+      props: {
+        title: 'SLOPE',
+        fromLabel: 'before',
+        toLabel: 'after',
+        items: Array.from({ length: 60 }, (_, i) => ({ label: String(i), from: 1, to: 2 })),
+      },
+      cap: 250,
+      selector: 'li',
+    },
+    {
+      component: GraphBullet,
+      props: {
+        title: 'BULLET',
+        items: Array.from({ length: 60 }, (_, i) => ({ label: String(i), value: 2, target: 3 })),
+      },
+      cap: 250,
+      selector: 'li',
+    },
     {
       component: GraphScore,
       props: {

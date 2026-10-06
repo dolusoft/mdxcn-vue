@@ -30,3 +30,14 @@ export { timelineFromList, specFromList } from './timeline-spec.js'
 
 export { firstToken, numericFromList, scoreFromList, normalizeNumeric } from './numeric-list.js'
 export type { ScoreRow, RankItem, FunnelStep, NumericRow } from './numeric-list.js'
+
+export {
+  statFromList,
+  slopeFromList,
+  bulletFromList,
+  normalizeSlope,
+  normalizeBullet,
+  formatNumber,
+  formatBullet,
+} from './stat-slope-bullet.js'
+export type { StatItem, SlopeItem, BulletItem, BulletRow } from './stat-slope-bullet.js'

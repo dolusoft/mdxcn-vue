@@ -26,6 +26,9 @@ const dataFields: Record<ComponentName, string[]> = {
   GraphScore: ['items', 'list'],
   GraphRank: ['items', 'list'],
   GraphFunnel: ['steps', 'list'],
+  GraphStat: ['items', 'list'],
+  GraphSlope: ['items', 'list'],
+  GraphBullet: ['items', 'list'],
 }
 /** Trusted repository Markdown only: the output is executable Vue template source. */
 export function mdxcnMarkdown(md: MarkdownIt, options: MarkdownOptions = {}): void {
@@ -49,7 +52,7 @@ export function mdxcnMarkdown(md: MarkdownIt, options: MarkdownOptions = {}): vo
       let openingEnd = start
       let openingText = lineAt(start)
       const leading = openingText.match(
-        /^<(GraphStack|GraphTable|Endpoint|Annotate|Env|Steps|Changelog|Decision|Chat|Keys|GraphTimeline|GraphSpec|GraphScore|GraphRank|GraphFunnel)(?=\s|>|$)/,
+        /^<(GraphStack|GraphTable|Endpoint|Annotate|Env|Steps|Changelog|Decision|Chat|Keys|GraphTimeline|GraphSpec|GraphScore|GraphRank|GraphFunnel|GraphStat|GraphSlope|GraphBullet)(?=\s|>|$)/,
       )
       if (!leading || /\/>\s*$/.test(openingText)) return false
       const name = leading[1] as ComponentName
@@ -57,9 +60,9 @@ export function mdxcnMarkdown(md: MarkdownIt, options: MarkdownOptions = {}): vo
         if (!silent) emitWarning(options, state.env, state.src, start, name, reason)
       }
       const pattern =
-        /^<(GraphStack|GraphTable|Endpoint|Annotate|Env|Steps|Changelog|Decision|Chat|Keys|GraphTimeline|GraphSpec|GraphScore|GraphRank|GraphFunnel)(\s(?:[^"'<>]|"[^"]*"|'[^']*')*)?>\s*$/
+        /^<(GraphStack|GraphTable|Endpoint|Annotate|Env|Steps|Changelog|Decision|Chat|Keys|GraphTimeline|GraphSpec|GraphScore|GraphRank|GraphFunnel|GraphStat|GraphSlope|GraphBullet)(\s(?:[^"'<>]|"[^"]*"|'[^']*')*)?>\s*$/
       const inlineOpening = openingText.match(
-        /^<(GraphStack|GraphTable|Endpoint|Annotate|Env|Steps|Changelog|Decision|Chat|Keys|GraphTimeline|GraphSpec|GraphScore|GraphRank|GraphFunnel)(\s(?:[^"'<>]|"[^"]*"|'[^']*')*)?>(.*)$/,
+        /^<(GraphStack|GraphTable|Endpoint|Annotate|Env|Steps|Changelog|Decision|Chat|Keys|GraphTimeline|GraphSpec|GraphScore|GraphRank|GraphFunnel|GraphStat|GraphSlope|GraphBullet)(\s(?:[^"'<>]|"[^"]*"|'[^']*')*)?>(.*)$/,
       )
       if (inlineOpening?.[3]?.trim()) {
         warn('Opening tag and content must be on separate lines')
@@ -109,6 +112,9 @@ export function mdxcnMarkdown(md: MarkdownIt, options: MarkdownOptions = {}): vo
           'GraphScore',
           'GraphRank',
           'GraphFunnel',
+          'GraphStat',
+          'GraphSlope',
+          'GraphBullet',
         ].includes(name) &&
           /^\s*\d+[.)]\s/.test(lineAt(openingEnd + 1)))
       ) {

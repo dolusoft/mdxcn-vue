@@ -130,3 +130,11 @@ export type {
   GraphFunnelProps,
 } from './components/numeric-list.js'
 export type { ScoreRow, RankItem, FunnelStep } from './core/numeric-list.js'
+
+export { GraphStat, Stat } from './components/graph-stat.js'
+export { GraphSlope, Slope } from './components/graph-slope.js'
+export { GraphBullet, Target } from './components/graph-bullet.js'
+export type { GraphStatProps } from './components/graph-stat.js'
+export type { GraphSlopeProps } from './components/graph-slope.js'
+export type { GraphBulletProps } from './components/graph-bullet.js'
+export type { StatItem, SlopeItem, BulletItem, BulletRow } from './core/stat-slope-bullet.js'
