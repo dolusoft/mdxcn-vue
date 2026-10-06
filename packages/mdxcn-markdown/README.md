@@ -12,7 +12,7 @@ export default {
 }
 ```
 
-Register `GraphStack`, `GraphTable` and `Endpoint` from `mdxcn-vue` in your Vue
+Register `GraphStack`, `GraphTable`, `Endpoint`, `Annotate` and `Env` from `mdxcn-vue` in your Vue
 host. The plugin compiles their Markdown into typed props after host inline
 processing and before anchors/highlighting. Unsupported content retains runtime
 slots with file/line warnings. Tags need their own lines; lists need a preceding
@@ -24,8 +24,8 @@ Full contracts: [project README](https://github.com/dolusoft/mdxcn-vue#readme).
 
 Also exports `withMdxcn`: GitHub/Obsidian alerts, attributed quotes, console/shell
 sessions and host footnotes. Options `alerts`, `quotes`, `terminals`, `footnotes`
-default to true. Until the prose components are ported, the default empty
-`components` list emits source warnings and preserves native HTML. Declare only
+default to true. The default empty `components` list emits source warnings and
+preserves native HTML. Declare only
 host-registered names (`Callout`, `Quote`, `Terminal`, `Footnotes`) to emit Vue
 tags; Terminal uses `prompt`/`text` bindings. Footnote IDs/backlinks are preserved
 and require a host footnote parser. This plugin is also for trusted Markdown.

@@ -9,11 +9,15 @@ import {
   normalizeProseWhitespace,
 } from 'mdxcn-vue/core'
 import type { EndpointBlock, EndpointParam } from 'mdxcn-vue'
+import type { EnvVar } from 'mdxcn-vue/core'
+import { parseEnv, envVarFromList } from 'mdxcn-vue/core'
 
-export type ComponentName = 'GraphStack' | 'GraphTable' | 'Endpoint'
+export type ComponentName = 'GraphStack' | 'GraphTable' | 'Endpoint' | 'Annotate' | 'Env'
 export type CompiledProps =
   | { rows: StackRow[] }
   | TableModel
+  | { code: string; notes: ProseNode[][]; title: string }
+  | { vars: EnvVar[] }
   | {
       method: string
       path: string
@@ -90,6 +94,7 @@ function blocks(
   md: MarkdownIt,
   env: object,
   options: TokenModelOptions,
+  orderedLists = false,
 ): Block[] {
   const root: Block[] = []
   const stack = [root]
@@ -110,11 +115,18 @@ function blocks(
         ),
       })
     } else if (token.type === 'fence') stack.at(-1)!.push({ tag: 'fence', token, children: [] })
-    else if (token.nesting === 1 && allowed.has(token.tag)) {
+    else if (
+      token.nesting === 1 &&
+      (allowed.has(token.tag) || (orderedLists && token.tag === 'ol'))
+    ) {
       const block: Block = { tag: token.tag, token, children: [] }
       stack.at(-1)!.push(block)
       stack.push(block.children)
-    } else if (token.nesting === -1 && allowed.has(token.tag)) stack.pop()
+    } else if (
+      token.nesting === -1 &&
+      (allowed.has(token.tag) || (orderedLists && token.tag === 'ol'))
+    )
+      stack.pop()
     else throw new Error(`Unsupported block token: ${token.type}`)
   }
   return root
@@ -144,7 +156,42 @@ export function tokensToProps(
   env: object = {},
   options: TokenModelOptions = {},
 ): CompiledProps {
-  const tree = blocks(tokens, md, env, options)
+  const tree = blocks(tokens, md, env, options, name === 'Annotate' || name === 'Env')
+  if (name === 'Annotate' || name === 'Env') {
+    if (tree.some((block) => !['fence', 'ol', 'ul', 'p'].includes(block.tag)))
+      throw new Error(`${name} requires fences, lists or paragraphs`)
+    const fence = tree.find((block) => block.tag === 'fence')
+    const items = tree
+      .filter((block) => block.tag === 'ol' || block.tag === 'ul')
+      .flatMap((list) => list.children)
+    // Preserve paragraph and nested-list structure through the runtime reader.
+    if (
+      items.some(
+        (item) =>
+          item.children.some((block) => !['p', 'inline'].includes(block.tag)) ||
+          item.children.filter((block) => block.tag === 'p').length > 1,
+      )
+    )
+      throw new Error('Complex list items require runtime resolution')
+    if (name === 'Annotate')
+      return {
+        code: fence?.token.content ?? '',
+        notes: items.map(content),
+        title: fence?.token.info.trim().match(/^[^\s:{[]+/)?.[0] ?? 'code',
+      }
+    return {
+      vars: fence
+        ? parseEnv(fence.token.content)
+        : items.length
+          ? items.map((item) =>
+              envVarFromList(
+                proseText(normalizeProseWhitespace(content(item))),
+                bold(content(item)),
+              ),
+            )
+          : parseEnv(tree.map((block) => proseText(content(block))).join('')),
+    }
+  }
   if (name === 'GraphStack') {
     if (tree.some((block) => block.tag !== 'ul'))
       throw new Error('GraphStack requires direct bullet lists')

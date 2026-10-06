@@ -15,7 +15,7 @@ export default defineConfig({
     md.use(withMdxcn, { components: ['Callout', 'Quote', 'Terminal'] })
   } },
   themeConfig: {
-    sidebar: [{ text: 'Components', items: [{ text: 'GraphStack', link: '/components/graph-stack' }, { text: 'GraphTable', link: '/components/graph-table' }, { text: 'Endpoint', link: '/components/endpoint' }, { text: 'GraphTimer', link: '/components/graph-timer' }, { text: 'Callout', link: '/components/callout' }, { text: 'Quote', link: '/components/quote' }, { text: 'Terminal', link: '/components/terminal' }] }],
+    sidebar: [{ text: 'Components', items: [{ text: 'GraphStack', link: '/components/graph-stack' }, { text: 'GraphTable', link: '/components/graph-table' }, { text: 'Endpoint', link: '/components/endpoint' }, { text: 'GraphTimer', link: '/components/graph-timer' }, { text: 'Callout', link: '/components/callout' }, { text: 'Quote', link: '/components/quote' }, { text: 'Terminal', link: '/components/terminal' }, { text: 'Annotate', link: '/components/annotate' }, { text: 'Env', link: '/components/env' }] }],
   },
   vite: {
     // Vue DevTools: in-page overlay plus standalone UI at `/__devtools__/`.

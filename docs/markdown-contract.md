@@ -33,6 +33,18 @@ sağlanan parser kullanılır; runtime Markdown renderer eklenmez.
   algılaması yapılmaz; boş açıklama `undefined` olur. `about` alanı paragraf
   başına bir `ProseNode[]` taşır. Kod girintisi korunur; yalnız bir son newline
   çıkarılır. `$ ` ve `curl` önekleri `request` etiketi üretir.
+- `Annotate`: ilk fence → `code` ve varsayılan `title`; doğrudan `ol`/`ul`
+  notları → zengin `ProseNode[][]` içeren `notes`. İşaretler runtime core
+  okuyucusunda ayrıştırılır. İki veri alanının önceliği bağımsızdır; boş değerler
+  fallback yapmaz. Kod yoksa boş bir satır çizilir. Birden fazla paragraf veya
+  iç içe liste içeren notlar yapıyı korumak için runtime okuyucusuna bırakılır;
+  upstream gibi iç içe not listeleri çizilmez.
+- `Env`: ilk fence (boş olsa da) → boş olmayan doğrudan liste → ham metin;
+  sonuç `vars` dizisidir. Açık `vars` alanı tüm Markdown girdilerinden önce gelir.
+  Liste metni `KEY: value — note` biçimindedir; kalın öğe `required` bayrağını
+  üretir. Core `parseEnv` upstream gösterim grammar davranışını korur: boş
+  satır yorumları temizler, geçersiz satır atlanır ve ` #` dizisi tırnak içinde
+  bile inline yorum başlatır. Bu bir dotenv yükleyicisi değildir.
 
 Plugin, `html_block` kuralından önce ham blokları alır; gövde token değerlerini
 host core kurallarına bırakır. Model dönüşümü `inline`, emoji, typographer ve
@@ -92,7 +104,7 @@ Faz 4A'da `Callout`, `Quote`, `Terminal` gerçek Vue bileşenleri olarak sağlan
 `Terminal` için `text` upstream'de olmayan derleyici girdisidir: açık değer slot
 metninden önce gelir; boş string slotu bastırır, `null`/`undefined` slotu okur.
 Prose bileşenlerinin gövdesi slot olarak kalır; item adaptörü yoktur.
-`Terminal` ve `Endpoint` etiketleri içindeki fence blokları kendi okuyucularına
+`Terminal`, `Endpoint`, `Annotate` ve `Env` etiketleri içindeki fence blokları kendi okuyucularına
 bırakılır; iç içe otomatik `Terminal` üretilmez.
 
 `withMdxcn` çerçeve içindeki `blockquote` token değerlerini de işler: açık
@@ -106,7 +118,8 @@ Varsayılan boş liste kaynak konumlu uyarıyla HTML üretir: host alert çıkt�
 `pre > code` yapısı ve özgün footnote bölümü. Zengin gövde biçimleri korunur.
 Seçenekler yalnız bu plugin'in dönüşümlerini kapatır; VitePress'in kendi alert
 işlevi gibi host özelliklerini kapatmaz. Registry dört mevcut bileşeni, üç yeni
-prose/fence bileşenini, frame, core ve CSS dosyalarını içerir; toplam on öğedir.
+prose/fence bileşenini, `Annotate`, `Env`, frame, core ve CSS dosyalarını içerir;
+toplam on iki öğedir.
 
 Runtime Endpoint, VitePress `div.language-* > pre` sarmalayıcısını tek seviyede
 açar; `button.copy` ve `span.lang` içerik sayılmaz. Highlighter kaynak kodun

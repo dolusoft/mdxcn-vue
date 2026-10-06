@@ -1,6 +1,6 @@
 import type { Theme } from 'vitepress'
 import DefaultTheme from 'vitepress/theme'
-import { Bar, Callout, Quote, Terminal, Endpoint, GraphStack, GraphTable, GraphTimer, Head, Row, Foot, Cell, Segment } from 'mdxcn-vue'
+import { Annotate, Env, Bar, Callout, Quote, Terminal, Endpoint, GraphStack, GraphTable, GraphTimer, Head, Row, Foot, Cell, Segment } from 'mdxcn-vue'
 import './style.css'
 import '@fontsource/geist-mono/400.css'
 import '@fontsource/geist-mono/600.css'
@@ -8,6 +8,8 @@ import '@fontsource/geist-mono/600.css'
 export default {
   extends: DefaultTheme,
   enhanceApp({ app }) {
+    app.component('Annotate', Annotate)
+    app.component('Env', Env)
     app.component('Callout', Callout)
     app.component('Quote', Quote)
     app.component('Terminal', Terminal)

@@ -42,6 +42,8 @@ export default tseslint.config(
             'Callout',
             'Quote',
             'Terminal',
+            'Annotate',
+            'Env',
           ],
         },
       ],

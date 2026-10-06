@@ -4,8 +4,9 @@ Vue 3 port of [mdxcn](https://github.com/shadcn-labs/mdxcn) — ASCII-style grap
 prose components (tables, bars, timelines, invoices, terminals, ...) that can be fed
 by typed props, item components or Markdown.
 
-> **Status:** work in progress. Phase 3 includes the shared frame, typed core,
-> `v-reveal`, `GraphStack`, `GraphTable`, `Endpoint` and `GraphTimer`;
+> **Status:** work in progress. Phase 4B includes the shared frame, typed core,
+> `v-reveal`, `GraphStack`, `GraphTable`, `Endpoint`, `GraphTimer`, `Callout`,
+> `Quote`, `Terminal`, `Annotate` and `Env`;
 > build-time Markdown and packaged consumer checks are available; the remaining
 > components are still pending.
 
@@ -143,6 +144,8 @@ Use this plugin in VitePress `markdown.config` for **trusted repository Markdown
 only**. It generates executable Vue template expressions; it is not a sanitizer
 for user content. `GraphStack` lists, `GraphTable` tables and `Endpoint` paragraphs,
 parameter tables and fences become typed props before anchors and highlighting.
+`Annotate` fence/list bodies and `Env` fence/list/raw-text bodies also compile;
+explicit data props or complex note structures retain their runtime readers.
 Inline strong/emphasis/code/links remain rich. The host supplies `markdown-it`;
 `mdxcn-markdown` requires `markdown-it ^14` as a peer. VitePress integration is
 tested with `2.0.0-alpha.20`; component block, entity and link behavior depends
@@ -174,7 +177,7 @@ import { withMdxcn } from 'mdxcn-markdown'
 
 md.use(withMdxcn, {
   alerts: true, quotes: true, terminals: true, footnotes: true,
-  components: [], // Names explicitly registered by the host, once ported.
+  components: [], // Names explicitly registered by the host.
   warn: (warning) => console.warn(warning),
 })
 ```
@@ -186,7 +189,8 @@ prompt target `Terminal`. Unprompted shell scripts stay code. Host-generated
 footnote sections target `Footnotes`; the host must enable a footnote parser
 (VitePress already does). All four options default to `true`.
 
-The prose components are not yet ported. By default the plugin warns and renders
+`Callout`, `Quote` and `Terminal` are ported; `Footnotes` remains pending.
+By default the plugin warns and renders
 native HTML: the original alert blockquote (or VitePress custom block), an
 attributed blockquote with its em dash, the host's code block and
 footnote section. IDs/backlinks, rich body content and code whitespace survive.
@@ -199,6 +203,24 @@ with the first source location. Create a new parser for a separate site.
 This is an opt-in plugin for trusted Markdown; it composes with `mdxcnMarkdown`
 in either registration order. Register both in the host's Markdown configuration,
 and register each name listed in `components` in the Vue app separately.
+
+## Annotate and Env
+
+```vue
+<Annotate title="example.ts" code="const active = true // (1)" :notes="['Enable the feature.']" />
+<Env :vars="[{ name: 'DATABASE_URL', value: 'postgres://localhost:5432/app', required: true }]" />
+```
+
+Import `Annotate` and `Env` from `mdxcn-vue`. `Annotate` selects `code` and
+`notes` independently, falling back to its first fence and direct lists. Notes
+accept strings, numbers, VNodes and inline `ProseNode[]` models. `Env` selects
+`vars`, then the first fence (even empty), then a nonempty list, then raw text.
+Empty props suppress fallback; `null` and `undefined` allow it. Neither has an
+item API. Both preserve the upstream frame, palette and required/marker semantics.
+Core helpers `parseAnnotatedCode`, `parseEnv` and `envVarFromList` are available
+only through `mdxcn-vue/core`. The Env grammar is a display parser with upstream
+inline-comment behavior, not a dotenv loader. See the docs pages and
+[Markdown contract](docs/markdown-contract.md) for input details and limits.
 
 `pnpm consumer:check` packs both libraries and installs isolated Vite/Vue/Tailwind
 and VitePress projects outside the repo (`../tmp/mdxcn-vue/consumer-*`). It verifies

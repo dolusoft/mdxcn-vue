@@ -206,12 +206,12 @@ write(
   app,
   'src/App.vue',
   `<script setup lang="ts">
-import {GraphStack,GraphTable,Endpoint,GraphTimer,Callout,Quote,Terminal} from 'mdxcn-vue';
+import {GraphStack,GraphTable,Endpoint,GraphTimer,Callout,Quote,Terminal,Annotate,Env} from 'mdxcn-vue';
 import {splitLabel} from 'mdxcn-vue/core';
 import type {StackRow,TableModel} from 'mdxcn-vue/core';
 const rows: StackRow[]=[{label:splitLabel('Web: 1 js').label,segments:[{label:'js',value:1}]}];
 const table:TableModel={headers:['A'],rows:[['B']]};
-</script><template><GraphStack title="STACK" :rows="rows"/><GraphTable title="TABLE" v-bind="table"/><Endpoint/><GraphTimer title="TIMER" kind="clock"/><Callout type="warning"><p>Registry source</p></Callout><Quote by="Paul Graham" source="Taste for Makers"><p>Voices in tune.</p></Quote><Terminal :text="'$ run'"/></template>`,
+</script><template><GraphStack title="STACK" :rows="rows"/><GraphTable title="TABLE" v-bind="table"/><Endpoint/><GraphTimer title="TIMER" kind="clock"/><Callout type="warning"><p>Registry source</p></Callout><Quote by="Paul Graham" source="Taste for Makers"><p>Voices in tune.</p></Quote><Terminal :text="'$ run'"/><Annotate code="run // (1)" :notes="['One']"/><Env :vars="[{name:'A',value:'one',required:true}]"/></template>`,
 )
 write(
   app,
@@ -223,7 +223,7 @@ write(
   'src/type-contract.ts',
   `import {splitLabel} from 'mdxcn-vue/core';
 import type {StackRow} from 'mdxcn-vue/core';
-import type {GraphStackProps,CalloutProps,QuoteProps,TerminalProps} from 'mdxcn-vue';
+import type {GraphStackProps,CalloutProps,QuoteProps,TerminalProps,AnnotateProps,EnvProps} from 'mdxcn-vue';
 import {mdxcnMarkdown,withMdxcn} from 'mdxcn-markdown';
 import type {MdxcnOptions} from 'mdxcn-markdown';
 import MarkdownIt from 'markdown-it';
@@ -232,6 +232,14 @@ const graph:GraphStackProps={title:'STACK',rows:[row]};
 const callout:CalloutProps={type:'warning'};
 const quote:QuoteProps={by:'Paul Graham'};
 const terminal:TerminalProps={text:'$ run',prompt:'$'};
+const annotate:AnnotateProps={code:'run // (1)',notes:['One']};
+const env:EnvProps={vars:[{name:'A',required:true}]};
+// @ts-expect-error Code must remain a string.
+annotate.code=42;
+// @ts-expect-error Notes must remain an array.
+annotate.notes='wrong';
+// @ts-expect-error Required must remain a boolean.
+env.vars=[{name:'A',required:'yes'}];
 // @ts-expect-error Callout types must remain a closed union.
 callout.type='unknown';
 // @ts-expect-error Attribution must remain a string.
@@ -398,6 +406,12 @@ console.log('VITEPRESS CONSUMER PASSED: 3 compiled figures, 4 warned native upgr
 // The same packed packages must render registered upgrades as real Vue figures.
 write(
   site,
+  'index.md',
+  readFileSync(join(site, 'index.md'), 'utf8') +
+    '\n\n<Annotate>\n\n```python\nrun() # (1)\n```\n\n1. One **note**.\n\n</Annotate>\n\n<Env>\n\n```bash\n# Required.\nCONSUMER_KEY=one\n```\n\n</Env>\n',
+)
+write(
+  site,
   '.vitepress/config.ts',
   readFileSync(join(site, '.vitepress/config.ts'), 'utf8').replace(
     'md.use(withMdxcn,{warn:',
@@ -407,7 +421,7 @@ write(
 write(
   site,
   '.vitepress/theme/index.ts',
-  `import DefaultTheme from 'vitepress/theme';import {GraphStack,GraphTable,Endpoint,Callout,Quote,Terminal} from 'mdxcn-vue';import './style.css';export default {...DefaultTheme,enhanceApp({app}) {for(const [name,component] of Object.entries({GraphStack,GraphTable,Endpoint,Callout,Quote,Terminal}))app.component(name,component);}};`,
+  `import DefaultTheme from 'vitepress/theme';import {GraphStack,GraphTable,Endpoint,Callout,Quote,Terminal,Annotate,Env} from 'mdxcn-vue';import './style.css';export default {...DefaultTheme,enhanceApp({app}) {for(const [name,component] of Object.entries({GraphStack,GraphTable,Endpoint,Callout,Quote,Terminal,Annotate,Env}))app.component(name,component);}};`,
 )
 const registeredOutput = run(['exec', 'vitepress', 'build'], site, true)
 assert.deepEqual(
@@ -415,7 +429,7 @@ assert.deepEqual(
   ['Footnotes'],
 )
 const registeredHtml = readFileSync(join(site, '.vitepress/dist/index.html'), 'utf8')
-assert.equal((registeredHtml.match(/<figure\b/g) ?? []).length, 6)
+assert.equal((registeredHtml.match(/<figure\b/g) ?? []).length, 8)
 for (const value of [
   'role="note"',
   '[ note ]',
@@ -425,11 +439,16 @@ for (const value of [
   '>run</span>',
   '>output</span>',
   'id="footnote1"',
+  '[ python ]',
+  '>run()</span>',
+  '>One <strong>note</strong>.</div>',
+  'CONSUMER_KEY',
+  ' (required)</span>',
 ])
   assert.ok(registeredHtml.includes(value), `Missing registered upgrade ${value}`)
-assert.doesNotMatch(registeredHtml, /<(?:Callout|Quote|Terminal|Footnotes)\b/)
+assert.doesNotMatch(registeredHtml, /<(?:Callout|Quote|Terminal|Footnotes|Annotate|Env)\b/)
 console.log(
-  'REGISTERED VITEPRESS CONSUMER PASSED: 6 figures, Callout/Quote/Terminal rendered; Footnotes fallback preserved',
+  'REGISTERED VITEPRESS CONSUMER PASSED: 8 figures, Callout/Quote/Terminal/Annotate/Env rendered; Footnotes fallback preserved',
 )
 
 // Install generated registry payloads with the real CLI, without a server.
@@ -473,8 +492,8 @@ write(
 )
 const registryApp = readFileSync(join(app, 'src/App.vue'), 'utf8')
   .replace(
-    "import {GraphStack,GraphTable,Endpoint,GraphTimer,Callout,Quote,Terminal} from 'mdxcn-vue';",
-    "import {GraphStack} from './components/mdxcn/components/graph-stack';import {GraphTable} from './components/mdxcn/components/graph-table';import {Endpoint} from './components/mdxcn/components/endpoint';import {GraphTimer} from './components/mdxcn/components/graph-timer';import {Callout} from './components/mdxcn/components/callout';import {Quote} from './components/mdxcn/components/quote';import {Terminal} from './components/mdxcn/components/terminal';",
+    "import {GraphStack,GraphTable,Endpoint,GraphTimer,Callout,Quote,Terminal,Annotate,Env} from 'mdxcn-vue';",
+    "import {GraphStack} from './components/mdxcn/components/graph-stack';import {GraphTable} from './components/mdxcn/components/graph-table';import {Endpoint} from './components/mdxcn/components/endpoint';import {GraphTimer} from './components/mdxcn/components/graph-timer';import {Callout} from './components/mdxcn/components/callout';import {Quote} from './components/mdxcn/components/quote';import {Terminal} from './components/mdxcn/components/terminal';import {Annotate} from './components/mdxcn/components/annotate';import {Env} from './components/mdxcn/components/env';",
   )
   .replaceAll("'mdxcn-vue/core'", "'./components/mdxcn/core'")
 write(registry, 'src/App.vue', registryApp)
@@ -534,7 +553,7 @@ const results = {
   stackLibraryBytes,
   vueRuntimeEntries: vueEntries.length,
   vitepressFigures: 3,
-  registeredVitepressFigures: 6,
+  registeredVitepressFigures: 8,
   upgradeFallbacks: fallbackNames,
   registryItems: registryPaths.length,
   registryFiles: copied.size,

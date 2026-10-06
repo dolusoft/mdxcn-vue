@@ -40,10 +40,11 @@ function readerRanges(tokens: readonly Token[]): [number, number][] {
     if (token.type !== 'html_block') continue
     const html = token.content.replace(/<!--[\s\S]*?(?:-->|$)/g, '')
     for (const tag of html.matchAll(
-      /<\/?(Terminal|Endpoint)(?=\s|\/?>)(?:[^"'<>]|"[^"]*"|'[^']*')*>/g,
+      /<\/?(Terminal|Endpoint|Annotate|Env)(?=\s|\/?>)(?:[^"'<>]|"[^"]*"|'[^']*')*>/g,
     )) {
       if (tag[0].startsWith('</')) {
-        const at = stack.findLastIndex((entry) => entry.name === tag[1])
+        let at = stack.length - 1
+        while (at >= 0 && stack[at]!.name !== tag[1]) at--
         if (at >= 0) {
           ranges.push([stack[at]!.index, index])
           stack.splice(at)
@@ -95,7 +96,7 @@ export function withMdxcn(md: MarkdownIt, options: MdxcnOptions = {}): void {
   const warned = new Set<UpgradeComponent>()
   md.core.ruler.after('block', 'mdxcn_upgrades_blocks', (state) => {
     const tokens = state.tokens
-    const ranges = available.has('Terminal') ? readerRanges(tokens) : []
+    const ranges = readerRanges(tokens)
     // Keep token identities: alert/byline processing may splice earlier tokens.
     const ownedFences = new Set(
       tokens.filter(

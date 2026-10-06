@@ -14,6 +14,8 @@ const dataFields: Record<ComponentName, string[]> = {
   GraphStack: ['rows'],
   GraphTable: ['headers', 'rows', 'footer', 'align'],
   Endpoint: ['method', 'path', 'params', 'blocks', 'about'],
+  Annotate: ['code', 'notes'],
+  Env: ['vars'],
 }
 /** Trusted repository Markdown only: the output is executable Vue template source. */
 export function mdxcnMarkdown(md: MarkdownIt, options: MarkdownOptions = {}): void {
@@ -36,15 +38,16 @@ export function mdxcnMarkdown(md: MarkdownIt, options: MarkdownOptions = {}): vo
         state.src.slice(state.bMarks[line]! + state.tShift[line]!, state.eMarks[line])
       let openingEnd = start
       let openingText = lineAt(start)
-      const leading = openingText.match(/^<(GraphStack|GraphTable|Endpoint)(?=\s|>|$)/)
+      const leading = openingText.match(/^<(GraphStack|GraphTable|Endpoint|Annotate|Env)(?=\s|>|$)/)
       if (!leading || /\/>\s*$/.test(openingText)) return false
       const name = leading[1] as ComponentName
       const warn = (reason: string) => {
         if (!silent) emitWarning(options, state.env, state.src, start, name, reason)
       }
-      const pattern = /^<(GraphStack|GraphTable|Endpoint)(\s(?:[^"'<>]|"[^"]*"|'[^']*')*)?>\s*$/
+      const pattern =
+        /^<(GraphStack|GraphTable|Endpoint|Annotate|Env)(\s(?:[^"'<>]|"[^"]*"|'[^']*')*)?>\s*$/
       const inlineOpening = openingText.match(
-        /^<(GraphStack|GraphTable|Endpoint)(\s(?:[^"'<>]|"[^"]*"|'[^']*')*)?>(.*)$/,
+        /^<(GraphStack|GraphTable|Endpoint|Annotate|Env)(\s(?:[^"'<>]|"[^"]*"|'[^']*')*)?>(.*)$/,
       )
       if (inlineOpening?.[3]?.trim()) {
         warn('Opening tag and content must be on separate lines')

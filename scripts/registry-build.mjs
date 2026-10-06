@@ -17,6 +17,8 @@ const definitions = [
   ['callout', ['components/callout.ts']],
   ['quote', ['components/quote.ts']],
   ['terminal', ['components/terminal.ts']],
+  ['annotate', ['components/annotate.ts']],
+  ['env', ['components/env.ts']],
   ['graph-frame', ['components/graph-frame.ts']],
   ['core', ['core/index.ts']],
   ['css', ['styles/graph.css', 'styles/host.css', 'styles/theme.css']],
