@@ -1,0 +1,116 @@
+{
+  "capturedAt": "2026-10-06T21:23:41.287Z",
+  "archiveRoot": "C:/Users/zahid/source/github/tmp/mdxcn-vue",
+  "browser": {
+    "nojs": [
+      {
+        "page": "light:graph-stack",
+        "scriptsRan": false,
+        "hasVueApp": false,
+        "figureCount": 5,
+        "allVisible": true
+      },
+      {
+        "page": "light:graph-table",
+        "scriptsRan": false,
+        "hasVueApp": false,
+        "figureCount": 4,
+        "allVisible": true
+      },
+      {
+        "page": "light:endpoint",
+        "scriptsRan": false,
+        "hasVueApp": false,
+        "figureCount": 2,
+        "allVisible": true
+      },
+      {
+        "page": "light:graph-timer",
+        "scriptsRan": false,
+        "hasVueApp": false,
+        "figureCount": 3,
+        "allVisible": true
+      },
+      {
+        "page": "dark:graph-stack",
+        "scriptsRan": false,
+        "hasVueApp": false,
+        "figureCount": 5,
+        "allVisible": true
+      },
+      {
+        "page": "dark:graph-table",
+        "scriptsRan": false,
+        "hasVueApp": false,
+        "figureCount": 4,
+        "allVisible": true
+      },
+      {
+        "page": "dark:endpoint",
+        "scriptsRan": false,
+        "hasVueApp": false,
+        "figureCount": 2,
+        "allVisible": true
+      },
+      {
+        "page": "dark:graph-timer",
+        "scriptsRan": false,
+        "hasVueApp": false,
+        "figureCount": 3,
+        "allVisible": true
+      }
+    ],
+    "jsblocked": [
+      {
+        "page": "light:graph-stack",
+        "scriptsRan": false,
+        "hasVueApp": false,
+        "figureCount": 5,
+        "allVisible": true
+      },
+      {
+        "page": "light:graph-table",
+        "scriptsRan": false,
+        "hasVueApp": false,
+        "figureCount": 4,
+        "allVisible": true
+      },
+      {
+        "page": "light:endpoint",
+        "scriptsRan": false,
+        "hasVueApp": false,
+        "figureCount": 2,
+        "allVisible": true
+      },
+      {
+        "page": "light:graph-timer",
+        "scriptsRan": false,
+        "hasVueApp": false,
+        "figureCount": 3,
+        "allVisible": true
+      }
+    ]
+  },
+  "hashes": {
+    "f2b4-tools/nojs.out.json": "f67392521ed77b3dc6ffe076e9eda196d98eb21e23a30e3bead059bbae75f32d",
+    "f2b4-tools/jsblocked.out.json": "8379430de1ee678810e3e66f6379c5e3e04bbc0a0279ff1efe2cef0ac9446159",
+    "f2b4-shots/jsblocked-endpoint-light-1280.png": "545cf9f7e6d843980792bb653b14f5af98c5cc982c26c837214395a52f0398fd",
+    "f2b4-shots/jsblocked-graph-stack-light-1280.png": "c49248b56bde894803be2ecfcfd6bdcd8f71ead5774503645189e821583cdd21",
+    "f2b4-shots/jsblocked-graph-table-light-1280.png": "142de7d629b9df9cb9d59352bbb5c6bcf5cb7d1effcd7e4f27c57d4445e11b8b",
+    "f2b4-shots/jsblocked-graph-timer-light-1280.png": "12e7fe54096577dae23d153848f1e4a9ee3535114246287b35de3b2a4c3fb0c5",
+    "f2b4-shots/nojs-endpoint-dark-1280.png": "545cf9f7e6d843980792bb653b14f5af98c5cc982c26c837214395a52f0398fd",
+    "f2b4-shots/nojs-endpoint-light-1280.png": "545cf9f7e6d843980792bb653b14f5af98c5cc982c26c837214395a52f0398fd",
+    "f2b4-shots/nojs-graph-stack-dark-1280.png": "c49248b56bde894803be2ecfcfd6bdcd8f71ead5774503645189e821583cdd21",
+    "f2b4-shots/nojs-graph-stack-light-1280.png": "c49248b56bde894803be2ecfcfd6bdcd8f71ead5774503645189e821583cdd21",
+    "f2b4-shots/nojs-graph-table-dark-1280.png": "142de7d629b9df9cb9d59352bbb5c6bcf5cb7d1effcd7e4f27c57d4445e11b8b",
+    "f2b4-shots/nojs-graph-table-light-1280.png": "142de7d629b9df9cb9d59352bbb5c6bcf5cb7d1effcd7e4f27c57d4445e11b8b",
+    "f2b4-shots/nojs-graph-timer-dark-1280.png": "12e7fe54096577dae23d153848f1e4a9ee3535114246287b35de3b2a4c3fb0c5",
+    "f2b4-shots/nojs-graph-timer-light-1280.png": "12e7fe54096577dae23d153848f1e4a9ee3535114246287b35de3b2a4c3fb0c5"
+  },
+  "cls": {
+    "reportedPreviousValue": 0.0007,
+    "verifiedThisPhase": false,
+    "layoutShiftEventsInArchive": 0,
+    "reason": "No persisted layout-shift score; remeasure after font changes"
+  }
+}
