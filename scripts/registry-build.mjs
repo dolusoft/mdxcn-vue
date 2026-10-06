@@ -24,7 +24,7 @@ function closure(entries) {
     const content = readFileSync(join(src, path), 'utf8')
     for (const match of content.matchAll(/(?:from\s*|@import\s*)['"]([^'"]+)['"]/g)) {
       if (!match[1].startsWith('.')) continue
-      const relative = resolve(src, dirname(path), match[1])
+      const relative = resolve(src, dirname(path), match[1].replace(/\.js$/, '.ts'))
       const target = existsSync(relative) ? relative : `${relative}.ts`
       assert.ok(
         target.startsWith(src + '/'.replace('/', process.platform === 'win32' ? '\\' : '/')),
@@ -53,7 +53,7 @@ function output(path, value) {
 const items = definitions.map(([name, entries]) => ({
   $schema: 'https://shadcn-vue.com/schema/registry-item.json',
   name: `mdxcn-${name}`,
-  type: name === 'css' ? 'registry:style' : name === 'core' ? 'registry:lib' : 'registry:component',
+  type: name === 'css' ? 'registry:file' : name === 'core' ? 'registry:lib' : 'registry:component',
   title: `mdxcn ${name}`,
   description: `Vue 3 ${name} from the mdxcn-vue source tree.`,
   dependencies: ['vue@^3.5.0'],

@@ -351,7 +351,9 @@ const localItems = registryPaths.map((path) => {
   write(registry, target, readFileSync(path, 'utf8'))
   return `./${target}`
 })
-run(['exec', 'shadcn-vue', 'add', '--yes', '--overwrite', ...localItems], registry)
+const registryInstall = run(['exec', 'shadcn-vue', 'add', '--overwrite', ...localItems], registry, true)
+assert.doesNotMatch(registryInstall, /overwrite.*(?:CSS|variables)|[?❯]/i)
+console.log('REGISTRY PROMPT CHECK PASSED: closed stdin, no --yes')
 const copied = new Set()
 for (const path of registryPaths) {
   const item = JSON.parse(readFileSync(path, 'utf8'))
