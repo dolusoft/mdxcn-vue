@@ -20,9 +20,9 @@ export default defineConfig({
   ],
   build: {
     lib: {
-      entry: 'src/index.ts',
+      entry: { index: 'src/index.ts', core: 'src/core/index.ts' },
       formats: ['es'],
-      fileName: 'index',
+      fileName: (_format, name) => `${name}.js`,
     },
     rolldownOptions: {
       // `vue` is a peer dependency and must never be bundled.

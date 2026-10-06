@@ -1,5 +1,5 @@
 import { expect, it } from 'vitest'
-import { numbers, words, splitDash } from '../src'
+import { numbers, words, splitDash } from '../src/core'
 
 it('words preserves arrays and splits whitespace and commas', () => {
   expect(words(undefined)).toEqual([])
