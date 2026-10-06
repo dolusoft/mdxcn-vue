@@ -6,6 +6,9 @@ import { splitLabel } from './stack.js'
 
 /** Host-independent description; paragraphs are present only for loose lists. */
 export interface StateListItem {
+  /** Optional for compatibility with existing compiler inputs. */
+  head?: ProseNode[]
+  body?: ProseNode[][]
   text: string
   paragraphs: ProseNode[][]
   strong: boolean

@@ -246,7 +246,14 @@ describe('independent state-list fixtures', () => {
       ]),
     ])
     expect(list.map((i) => i.description)).toEqual([
-      { text: 'A — B', paragraphs: [], strong: true, em: true },
+      {
+        text: 'A — B',
+        paragraphs: [],
+        strong: true,
+        em: true,
+        head: [{ type: 'text', value: 'A — B' }],
+        body: [],
+      },
     ])
     expect(stepFromList(list[0]!.description)).toEqual({ title: 'A', body: 'B', state: 'now' })
     expect(optionFromList(list[0]!.description)).toEqual({

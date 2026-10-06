@@ -4,6 +4,7 @@ import type { VNode, VNodeChild } from 'vue'
 import { childrenOf, textOf } from './items.js'
 import { readerListItems } from './code-readers.js'
 import { speakerPrefix } from '../core/chat-keys.js'
+import { itemParts } from './state-list.js'
 
 export interface ChatTurn {
   by: string
@@ -11,7 +12,7 @@ export interface ChatTurn {
   aside?: boolean
 }
 /** Drop text offsets while preserving host attributes and opaque component boundaries. */
-function dropText(nodes: readonly VNode[], count: number): VNode[] {
+export function dropText(nodes: readonly VNode[], count: number): VNode[] {
   let left = count
   const walk = (items: readonly VNode[]): VNode[] =>
     items.flatMap((node) => {
@@ -34,15 +35,7 @@ function dropText(nodes: readonly VNode[], count: number): VNode[] {
 }
 export function chatModel(nodes: readonly VNode[]): ChatTurn[] {
   return readerListItems(nodes).flatMap((item) => {
-    const children = childrenOf(item)
-    const isList = (node: VNode) => node.type === 'ul' || node.type === 'ol'
-    const first = children.findIndex((node) => node.type === 'p')
-    const head =
-      first === -1 ? children.filter((node) => !isList(node)) : childrenOf(children[first]!)
-    const body =
-      first === -1
-        ? []
-        : children.slice(first + 1).filter((node) => !isList(node) && typeof node.type !== 'symbol')
+    const { head, body } = itemParts(item)
     const match = speakerPrefix(textOf(head))
     if (!match) return []
     const rest = dropText(head, match[0].length)
