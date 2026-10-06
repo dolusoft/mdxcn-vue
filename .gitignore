@@ -1,7 +1,7 @@
 node_modules/
 dist/
-.vitepress/cache/
-.vitepress/dist/
+**/.vitepress/cache/
+**/.vitepress/dist/
 coverage/
 playwright-report/
 test-results/

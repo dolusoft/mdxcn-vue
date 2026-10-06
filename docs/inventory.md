@@ -169,6 +169,7 @@ Sistemden alınan doğrulama zamanı: 2026-10-06 Salı 21:17 (Europe/Istanbul). 
 | `tailwindcss` | `4.3.3` |
 | `@tailwindcss/vite` | `4.3.3` |
 | `vue-tsc` | `3.3.12` |
+| `typescript` | Kullanılan `6.0.3`; npm latest `7.0.2`; `typescript-eslint` peer tavanı `<6.1.0` |
 
 Tek ön sürüm istisnası `vitepress@2.0.0-alpha.20` exact sürümüdür. Workspace içindeki Vite override aynı latest sürümünü kullanır.
 

@@ -178,9 +178,6 @@ importers:
       '@types/node':
         specifier: 26.6.4
         version: 26.6.4
-      '@vitejs/devtools':
-        specifier: 0.7.6
-        version: 0.7.6(@devframes/json-render@1.2.0(@devframes/hub@1.2.0(@devframes/agentic@1.2.0)(crossws@0.4.12(srvx@1.0.5))(devframe@1.2.0))(devframe@1.2.0))(@vitejs/devtools-oxc@0.7.6)(@vitejs/devtools-rolldown@0.7.6)(@vitejs/devtools-vite@0.7.6)(@vitejs/devtools-vitest@0.7.6)(crossws@0.4.12(srvx@1.0.5))(srvx@1.0.5)(vite@8.3.3)
       eslint:
         specifier: 10.12.0
         version: 10.12.0(jiti@2.7.0)
