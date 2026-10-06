@@ -1,6 +1,9 @@
 # Env
 
 Environment variables from data, a fence, a Markdown list, or raw text.
+Values are displayed without masking. Never put real secrets, passwords, or
+access tokens in documentation examples.
+
 Comments describe a key; a comment containing `required` marks it as required.
 
 ## .env
