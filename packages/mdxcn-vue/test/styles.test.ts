@@ -11,6 +11,20 @@ function luminance(block: string, name: string) {
 }
 
 describe('CSS contracts', () => {
+  it('resets graph lists with specificity above VitePress prose selectors', () => {
+    const graph = css('graph')
+    for (const selector of ['ul', 'ol', 'li', 'li + li']) {
+      const rule = `.graph-frame.graph-frame ${selector}`
+      expect(graph).toContain(rule)
+      const block = graph.slice(graph.indexOf(rule)).match(/\{([^}]+)\}/)?.[1]
+      for (const property of ['list-style: none;', 'margin: 0;', 'padding: 0;'])
+        expect(block).toContain(property)
+      // Two classes beat .vp-doc ul / li + li, even when the host loads last.
+      expect(rule.match(/\.[\w-]+/g)).toHaveLength(2)
+      expect(rule).not.toContain(':where')
+    }
+    expect(graph.indexOf('.graph-frame.graph-frame')).toBeLessThan(graph.indexOf('@utility'))
+  })
   it.each(['light', 'dark'])('%s graph-muted contrast is at least 4.5:1', (mode) => {
     const theme = css('theme')
     const block = theme.match(

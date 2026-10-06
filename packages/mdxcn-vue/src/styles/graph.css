@@ -1,6 +1,16 @@
 /* Derived from mdxcn, Copyright (c) 2026 Keshav Bagaade. MIT; see LICENSE. */
 @source "../";
 
+/* Unlayered host prose rules must not change graph list geometry. */
+.graph-frame.graph-frame ul,
+.graph-frame.graph-frame ol,
+.graph-frame.graph-frame li,
+.graph-frame.graph-frame li + li {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
 @utility graph-title-ink {
   background-image: var(--graph-title-gradient, none);
   -webkit-background-clip: text;
