@@ -32,6 +32,27 @@ const alerts: Record<string, { type: string; title?: string }> = {
 const alertPattern = /^\s*\[!([a-z]+)\][+-]?[ \t]*([^\n]*)\n?\s*/i
 const bylinePattern = /(?:^|\n)[ \t]*(?:—|―|–|--)[ \t]*([^\n]+)$/
 const prompts = ['$', '%', '❯', '>']
+/** Only paired reader tags own fences; comments and broken tags cannot poison later blocks. */
+function readerRanges(tokens: readonly Token[]): [number, number][] {
+  const stack: { name: string; index: number }[] = []
+  const ranges: [number, number][] = []
+  for (const [index, token] of tokens.entries()) {
+    if (token.type !== 'html_block') continue
+    const html = token.content.replace(/<!--[\s\S]*?(?:-->|$)/g, '')
+    for (const tag of html.matchAll(
+      /<\/?(Terminal|Endpoint)(?=\s|\/?>)(?:[^"'<>]|"[^"]*"|'[^']*')*>/g,
+    )) {
+      if (tag[0].startsWith('</')) {
+        const at = stack.findLastIndex((entry) => entry.name === tag[1])
+        if (at >= 0) {
+          ranges.push([stack[at]!.index, index])
+          stack.splice(at)
+        }
+      } else if (!tag[0].endsWith('/>')) stack.push({ name: tag[1]!, index })
+    }
+  }
+  return ranges
+}
 type Upgrade = { component: UpgradeComponent; props: Record<string, string>; available?: boolean }
 function closeAt(tokens: Token[], start: number): number {
   let depth = 0
@@ -74,22 +95,20 @@ export function withMdxcn(md: MarkdownIt, options: MdxcnOptions = {}): void {
   const warned = new Set<UpgradeComponent>()
   md.core.ruler.after('block', 'mdxcn_upgrades_blocks', (state) => {
     const tokens = state.tokens
-    const fenceHosts: string[] = []
+    const ranges = available.has('Terminal') ? readerRanges(tokens) : []
+    // Keep token identities: alert/byline processing may splice earlier tokens.
+    const ownedFences = new Set(
+      tokens.filter(
+        (token, index) =>
+          token.type === 'fence' && ranges.some(([start, end]) => index > start && index < end),
+      ),
+    )
     for (let index = 0; index < tokens.length; index++) {
       const token = tokens[index]!
       // Explicit code readers own their fences, including compiler fallback blocks.
       // Do not create a nested Terminal or replace an Endpoint request block.
-      if (available.has('Terminal') && token.type === 'html_block') {
-        for (const tag of token.content.matchAll(
-          /<\/?(Terminal|Endpoint)(?=\s|\/?>)(?:[^"'<>]|"[^"]*"|'[^']*')*>/g,
-        )) {
-          if (tag[0].startsWith('</')) {
-            if (fenceHosts.at(-1) === tag[1]) fenceHosts.pop()
-          } else if (!tag[0].endsWith('/>')) fenceHosts.push(tag[1]!)
-        }
-      }
       if (token.type === 'fence' && options.terminals !== false) {
-        if (fenceHosts.length) continue
+        if (ownedFences.has(token)) continue
         const language =
           token.info
             .trim()

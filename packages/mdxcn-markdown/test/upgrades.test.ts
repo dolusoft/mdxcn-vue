@@ -26,6 +26,32 @@ function props(output: string): object {
   )
 }
 describe('independent upstream Markdown upgrade fixtures', () => {
+  it('keeps reader ownership after a preceding alert removes its marker paragraph', () => {
+    const { md } = parser({ components: ['Callout', 'Terminal'] })
+    const output = md.render(
+      '> [!NOTE]\n>\n> Body\n\n<Terminal>\n\n```console\n$ inside\n```\n\n</Terminal>\n\n```console\n$ outside\n```',
+    )
+    expect(output).toContain('<pre><code class="language-console">$ inside\n</code></pre>')
+    expect(output.match(/<Terminal v-bind=/g)).toHaveLength(1)
+    expect(output).toContain('$ outside')
+  })
+  it.each(['<!-- <Terminal> -->', '<Terminal>', '<Endpoint>\n\n</Terminal>'])(
+    'recovers after a comment or unmatched reader: %s',
+    (prefix) => {
+      const { md, warnings } = parser({ components: ['Terminal'] })
+      const output = md.render(`${prefix}\n\n\`\`\`console\n$ outside\n\`\`\``)
+      expect(props(output)).toEqual({ prompt: '$', text: '$ outside' })
+      expect(warnings).toEqual([])
+    },
+  )
+  it('recovers a matching outer reader after a mismatched nested tag', () => {
+    const { md } = parser({ components: ['Terminal'] })
+    const output = md.render(
+      '<Terminal>\n\n<Endpoint>\n\n```console\n$ inside\n```\n\n</Terminal>\n\n```console\n$ outside\n```',
+    )
+    expect(output).toContain('<pre><code class="language-console">$ inside\n</code></pre>')
+    expect(props(output)).toEqual({ prompt: '$', text: '$ outside' })
+  })
   it.each(['Terminal', 'Endpoint'])(
     'keeps fences inside an explicit %s reader and upgrades a following session',
     (name) => {
