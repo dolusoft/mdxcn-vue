@@ -43,18 +43,21 @@ function inline(
     const children = stack.at(-1)!
     if (token.type === 'text' && /\[[^\]]+\]/.test(token.content))
       throw new Error('Unresolved reference links require runtime resolution')
-    if (['text', 'text_special', 'emoji', 'softbreak'].includes(token.type))
-      children.push({
-        type: 'text',
-        // VitePress restores entities for its Vue template renderer at text_join.
-        value:
-          token.type === 'softbreak'
-            ? '\n'
-            : token.content.replace(/&(?:#x[\da-f]+|#\d+|[a-z][\da-z]+);/gi, (entity) =>
-                md.utils.unescapeAll(entity),
-              ),
-      })
-    else if (token.type === 'code_inline')
+    if (['text', 'text_special', 'emoji', 'softbreak'].includes(token.type)) {
+      let value = token.type === 'softbreak' ? '\n' : token.content
+      if (token.type === 'text') {
+        // Read rendered text semantics once: VitePress restores entities for Vue,
+        // whereas plain markdown-it already decoded them. Avoid double decoding.
+        const rendered =
+          md.renderer.rules.text?.(tokens, index, md.options, env, md.renderer) ??
+          md.utils.escapeHtml(value)
+        if (/[<>]/.test(rendered)) throw new Error('Custom text renderer produces markup')
+        value = rendered.replace(/&(?:#x[\da-f]+|#\d+|[a-z][\da-z]+);/gi, (entity) =>
+          md.utils.unescapeAll(entity),
+        )
+      }
+      children.push({ type: 'text', value })
+    } else if (token.type === 'code_inline')
       children.push({ type: 'code', children: [{ type: 'text', value: token.content }] })
     else if (['strong_open', 'em_open', 'link_open'].includes(token.type)) {
       if (token.type === 'link_open' && renderLinks) {

@@ -163,6 +163,34 @@ Explicit data props also keep runtime field precedence. See the
 `words`, `numbers`, `splitDash` and `pad2` are exported from `mdxcn-vue/core`.
 The primary entry has an explicit reviewed export list.
 
+## Markdown upgrades (`withMdxcn`)
+
+```ts
+import { withMdxcn } from 'mdxcn-markdown'
+
+md.use(withMdxcn, {
+  alerts: true, quotes: true, terminals: true, footnotes: true,
+  components: [], // Names explicitly registered by the host, once ported.
+  warn: (warning) => console.warn(warning),
+})
+```
+
+GitHub alerts (including upstream Obsidian aliases) target `Callout`; a quote's
+last byline (`— Name, Source`, also `―`, `–`, `--`) targets `Quote`. Session fences
+(`console`, `shell-session`, `terminal`) and shell fences with a dominant `$ `
+prompt target `Terminal`. Unprompted shell scripts stay code. Host-generated
+footnote sections target `Footnotes`; the host must enable a footnote parser
+(VitePress already does). All four options default to `true`.
+
+The prose components are not yet ported. By default the plugin warns and renders
+native HTML: an alert aside, an attributed blockquote, the host's code block and
+footnote section. IDs/backlinks, rich body content and code whitespace survive.
+Set `components` only to names actually registered by the host: `Callout`,
+`Quote`, `Terminal`, `Footnotes`. That enables named Vue tags; props are JSON
+bindings (`type`/`title`, `by`/`source`, `prompt`/`text`). Footnotes wrap the host
+section so its anchors remain intact. Missing names continue to use HTML.
+This is an opt-in plugin for trusted Markdown; it composes with `mdxcnMarkdown`.
+
 `pnpm consumer:check` packs both libraries and installs isolated Vite/Vue/Tailwind
 and VitePress projects outside the repo (`../tmp/mdxcn-vue/consumer-*`). It verifies
 published files and notices, declaration resolution, CSS source scanning (with

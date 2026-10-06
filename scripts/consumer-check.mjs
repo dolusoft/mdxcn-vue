@@ -230,8 +230,8 @@ write(site, 'package.json', {
 write(
   site,
   '.vitepress/config.ts',
-  `import {defineConfig} from 'vitepress';import {mdxcnMarkdown} from 'mdxcn-markdown';import tailwind from '@tailwindcss/vite';
-export default defineConfig({markdown:{config:(md)=>md.use(mdxcnMarkdown,{warn:(w)=>{throw new Error(JSON.stringify(w))}})},vite:{plugins:[tailwind()]}});`,
+  `import {defineConfig} from 'vitepress';import {mdxcnMarkdown,withMdxcn} from 'mdxcn-markdown';import tailwind from '@tailwindcss/vite';
+export default defineConfig({markdown:{config:(md)=>{md.use(mdxcnMarkdown,{warn:(w)=>{throw new Error(JSON.stringify(w))}});md.use(withMdxcn,{warn:(w)=>console.log('EXPECTED_FALLBACK '+w.component)});}},vite:{plugins:[tailwind()]}});`,
 )
 write(
   site,
@@ -246,10 +246,31 @@ write(
 )
 run(['install'], site)
 run(['peers', 'check'], site)
-run(['exec', 'vitepress', 'build'], site)
+write(
+  site,
+  'index.md',
+  readFileSync(join(site, 'index.md'), 'utf8') +
+    '\n\n> [!NOTE]\n> Upgrade body.\n\n> Quote body.\n> — Ada, Notes\n\n```console\n$ run\noutput\n```\n\nFoot[^1].\n\n[^1]: Note body.\n',
+)
+const siteOutput = run(['exec', 'vitepress', 'build'], site, true)
+const fallbackNames = [...siteOutput.matchAll(/EXPECTED_FALLBACK (\w+)/g)]
+  .map((match) => match[1])
+  .sort()
+assert.deepEqual(fallbackNames, ['Callout', 'Footnotes', 'Quote', 'Terminal'])
 const html = readFileSync(join(site, '.vitepress/dist/index.html'), 'utf8')
 assert.equal((html.match(/<figure\b/g) ?? []).length, 3)
 for (const value of ['Web', 'B', '/consumer']) assert.ok(html.includes(value))
+for (const value of [
+  'data-mdxcn="Callout"',
+  'data-mdxcn="Quote"',
+  'Quote body.',
+  '$ run',
+  'id="footnote1"',
+  'href="#footnote-ref1"',
+])
+  assert.ok(html.includes(value), `Missing upgrade fallback ${value}`)
+assert.doesNotMatch(html, /<(?:Callout|Quote|Terminal|Footnotes)\b/)
+console.log('VITEPRESS CONSUMER PASSED: 3 compiled figures, 4 warned native upgrade fallbacks')
 
 // Install generated registry payloads with the real CLI, without a server.
 run(['registry:check'], repo)
@@ -337,6 +358,7 @@ write(root, 'results.json', {
   removedBytes: fullBytes - stackBytes,
   vueRuntimeEntries: vueEntries.length,
   vitepressFigures: 3,
+  upgradeFallbacks: fallbackNames,
   registryItems: registryPaths.length,
   registryFiles: copied.size,
 })

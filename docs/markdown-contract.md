@@ -1,4 +1,4 @@
-# Markdown derleme arayüzü (Faz 2B-3)
+# Markdown derleme arayüzü (Faz 2B-4)
 
 `mdxcn-markdown` paketindeki `mdxcnMarkdown` işlevi bir `markdown-it` plugin'idir.
 VitePress `markdown.config` alanına takılır; ek Vite transform gerekmez:
@@ -34,17 +34,29 @@ sağlanan parser kullanılır; runtime Markdown renderer eklenmez.
   başına bir `ProseNode[]` taşır. Kod girintisi korunur; yalnız bir son newline
   çıkarılır. `$ ` ve `curl` önekleri `request` etiketi üretir.
 
-Plugin, `html_block` kuralından önce ham blokları alır. `md.block.parse` ve
-`md.inline.parse` çağrıları heading anchor ve highlighter işlemlerinden önce
-model üretir. JSON, HTML attribute için escape edilir ve bileşene `v-bind` ile
+Plugin, `html_block` kuralından önce ham blokları alır; gövde token değerlerini
+host core kurallarına bırakır. Model dönüşümü `inline`, emoji, typographer ve
+`text_join` adımlarından sonra, `anchor` adımından önce yapılır. Host entity
+renderer işlevinin metin anlamı bir kez çözülür; `text_special` metin sayılır.
+JSON, HTML attribute için escape edilir ve bileşene `v-bind` ile
 aktarılır; başarılı blokta Markdown slotu kaldırılır. Çok satırlı açılış etiketi
 en fazla 33 satırdır; açılış/kapanış kendi satırlarında olmalıdır. Dış HTML
 sarmalayıcı ile bileşen arasında Markdown blok sınırı için boş satır gerekir.
+Açılışın ardından liste varsa önüne boş satır konur. Aksi halde VitePress
+listeyi ham HTML metni sayar; iki yol da bu davranışı korur ve uyarı verir.
+Kapanışı bulunmayan ve açılış satırında gövde içeren bloklar da konumlu uyarı verir.
+Uyarı satırları frontmatter farkını içerir; `@include` konumları genişletilmiş
+host dosyasına aittir, dahil edilen dosyaya ayrı kaynak eşlemesi yapılmaz.
 
 `renderLinks: true` seçeneği host `link_open` renderer işlevini kullanarak
 VitePress URL dönüşümünü, dead-link kaydını, `title`, `target`, `rel` alanlarını
-korur. Varsayılan `false`, özgün href değerini korur. Diğer host core dönüşümleri
-(örneğin typographer) bu sınırlı model derlemesinin parçası değildir.
+korur. Varsayılan `false`, özgün href değerini korur. Reference link tanımları
+inline dönüşümünden önce tamamlandığından sonraki tanımlar da derlenebilir.
+Tablo ve liste metninin boşlukları iki yolda aynı core işleviyle normalize edilir.
+Fence dil etiketi `/^[^\s:{[]+/` kuralıyla meta bilgiden ayrılır; VitePress
+highlighter işlevinin kısalttığı `c++`, kaynak metadata değerinden geri alınır.
+Dilsiz fence blokları `undefined` etiketle korunur. Endpoint kod bölgesinin
+erişilebilir adı caption ve kod etiketini birlikte içerir.
 
 ## Fallback ve güven sınırı
 
@@ -58,8 +70,32 @@ derleme bloğunun kaynak aralığı token `map` alanında tutulur.
 
 **Yalnız repo içindeki güvenilir Markdown kullanılır.** Üretilen Vue şablonu
 çalıştırılabilir; bu plugin kullanıcı girdisi için sanitization sağlamaz.
-Runtime Markdown/Comark, alert/footnote ve `withMdxcn` dönüşümleri bu fazın
-dışındadır. `GraphTimer` derleme desteği eklenmedi; mevcut runtime sözleşmesi sürer.
+Runtime Markdown/Comark bu fazın dışındadır. `GraphTimer` derleme desteği
+eklenmedi; mevcut runtime sözleşmesi sürer.
+
+## `withMdxcn` dönüşümleri
+
+Ayrı `withMdxcn` plugin'i aynı güvenilir Markdown host'una takılır.
+`alerts`, `quotes`, `terminals`, `footnotes` seçenekleri varsayılan `true` olur.
+GitHub alert ve upstream Obsidian alias değerleri `Callout`, son satırındaki
+byline işareti `—`/`―`/`–`/`--` olan alıntılar `Quote`, console/session fence
+ve baskın `$ ` prompt içeren shell fence blokları `Terminal` hedefini kullanır.
+Prompt içermeyen shell script değişmez. Footnote token değerlerini host üretir;
+VitePress bunu sağlar, düz `markdown-it` host'u kendi footnote plugin'ini takar.
+
+`components` listesi yalnız host'un kaydettiği `Callout`, `Quote`, `Terminal`,
+`Footnotes` adlarını içerir. Listelenen hedefler bileşen etiketi üretir;
+`Callout` için `type`/`title`, `Quote` için `by`/`source`, `Terminal` için
+`prompt`/`text` değerleri JSON binding ile aktarılır. `Footnotes` özgün host
+bölümünü sarar; ID, ileri bağlantı ve backlink değerleri korunur.
+Bu, Faz 5 portlarının uyması gereken geçici prop sözleşmesidir.
+
+Bu bileşenler henüz port edilmediği için varsayılan boş liste kaynak konumlu
+uyarıyla HTML üretir: alert için `aside`, byline içeren `blockquote`, host
+`pre > code` yapısı ve özgün footnote bölümü. Zengin gövde biçimleri korunur.
+Seçenekler yalnız bu plugin'in dönüşümlerini kapatır; VitePress'in kendi alert
+işlevi gibi host özelliklerini kapatmaz. Registry yalnız mevcut dört graph
+bileşenini, frame, core ve CSS dosyalarını içerir.
 
 Runtime Endpoint, VitePress `div.language-* > pre` sarmalayıcısını tek seviyede
 açar; `button.copy` ve `span.lang` içerik sayılmaz. Highlighter kaynak kodun

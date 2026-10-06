@@ -2,15 +2,11 @@ import type MarkdownIt from 'markdown-it'
 import type Token from 'markdown-it/lib/token.mjs'
 import { tokensToProps } from './model.js'
 import type { ComponentName } from './model.js'
+import { emitWarning, escapeAttribute, trackSource } from './diagnostics.js'
+import type { WarningOptions } from './diagnostics.js'
+export type { MarkdownWarning } from './diagnostics.js'
 
-export interface MarkdownWarning {
-  file: string
-  line: number
-  component: ComponentName
-  reason: string
-}
-export interface MarkdownOptions {
-  warn?: (warning: MarkdownWarning) => void
+export interface MarkdownOptions extends WarningOptions {
   /** Apply the host's link renderer to retain URL rewrites and external attributes. */
   renderLinks?: boolean
 }
@@ -19,14 +15,6 @@ const dataFields: Record<ComponentName, string[]> = {
   GraphTable: ['headers', 'rows', 'footer', 'align'],
   Endpoint: ['method', 'path', 'params', 'blocks', 'about'],
 }
-const escapeAttribute = (text: string) =>
-  text
-    .replace(/&/g, '&amp;')
-    .replace(/"/g, '&quot;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/'/g, '&#39;')
-
 /** Trusted repository Markdown only: the output is executable Vue template source. */
 export function mdxcnMarkdown(md: MarkdownIt, options: MarkdownOptions = {}): void {
   const fence = md.renderer.rules.fence!
@@ -38,16 +26,7 @@ export function mdxcnMarkdown(md: MarkdownIt, options: MarkdownOptions = {}): vo
       ? html.replace(/^<div\b/, `<div data-mdxcn-language="${escapeAttribute(language)}"`)
       : html
   }
-  const parse = md.parse.bind(md)
-  md.parse = (source, env = {}) => {
-    const previous = env.mdxcnSource
-    env.mdxcnSource = source
-    try {
-      return parse(source, env)
-    } finally {
-      env.mdxcnSource = previous
-    }
-  }
+  trackSource(md)
   md.block.ruler.before(
     'html_block',
     'mdxcn_props',
@@ -64,7 +43,10 @@ export function mdxcnMarkdown(md: MarkdownIt, options: MarkdownOptions = {}): vo
         if (!silent) emitWarning(options, state.env, state.src, start, name, reason)
       }
       const pattern = /^<(GraphStack|GraphTable|Endpoint)(\s(?:[^"'<>]|"[^"]*"|'[^']*')*)?>\s*$/
-      if (/^<[^>]+>\S|^<[^>]+>\s+\S/.test(openingText)) {
+      const inlineOpening = openingText.match(
+        /^<(GraphStack|GraphTable|Endpoint)(\s(?:[^"'<>]|"[^"]*"|'[^']*')*)?>(.*)$/,
+      )
+      if (inlineOpening?.[3]?.trim()) {
         warn('Opening tag and content must be on separate lines')
         return false
       }
@@ -73,7 +55,11 @@ export function mdxcnMarkdown(md: MarkdownIt, options: MarkdownOptions = {}): vo
         openingText += '\n' + lineAt(++openingEnd)
         opening = openingText.match(pattern)
       }
-      if (!opening || opening[2]?.trimEnd().endsWith('/')) return false
+      if (!opening) {
+        warn('Opening tag must end on its own line')
+        return false
+      }
+      if (opening[2]?.trimEnd().endsWith('/')) return false
       let close = openingEnd + 1
       let fence: { mark: string; length: number } | undefined
       for (; close < end; close++) {
@@ -116,7 +102,7 @@ export function mdxcnMarkdown(md: MarkdownIt, options: MarkdownOptions = {}): vo
         const token = state.push('html_block', '', 0)
         token.content = `${openingText}\n`
         token.map = [start, close + 1]
-        token.meta = { mdxcn: { name, attrs, count: tokens.length, lineOffset: openingEnd + 1 } }
+        token.meta = { mdxcn: { name, attrs } }
         for (const child of tokens) {
           if (child.map)
             child.map = child.map.map((line) => line + openingEnd + 1) as [number, number]
@@ -135,8 +121,7 @@ export function mdxcnMarkdown(md: MarkdownIt, options: MarkdownOptions = {}): vo
   const convert = (state: import('markdown-it/lib/rules_core/state_core.mjs').default) => {
     for (let index = 0; index < state.tokens.length; index++) {
       const token = state.tokens[index]!
-      const block = token.meta?.mdxcn as
-        { name: ComponentName; attrs: string; count: number; lineOffset: number } | undefined
+      const block = token.meta?.mdxcn as { name: ComponentName; attrs: string } | undefined
       if (!block) continue
       // Find the close marker: host core rules may have inserted tokens.
       const close = state.tokens.findIndex(
@@ -175,33 +160,4 @@ export function mdxcnMarkdown(md: MarkdownIt, options: MarkdownOptions = {}): vo
   } catch {
     md.core.ruler.push('mdxcn_props', convert)
   }
-}
-
-function emitWarning(
-  options: MarkdownOptions,
-  env: { path?: string; filePath?: string; relativePath?: string; mdxcnSource?: string },
-  source: string,
-  start: number,
-  component: ComponentName,
-  reason: string,
-): void {
-  const warning = {
-    file: env.path ?? env.filePath ?? env.relativePath ?? '<markdown>',
-    line: start + 1 + sourceLineOffset(source, env),
-    component,
-    reason,
-  }
-  if (options.warn) options.warn(warning)
-  else
-    console.warn(
-      `[mdxcn-markdown] ${warning.file}:${warning.line} ${component}: ${reason}; keeping runtime slot`,
-    )
-}
-
-/** VitePress removes frontmatter before block parsing; retain original file lines. */
-function sourceLineOffset(source: string, env: { mdxcnSource?: string }): number {
-  const original = env.mdxcnSource
-  return original?.endsWith(source)
-    ? (original.slice(0, original.length - source.length).match(/\n/g)?.length ?? 0)
-    : 0
 }

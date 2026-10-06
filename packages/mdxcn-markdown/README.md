@@ -22,5 +22,13 @@ this is not a sanitizer for user content.
 
 Full contracts: [project README](https://github.com/dolusoft/mdxcn-vue#readme).
 
+Also exports `withMdxcn`: GitHub/Obsidian alerts, attributed quotes, console/shell
+sessions and host footnotes. Options `alerts`, `quotes`, `terminals`, `footnotes`
+default to true. Until the prose components are ported, the default empty
+`components` list emits source warnings and preserves native HTML. Declare only
+host-registered names (`Callout`, `Quote`, `Terminal`, `Footnotes`) to emit Vue
+tags; Terminal uses `prompt`/`text` bindings. Footnote IDs/backlinks are preserved
+and require a host footnote parser. This plugin is also for trusted Markdown.
+
 MIT. Copyright (c) 2026 Keshav Bagaade (mdxcn) and Dolusoft (Vue port).
 The full notice in LICENSE must accompany every copy.

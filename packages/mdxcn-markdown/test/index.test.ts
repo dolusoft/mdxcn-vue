@@ -147,9 +147,15 @@ describe('raw tokens to independent expected models', () => {
   })
 })
 describe('component block plugin', () => {
+  it('accepts a quoted greater-than sign on the opening line', () => {
+    const tokens = compile('<GraphStack title="A > B">\n\n- web: 1 js\n\n</GraphStack>')
+    expect(warnings).toEqual([])
+    expect(tokens[0]?.content).toContain('title="A > B"')
+  })
   it.each([
     ['<GraphStack>\n\n- web: 1 js', 'Closing component tag'],
     ['<GraphStack>same line\n</GraphStack>', 'separate lines'],
+    ['<GraphStack\n title="X">same line\n</GraphStack>', 'own line'],
     ['<GraphStack>\n- web: 1 js\n</GraphStack>', 'blank line'],
     ['<GraphStack v-if="true">\n- web: 1 js\n</GraphStack>', 'blank line'],
   ])('warns once with a source position for malformed input %s', (source, reason) => {
