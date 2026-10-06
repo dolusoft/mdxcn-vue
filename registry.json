@@ -281,6 +281,140 @@
     },
     {
       "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+      "name": "mdxcn-callout",
+      "type": "registry:component",
+      "title": "mdxcn callout",
+      "description": "Vue 3 callout from the mdxcn-vue source tree.",
+      "dependencies": [
+        "vue@^3.5.0"
+      ],
+      "meta": {
+        "license": "MIT",
+        "notice": "MIT License\n\nCopyright (c) 2026 Keshav Bagaade (mdxcn, original React implementation)\nCopyright (c) 2026 Dolusoft (mdxcn-vue, Vue 3 port)\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.",
+        "upstream": "shadcn-labs/mdxcn@16d817a"
+      },
+      "docs": "Files use relative imports under src/components/mdxcn. Import styles/graph.css, host.css and optional theme.css from your Tailwind v4 CSS entry. Keep the full MIT notice with copied files.",
+      "files": [
+        {
+          "path": "packages/mdxcn-vue/src/components/callout.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/components/callout.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/components/graph-frame.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/components/graph-frame.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/core/model.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/core/model.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/directives/reveal.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/directives/reveal.ts"
+        }
+      ]
+    },
+    {
+      "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+      "name": "mdxcn-quote",
+      "type": "registry:component",
+      "title": "mdxcn quote",
+      "description": "Vue 3 quote from the mdxcn-vue source tree.",
+      "dependencies": [
+        "vue@^3.5.0"
+      ],
+      "meta": {
+        "license": "MIT",
+        "notice": "MIT License\n\nCopyright (c) 2026 Keshav Bagaade (mdxcn, original React implementation)\nCopyright (c) 2026 Dolusoft (mdxcn-vue, Vue 3 port)\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.",
+        "upstream": "shadcn-labs/mdxcn@16d817a"
+      },
+      "docs": "Files use relative imports under src/components/mdxcn. Import styles/graph.css, host.css and optional theme.css from your Tailwind v4 CSS entry. Keep the full MIT notice with copied files.",
+      "files": [
+        {
+          "path": "packages/mdxcn-vue/src/components/graph-frame.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/components/graph-frame.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/components/quote.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/components/quote.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/core/model.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/core/model.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/directives/reveal.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/directives/reveal.ts"
+        }
+      ]
+    },
+    {
+      "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+      "name": "mdxcn-terminal",
+      "type": "registry:component",
+      "title": "mdxcn terminal",
+      "description": "Vue 3 terminal from the mdxcn-vue source tree.",
+      "dependencies": [
+        "vue@^3.5.0"
+      ],
+      "meta": {
+        "license": "MIT",
+        "notice": "MIT License\n\nCopyright (c) 2026 Keshav Bagaade (mdxcn, original React implementation)\nCopyright (c) 2026 Dolusoft (mdxcn-vue, Vue 3 port)\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.",
+        "upstream": "shadcn-labs/mdxcn@16d817a"
+      },
+      "docs": "Files use relative imports under src/components/mdxcn. Import styles/graph.css, host.css and optional theme.css from your Tailwind v4 CSS entry. Keep the full MIT notice with copied files.",
+      "files": [
+        {
+          "path": "packages/mdxcn-vue/src/adapters/items.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/adapters/items.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/adapters/terminal.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/adapters/terminal.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/components/graph-frame.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/components/graph-frame.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/components/terminal.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/components/terminal.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/core/model.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/core/model.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/core/stack.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/core/stack.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/core/terminal.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/core/terminal.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/directives/reveal.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/directives/reveal.ts"
+        }
+      ]
+    },
+    {
+      "$schema": "https://shadcn-vue.com/schema/registry-item.json",
       "name": "mdxcn-graph-frame",
       "type": "registry:component",
       "title": "mdxcn graph-frame",
@@ -352,6 +486,11 @@
           "path": "packages/mdxcn-vue/src/core/table.ts",
           "type": "registry:file",
           "target": "~/src/components/mdxcn/core/table.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/core/terminal.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/core/terminal.ts"
         }
       ]
     },

@@ -7,6 +7,9 @@ import ts from 'typescript'
 
 // Deliberately maintained independently of export declarations.
 const publicNames = [
+  'Callout',
+  'Quote',
+  'Terminal',
   'Bar',
   'Cell',
   'DEFAULT_STACK_GLYPHS',
@@ -92,6 +95,10 @@ it('exposes grammar and clock helpers only through core', () => {
 })
 
 const publicTypes = [
+  'CalloutType',
+  'CalloutProps',
+  'QuoteProps',
+  'TerminalProps',
   'ProseNode',
   'StackSegment',
   'StackRow',
@@ -124,6 +131,8 @@ const publicTypes = [
   'GraphTimerProps',
 ]
 const coreNames = [
+  'TerminalLine',
+  'parseTerminal',
   'ProseNode',
   'StackSegment',
   'StackRow',

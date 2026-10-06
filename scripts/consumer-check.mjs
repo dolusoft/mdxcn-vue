@@ -206,12 +206,12 @@ write(
   app,
   'src/App.vue',
   `<script setup lang="ts">
-import {GraphStack,GraphTable,Endpoint,GraphTimer} from 'mdxcn-vue';
+import {GraphStack,GraphTable,Endpoint,GraphTimer,Callout,Quote,Terminal} from 'mdxcn-vue';
 import {splitLabel} from 'mdxcn-vue/core';
 import type {StackRow,TableModel} from 'mdxcn-vue/core';
 const rows: StackRow[]=[{label:splitLabel('Web: 1 js').label,segments:[{label:'js',value:1}]}];
 const table:TableModel={headers:['A'],rows:[['B']]};
-</script><template><GraphStack title="STACK" :rows="rows"/><GraphTable title="TABLE" v-bind="table"/><Endpoint/><GraphTimer title="TIMER" kind="clock"/></template>`,
+</script><template><GraphStack title="STACK" :rows="rows"/><GraphTable title="TABLE" v-bind="table"/><Endpoint/><GraphTimer title="TIMER" kind="clock"/><Callout type="warning"><p>Registry source</p></Callout><Quote by="Paul Graham" source="Taste for Makers"><p>Voices in tune.</p></Quote><Terminal :text="'$ run'"/></template>`,
 )
 write(
   app,
@@ -223,12 +223,21 @@ write(
   'src/type-contract.ts',
   `import {splitLabel} from 'mdxcn-vue/core';
 import type {StackRow} from 'mdxcn-vue/core';
-import type {GraphStackProps} from 'mdxcn-vue';
+import type {GraphStackProps,CalloutProps,QuoteProps,TerminalProps} from 'mdxcn-vue';
 import {mdxcnMarkdown,withMdxcn} from 'mdxcn-markdown';
 import type {MdxcnOptions} from 'mdxcn-markdown';
 import MarkdownIt from 'markdown-it';
 const row:StackRow={label:splitLabel('Web: 1 js').label,segments:[{label:'js',value:1}]};
 const graph:GraphStackProps={title:'STACK',rows:[row]};
+const callout:CalloutProps={type:'warning'};
+const quote:QuoteProps={by:'Paul Graham'};
+const terminal:TerminalProps={text:'$ run',prompt:'$'};
+// @ts-expect-error Callout types must remain a closed union.
+callout.type='unknown';
+// @ts-expect-error Attribution must remain a string.
+quote.by=42;
+// @ts-expect-error Terminal text must not accept arrays.
+terminal.text=[];
 const options:MdxcnOptions={components:['Terminal']};
 new MarkdownIt().use(mdxcnMarkdown).use(withMdxcn,options);
 // @ts-expect-error Unknown fields must not silently become any.
@@ -386,6 +395,43 @@ for (const value of [
 assert.doesNotMatch(html, /<(?:Callout|Quote|Terminal|Footnotes)\b/)
 console.log('VITEPRESS CONSUMER PASSED: 3 compiled figures, 4 warned native upgrade fallbacks')
 
+// The same packed packages must render registered upgrades as real Vue figures.
+write(
+  site,
+  '.vitepress/config.ts',
+  readFileSync(join(site, '.vitepress/config.ts'), 'utf8').replace(
+    'md.use(withMdxcn,{warn:',
+    "md.use(withMdxcn,{components:['Callout','Quote','Terminal'],warn:",
+  ),
+)
+write(
+  site,
+  '.vitepress/theme/index.ts',
+  `import DefaultTheme from 'vitepress/theme';import {GraphStack,GraphTable,Endpoint,Callout,Quote,Terminal} from 'mdxcn-vue';import './style.css';export default {...DefaultTheme,enhanceApp({app}) {for(const [name,component] of Object.entries({GraphStack,GraphTable,Endpoint,Callout,Quote,Terminal}))app.component(name,component);}};`,
+)
+const registeredOutput = run(['exec', 'vitepress', 'build'], site, true)
+assert.deepEqual(
+  [...registeredOutput.matchAll(/EXPECTED_FALLBACK (\w+)/g)].map((match) => match[1]),
+  ['Footnotes'],
+)
+const registeredHtml = readFileSync(join(site, '.vitepress/dist/index.html'), 'utf8')
+assert.equal((registeredHtml.match(/<figure\b/g) ?? []).length, 6)
+for (const value of [
+  'role="note"',
+  '[ note ]',
+  '<cite class="text-foreground not-italic">Ada</cite>',
+  'Quote body.',
+  '[ shell ]',
+  '>run</span>',
+  '>output</span>',
+  'id="footnote1"',
+])
+  assert.ok(registeredHtml.includes(value), `Missing registered upgrade ${value}`)
+assert.doesNotMatch(registeredHtml, /<(?:Callout|Quote|Terminal|Footnotes)\b/)
+console.log(
+  'REGISTERED VITEPRESS CONSUMER PASSED: 6 figures, Callout/Quote/Terminal rendered; Footnotes fallback preserved',
+)
+
 // Install generated registry payloads with the real CLI, without a server.
 run(['registry:check'], repo)
 const registry = join(root, 'registry-app')
@@ -427,8 +473,8 @@ write(
 )
 const registryApp = readFileSync(join(app, 'src/App.vue'), 'utf8')
   .replace(
-    "import {GraphStack,GraphTable,Endpoint,GraphTimer} from 'mdxcn-vue';",
-    "import {GraphStack} from './components/mdxcn/components/graph-stack';import {GraphTable} from './components/mdxcn/components/graph-table';import {Endpoint} from './components/mdxcn/components/endpoint';import {GraphTimer} from './components/mdxcn/components/graph-timer';",
+    "import {GraphStack,GraphTable,Endpoint,GraphTimer,Callout,Quote,Terminal} from 'mdxcn-vue';",
+    "import {GraphStack} from './components/mdxcn/components/graph-stack';import {GraphTable} from './components/mdxcn/components/graph-table';import {Endpoint} from './components/mdxcn/components/endpoint';import {GraphTimer} from './components/mdxcn/components/graph-timer';import {Callout} from './components/mdxcn/components/callout';import {Quote} from './components/mdxcn/components/quote';import {Terminal} from './components/mdxcn/components/terminal';",
   )
   .replaceAll("'mdxcn-vue/core'", "'./components/mdxcn/core'")
 write(registry, 'src/App.vue', registryApp)
@@ -488,6 +534,7 @@ const results = {
   stackLibraryBytes,
   vueRuntimeEntries: vueEntries.length,
   vitepressFigures: 3,
+  registeredVitepressFigures: 6,
   upgradeFallbacks: fallbackNames,
   registryItems: registryPaths.length,
   registryFiles: copied.size,

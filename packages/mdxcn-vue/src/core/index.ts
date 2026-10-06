@@ -8,3 +8,5 @@ export type { GraphAlign, TableCell, TableData, TableModel } from './table.js'
 export { cellText, splitCells, resolveTable, toLabeledTable } from './table.js'
 
 export { normalizeProseWhitespace } from './model.js'
+export type { TerminalLine } from './terminal.js'
+export { parseTerminal } from './terminal.js'

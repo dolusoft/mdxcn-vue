@@ -88,14 +88,19 @@ VitePress bunu sağlar, düz `markdown-it` host'u kendi footnote plugin'ini taka
 `Callout` için `type`/`title`, `Quote` için `by`/`source`, `Terminal` için
 `prompt`/`text` değerleri JSON binding ile aktarılır. `Footnotes` özgün host
 bölümünü sarar; ID, ileri bağlantı ve backlink değerleri korunur.
-Bu, Faz 5 portlarının uyması gereken geçici prop sözleşmesidir.
+Faz 4A'da `Callout`, `Quote`, `Terminal` gerçek Vue bileşenleri olarak sağlanır.
+`Terminal` için `text` upstream'de olmayan derleyici girdisidir: açık değer slot
+metninden önce gelir; boş string slotu bastırır, `null`/`undefined` slotu okur.
+Prose bileşenlerinin gövdesi slot olarak kalır; item adaptörü yoktur.
+`Terminal` ve `Endpoint` etiketleri içindeki fence blokları kendi okuyucularına
+bırakılır; iç içe otomatik `Terminal` üretilmez.
 
-Bu bileşenler henüz port edilmediği için varsayılan boş liste kaynak konumlu
-uyarıyla HTML üretir: alert için `aside`, byline içeren `blockquote`, host
+Varsayılan boş liste kaynak konumlu uyarıyla HTML üretir: host alert çıktısı
+(kendi alert renderer işlevi yoksa `aside`), byline içeren `blockquote`, host
 `pre > code` yapısı ve özgün footnote bölümü. Zengin gövde biçimleri korunur.
 Seçenekler yalnız bu plugin'in dönüşümlerini kapatır; VitePress'in kendi alert
-işlevi gibi host özelliklerini kapatmaz. Registry yalnız mevcut dört graph
-bileşenini, frame, core ve CSS dosyalarını içerir.
+işlevi gibi host özelliklerini kapatmaz. Registry dört mevcut bileşeni, üç yeni
+prose/fence bileşenini, frame, core ve CSS dosyalarını içerir; toplam on öğedir.
 
 Runtime Endpoint, VitePress `div.language-* > pre` sarmalayıcısını tek seviyede
 açar; `button.copy` ve `span.lang` içerik sayılmaz. Highlighter kaynak kodun

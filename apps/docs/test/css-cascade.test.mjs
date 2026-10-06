@@ -102,6 +102,13 @@ test('actual VitePress rules lose to graph resets and generated layered prose ut
   assert.equal(resolve(table, 'border-collapse').value, 'separate')
   assert.equal(resolve(table, 'border-spacing').value, '0')
   assert.equal(resolve(code, 'color', true).layer, 'utilities')
+  const quoteHtml = readFileSync(new URL('../.vitepress/dist/components/quote.html', import.meta.url), 'utf8')
+  const quote = new JSDOM(quoteHtml).window.document.querySelector('figure blockquote')
+  assert.equal(resolve(quote, 'margin').layer, 'utilities')
+  assert.equal(resolve(quote, 'padding-left').layer, 'utilities')
+  assert.equal(resolve(quote, 'border-left').value, '0')
+  assert.equal(resolve(quote, 'color').value, 'inherit')
+  assert.equal(resolve(quote, 'transition').value, 'none')
   for (const property of ['padding', 'background-color', 'border-radius', 'font-size']) {
     const winner = resolve(code, property)
     assert.ok(!winner || winner.layer, `${property} must not retain host prose styling`)

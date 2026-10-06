@@ -66,7 +66,7 @@ function plain(source: string, md: MarkdownIt, env: object): string {
     .join('')
 }
 
-/** Upgrade trusted Markdown without requiring the future prose component ports. */
+/** Upgrade trusted Markdown; unregistered targets keep the host HTML rendering. */
 export function withMdxcn(md: MarkdownIt, options: MdxcnOptions = {}): void {
   trackSource(md)
   const available = new Set(options.components ?? [])
@@ -74,9 +74,22 @@ export function withMdxcn(md: MarkdownIt, options: MdxcnOptions = {}): void {
   const warned = new Set<UpgradeComponent>()
   md.core.ruler.after('block', 'mdxcn_upgrades_blocks', (state) => {
     const tokens = state.tokens
+    const fenceHosts: string[] = []
     for (let index = 0; index < tokens.length; index++) {
       const token = tokens[index]!
+      // Explicit code readers own their fences, including compiler fallback blocks.
+      // Do not create a nested Terminal or replace an Endpoint request block.
+      if (available.has('Terminal') && token.type === 'html_block') {
+        for (const tag of token.content.matchAll(
+          /<\/?(Terminal|Endpoint)(?=\s|\/?>)(?:[^"'<>]|"[^"]*"|'[^']*')*>/g,
+        )) {
+          if (tag[0].startsWith('</')) {
+            if (fenceHosts.at(-1) === tag[1]) fenceHosts.pop()
+          } else if (!tag[0].endsWith('/>')) fenceHosts.push(tag[1]!)
+        }
+      }
       if (token.type === 'fence' && options.terminals !== false) {
+        if (fenceHosts.length) continue
         const language =
           token.info
             .trim()

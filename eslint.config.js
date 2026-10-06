@@ -29,7 +29,21 @@ export default tseslint.config(
     rules: {
       'vue/multi-word-component-names': [
         'error',
-        { ignores: ['Graph', 'Bar', 'Segment', 'Head', 'Row', 'Foot', 'Cell', 'Endpoint'] },
+        {
+          ignores: [
+            'Graph',
+            'Bar',
+            'Segment',
+            'Head',
+            'Row',
+            'Foot',
+            'Cell',
+            'Endpoint',
+            'Callout',
+            'Quote',
+            'Terminal',
+          ],
+        },
       ],
       'vue/no-reserved-component-names': ['error', { htmlElementCaseSensitive: true }],
     },

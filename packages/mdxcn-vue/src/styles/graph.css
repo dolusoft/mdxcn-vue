@@ -60,6 +60,14 @@
   margin: revert-layer;
   line-height: revert-layer;
 }
+/* Quote supplies its own frame, spacing and text color. */
+.graph-frame.graph-frame blockquote {
+  margin: revert-layer;
+  border-left: 0;
+  padding: revert-layer;
+  color: inherit;
+  transition: none;
+}
 .graph-frame.graph-frame a,
 .graph-frame.graph-frame a:hover {
   color: revert-layer;

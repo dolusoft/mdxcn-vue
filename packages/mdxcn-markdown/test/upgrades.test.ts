@@ -26,6 +26,27 @@ function props(output: string): object {
   )
 }
 describe('independent upstream Markdown upgrade fixtures', () => {
+  it.each(['Terminal', 'Endpoint'])(
+    'keeps fences inside an explicit %s reader and upgrades a following session',
+    (name) => {
+      const { md, warnings } = parser({ components: ['Terminal'] })
+      const source = `<${name}>\n\n\`\`\`console\n$ inside\n\`\`\`\n\n</${name}>\n\n\`\`\`console\n$ outside\n\`\`\``
+      const output = md.render(source)
+      expect(output).toContain('<pre><code class="language-console">$ inside\n</code></pre>')
+      expect(output.match(/<Terminal v-bind=/g)).toHaveLength(1)
+      expect(props(output)).toEqual({ prompt: '$', text: '$ outside' })
+      expect(warnings).toEqual([])
+    },
+  )
+  it('does not treat a self-closing Terminal with a quoted > prompt as a fence owner', () => {
+    const { md } = parser({ components: ['Terminal'] })
+    expect(
+      props(md.render('<Terminal prompt=">" text="one" />\n\n```console\n$ outside\n```')),
+    ).toEqual({
+      prompt: '$',
+      text: '$ outside',
+    })
+  })
   it('decodes nested entities exactly once with plain markdown-it', () => {
     const md = new MarkdownIt()
     expect(
