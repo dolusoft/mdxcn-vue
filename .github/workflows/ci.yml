@@ -45,6 +45,20 @@ jobs:
       # shadcn-vue's nypm otherwise sends native pnpm 12 through Corepack's JS launcher.
       - name: Use the native pnpm installed by action-setup
         run: npm uninstall --global corepack
+      - name: Remove bundled Corepack launchers on Windows
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $nodeDirectory = Split-Path (Get-Command node).Source
+          foreach ($name in @('corepack', 'corepack.cmd', 'corepack.ps1')) {
+            $launcher = Join-Path $nodeDirectory $name
+            if (Test-Path -LiteralPath $launcher) {
+              Remove-Item -LiteralPath $launcher
+            }
+          }
+          if (Get-Command corepack -ErrorAction SilentlyContinue) {
+            throw 'Corepack is still on PATH; native pnpm 12 must be used.'
+          }
       - run: pnpm install --frozen-lockfile
       - run: pnpm --filter mdxcn-vue --filter mdxcn-markdown build
       - run: pnpm consumer:check
