@@ -83,7 +83,7 @@ test('actual VitePress rules lose to graph resets and generated layered prose ut
     const siblings = [...page.querySelectorAll('figure li + li')]
     if (slug === 'keys') {
       assert.equal(page.querySelectorAll('figure li').length, 0)
-      assert.ok(page.querySelectorAll('figure table tr').length > 1)
+      assert.ok(page.querySelectorAll('figure dl > div').length > 1)
       continue
     }
     assert.ok(siblings.length, `${slug} needs adjacent list rows`)
