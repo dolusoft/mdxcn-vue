@@ -2,6 +2,8 @@ import type { Theme } from 'vitepress'
 import DefaultTheme from 'vitepress/theme'
 import { Bar, GraphStack, MdxcnSmoke, Segment } from 'mdxcn-vue'
 import './style.css'
+import '@fontsource/geist-mono/400.css'
+import '@fontsource/geist-mono/600.css'
 
 export default {
   extends: DefaultTheme,

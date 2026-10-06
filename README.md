@@ -72,7 +72,8 @@ const rows: StackRow[] = [
 `graph.css` supplies graph utilities and package-local Tailwind v4 `@source`;
 `host.css` connects existing host tokens without redefining them; `theme.css`
 adds the optional complete palette and fourteen scoped `data-accent` presets.
-Geist Mono is a host-supplied font. Full-theme muted text contrast is at least
+Geist Mono is recommended for upstream font parity (licensed under OFL). It is
+host-supplied; the package does not distribute font files. Full-theme muted text contrast is at least
 4.5:1 in both modes; custom host backgrounds need their own contrast check.
 
 `GraphStack` supports typed rows, direct Markdown lists and `Bar`/`Segment` item
