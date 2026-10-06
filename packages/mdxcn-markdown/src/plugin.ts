@@ -89,13 +89,16 @@ export function mdxcnMarkdown(md: MarkdownIt, options: MarkdownOptions = {}): vo
           throw new Error('Explicit data props require runtime field precedence')
         const tokens: Token[] = []
         md.block.parse(body, md, state.env, tokens)
-        const props = tokensToProps(name, tokens, md, state.env, {
-          renderLinks: options.renderLinks,
-          lineOffset: openingEnd + 1,
-        })
         const token = state.push('html_block', '', 0)
-        token.content = `<${name} v-bind="${escapeAttribute(JSON.stringify(props))}"${attrs} />\n`
+        token.content = `${openingText}\n`
         token.map = [start, close + 1]
+        token.meta = { mdxcn: { name, attrs, count: tokens.length, lineOffset: openingEnd + 1 } }
+        for (const child of tokens) {
+          if (child.map)
+            child.map = child.map.map((line) => line + openingEnd + 1) as [number, number]
+          state.tokens.push(child)
+        }
+        state.push('html_block', '', 0).content = `</${name}>\n`
         state.line = close + 1
         return true
       } catch (error) {
@@ -116,6 +119,70 @@ export function mdxcnMarkdown(md: MarkdownIt, options: MarkdownOptions = {}): vo
     },
     { alt: ['paragraph', 'reference', 'blockquote', 'list'] },
   )
+  const convert = (state: import('markdown-it/lib/rules_core/state_core.mjs').default) => {
+    for (let index = 0; index < state.tokens.length; index++) {
+      const token = state.tokens[index]!
+      const block = token.meta?.mdxcn as
+        { name: ComponentName; attrs: string; count: number; lineOffset: number } | undefined
+      if (!block) continue
+      // Find the close marker: host core rules may have inserted tokens.
+      const close = state.tokens.findIndex(
+        (item, at) =>
+          at > index && item.type === 'html_block' && item.content === `</${block.name}>\n`,
+      )
+      try {
+        const props = tokensToProps(
+          block.name,
+          state.tokens.slice(index + 1, close),
+          md,
+          state.env,
+          {
+            renderLinks: options.renderLinks,
+          },
+        )
+        token.content = `<${block.name} v-bind="${escapeAttribute(JSON.stringify(props))}"${block.attrs} />\n`
+        state.tokens.splice(index + 1, close - index)
+      } catch (error) {
+        emitWarning(
+          options,
+          state.env,
+          state.src,
+          token.map?.[0] ?? 0,
+          block.name,
+          error instanceof Error ? error.message : String(error),
+        )
+        index = close
+      }
+      delete token.meta.mdxcn
+    }
+  }
+  // Run after host inline transformations (emoji/typographer), before anchors.
+  try {
+    md.core.ruler.before('anchor', 'mdxcn_props', convert)
+  } catch {
+    md.core.ruler.push('mdxcn_props', convert)
+  }
+}
+
+function emitWarning(
+  options: MarkdownOptions,
+  env: { path?: string; filePath?: string; relativePath?: string; mdxcnSource?: string },
+  source: string,
+  start: number,
+  component: ComponentName,
+  reason: string,
+): void {
+  const warning = {
+    file: env.path ?? env.filePath ?? env.relativePath ?? '<markdown>',
+    line: start + 1 + sourceLineOffset(source, env),
+    component,
+    reason,
+  }
+  if (options.warn) options.warn(warning)
+  else
+    console.warn(
+      `[mdxcn-markdown] ${warning.file}:${warning.line} ${component}: ${reason}; keeping runtime slot`,
+    )
 }
 
 /** VitePress removes frontmatter before block parsing; retain original file lines. */

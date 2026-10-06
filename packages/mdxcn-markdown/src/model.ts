@@ -37,8 +37,17 @@ function inline(
     const children = stack.at(-1)!
     if (token.type === 'text' && /\[[^\]]+\]/.test(token.content))
       throw new Error('Unresolved reference links require runtime resolution')
-    if (token.type === 'text' || token.type === 'softbreak')
-      children.push({ type: 'text', value: token.type === 'text' ? token.content : '\n' })
+    if (['text', 'text_special', 'emoji', 'softbreak'].includes(token.type))
+      children.push({
+        type: 'text',
+        // VitePress restores entities for its Vue template renderer at text_join.
+        value:
+          token.type === 'softbreak'
+            ? '\n'
+            : token.content.replace(/&(?:#x[\da-f]+|#\d+|[a-z][\da-z]+);/gi, (entity) =>
+                md.utils.unescapeAll(entity),
+              ),
+      })
     else if (token.type === 'code_inline')
       children.push({ type: 'code', children: [{ type: 'text', value: token.content }] })
     else if (['strong_open', 'em_open', 'link_open'].includes(token.type)) {
@@ -77,8 +86,8 @@ function blocks(
   const stack = [root]
   for (const token of tokens) {
     if (token.type === 'inline') {
-      const children: Token[] = []
-      md.inline.parse(token.content, md, env, children)
+      const children: Token[] = token.children ?? []
+      if (!children.length && token.content) md.inline.parse(token.content, md, env, children)
       stack.at(-1)!.push({
         tag: 'inline',
         token,

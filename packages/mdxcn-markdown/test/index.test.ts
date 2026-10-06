@@ -132,6 +132,17 @@ describe('raw tokens to independent expected models', () => {
   })
 })
 describe('component block plugin', () => {
+  it.each([
+    [':tada:', '🎉'],
+    ['&amp;', '&'],
+    ['&nbsp;', ' '],
+  ])('uses host inline processing for %s', (input, output) => {
+    const tokens = compile(`<GraphStack>\n\n- Web ${input} app: 1 js\n\n</GraphStack>`)
+    expect(warnings).toEqual([])
+    expect(tokens[0]?.content).toContain(
+      `Web ${output === '&' ? '&amp;' : output === ' ' ? '' : output}${output === ' ' ? '' : ' '}app`,
+    )
+  })
   it('reports source lines including frontmatter and does not leak offsets to later files', () => {
     compile('---\ntitle: Test\n---\n\n<GraphStack>\n\n- {{ value }}\n\n</GraphStack>')
     expect(warnings[0]?.line).toBe(5)
@@ -166,16 +177,15 @@ describe('component block plugin', () => {
       ],
     })
   })
-  it('leaves later-defined reference links in runtime slots rather than compiling literal labels', () => {
+  it('resolves later-defined reference links before compiling props', () => {
     const tokens = compile(
       '<GraphStack title="X">\n\n- [Docs][guide]: 1 js\n\n</GraphStack>\n\n[guide]: /docs\n',
     )
-    expect(warnings).toHaveLength(1)
-    expect(warnings[0]?.reason).toContain('reference links')
+    expect(warnings).toEqual([])
     const output = md.renderer.render(tokens, md.options, {})
-    expect(output).toContain('href="/docs.html"')
+    expect(output).toContain('&quot;href&quot;:&quot;/docs')
   })
-  it('emits serializable props and removes the source slot before core transforms', () => {
+  it('emits serializable props and removes the source slot before anchors', () => {
     const tokens = compile('<GraphStack title="BUNDLE">\n\n- web: 2 js, 1 css\n\n</GraphStack>\n')
     expect(warnings).toEqual([])
     expect(tokens).toHaveLength(1)
