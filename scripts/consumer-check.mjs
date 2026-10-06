@@ -6,7 +6,8 @@ import { fileURLToPath } from 'node:url'
 
 const repo = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 // Keep fixtures outside the repository, under the authorized scratch directory.
-const scratch = resolve(process.env.MDXCN_CONSUMER_DIR ?? resolve(repo, '../tmp/mdxcn-vue'))
+// Resolve relative overrides against the repo, independent of the caller's cwd.
+const scratch = resolve(repo, process.env.MDXCN_CONSUMER_DIR ?? '../tmp/mdxcn-vue')
 mkdirSync(scratch, { recursive: true })
 const root = mkdtempSync(join(scratch, 'consumer-'))
 const pnpmCli = process.env.npm_execpath
@@ -598,11 +599,12 @@ const results = {
   registryItems: registryPaths.length,
   registryFiles: copied.size,
 }
-write(scratch, 'consumer-results.json', results)
+const resultsPath = resolve(scratch, 'consumer-results.json')
+writeFileSync(resultsPath, JSON.stringify(results, null, 2))
 // Only remove the newly-created fixture, never the override directory itself.
 assert.equal(dirname(root), scratch)
 assert.ok(basename(root).startsWith('consumer-'))
 rmSync(root, { recursive: true, force: true })
 console.log(
-  `CONSUMER CHECK PASSED; fixture removed; results: ${join(scratch, 'consumer-results.json')}`,
+  `CONSUMER CHECK PASSED; fixture removed; results: ${resultsPath}`,
 )
