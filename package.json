@@ -15,7 +15,9 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "typecheck": "pnpm -r typecheck",
-    "consumer:check": "node scripts/consumer-check.mjs"
+    "consumer:check": "node scripts/consumer-check.mjs",
+    "registry:build": "node scripts/registry-build.mjs",
+    "registry:check": "node scripts/registry-build.mjs --check"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",

@@ -169,6 +169,26 @@ published files and notices, declaration resolution, CSS source scanning (with
 a negative control), production builds, one Vue runtime entry, and tree-shaking
 of non-imported components/Markdown. The CI consumer job runs the same script.
 
+## shadcn-vue registry
+
+`pnpm registry:build` generates `registry.json` and seven `public/r/mdxcn-*.json`
+items from the library sources: the four components, shared frame, core and CSS.
+`pnpm registry:check` rejects stale payloads. The format follows the
+[shadcn-vue item schema](https://shadcn-vue.com/schema/registry-item.json).
+
+Use `shadcn-vue add ./path/to/mdxcn-graph-stack.json` (and the
+CSS item) in a Vite/Vue project. Each item includes its local dependency closure
+and uses explicit `src/components/mdxcn/` targets; relative imports remain valid
+without a registry server or alias rewriting. Targets use the CLI's `~/` prefix
+to preserve `src/`. Payload paths use `.txt` transport suffixes because CLI 2.8.2
+otherwise parses CSS/license files as JavaScript; target files retain their
+actual extensions. Use relative local JSON paths on Windows (drive-letter paths
+are treated as URLs by that CLI). Other project layouts can relocate
+the whole directory. CSS files need Tailwind v4 processing and imports from the
+host CSS entry; choose `host.css` and optional `theme.css` as with npm consumption.
+Each copied file and JSON payload retains the full MIT notice. The consumer
+check installs all seven items with the real CLI, then typechecks and builds.
+
 ## License
 
 MIT. mdxcn is (c) Keshav Bagaade; the Vue port is (c) Dolusoft. See [LICENSE](LICENSE).

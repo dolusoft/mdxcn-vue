@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict'
 import { spawnSync } from 'node:child_process'
 import { mkdirSync, mkdtempSync, readFileSync, readdirSync, writeFileSync } from 'node:fs'
-import { dirname, join, resolve } from 'node:path'
+import { basename, dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const repo = resolve(dirname(fileURLToPath(import.meta.url)), '..')
@@ -250,11 +250,94 @@ run(['exec', 'vitepress', 'build'], site)
 const html = readFileSync(join(site, '.vitepress/dist/index.html'), 'utf8')
 assert.equal((html.match(/<figure\b/g) ?? []).length, 3)
 for (const value of ['Web', 'B', '/consumer']) assert.ok(html.includes(value))
+
+// Install generated registry payloads with the real CLI, without a server.
+run(['registry:check'], repo)
+const registry = join(root, 'registry-app')
+write(registry, 'package.json', {
+  name: 'consumer-registry',
+  private: true,
+  type: 'module',
+  packageManager: 'pnpm@12.4.1',
+  dependencies: { ...common, 'shadcn-vue': '2.8.2' },
+})
+write(registry, 'tsconfig.json', {
+  ...tsconfig,
+  compilerOptions: { ...tsconfig.compilerOptions, paths: { '@/*': ['./src/*'] } },
+})
+write(registry, 'vite.config.ts', viteConfig)
+write(registry, 'index.html', readFileSync(join(app, 'index.html'), 'utf8'))
+write(registry, 'components.json', {
+  $schema: 'https://shadcn-vue.com/schema.json',
+  style: 'new-york',
+  typescript: true,
+  tailwind: { config: '', css: 'src/style.css', baseColor: 'neutral', cssVariables: true },
+  aliases: {
+    components: '@/components',
+    ui: '@/components/ui',
+    utils: '@/lib/utils',
+    lib: '@/lib',
+    composables: '@/composables',
+  },
+})
+write(
+  registry,
+  'src/style.css',
+  '@import "tailwindcss";\n@import "./components/mdxcn/styles/graph.css";\n@import "./components/mdxcn/styles/host.css";\n@import "./components/mdxcn/styles/theme.css";\n',
+)
+write(
+  registry,
+  'src/main.ts',
+  "import {createApp} from 'vue';import App from './App.vue';import './style.css';createApp(App).mount('#app');",
+)
+const registryApp = readFileSync(join(app, 'src/App.vue'), 'utf8')
+  .replace(
+    "import {GraphStack,GraphTable,Endpoint,GraphTimer} from 'mdxcn-vue';",
+    "import {GraphStack} from './components/mdxcn/components/graph-stack';import {GraphTable} from './components/mdxcn/components/graph-table';import {Endpoint} from './components/mdxcn/components/endpoint';import {GraphTimer} from './components/mdxcn/components/graph-timer';",
+  )
+  .replaceAll("'mdxcn-vue/core'", "'./components/mdxcn/core'")
+write(registry, 'src/App.vue', registryApp)
+run(['install'], registry)
+const registryPaths = files(join(repo, 'public/r'), '.json').sort()
+const localItems = registryPaths.map((path) => {
+  const target = `registry-input/${basename(path)}`
+  write(registry, target, readFileSync(path, 'utf8'))
+  return `./${target}`
+})
+run(['exec', 'shadcn-vue', 'add', '--yes', '--overwrite', ...localItems], registry)
+const copied = new Set()
+for (const path of registryPaths) {
+  const item = JSON.parse(readFileSync(path, 'utf8'))
+  assert.match(item.meta.notice, /Keshav Bagaade/)
+  for (const file of item.files) {
+    assert.match(file.content, /Keshav Bagaade/)
+    assert.equal(
+      readFileSync(join(registry, file.target.replace(/^~\//, '')), 'utf8')
+        .replaceAll('\r\n', '\n')
+        .trim(),
+      file.content.replaceAll('\r\n', '\n').trim(),
+      `Registry CLI changed ${file.target}`,
+    )
+    copied.add(file.target)
+  }
+}
+run(['exec', 'vue-tsc', '--noEmit'], registry)
+run(['exec', 'vite', 'build'], registry)
+const registryCss = files(join(registry, 'dist/assets'), '.css')
+  .map((path) => readFileSync(path, 'utf8'))
+  .join('\n')
+for (const selector of ['.graph-frame', '.px-5', '.text-graph-muted'])
+  assert.ok(registryCss.includes(selector))
+console.log(
+  `REGISTRY INSTALL PASSED: shadcn-vue 2.8.2, ${registryPaths.length} items, ${copied.size} source files; typecheck and build passed`,
+)
 write(root, 'results.json', {
   fullBytes,
   stackBytes,
   removedBytes: fullBytes - stackBytes,
   vueRuntimeEntries: vueEntries.length,
   vitepressFigures: 3,
+  registryItems: registryPaths.length,
+  registryFiles: copied.size,
 })
 console.log(`CONSUMER CHECK PASSED; artifacts: ${root}`)
