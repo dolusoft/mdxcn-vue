@@ -233,7 +233,9 @@ it('summarizes missing components once per parser across documents', () => {
     md.render('> [!NOTE]\n> Body\n\n> [!TIP]\n> More\n\n> Quote\n> — Ada', { path })
   expect(warnings.map((w) => w.component)).toEqual(['Callout', 'Quote'])
   expect(warnings.every((w) => w.file === 'first.md')).toBe(true)
-  expect(parser().warnings).toEqual([])
+  const otherSite = parser()
+  otherSite.md.render('> [!NOTE]\n> Body')
+  expect(otherSite.warnings.map((w) => w.component)).toEqual(['Callout'])
 })
 
 it.each([false, true])(
@@ -251,3 +253,53 @@ it.each([false, true])(
     expect(warnings.map((w) => w.component)).toEqual(['Terminal'])
   },
 )
+
+describe('host fallback preservation and registration order', () => {
+  beforeEach(() => disposeMdItInstance())
+  it.each(['> [!NOTE]\n> **Body**', '> [!CAUTION]+ Read this\n> Body'])(
+    'preserves the complete original VitePress output for %s',
+    async (source) => {
+      const baseline = await createMarkdownRenderer('.')
+      const expected = await baseline.renderAsync(source)
+      disposeMdItInstance()
+      const warnings: MarkdownWarning[] = []
+      const md = await createMarkdownRenderer('.', {
+        config: (md) => md.use(withMdxcn, { warn: (w: MarkdownWarning) => warnings.push(w) }),
+      })
+      expect(await md.renderAsync(source)).toBe(expected)
+      expect(warnings.map((w) => w.component)).toEqual(['Callout'])
+    },
+  )
+  it('upgrades a host alert only when Callout is registered', async () => {
+    const md = await createMarkdownRenderer('.', {
+      config: (md) => md.use(withMdxcn, { components: ['Callout'] }),
+    })
+    const output = await md.renderAsync('> [!NOTE]\n> **Body**')
+    expect(props(output)).toEqual({ type: 'note' })
+    expect(output).toContain('<Callout ')
+    expect(output).toContain('<strong>Body</strong>')
+    expect(output).not.toContain('custom-block')
+  })
+  it.each([false, true])(
+    'compiles host Endpoint before diagnostics with upgrades first=%s',
+    async (upgradesFirst) => {
+      const warnings: MarkdownWarning[] = []
+      const options = { warn: (w: MarkdownWarning) => warnings.push(w) }
+      const md = await createMarkdownRenderer('.', {
+        config: (md) => {
+          if (upgradesFirst) md.use(withMdxcn, options).use(mdxcnMarkdown, options)
+          else md.use(mdxcnMarkdown, options).use(withMdxcn, options)
+        },
+      })
+      const output = await md.renderAsync(
+        '<Endpoint>\n\nPOST /api\n\n```console\n$ run\n```\n\n</Endpoint>',
+      )
+      expect(props(output)).toMatchObject({
+        method: 'POST',
+        path: '/api',
+        blocks: [{ label: 'console', code: '$ run' }],
+      })
+      expect(warnings).toEqual([])
+    },
+  )
+})
