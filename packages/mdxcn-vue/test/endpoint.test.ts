@@ -30,6 +30,18 @@ const nodes = () => [
   h('pre', [h('code', { class: 'language-json' }, '{ "slug": "graph-meter" }\n')]),
 ]
 describe('Endpoint reader', () => {
+  it('omits empty and whitespace-only descriptions without an empty prose wrapper', () => {
+    for (const value of ['', '  \n']) {
+      const input = h('table', [
+        h('tbody', [h('tr', [h('td', 'name'), h('td', 'string'), h('td', value)])]),
+      ])
+      expect(endpointModel({}, [input]).params[0]?.description).toBeUndefined()
+      const wrapper = mount(Endpoint, { slots: { default: () => input } })
+      expect(wrapper.find('li .leading-relaxed').exists()).toBe(false)
+      expect(wrapper.findAll('li > span')).toHaveLength(3)
+      wrapper.unmount()
+    }
+  })
   it('ignores host whitespace before the first non-thead section', () => {
     const node = h('table', ['\n ', h('thead'), '\n ', h('tfoot', [h('tr', [h('td', 'field')])])])
     expect(endpointModel({}, [node]).params[0]?.name).toBe('field')

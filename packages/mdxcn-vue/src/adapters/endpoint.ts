@@ -38,7 +38,8 @@ function paramsOf(table?: VNode): EndpointParam[] {
     return {
       name: name ? textOf(childrenOf(name)).trim() : '',
       type: type ? textOf(childrenOf(type)).trim() || undefined : undefined,
-      description: description ? childrenOf(description) : undefined,
+      description:
+        description && textOf(childrenOf(description)).trim() ? childrenOf(description) : undefined,
       required: name ? hasBold(childrenOf(name)) : false,
     }
   })
