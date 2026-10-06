@@ -30,6 +30,16 @@ const nodes = () => [
   h('pre', [h('code', { class: 'language-json' }, '{ "slug": "graph-meter" }\n')]),
 ]
 describe('Endpoint reader', () => {
+  it('keeps VitePress fences without a language and omits their label', () => {
+    expect(
+      endpointModel({}, [
+        h('div', { class: 'language- vp-adaptive-theme' }, [
+          h('button', 'Copy'),
+          h('pre', [h('code', 'unmarked\n')]),
+        ]),
+      ]).blocks,
+    ).toEqual([{ label: undefined, code: 'unmarked' }])
+  })
   it.each(['js{1,3}', 'ts:line-numbers', 'cpp{1}', 'c++'])(
     'normalizes runtime fence language %s',
     (info) => {

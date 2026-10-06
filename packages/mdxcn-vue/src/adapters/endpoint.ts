@@ -52,7 +52,7 @@ function blocksOf(elements: readonly VNode[]): EndpointBlock[] {
     .flatMap((node) => {
       if (node.type === 'pre') return [{ pre: node, wrapperClass: '' }]
       const wrapperClass = normalizeClass(node.props?.class)
-      if (node.type !== 'div' || !/\blanguage-\S+/.test(wrapperClass)) return []
+      if (node.type !== 'div' || !/\blanguage-\S*/.test(wrapperClass)) return []
       return childrenOf(node)
         .filter((child) => child.type === 'pre')
         .map((pre) => ({ pre, wrapperClass }))
