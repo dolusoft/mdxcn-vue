@@ -1,0 +1,76 @@
+import { readFileSync, readdirSync } from 'node:fs'
+import { createRequire } from 'node:module'
+import assert from 'node:assert/strict'
+import { test } from 'node:test'
+
+const viteRequire = createRequire(import.meta.resolve('vite'))
+const postcss = viteRequire('postcss')
+const { transform } = viteRequire('lightningcss')
+const vueRequire = createRequire(import.meta.resolve('../../../packages/mdxcn-vue/package.json'))
+const { JSDOM } = vueRequire('jsdom')
+
+// :not() takes the specificity of its most specific argument; :where() takes zero.
+function specificity(selector) {
+  selector = selector.replace(/:where\([^)]*\)/g, '')
+  selector = selector.replace(/:not\(([^)]*)\)/g, (_, args) => args.split(',').sort((a, b) => specificity(b) - specificity(a))[0])
+  const ids = (selector.match(/#[\w-]+/g) ?? []).length
+  const classes = (selector.match(/\.[\w-]+|\[[^\]]+\]|:(?!:)[\w-]+/g) ?? []).length
+  const types = (selector.replace(/#[\w-]+|\.[\w-]+|\[[^\]]+\]|:{1,2}[\w-]+/g, '').match(/[a-z][\w-]*/gi) ?? []).length
+  return ids * 10000 + classes * 100 + types
+}
+
+test('actual VitePress rules lose to graph resets and generated layered prose utilities', () => {
+  const host = readFileSync(new URL('../node_modules/vitepress/dist/client/theme-default/styles/components/vp-doc.css', import.meta.url), 'utf8')
+  const graph = readFileSync(new URL('../../../packages/mdxcn-vue/dist/graph.css', import.meta.url), 'utf8').split('@utility')[0]
+  const assets = new URL('../.vitepress/dist/assets/', import.meta.url)
+  const built = readdirSync(assets).filter((name) => name.endsWith('.css')).map((name) => readFileSync(new URL(name, assets), 'utf8')).join('\n')
+  // Flatten real Tailwind nesting, retaining cascade layers.
+  const compiled = transform({ filename: 'docs.css', code: Buffer.from(built), targets: { chrome: 100 << 16 } }).code.toString()
+  const rules = []
+  for (const source of [compiled, graph, host]) {
+    postcss.parse(source).walkRules((rule) => {
+      let layer = ''
+      for (let parent = rule.parent; parent; parent = parent.parent)
+        if (parent.type === 'atrule' && parent.name === 'layer') layer = parent.params
+      // Only Tailwind layers from the build; host is deliberately loaded last.
+      if (source === compiled && !layer) return
+      for (const selector of rule.selectors) {
+        const declarations = []
+        rule.walkDecls((decl) => declarations.push([decl.prop, decl.value]))
+        rules.push({ selector, layer, declarations, order: rules.length })
+      }
+    })
+  }
+  const html = readFileSync(new URL('../.vitepress/dist/components/endpoint.html', import.meta.url), 'utf8')
+  const document = new JSDOM(html).window.document
+  const prose = document.querySelector('figure .leading-relaxed')
+  assert.ok(prose)
+  prose.insertAdjacentHTML('beforeend', '<ul><li>one</li><li>two</li></ul><a href="/docs"><code>code</code></a>')
+  const resolve = (element, property) => {
+    const candidates = rules.flatMap((rule) => {
+      try { if (!element.matches(rule.selector)) return [] } catch { return [] }
+      return rule.declarations.filter(([name]) => name === property).map(([, value]) => ({ ...rule, value }))
+    }).sort((a, b) => {
+      const rank = (layer) => ({ base: 0, components: 1, utilities: 2, '': 3 })[layer] ?? -1
+      return rank(b.layer) - rank(a.layer) || specificity(b.selector) - specificity(a.selector) || b.order - a.order
+    })
+    const winner = candidates[0]
+    assert.ok(winner, `No declaration for ${property}`)
+    return winner.value === 'revert-layer' ? candidates.find((candidate) => candidate.layer !== winner.layer) : winner
+  }
+  const ul = prose.querySelector('ul')
+  const li = prose.querySelector('li + li')
+  const a = prose.querySelector('a')
+  const code = a.querySelector('code')
+  for (const [element, property] of [[ul, 'padding'], [ul, 'margin'], [ul, 'list-style'], [li, 'margin']])
+    assert.match(resolve(element, property).selector, /graph-frame/)
+  assert.equal(resolve(li, 'padding-left').layer, 'utilities')
+  assert.equal(resolve(a, 'color').layer, 'utilities')
+  assert.equal(resolve(a, 'text-underline-offset').layer, 'utilities')
+  assert.equal(resolve(code, 'color').layer, 'utilities')
+  assert.equal(resolve(code, 'font-weight').layer, 'utilities')
+  for (const property of ['padding', 'background-color', 'border-radius', 'font-size']) {
+    const winner = resolve(code, property)
+    assert.ok(!winner || winner.layer, `${property} must not retain host prose styling`)
+  }
+})

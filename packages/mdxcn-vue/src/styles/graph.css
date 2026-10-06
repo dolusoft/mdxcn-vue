@@ -42,12 +42,30 @@
 
 /* Unlayered host prose rules must not change graph list geometry. */
 .graph-frame.graph-frame ul,
-.graph-frame.graph-frame ol,
-.graph-frame.graph-frame li,
-.graph-frame.graph-frame li + li {
+.graph-frame.graph-frame ol {
   list-style: none;
   margin: 0;
   padding: 0;
+}
+.graph-frame.graph-frame li + li {
+  margin: 0;
+}
+
+/* Discard the unlayered host values so layered utilities and preflight win. */
+.graph-frame.graph-frame a {
+  color: revert-layer;
+  font-weight: revert-layer;
+  text-decoration: revert-layer;
+  text-underline-offset: revert-layer;
+  transition: revert-layer;
+}
+.graph-frame.graph-frame code {
+  color: revert-layer;
+  font-size: revert-layer;
+  border-radius: revert-layer;
+  padding: revert-layer;
+  background-color: revert-layer;
+  transition: revert-layer;
 }
 
 @utility graph-title-ink {
