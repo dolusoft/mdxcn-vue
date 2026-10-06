@@ -1,4 +1,4 @@
-import { readFileSync, readdirSync, mkdirSync, mkdtempSync, writeFileSync, rmSync } from 'node:fs'
+import { readFileSync, readdirSync, mkdirSync, mkdtempSync, writeFileSync, rmSync, cpSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { compile } from '@tailwindcss/node'
@@ -45,12 +45,10 @@ test('isolated consumer discovers package classes only through @source', async (
     for (const registered of [true, false]) {
       const target = registered ? distributed : join(fixture, 'control')
       if (!registered) {
-        mkdirSync(target)
-        for (const name of ['theme.css', 'host.css', 'graph.css']) {
-          const content = readFileSync(join(distributed, name), 'utf8')
-          writeFileSync(join(target, name), name === 'graph.css'
-            ? content.replace(/@source\s+["'][^"']+["'];/, '') : content)
-        }
+        cpSync(distributed, target, { recursive: true })
+        const graph = join(target, 'graph.css')
+        writeFileSync(graph, readFileSync(graph, 'utf8').replace(/@source\s+["'][^"']+["'];/, ''))
+        assert.ok(readdirSync(target).includes('index.js'))
       }
       const compiler = await compile(css, {
         base: fixture,
