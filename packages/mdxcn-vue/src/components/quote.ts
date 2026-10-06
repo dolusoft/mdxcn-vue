@@ -35,7 +35,7 @@ export const Quote = defineComponent({
                   ),
                   h(
                     GraphProse,
-                    { class: 'text-base leading-relaxed text-foreground sm:text-lg' },
+                    { class: 'text-base text-foreground sm:text-lg' },
                     slots.default,
                   ),
                 ]),
