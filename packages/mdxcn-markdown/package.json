@@ -25,6 +25,9 @@
     "@types/markdown-it": "14.2.0",
     "mdxcn-vue": "workspace:*"
   },
+  "peerDependencies": {
+    "markdown-it": "^14"
+  },
   "devDependencies": {
     "vitepress": "2.0.0-alpha.20",
     "typescript": "6.0.3",

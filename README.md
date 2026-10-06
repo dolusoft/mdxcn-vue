@@ -142,6 +142,9 @@ only**. It generates executable Vue template expressions; it is not a sanitizer
 for user content. `GraphStack` lists, `GraphTable` tables and `Endpoint` paragraphs,
 parameter tables and fences become typed props before anchors and highlighting.
 Inline strong/emphasis/code/links remain rich. The host supplies `markdown-it`;
+`mdxcn-markdown` requires `markdown-it ^14` as a peer. VitePress integration is
+tested with `2.0.0-alpha.20`; component block, entity and link behavior depends
+on that host version. Other hosts must supply equivalent token/renderer rules.
 the compiler does not ship a runtime Markdown renderer. `renderLinks: true`
 retains host URL rewrites, link titles and external link attributes.
 
