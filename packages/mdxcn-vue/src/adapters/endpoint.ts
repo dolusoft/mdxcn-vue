@@ -1,5 +1,6 @@
 /* Derived from mdxcn, Copyright (c) 2026 Keshav Bagaade. MIT; see LICENSE. */
 import type { VNode } from 'vue'
+import { normalizeClass } from 'vue'
 import type { ProseNode } from '../core/model'
 import { childrenOf, flattenNodes, textOf } from './items'
 import { hostCells, rowsIn } from './table'
@@ -47,12 +48,19 @@ function paramsOf(table?: VNode): EndpointParam[] {
 
 function blocksOf(elements: readonly VNode[]): EndpointBlock[] {
   return elements
-    .filter((node) => node.type === 'pre')
-    .map((pre) => {
+    .flatMap((node) => {
+      if (node.type === 'pre') return [{ pre: node, wrapperClass: '' }]
+      const wrapperClass = normalizeClass(node.props?.class)
+      if (node.type !== 'div' || !/\blanguage-\S+/.test(wrapperClass)) return []
+      return childrenOf(node)
+        .filter((child) => child.type === 'pre')
+        .map((pre) => ({ pre, wrapperClass }))
+    })
+    .map(({ pre, wrapperClass }) => {
       const code = childrenOf(pre).find((node) => node.type === 'code')
-      const language = String(code?.props?.class ?? code?.props?.className ?? '').match(
-        /language-(\S+)/,
-      )?.[1]
+      const language = (
+        normalizeClass(code?.props?.class ?? code?.props?.className) || wrapperClass
+      ).match(/language-(\S+)/)?.[1]
       const text = textOf([pre]).replace(/\n$/, '')
       return { label: /^\s*(\$ |curl\b)/.test(text) ? 'request' : language, code: text }
     })

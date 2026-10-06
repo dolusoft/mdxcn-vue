@@ -30,6 +30,25 @@ const nodes = () => [
   h('pre', [h('code', { class: 'language-json' }, '{ "slug": "graph-meter" }\n')]),
 ]
 describe('Endpoint reader', () => {
+  it('normalizes array/object classes and unwraps only one VitePress fence level', () => {
+    expect(
+      endpointModel({}, [
+        h('pre', [h('code', { class: ['extra', { 'language-json': true }] }, 'direct\n')]),
+        h('div', { class: ['language-bash', 'vp-adaptive-theme'] }, [
+          h('button', { class: 'copy' }, 'Copy'),
+          h('span', { class: 'lang' }, 'bash'),
+          h('pre', [h('code', [h('span', '  curl /x'), '\n'])]),
+        ]),
+        h('div', { class: 'language-text' }, [h('pre', [h('code', '  preserved\n\n')])]),
+        h('div', [h('pre', 'hidden')]),
+        h('div', { class: 'language-json' }, [h('div', [h('pre', 'nested')])]),
+      ]).blocks,
+    ).toEqual([
+      { label: 'json', code: 'direct' },
+      { label: 'request', code: '  curl /x' },
+      { label: 'text', code: '  preserved\n' },
+    ])
+  })
   it('omits empty and whitespace-only descriptions without an empty prose wrapper', () => {
     for (const value of ['', '  \n']) {
       const input = h('table', [
