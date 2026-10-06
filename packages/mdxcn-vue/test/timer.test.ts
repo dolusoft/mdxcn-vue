@@ -2,6 +2,9 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
 import { createSSRApp, defineComponent, h, nextTick } from 'vue'
 import { renderToString } from 'vue/server-renderer'
+import { execFileSync } from 'node:child_process'
+import { pathToFileURL } from 'node:url'
+import { resolve } from 'node:path'
 import { GraphTimer, formatAgo, formatClock, formatHms, parseInstant, useGraphNow } from '../src'
 
 const instant = Date.UTC(2026, 0, 2, 12, 34, 56)
@@ -15,6 +18,19 @@ afterEach(() => {
 })
 
 describe('clock helpers', () => {
+  it('converts UTC instants to Istanbul local time in a separate TZ process', () => {
+    const url = pathToFileURL(resolve('src/core/clock.ts')).href
+    const result = execFileSync(
+      process.execPath,
+      [
+        '--input-type=module',
+        '-e',
+        `import { formatClock } from ${JSON.stringify(url)}; console.log(JSON.stringify([new Date(${instant}).getTimezoneOffset(), formatClock(${instant}), formatClock(${instant + 12 * 3600000})]));`,
+      ],
+      { env: { ...process.env, TZ: 'Europe/Istanbul' }, encoding: 'utf8' },
+    )
+    expect(JSON.parse(result)).toEqual([-180, '15:34:56', '03:34:56'])
+  })
   it('parses Date, milliseconds and ISO strings and rejects invalid instants', () => {
     for (const value of [new Date(instant), instant, '2026-01-02T12:34:56Z'])
       expect(parseInstant(value)).toBe(instant)
