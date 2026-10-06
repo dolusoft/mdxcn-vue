@@ -78,6 +78,29 @@ test('actual VitePress rules lose to graph resets and generated layered prose ut
   const timer = new JSDOM(timerHtml).window.document.querySelector('figure .tabular-nums')
   assert.equal(resolve(timer, 'line-height').layer, 'utilities')
   assert.equal(resolve(a, 'color', true).layer, 'utilities')
+  const tableHtml = readFileSync(new URL('../.vitepress/dist/components/graph-table.html', import.meta.url), 'utf8')
+  const table = new JSDOM(tableHtml).window.document.querySelector('figure table')
+  const th = table.querySelector('th[scope]')
+  const td = table.querySelector('tbody td')
+  const foot = table.querySelector('tfoot tr:last-child td')
+  for (const element of [th, td, foot]) {
+    for (const [property, expected] of [['border', '0'], ['background', 'transparent'], ['font-size', 'inherit']]) {
+      const winner = resolve(element, property)
+      assert.equal(winner.layer, '')
+      assert.match(winner.selector, /graph-frame/)
+      assert.equal(winner.value, expected)
+    }
+  }
+  for (const [element, padding] of [[th, '0 0.75rem 0.75rem'], [td, '0.625rem 0.75rem'], [foot, '0.25rem 0.75rem 0']])
+    assert.equal(resolve(element, 'padding').value, padding)
+  assert.equal(resolve(th, 'font-weight').value, '400')
+  assert.equal(resolve(th, 'color').value, 'var(--foreground)')
+  assert.equal(resolve(table.querySelector('th.text-right'), 'text-align').value, 'right')
+  assert.equal(resolve(table.querySelector('thead tr[aria-hidden] th'), 'padding').value, '0')
+  assert.equal(resolve(table.querySelector('tfoot tr[aria-hidden] td'), 'padding').value, '0.5rem 0 0.75rem')
+  assert.equal(resolve(table, 'display').value, 'table')
+  assert.equal(resolve(table, 'border-collapse').value, 'separate')
+  assert.equal(resolve(table, 'border-spacing').value, '0')
   assert.equal(resolve(code, 'color', true).layer, 'utilities')
   for (const property of ['padding', 'background-color', 'border-radius', 'font-size']) {
     const winner = resolve(code, property)
