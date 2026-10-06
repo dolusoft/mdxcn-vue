@@ -30,6 +30,7 @@ jobs:
       - run: pnpm test
   consumer:
     strategy:
+      fail-fast: false
       matrix:
         node: [22.18, 24]
         os: [ubuntu-latest, windows-latest]
@@ -41,6 +42,9 @@ jobs:
         with:
           node-version: ${{ matrix.node }}
           cache: pnpm
+      # shadcn-vue's nypm otherwise sends native pnpm 12 through Corepack's JS launcher.
+      - name: Use the native pnpm installed by action-setup
+        run: npm uninstall --global corepack
       - run: pnpm install --frozen-lockfile
       - run: pnpm --filter mdxcn-vue --filter mdxcn-markdown build
       - run: pnpm consumer:check
