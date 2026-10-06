@@ -7,6 +7,8 @@ const repo = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const src = join(repo, 'packages/mdxcn-vue/src')
 const license = readFileSync(join(repo, 'LICENSE'), 'utf8').replaceAll('\r\n', '\n').trim()
 const check = process.argv.includes('--check')
+const cliOutput = process.argv[process.argv.indexOf('--from-cli') + 1]
+const useCli = process.argv.includes('--from-cli')
 const definitions = [
   ['graph-stack', ['components/graph-stack.ts']],
   ['graph-table', ['components/graph-table.ts']],
@@ -72,13 +74,31 @@ const items = definitions.map(([name, entries]) => ({
     })),
   ],
 }))
+if (useCli) {
+  for (const item of items) {
+    const built = JSON.parse(readFileSync(join(cliOutput, item.name + '.json'), 'utf8'))
+    assert.equal(built.type, item.type)
+    assert.equal(built.files.length, item.files.length)
+    for (const [index, file] of built.files.entries()) {
+      const expected = item.files[index]
+      assert.equal(file.path + '.txt', expected.path)
+      assert.equal(file.target, expected.target)
+      assert.equal('/*\n' + license + '\n*/\n' + file.content, expected.content)
+      // Normalize CLI output for the 2.8 CSS parser and per-file MIT distribution.
+      expected.content = '/*\n' + license + '\n*/\n' + file.content
+    }
+  }
+}
 for (const item of items) output(`public/r/${item.name}.json`, item)
 output('registry.json', {
   $schema: 'https://shadcn-vue.com/schema/registry.json',
   name: 'mdxcn-vue',
   homepage: 'https://github.com/dolusoft/mdxcn-vue',
   meta: { license: 'MIT', notice: license },
-  items,
+  // The build index references real sources; payload transport details stay in public/r.
+  items: items.map(item => ({...item, files: item.files.map(({path, type, target}) => ({
+    path: path.replace(/\.txt$/, ''), type, target,
+  }))})),
 })
 assert.equal(
   readdirSync(join(repo, 'public/r')).filter((path) => path.endsWith('.json')).length,

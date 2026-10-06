@@ -345,6 +345,10 @@ const registryApp = readFileSync(join(app, 'src/App.vue'), 'utf8')
   .replaceAll("'mdxcn-vue/core'", "'./components/mdxcn/core'")
 write(registry, 'src/App.vue', registryApp)
 run(['install'], registry)
+const cliOutput = join(root, 'registry-build')
+run(['exec', 'shadcn-vue', 'build', 'registry.json', '--cwd', repo, '--output', cliOutput], registry)
+run(['exec', 'node', 'scripts/registry-build.mjs', '--check', '--from-cli', cliOutput], repo)
+console.log('REGISTRY CLI BUILD PASSED: real source index and normalized payload parity')
 const registryPaths = files(join(repo, 'public/r'), '.json').sort()
 const localItems = registryPaths.map((path) => {
   const target = `registry-input/${basename(path)}`
