@@ -22,7 +22,8 @@ export function dropText(nodes: readonly VNode[], count: number): VNode[] {
         left = Math.max(0, left - text.length)
         return rest ? [createTextVNode(rest)] : []
       }
-      if (typeof node.type !== 'string') return [node]
+      // Past the cut nothing changes; keep the original so its compiled patch flags stay valid.
+      if (typeof node.type !== 'string' || left === 0) return [node]
       const before = textOf(childrenOf(node))
       const inner = walk(childrenOf(node))
       if (before !== '' && textOf(inner) === '') return []
