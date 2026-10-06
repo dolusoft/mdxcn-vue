@@ -4,23 +4,24 @@ import { proseText } from './model'
 import { words } from './markdown'
 
 export type GraphAlign = 'left' | 'right'
-export type TableCell = string | number | null | undefined | readonly ProseNode[]
-export interface TableModel {
+export type TableCell<Rich = never> =
+  string | number | null | undefined | readonly ProseNode[] | Rich
+export interface TableModel<Rich = never> {
   headers: string[]
-  rows: TableCell[][]
-  footer?: TableCell[]
+  rows: TableCell<Rich>[][]
+  footer?: TableCell<Rich>[]
   align?: GraphAlign[]
 }
-export interface TableData {
+export interface TableData<Rich = never> {
   headers?: readonly TableCell[] | string | null
-  rows?: readonly (readonly TableCell[])[] | null
-  footer?: readonly TableCell[] | null
+  rows?: readonly (readonly TableCell<Rich>[])[] | null
+  footer?: readonly TableCell<Rich>[] | null
   align?: readonly GraphAlign[] | string | null
 }
-export interface TableItems {
+export interface TableItems<Rich = never> {
   head?: TableCell[]
-  rows: TableCell[][]
-  foot?: TableCell[]
+  rows: TableCell<Rich>[][]
+  foot?: TableCell<Rich>[]
   align?: GraphAlign[]
 }
 
@@ -39,11 +40,11 @@ export function splitCells(text: string): string[] {
 }
 
 /** Each field chooses its own source; the existence of an empty Head still wins. */
-export function resolveTable(
-  data: TableData,
-  items: TableItems,
+export function resolveTable<Rich = never>(
+  data: TableData<Rich>,
+  items: TableItems<Rich>,
   markdown: TableModel | null,
-): TableModel {
+): TableModel<Rich> {
   const headers =
     data.headers == null
       ? (items.head ?? markdown?.headers ?? [])

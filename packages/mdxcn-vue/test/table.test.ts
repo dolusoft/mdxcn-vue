@@ -221,6 +221,22 @@ describe('table readers', () => {
 })
 
 describe('GraphTable rendering', () => {
+  it('renders VNode data cells and observes reactive replacements', async () => {
+    const wrapper = mount(GraphTable, {
+      props: {
+        title: 'VNode',
+        headers: ['Name'],
+        rows: [[h('a', { href: '/first' }, 'First')]],
+        footer: [h('code', 'sum()')],
+      },
+    })
+    expect(wrapper.get('tbody td a').attributes('href')).toBe('/first')
+    expect(wrapper.get('tfoot code').text()).toBe('sum()')
+    await wrapper.setProps({ rows: [[h('strong', 'Second')]] })
+    expect(wrapper.get('tbody strong').text()).toBe('Second')
+    expect(wrapper.find('tbody a').exists()).toBe(false)
+    wrapper.unmount()
+  })
   it('renders native table sections, column scope, rules and alignment', () => {
     const wrapper = mount(GraphTable, { props: { title: 'COST', ...data } })
     expect(wrapper.get('figcaption').text()).toBe('[ COST ]')

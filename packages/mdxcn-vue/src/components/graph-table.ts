@@ -1,12 +1,12 @@
 /* Derived from mdxcn, Copyright (c) 2026 Keshav Bagaade. MIT; see LICENSE. */
-import { defineComponent, h, mergeProps, withDirectives } from 'vue'
-import type { PropType } from 'vue'
+import { defineComponent, h, isVNode, mergeProps, withDirectives } from 'vue'
+import type { PropType, VNode } from 'vue'
 import type { TableCell, TableData, GraphAlign } from '../core/table'
 import { tableModel } from '../adapters/table'
 import { vReveal } from '../directives/reveal'
 import { Graph, GraphRule, renderProse } from './graph-frame'
 
-export interface GraphTableProps extends TableData {
+export interface GraphTableProps extends TableData<VNode> {
   title: string
   corner?: string
   className?: string
@@ -17,8 +17,8 @@ const ruleY = () =>
     'aria-hidden': 'true',
     class: 'pointer-events-none absolute inset-y-0 left-0 graph-rule-y',
   })
-const cellContent = (cell: TableCell) =>
-  Array.isArray(cell) ? renderProse([...cell]) : String(cell ?? '')
+const cellContent = (cell: TableCell<VNode>) =>
+  isVNode(cell) ? cell : Array.isArray(cell) ? renderProse([...cell]) : String(cell ?? '')
 
 export const GraphTable = defineComponent({
   name: 'GraphTable',
@@ -26,8 +26,8 @@ export const GraphTable = defineComponent({
   props: {
     title: { type: String, required: true },
     headers: [String, Array] as PropType<TableData['headers']>,
-    rows: Array as PropType<TableData['rows']>,
-    footer: Array as PropType<TableData['footer']>,
+    rows: Array as PropType<TableData<VNode>['rows']>,
+    footer: Array as PropType<TableData<VNode>['footer']>,
     align: [String, Array] as PropType<TableData['align']>,
     corner: String,
     className: String,
@@ -37,7 +37,7 @@ export const GraphTable = defineComponent({
       const model = tableModel(props, slots.default?.() ?? [])
       const alignment = (index: number): GraphAlign =>
         model.align?.[index] ?? (index === 0 ? 'left' : 'right')
-      const cells = (values: TableCell[], footer = false) =>
+      const cells = (values: TableCell<VNode>[], footer = false) =>
         values.map((cell, index) =>
           h(
             'td',

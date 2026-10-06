@@ -10,7 +10,7 @@ import { readProse } from './stack'
 
 export interface RowProps {
   label?: string
-  cells?: TableCell[]
+  cells?: TableCell<VNode>[]
 }
 export interface CellProps {
   align?: GraphAlign
@@ -35,10 +35,10 @@ function inlineCell(nodes: readonly VNode[], trim = false): TableCell {
   return content.some((node) => node.type !== 'text') ? content : proseText(content)
 }
 
-export function cellsOf(
-  value?: readonly TableCell[] | string | null,
+export function cellsOf<Rich = never>(
+  value?: readonly TableCell<Rich>[] | string | null,
   nodes: readonly VNode[] = [],
-): TableCell[] {
+): TableCell<Rich>[] {
   if (Array.isArray(value)) return [...value]
   const nested = childItems(nodes, Cell)
   if (nested.length) return nested.map((cell) => inlineCell(cell.children, true))
@@ -104,7 +104,7 @@ export function labeledTable(nodes: readonly VNode[]) {
 }
 
 /** Invoke during render so keyed slot replacements are reparsed. */
-export function tableModel(data: TableData, nodes: readonly VNode[]): TableModel {
+export function tableModel(data: TableData<VNode>, nodes: readonly VNode[]): TableModel<VNode> {
   const head = childItems(nodes, Head)[0]
   const foot = childItems(nodes, Foot)[0]
   return resolveTable(
@@ -112,10 +112,10 @@ export function tableModel(data: TableData, nodes: readonly VNode[]): TableModel
     {
       ...(head ? { head: cellsOf(undefined, head.children) } : {}),
       rows: childItems(nodes, Row).map((row) =>
-        cellsOf(row.props.cells as TableCell[] | undefined, row.children),
+        cellsOf(row.props.cells as TableCell<VNode>[] | undefined, row.children),
       ),
       ...(foot
-        ? { foot: cellsOf(foot.props.cells as TableCell[] | undefined, foot.children) }
+        ? { foot: cellsOf(foot.props.cells as TableCell<VNode>[] | undefined, foot.children) }
         : {}),
       align: alignsOf(head?.children),
     },
