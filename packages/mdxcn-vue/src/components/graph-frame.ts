@@ -118,7 +118,9 @@ export function renderProse(nodes: readonly ProseNode[]): (VNode | string)[] {
       ? node.value
       : h(
           node.type === 'link' ? 'a' : node.type,
-          node.type === 'link' ? { href: node.href } : {},
+          node.type === 'link'
+            ? { href: node.href, title: node.title, target: node.target, rel: node.rel }
+            : {},
           renderProse(node.children),
         ),
   )

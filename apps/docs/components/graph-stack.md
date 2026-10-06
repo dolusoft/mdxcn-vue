@@ -68,6 +68,7 @@ examples use the pinned upstream `bundle` and `tokens` datasets.
 ## Scoped accent and duo palette
 
 <div data-accent="sunset">
+
 <GraphStack title="TOKENS" palette="duo" :ticks="28" accent="completion">
 
 - week: 61 prompt, 27 completion, 12 cached
@@ -81,8 +82,10 @@ and comments are supported; custom wrappers, nested lists and arbitrary host
 trees are outside this reader's contract. Inline strong/emphasis/code/links in
 Markdown row labels retain their structure.
 
-In Phase 2B, `mdxcn-markdown` will compile tokens to the same typed model. The
-current reader consumes VitePress slot VNodes; it is not a general Markdown parser.
+The `mdxcn-markdown` plugin compiles these repository Markdown lists to typed
+`rows` before rendering. Dynamic content, item components and unsupported grammar
+retain their runtime slots with a source-position warning. The runtime reader
+remains available for application slots.
 
 Import `tailwindcss` and `mdxcn-vue/theme.css` for the optional complete theme, or
 `mdxcn-vue/host.css` to connect existing `--background`, `--foreground` and

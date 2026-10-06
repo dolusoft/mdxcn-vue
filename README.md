@@ -125,6 +125,32 @@ a deterministic SSR/first-client placeholder and update once per second after
 mount. `useGraphNow` clears its interval on unmount. See the
 [three upstream examples](apps/docs/components/graph-timer.md) for instant and caption inputs.
 
+## Build-time Markdown
+
+```ts
+import { mdxcnMarkdown } from 'mdxcn-markdown'
+
+export default {
+  markdown: {
+    config: (md) => { md.use(mdxcnMarkdown, { renderLinks: true }) },
+  },
+}
+```
+
+Use this plugin in VitePress `markdown.config` for **trusted repository Markdown
+only**. It generates executable Vue template expressions; it is not a sanitizer
+for user content. `GraphStack` lists, `GraphTable` tables and `Endpoint` paragraphs,
+parameter tables and fences become typed props before anchors and highlighting.
+Inline strong/emphasis/code/links remain rich. The host supplies `markdown-it`;
+the compiler does not ship a runtime Markdown renderer. `renderLinks: true`
+retains host URL rewrites, link titles and external link attributes.
+
+Unsupported or dynamic blocks retain runtime slots and emit `file:line` warnings.
+Explicit data props also keep runtime field precedence. See the
+[compiler contract and limits](docs/markdown-contract.md). Grammar/clock helpers
+`words`, `numbers`, `splitDash` and `pad2` are exported from `mdxcn-vue/core`.
+The primary entry has an explicit reviewed export list.
+
 ## License
 
 MIT. mdxcn is (c) Keshav Bagaade; the Vue port is (c) Dolusoft. See [LICENSE](LICENSE).

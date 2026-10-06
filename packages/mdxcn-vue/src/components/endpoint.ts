@@ -7,7 +7,7 @@ import { toneClass } from '../core/motion'
 import type { EndpointData, EndpointParam } from '../adapters/endpoint'
 import { endpointModel } from '../adapters/endpoint'
 import { vReveal } from '../directives/reveal'
-import { Graph, GraphBody, GraphProse, GraphRule } from './graph-frame'
+import { Graph, GraphBody, GraphProse, GraphRule, renderProse } from './graph-frame'
 
 export interface EndpointProps extends EndpointData {
   title?: string
@@ -34,6 +34,7 @@ export const Endpoint = defineComponent({
     path: String as PropType<EndpointData['path']>,
     params: Array as PropType<EndpointData['params']>,
     blocks: Array as PropType<EndpointData['blocks']>,
+    about: Array as PropType<EndpointData['about']>,
     palette: String as PropType<GraphPalette>,
     corner: String,
     className: String,
@@ -53,8 +54,12 @@ export const Endpoint = defineComponent({
                   h('span', { class: `shrink-0 ${accent}` }, model.method),
                   h('span', { class: 'min-w-0 break-all text-foreground' }, model.path),
                 ]),
-                model.about.length
-                  ? h(GraphProse, { class: 'text-graph-muted' }, () => model.about)
+                (props.about ?? model.about).length
+                  ? h(GraphProse, { class: 'text-graph-muted' }, () =>
+                      props.about != null
+                        ? props.about.map((paragraph) => h('p', renderProse(paragraph)))
+                        : model.about,
+                    )
                   : null,
               ]),
             ),

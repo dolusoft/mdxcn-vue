@@ -2,7 +2,14 @@
 export type ProseNode =
   | { type: 'text'; value: string }
   | { type: 'strong' | 'em' | 'code'; children: ProseNode[] }
-  | { type: 'link'; href: string; children: ProseNode[] }
+  | {
+      type: 'link'
+      href: string
+      title?: string
+      target?: string
+      rel?: string
+      children: ProseNode[]
+    }
 
 export interface StackSegment {
   label?: string

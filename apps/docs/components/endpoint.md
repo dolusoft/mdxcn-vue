@@ -1,7 +1,8 @@
 # Endpoint
 
 One API route with parameters, prose and request/response blocks. This example
-uses the pinned upstream `one component` dataset and direct host markup.
+uses the pinned upstream `one component` dataset. Repository Markdown is compiled
+to typed props before heading anchors and syntax highlighting.
 
 ## One component
 
@@ -15,8 +16,13 @@ One component from the catalog, with its props. See the [catalog](/components/gr
 | --- | --- | --- |
 | **slug** | string | Registry slug, like `graph-table` |
 
-<pre><code class="language-bash">$ curl https://mdxcn.dev/api/v1/components/graph-meter</code></pre>
-<pre><code class="language-json">{ "slug": "graph-meter", "name": "GraphMeter", "props": [ … ] }</code></pre>
+```bash
+$ curl https://mdxcn.dev/api/v1/components/graph-meter
+```
+
+```json
+{ "slug": "graph-meter", "name": "GraphMeter", "props": [ … ] }
+```
 
 </Endpoint>
 
@@ -36,9 +42,9 @@ One component from the catalog, with its props. See the [catalog](/components/gr
 </Endpoint>
 ```
 
-VitePress wraps highlighted Markdown fences in a `div`. Use direct `pre > code`
-hosts or the `blocks` prop here, matching the upstream direct-host input contract.
-The Markdown compiler is a later phase.
+The `mdxcn-markdown` plugin reads raw fence tokens before VitePress adds its
+highlighter wrappers. Runtime slots also accept one `div.language-* > pre` level;
+copy buttons and language labels are ignored.
 
 ## Typed data
 

@@ -53,7 +53,19 @@ export function readProse(nodes: readonly VNode[]): ProseNode[] {
       typeof node.children === 'string'
         ? [{ type: 'text' as const, value: node.children }]
         : readProse(childrenOf(node))
-    if (node.type === 'a') return [{ type: 'link', href: String(node.props?.href ?? ''), children }]
+    if (node.type === 'a')
+      return [
+        {
+          type: 'link',
+          href: String(node.props?.href ?? ''),
+          ...Object.fromEntries(
+            ['title', 'target', 'rel']
+              .filter((key) => node.props?.[key] != null)
+              .map((key) => [key, String(node.props![key])]),
+          ),
+          children,
+        },
+      ]
     if (node.type === 'b') return [{ type: 'strong', children }]
     if (node.type === 'strong' || node.type === 'em' || node.type === 'code')
       return [{ type: node.type, children }]

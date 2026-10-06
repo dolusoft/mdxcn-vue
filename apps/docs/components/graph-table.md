@@ -98,7 +98,9 @@ Empty arrays and an empty first `Head`/`Foot` still win. Pipe text preserves emp
 cells; plain text separates words on whitespace and commas. Nested `Cell` items preserve inline
 strong/emphasis/code/links and trim edge whitespace. Typed cells accept strings, numbers, VNodes or `ProseNode[]`.
 
-The Markdown reader consumes a direct host `table` with `thead`/`tbody`/`tfoot` and
+The `mdxcn-markdown` plugin compiles repository Markdown tables to typed props
+before rendering. Dynamic content and item components retain their runtime slots
+with a source-position warning. The runtime Markdown reader consumes a direct host `table` with `thead`/`tbody`/`tfoot` and
 `tr`/`th`/`td` slots. Without `thead`, the first body row supplies headings. With no
 explicit `tfoot`, a final row starting with **bold** text or `Total` becomes the
 footer when there are at least two body rows. Alignment defaults to left for the

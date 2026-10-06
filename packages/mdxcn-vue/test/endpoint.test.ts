@@ -39,7 +39,9 @@ describe('Endpoint reader', () => {
           h('span', { class: 'lang' }, 'bash'),
           h('pre', [h('code', [h('span', '  curl /x'), '\n'])]),
         ]),
-        h('div', { class: 'language-text' }, [h('pre', [h('code', '  preserved\n\n')])]),
+        h('div', { class: 'language-text' }, [
+          h('pre', [h('code', { class: 'highlight' }, '  preserved\n\n')]),
+        ]),
         h('div', [h('pre', 'hidden')]),
         h('div', { class: 'language-json' }, [h('div', [h('pre', 'nested')])]),
       ]).blocks,
@@ -157,6 +159,40 @@ describe('Endpoint reader', () => {
   })
 })
 describe('Endpoint rendering', () => {
+  it('renders typed about paragraphs, observes replacements and honors empty arrays', async () => {
+    const wrapper = mount(Endpoint, {
+      props: {
+        about: [
+          [
+            {
+              type: 'link',
+              href: '/docs',
+              title: 'Guide',
+              target: '_blank',
+              rel: 'noreferrer',
+              children: [{ type: 'text', value: 'Docs' }],
+            },
+          ],
+        ],
+      },
+      slots: { default: () => h('p', 'Fallback') },
+    })
+    expect(wrapper.get('p a').attributes()).toEqual({
+      href: '/docs',
+      title: 'Guide',
+      target: '_blank',
+      rel: 'noreferrer',
+    })
+    expect(wrapper.text()).not.toContain('Fallback')
+    await wrapper.setProps({ about: [[{ type: 'text', value: 'Updated' }]] })
+    expect(wrapper.text()).toContain('Updated')
+    await wrapper.setProps({ about: [] })
+    expect(wrapper.find('a').exists()).toBe(false)
+    expect(wrapper.text()).not.toContain('Fallback')
+    await wrapper.setProps({ about: null })
+    expect(wrapper.text()).toContain('Fallback')
+    wrapper.unmount()
+  })
   it('names focusable code regions with the caption or an untitled fallback', async () => {
     const wrapper = mount(Endpoint, { props: { blocks: [{ label: 'json', code: '{}' }] } })
     const region = wrapper.get('[role="region"]')

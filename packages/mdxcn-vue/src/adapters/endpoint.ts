@@ -16,6 +16,7 @@ export interface EndpointBlock {
   code: string
 }
 export interface EndpointData {
+  about?: readonly (readonly ProseNode[])[] | null
   method?: string | null
   path?: string | null
   params?: readonly EndpointParam[] | null
@@ -58,9 +59,9 @@ function blocksOf(elements: readonly VNode[]): EndpointBlock[] {
     })
     .map(({ pre, wrapperClass }) => {
       const code = childrenOf(pre).find((node) => node.type === 'code')
-      const language = (
-        normalizeClass(code?.props?.class ?? code?.props?.className) || wrapperClass
-      ).match(/language-(\S+)/)?.[1]
+      const language =
+        wrapperClass.match(/language-(\S+)/)?.[1] ??
+        normalizeClass(code?.props?.class ?? code?.props?.className).match(/language-(\S+)/)?.[1]
       const text = textOf([pre]).replace(/\n$/, '')
       return { label: /^\s*(\$ |curl\b)/.test(text) ? 'request' : language, code: text }
     })

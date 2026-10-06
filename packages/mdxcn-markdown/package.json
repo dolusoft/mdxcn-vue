@@ -21,7 +21,12 @@
     "test": "vitest run",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
+  "dependencies": {
+    "@types/markdown-it": "14.2.0",
+    "mdxcn-vue": "workspace:*"
+  },
   "devDependencies": {
+    "vitepress": "2.0.0-alpha.20",
     "typescript": "6.0.3",
     "vitest": "5.0.3"
   }
