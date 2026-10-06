@@ -369,3 +369,13 @@ it.each(cases)(
     vi.unstubAllGlobals()
   },
 )
+it('renders a missing or boolean stat value as empty text like React', () => {
+  const w = mount(GraphStat, {
+    props: {
+      title: 'T',
+      items: [{ label: 'a' }, { value: null, label: 'b' }, { value: false, label: 'c' }] as never,
+    },
+  })
+  expect(w.findAll('li > p:first-child').map((n) => n.text())).toEqual(['', '', ''])
+  w.unmount()
+})

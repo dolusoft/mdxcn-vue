@@ -62,7 +62,10 @@ export const GraphStat = defineComponent({
                           entry.accent ? 'text-graph-accent' : 'text-foreground',
                         ],
                       },
-                      String(entry.value),
+                      // React renders null, undefined and booleans as nothing.
+                      entry.value == null || typeof entry.value === 'boolean'
+                        ? ''
+                        : String(entry.value),
                     ),
                     h('p', { class: 'text-graph-muted' }, entry.label ?? ''),
                     ...(entry.hint ? [h('p', { class: 'text-graph-muted' }, entry.hint)] : []),
