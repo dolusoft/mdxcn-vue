@@ -93,7 +93,7 @@ export const Graph = defineComponent({
         [
           props.title ? h(GraphTitle, { id: captionId }, () => props.title) : null,
           h(GraphCorners, { mark: props.corner }),
-          ...(slots.default?.({ captionId }) ?? []),
+          ...(slots.default?.({ captionId: props.title ? captionId : undefined }) ?? []),
         ],
       )
   },

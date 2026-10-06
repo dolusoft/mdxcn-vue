@@ -221,6 +221,13 @@ describe('table readers', () => {
 })
 
 describe('GraphTable rendering', () => {
+  it('omits absent caption references and gives the untitled region a name', () => {
+    const wrapper = mount(GraphTable, { props: { title: '', ...data } })
+    expect(wrapper.find('figcaption').exists()).toBe(false)
+    expect(wrapper.find('[aria-labelledby]').exists()).toBe(false)
+    expect(wrapper.get('[role="region"]').attributes('aria-label')).toBe('Table')
+    wrapper.unmount()
+  })
   it('names the keyboard-focusable scroll region and table from the figcaption', () => {
     const wrapper = mount(GraphTable, { props: { title: 'COST', ...data } })
     const id = wrapper.get('figcaption').attributes('id')

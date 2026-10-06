@@ -60,6 +60,7 @@ export const GraphTable = defineComponent({
                 tabindex: 0,
                 role: 'region',
                 'aria-labelledby': captionId,
+                'aria-label': captionId ? undefined : 'Table',
               },
               [
                 h(
