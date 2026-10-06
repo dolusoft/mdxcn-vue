@@ -75,7 +75,9 @@ satırlarını/sınıflarını doğrular. Production fixture'ında önce iki yol
 beklentilerle sınanır, ardından DOM eşitliği ölçülür. Yalnız caption kimlikleri
 ve Vue yorum düğümleri normalize edilir; kod boşlukları sıkıştırılmaz.
 Üç bileşenin SSR çıktısı jsdom içinde mismatch uyarısı olmadan aynı DOM ile
-hydrate edildi. Bu kontrol gerçek tarayıcı görsel ölçümü değildir.
+hydrate edildi. Ortam jsdom'dur; `IntersectionObserver` yoktur ve `vReveal`
+animasyon yolu çalışmaz. Bu kontrol gerçek tarayıcı görsel ölçümü veya
+observer/WAAPI animasyon testi değildir; direktifin mock testleri ayrıdır.
 
 Build sırasında önceki compiler fallback fixture uyarıları beklenen şekilde
 sürüyor. Registry CLI bağımlılıklarında altı deprecated transitive dependency

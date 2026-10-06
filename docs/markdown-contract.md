@@ -95,6 +95,12 @@ Prose bileşenlerinin gövdesi slot olarak kalır; item adaptörü yoktur.
 `Terminal` ve `Endpoint` etiketleri içindeki fence blokları kendi okuyucularına
 bırakılır; iç içe otomatik `Terminal` üretilmez.
 
+`withMdxcn` çerçeve içindeki `blockquote` token değerlerini de işler: açık
+`Callout` veya `Quote` gövdesindeki alert/byline, kayıtlı hedefe dönüşebilir.
+Çerçeve için genel bir dönüşüm engeli yoktur. Yalnız eşleşen kod okuyucusu
+etiketleri fence yükseltmesini engeller; HTML yorumları ve kapanışsız etiketler
+sonraki fence bloklarını engellemez.
+
 Varsayılan boş liste kaynak konumlu uyarıyla HTML üretir: host alert çıktısı
 (kendi alert renderer işlevi yoksa `aside`), byline içeren `blockquote`, host
 `pre > code` yapısı ve özgün footnote bölümü. Zengin gövde biçimleri korunur.
