@@ -53,6 +53,14 @@ const markdown = () =>
   ])
 
 describe('table readers', () => {
+  it('splits comma-separated headers and align strings like upstream words', () => {
+    expect(tableModel({ headers: 'Name, Value', align: 'left, right' }, [])).toEqual({
+      headers: ['Name', 'Value'],
+      rows: [],
+      align: ['left', 'right'],
+    })
+    expect(cellsOf('a,b, c')).toEqual(['a', 'b', 'c'])
+  })
   it('produces an independent identical model for all three inputs', () => {
     const expected = {
       headers: ['Agent', 'Tokens', 'Time'],

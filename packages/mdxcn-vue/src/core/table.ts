@@ -1,6 +1,7 @@
 /* Derived from mdxcn, Copyright (c) 2026 Keshav Bagaade. MIT; see LICENSE. */
 import type { ProseNode } from './model'
 import { proseText } from './model'
+import { words } from './markdown'
 
 export type GraphAlign = 'left' | 'right'
 export type TableCell = string | number | null | undefined | readonly ProseNode[]
@@ -33,7 +34,7 @@ export function splitCells(text: string): string[] {
   return trimmed
     ? trimmed.includes('|')
       ? trimmed.split('|').map((cell) => cell.trim())
-      : trimmed.split(/\s+/)
+      : words(trimmed)
     : []
 }
 
@@ -52,9 +53,7 @@ export function resolveTable(
   const rows = data.rows ?? (items.rows.length ? items.rows : markdown?.rows) ?? []
   const footer = data.footer ?? items.foot ?? markdown?.footer
   const align =
-    (typeof data.align === 'string'
-      ? (data.align.trim().split(/\s+/).filter(Boolean) as GraphAlign[])
-      : data.align) ??
+    (typeof data.align === 'string' ? words<GraphAlign>(data.align) : data.align) ??
     items.align ??
     markdown?.align
   return {
