@@ -49,6 +49,8 @@ export default tseslint.config(
             'Changelog',
             'Change',
             'Decision',
+            'Chat',
+            'Keys',
           ],
         },
       ],

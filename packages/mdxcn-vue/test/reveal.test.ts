@@ -5,6 +5,7 @@ import { vReveal } from '../src/directives/reveal'
 import type { RevealOptions } from '../src/directives/reveal'
 import { Annotate } from '../src/components/annotate'
 import { Env } from '../src/components/env'
+import { Chat, Keys } from '../src'
 import { Terminal } from '../src/components/terminal'
 
 let reduced: boolean
@@ -91,6 +92,31 @@ afterEach(() => {
 })
 
 describe('v-reveal lifecycle', () => {
+  it.each([
+    {
+      component: Chat,
+      props: { turns: Array.from({ length: 60 }, () => ({ by: 'you', children: 'hello' })) },
+      cap: 300,
+      selector: 'li',
+    },
+    {
+      component: Keys,
+      props: { bindings: Array.from({ length: 60 }, () => ({ keys: 'K', action: 'search' })) },
+      cap: 200,
+      selector: 'dl > div',
+    },
+  ])(
+    'caps $component.name stagger at $cap ms for the last of 60 rows',
+    ({ component, props, cap, selector }) => {
+      const wrapper = mount(defineComponent({ setup: () => () => h(component, props) }))
+      wrappers.push(wrapper)
+      expect(observe).toHaveBeenCalledTimes(60)
+      intersect()
+      expect(animate.mock.calls[0]?.[1].delay).toBe(cap)
+      expect((wrapper.findAll(selector).at(-1)?.element as HTMLElement).style.opacity).toBe('')
+      expect(animate).toHaveBeenCalledTimes(1)
+    },
+  )
   it('caps Annotate stagger at 250 ms when the last of 60 notes enters alone', () => {
     const wrapper = mount(Annotate, { props: { notes: Array(60).fill('note') } })
     wrappers.push(wrapper)

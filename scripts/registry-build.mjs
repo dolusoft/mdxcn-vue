@@ -22,6 +22,8 @@ const definitions = [
   ['steps', ['components/steps.ts']],
   ['changelog', ['components/changelog.ts']],
   ['decision', ['components/decision.ts']],
+  ['chat', ['components/chat.ts']],
+  ['keys', ['components/keys.ts']],
   ['graph-frame', ['components/graph-frame.ts']],
   ['core', ['core/index.ts']],
   ['css', ['styles/graph.css', 'styles/host.css', 'styles/theme.css']],

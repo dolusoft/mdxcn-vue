@@ -13,15 +13,28 @@ import type { EnvVar } from 'mdxcn-vue/core'
 import { parseEnv, envVarFromList } from 'mdxcn-vue/core'
 import { optionFromList } from 'mdxcn-vue/core'
 import type { StateListItem, DecisionOption } from 'mdxcn-vue/core'
+import { bindingFromList } from 'mdxcn-vue/core'
+import type { ChatListItem, KeyBinding } from 'mdxcn-vue/core'
 
 export type ComponentName =
-  'GraphStack' | 'GraphTable' | 'Endpoint' | 'Annotate' | 'Env' | 'Steps' | 'Changelog' | 'Decision'
+  | 'GraphStack'
+  | 'GraphTable'
+  | 'Endpoint'
+  | 'Annotate'
+  | 'Env'
+  | 'Steps'
+  | 'Changelog'
+  | 'Decision'
+  | 'Chat'
+  | 'Keys'
 export type CompiledProps =
   | { rows: StackRow[] }
   | TableModel
   | { code: string; notes: ProseNode[][]; title: string }
   | { vars: EnvVar[] }
   | { list: StateListItem[] }
+  | { list: ChatListItem[] }
+  | { bindings: KeyBinding[] }
   | { options: DecisionOption[]; after: ProseNode[][] }
   | {
       method: string
@@ -161,7 +174,7 @@ export function tokensToProps(
   env: object = {},
   options: TokenModelOptions = {},
 ): CompiledProps {
-  const stateList = ['Steps', 'Changelog', 'Decision'].includes(name)
+  const stateList = ['Steps', 'Changelog', 'Decision', 'Chat', 'Keys'].includes(name)
   const tree = blocks(tokens, md, env, options, stateList || name === 'Annotate' || name === 'Env')
   if (stateList) {
     if (tree.some((block) => !['ul', 'ol', 'p'].includes(block.tag)))
@@ -171,6 +184,20 @@ export function tokensToProps(
       .flatMap((list) => list.children)
     if (items.some((item) => item.children.some((block) => !['p', 'inline'].includes(block.tag))))
       throw new Error('Nested list items require runtime resolution')
+    if (name === 'Chat')
+      return {
+        list: items.map((item) => {
+          const paragraphs = item.children.filter(
+            (block) => block.tag === 'p' && !block.token.hidden,
+          )
+          const clean = (block: Block) =>
+            content(block).filter((node) => node.type !== 'text' || node.value !== '')
+          return {
+            head: paragraphs.length ? clean(paragraphs[0]!) : clean(item),
+            body: paragraphs.slice(1).map(clean),
+          }
+        }),
+      }
     const has = (nodes: ProseNode[], type: 'strong' | 'em'): boolean =>
       nodes.some((node) => node.type !== 'text' && (node.type === type || has(node.children, type)))
     const list: StateListItem[] = items.map((item) => ({
@@ -182,6 +209,7 @@ export function tokensToProps(
       strong: has(content(item), 'strong'),
       em: has(content(item), 'em'),
     }))
+    if (name === 'Keys') return { bindings: list.map(bindingFromList) }
     return name === 'Decision'
       ? {
           options: list.map(optionFromList),

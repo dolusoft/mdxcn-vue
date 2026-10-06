@@ -7,6 +7,8 @@ import ts from 'typescript'
 
 // Deliberately maintained independently of export declarations.
 const publicNames = [
+  'Chat',
+  'Keys',
   'Steps',
   'Step',
   'Changelog',
@@ -102,6 +104,10 @@ it('exposes grammar and clock helpers only through core', () => {
 })
 
 const publicTypes = [
+  'ChatProps',
+  'ChatTurn',
+  'KeysProps',
+  'KeyBinding',
   'StepState',
   'StepProps',
   'StepsProps',
@@ -151,6 +157,12 @@ const publicTypes = [
   'GraphTimerProps',
 ]
 const coreNames = [
+  'ChatListItem',
+  'KeyBinding',
+  'speakerPrefix',
+  'chatFromList',
+  'bindingFromList',
+  'chordsOf',
   'StateListItem',
   'StepState',
   'ChangeType',

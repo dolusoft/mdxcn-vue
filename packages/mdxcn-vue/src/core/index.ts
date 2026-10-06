@@ -22,3 +22,5 @@ export type {
   DecisionOption,
 } from './state-list.js'
 export { stepFromList, changeFromList, optionFromList } from './state-list.js'
+export type { ChatListItem, KeyBinding } from './chat-keys.js'
+export { speakerPrefix, chatFromList, bindingFromList, chordsOf } from './chat-keys.js'

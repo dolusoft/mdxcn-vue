@@ -4,9 +4,9 @@ Vue 3 port of [mdxcn](https://github.com/shadcn-labs/mdxcn) — ASCII-style grap
 prose components (tables, bars, timelines, invoices, terminals, ...) that can be fed
 by typed props, item components or Markdown.
 
-> **Status:** work in progress. Phase 5A includes the shared frame, typed core,
+> **Status:** work in progress. Phase 5B includes the shared frame, typed core,
 > `v-reveal`, `GraphStack`, `GraphTable`, `Endpoint`, `GraphTimer`, `Callout`,
-> `Quote`, `Terminal`, `Annotate`, `Env`, `Steps`, `Changelog` and `Decision`;
+> `Quote`, `Terminal`, `Annotate`, `Env`, `Steps`, `Changelog`, `Decision`, `Chat` and `Keys`;
 > build-time Markdown and packaged consumer checks are available; the remaining
 > components are still pending.
 
@@ -238,8 +238,8 @@ published JS payload (all exports) and from the application's total size.
 
 ## shadcn-vue registry
 
-`pnpm registry:build` generates `registry.json` and seven `public/r/mdxcn-*.json`
-items from the library sources: the four components, shared frame, core and CSS.
+`pnpm registry:build` generates `registry.json` and seventeen `public/r/mdxcn-*.json`
+items from the library sources: fourteen components, shared frame, core and CSS.
 The content-free build index references real files. The consumer check runs
 `shadcn-vue build registry.json` and verifies its output against the distributable
 payloads after adding the MIT notice. Our script generates `public/r`;
