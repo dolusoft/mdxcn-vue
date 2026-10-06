@@ -7,7 +7,7 @@
     "dev": "vitepress dev",
     "build": "vitepress build",
     "preview": "vitepress preview",
-    "test": "echo \"docs: no unit tests yet\"",
+    "test": "node --test test/*.test.mjs",
     "typecheck": "vue-tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {

@@ -1,8 +1,8 @@
 import { defineConfig } from 'vite'
 
 /**
- * Picked up by Vite itself: VitePress calls `createServer({ root: srcDir })`
- * without `configFile`, so Vite auto-loads this file as the *user* config.
+ * VitePress passes `config.vite?.configFile` to Vite. With no explicit path,
+ * Vite auto-loads this file from `srcDir` as the user config.
  *
  * `devtools` must live here. VitePress forwards `.vitepress/config.ts` `vite`
  * options through a plugin `config` hook, and Vite rejects `devtools` from a

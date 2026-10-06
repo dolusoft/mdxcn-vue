@@ -33,6 +33,11 @@ pnpm typecheck
 
 The docs dev server ships with Vue DevTools (`vite-plugin-vue-devtools`, UI at
 `/__devtools__/`) and Vite DevTools (`@vitejs/devtools`, UI at `/__devtools/`).
+Both are enabled in `apps/docs` on the dev server's reported port (default 5173).
+`apps/docs/vite.config.ts` configures Vite DevTools;
+`apps/docs/.vitepress/config.ts` configures Vue DevTools and Tailwind. The docs
+tests resolve development and production configs without starting a server;
+both tools are excluded from production builds. Browser verification is pending.
 
 ## License
 
