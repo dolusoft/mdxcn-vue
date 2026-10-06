@@ -144,6 +144,19 @@ bildirilen alanları okur; kebab-case anahtarları camelCase biçimine çevirir,
 boolean boş değeri `true` yapar ve varsayılanları uygular. Slotlar `computed`
 içinde önbelleğe alınmaz; her render sırasında okunur.
 
+## Callout içindeki VitePress fence görünümü
+
+`Callout` gövdesi host tarafından üretilen slotu korur. VitePress bir kod fence
+için `div.language-*` sarmalayıcısı, koyu arka plan, `button.copy`, `span.lang`
+ve 16 px dış boşluk üretir. Bunlar upstream `GraphProse` sözleşmesinin parçası
+değildir; mevcut `host.css` bu fence arayüzünü nötrleştirmez. Dolayısıyla bu
+girdi biçiminde görsel upstream paritesi garanti edilmez. Düz `pre > code`
+slotu, VitePress fence arayüzü olmadan upstream prose yapısını kullanır.
+
+Bu sınır belgelendi: genel bir CSS sıfırlaması kopyalama/dil ve highlighter
+özelliklerini değiştireceği için dar kapsamlı bu teslimatta host arayüzü korundu.
+Tarayıcıda fence boşlukları ve light/dark renkleri ayrıca ölçülmelidir.
+
 ## Terminal açılış etiketi sınırı
 
 `Terminal`, yukarıdaki model derleyicisinin desteklediği bileşenler arasında
