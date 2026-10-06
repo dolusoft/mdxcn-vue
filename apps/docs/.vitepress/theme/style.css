@@ -4,3 +4,13 @@
 .vp-doc .graph-frame {
   margin: 2rem 0;
 }
+
+/* Matches the upstream Next font metrics; keep font assets in the docs host. */
+@font-face {
+  font-family: 'Geist Mono Fallback';
+  src: local('Arial');
+  ascent-override: 74.67%;
+  descent-override: 21.92%;
+  line-gap-override: 0%;
+  size-adjust: 134.59%;
+}

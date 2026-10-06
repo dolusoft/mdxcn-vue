@@ -7,6 +7,9 @@ import { mdxcnMarkdown } from 'mdxcn-markdown'
 export default defineConfig({
   title: 'mdxcn-vue',
   description: 'Vue 3 port of mdxcn',
+  transformHead: ({ assets, siteConfig }) => assets
+    .filter(asset => /geist-mono-latin-(?:400|600)-normal.*\.woff2$/.test(asset))
+    .map(asset => ['link', {rel:'preload',as:'font',type:'font/woff2',crossorigin:'',href:siteConfig.site.base + asset}]),
   markdown: { config: (md) => { md.use(mdxcnMarkdown, { renderLinks: true }) } },
   themeConfig: {
     sidebar: [{ text: 'Components', items: [{ text: 'GraphStack', link: '/components/graph-stack' }, { text: 'GraphTable', link: '/components/graph-table' }, { text: 'Endpoint', link: '/components/endpoint' }, { text: 'GraphTimer', link: '/components/graph-timer' }] }],
