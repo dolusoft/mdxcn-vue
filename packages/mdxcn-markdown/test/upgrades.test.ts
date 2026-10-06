@@ -162,9 +162,9 @@ describe('VitePress host integration', () => {
     const output = await md.renderAsync('---\ntitle: Test\n---\n\n> [!NOTE]\n> **Body**', {
       path: 'note.md',
     })
-    expect(output).toContain('<aside data-mdxcn="Callout"')
+    expect(output).toContain('custom-block github-alert')
     expect(output).toContain('<strong>Body</strong>')
-    expect(output).not.toContain('custom-block')
+    expect(output).not.toContain('<aside')
     expect(warnings).toMatchObject([{ file: 'note.md', line: 5, component: 'Callout' }])
   })
   it.each([false, true])(
@@ -222,7 +222,15 @@ describe('VitePress host integration', () => {
     )
     expect(output).toContain('<GraphStack v-bind=')
     expect(output).toContain('🎉')
-    expect(output).toContain('<aside data-mdxcn="Callout"')
+    expect(output).toContain('custom-block github-alert')
     expect(warnings).toMatchObject([{ file: 'combined.md', line: 11, component: 'Callout' }])
   })
+})
+
+it('summarizes missing components once per parser across documents', () => {
+  const {md,warnings}=parser()
+  for(const path of ['first.md','second.md']) md.render('> [!NOTE]\n> Body\n\n> [!TIP]\n> More\n\n> Quote\n> — Ada', {path})
+  expect(warnings.map(w=>w.component)).toEqual(['Callout','Quote'])
+  expect(warnings.every(w=>w.file==='first.md')).toBe(true)
+  expect(parser().warnings).toEqual([])
 })

@@ -3,46 +3,62 @@
     "name": "GitHub note",
     "source": "> [!NOTE]\n> Keep **rich** text.",
     "component": "Callout",
-    "props": { "type": "note" },
-    "native": "<aside data-mdxcn=\"Callout\" data-type=\"note\" role=\"note\">\n<p class=\"mdxcn-alert-title\">note</p>\n<p>Keep <strong>rich</strong> text.</p>\n</aside>\n",
+    "props": {
+      "type": "note"
+    },
+    "native": "<blockquote>\n<p>[!NOTE]\nKeep <strong>rich</strong> text.</p>\n</blockquote>\n",
     "body": "<p>Keep <strong>rich</strong> text.</p>"
   },
   {
     "name": "custom caution title",
     "source": "> [!CAUTION]+ Read this\n> Body with `code`.",
     "component": "Callout",
-    "props": { "type": "danger", "title": "Read this" },
-    "native": "<aside data-mdxcn=\"Callout\" data-type=\"danger\" role=\"note\">\n<p class=\"mdxcn-alert-title\">Read this</p>\n<p>Body with <code>code</code>.</p>\n</aside>\n",
+    "props": {
+      "type": "danger",
+      "title": "Read this"
+    },
+    "native": "<blockquote>\n<p>[!CAUTION]+ Read this\nBody with <code>code</code>.</p>\n</blockquote>\n",
     "body": "<p>Body with <code>code</code>.</p>"
   },
   {
     "name": "quote byline in same paragraph",
     "source": "> Keep *going*.\n> — Ada, Notes",
     "component": "Quote",
-    "props": { "by": "Ada", "source": "Notes" },
-    "native": "<blockquote data-mdxcn=\"Quote\">\n<p>Keep <em>going</em>.</p>\n<footer><cite>Ada</cite>, Notes</footer>\n</blockquote>\n",
+    "props": {
+      "by": "Ada",
+      "source": "Notes"
+    },
+    "native": "<blockquote data-mdxcn=\"Quote\">\n<p>Keep <em>going</em>.</p>\n<footer>— <cite>Ada</cite>, Notes</footer>\n</blockquote>\n",
     "body": "<p>Keep <em>going</em>.</p>"
   },
   {
     "name": "quote byline in its own paragraph",
     "source": "> Keep [reading](/docs).\n>\n> -- Ada",
     "component": "Quote",
-    "props": { "by": "Ada" },
-    "native": "<blockquote data-mdxcn=\"Quote\">\n<p>Keep <a href=\"/docs\">reading</a>.</p>\n<footer><cite>Ada</cite></footer>\n</blockquote>\n",
+    "props": {
+      "by": "Ada"
+    },
+    "native": "<blockquote data-mdxcn=\"Quote\">\n<p>Keep <a href=\"/docs\">reading</a>.</p>\n<footer>— <cite>Ada</cite></footer>\n</blockquote>\n",
     "body": "<p>Keep <a href=\"/docs\">reading</a>.</p>"
   },
   {
     "name": "console session",
     "source": "```console\n% run\n  indented <output>\n```",
     "component": "Terminal",
-    "props": { "prompt": "%", "text": "% run\n  indented <output>" },
+    "props": {
+      "prompt": "%",
+      "text": "% run\n  indented <output>"
+    },
     "native": "<pre><code class=\"language-console\">% run\n  indented &lt;output&gt;\n</code></pre>\n"
   },
   {
     "name": "shell prompt session",
     "source": "```bash\n$ run\noutput\n```",
     "component": "Terminal",
-    "props": { "prompt": "$", "text": "$ run\noutput" },
+    "props": {
+      "prompt": "$",
+      "text": "$ run\noutput"
+    },
     "native": "<pre><code class=\"language-bash\">$ run\noutput\n</code></pre>\n"
   }
 ]

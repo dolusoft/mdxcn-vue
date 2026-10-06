@@ -70,6 +70,8 @@ function plain(source: string, md: MarkdownIt, env: object): string {
 export function withMdxcn(md: MarkdownIt, options: MdxcnOptions = {}): void {
   trackSource(md)
   const available = new Set(options.components ?? [])
+  const nativeAlerts = new WeakMap<Token, Upgrade>()
+  const warned = new Set<UpgradeComponent>()
   md.core.ruler.after('block', 'mdxcn_upgrades_blocks', (state) => {
     const tokens = state.tokens
     for (let index = 0; index < tokens.length; index++) {
@@ -116,6 +118,11 @@ export function withMdxcn(md: MarkdownIt, options: MdxcnOptions = {}): void {
         const upgrade: Upgrade = {
           component: 'Callout',
           props: { type: known?.type ?? 'note', ...(title ? { title } : {}) },
+        }
+        if (!available.has('Callout')) {
+          // Preserve host alert tokens and markers; VitePress owns their rendering.
+          nativeAlerts.set(token, upgrade)
+          continue
         }
         token.type = 'mdxcn_callout_open'
         token.meta = { ...token.meta, upgrade }
@@ -172,10 +179,11 @@ export function withMdxcn(md: MarkdownIt, options: MdxcnOptions = {}): void {
         )
         if (end >= 0) state.tokens[end]!.meta = { upgrade }
       }
-      const upgrade = token.meta?.upgrade as Upgrade | undefined
+      const upgrade = (token.meta?.upgrade ?? nativeAlerts.get(token)) as Upgrade | undefined
       if (!upgrade) continue
       upgrade.available = available.has(upgrade.component)
-      if (!token.type.endsWith('_close') && !upgrade.available) {
+      if (!token.type.endsWith('_close') && !upgrade.available && !warned.has(upgrade.component)) {
+        warned.add(upgrade.component)
         // Footnote containers lack a map; use the first mapped definition token.
         const line =
           token.map?.[0] ?? state.tokens.slice(index + 1).find((item) => item.map)?.map?.[0] ?? 0
@@ -212,7 +220,7 @@ export function withMdxcn(md: MarkdownIt, options: MdxcnOptions = {}): void {
     const upgrade = tokens[index]!.meta.upgrade as Upgrade
     return upgrade.available
       ? '</Quote>\n'
-      : `<footer><cite>${md.utils.escapeHtml(upgrade.props.by!)}</cite>${upgrade.props.source ? `, ${md.utils.escapeHtml(upgrade.props.source)}` : ''}</footer>\n</blockquote>\n`
+      : `<footer>— <cite>${md.utils.escapeHtml(upgrade.props.by!)}</cite>${upgrade.props.source ? `, ${md.utils.escapeHtml(upgrade.props.source)}` : ''}</footer>\n</blockquote>\n`
   }
   const fence = md.renderer.rules.fence!
   md.renderer.rules.fence = (tokens, index, ...args) => {

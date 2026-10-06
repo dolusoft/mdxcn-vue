@@ -287,7 +287,7 @@ const html = readFileSync(join(site, '.vitepress/dist/index.html'), 'utf8')
 assert.equal((html.match(/<figure\b/g) ?? []).length, 3)
 for (const value of ['Web', 'B', '/consumer']) assert.ok(html.includes(value))
 for (const value of [
-  'data-mdxcn="Callout"',
+  'custom-block github-alert',
   'data-mdxcn="Quote"',
   'Quote body.',
   '$ run',
