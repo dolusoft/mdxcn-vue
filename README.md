@@ -146,6 +146,9 @@ the compiler does not ship a runtime Markdown renderer. `renderLinks: true`
 retains host URL rewrites, link titles and external link attributes.
 
 Unsupported or dynamic blocks retain runtime slots and emit `file:line` warnings.
+Warning lines include removed VitePress frontmatter. VitePress `@include` expands
+content before parsing: locations refer to the expanded host document, not the
+included file; this plugin does not provide an include source map.
 Explicit data props also keep runtime field precedence. See the
 [compiler contract and limits](docs/markdown-contract.md). Grammar/clock helpers
 `words`, `numbers`, `splitDash` and `pad2` are exported from `mdxcn-vue/core`.

@@ -132,6 +132,12 @@ describe('raw tokens to independent expected models', () => {
   })
 })
 describe('component block plugin', () => {
+  it('reports source lines including frontmatter and does not leak offsets to later files', () => {
+    compile('---\ntitle: Test\n---\n\n<GraphStack>\n\n- {{ value }}\n\n</GraphStack>')
+    expect(warnings[0]?.line).toBe(5)
+    compile('<GraphStack>\n\n- {{ value }}\n\n</GraphStack>')
+    expect(warnings[0]?.line).toBe(1)
+  })
   it('supports multiline presentation attributes including greater-than signs in quotes', () => {
     const tokens = compile(
       '<GraphStack\n title="A > B"\n :ticks="3">\n\n- web: 2 js, 1 css\n\n</GraphStack>',

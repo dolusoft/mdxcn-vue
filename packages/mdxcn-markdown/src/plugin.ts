@@ -29,6 +29,16 @@ const escapeAttribute = (text: string) =>
 
 /** Trusted repository Markdown only: the output is executable Vue template source. */
 export function mdxcnMarkdown(md: MarkdownIt, options: MarkdownOptions = {}): void {
+  const parse = md.parse.bind(md)
+  md.parse = (source, env = {}) => {
+    const previous = env.mdxcnSource
+    env.mdxcnSource = source
+    try {
+      return parse(source, env)
+    } finally {
+      env.mdxcnSource = previous
+    }
+  }
   md.block.ruler.before(
     'html_block',
     'mdxcn_props',
@@ -92,7 +102,7 @@ export function mdxcnMarkdown(md: MarkdownIt, options: MarkdownOptions = {}): vo
         const env = state.env as { path?: string; filePath?: string; relativePath?: string }
         const warning: MarkdownWarning = {
           file: env.path ?? env.filePath ?? env.relativePath ?? '<markdown>',
-          line: start + 1,
+          line: start + 1 + sourceLineOffset(state.src, state.env),
           component: name,
           reason: error instanceof Error ? error.message : String(error),
         }
@@ -106,4 +116,12 @@ export function mdxcnMarkdown(md: MarkdownIt, options: MarkdownOptions = {}): vo
     },
     { alt: ['paragraph', 'reference', 'blockquote', 'list'] },
   )
+}
+
+/** VitePress removes frontmatter before block parsing; retain original file lines. */
+function sourceLineOffset(source: string, env: { mdxcnSource?: string }): number {
+  const original = env.mdxcnSource
+  return original?.endsWith(source)
+    ? (original.slice(0, original.length - source.length).match(/\n/g)?.length ?? 0)
+    : 0
 }
