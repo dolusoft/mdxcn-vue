@@ -133,6 +133,22 @@ describe('raw tokens to independent expected models', () => {
 })
 describe('component block plugin', () => {
   it.each([
+    ['<GraphStack>\n\n- web: 1 js', 'Closing component tag'],
+    ['<GraphStack>same line\n</GraphStack>', 'separate lines'],
+    ['<GraphStack>\n- web: 1 js\n</GraphStack>', 'blank line'],
+    ['<GraphStack v-if="true">\n- web: 1 js\n</GraphStack>', 'blank line'],
+  ])('warns once with a source position for malformed input %s', (source, reason) => {
+    const tokens = compile(`Intro\n\n${source}`)
+    expect(warnings).toHaveLength(1)
+    expect(warnings[0]).toMatchObject({
+      file: 'fixtures/example.md',
+      line: 3,
+      component: 'GraphStack',
+    })
+    expect(warnings[0]?.reason).toContain(reason)
+    expect(md.renderer.render(tokens, md.options, {})).not.toContain('v-bind="{&quot;rows')
+  })
+  it.each([
     [':tada:', '🎉'],
     ['&amp;', '&'],
     ['&nbsp;', ' '],

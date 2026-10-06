@@ -48,15 +48,23 @@ export function mdxcnMarkdown(md: MarkdownIt, options: MarkdownOptions = {}): vo
         state.src.slice(state.bMarks[line]! + state.tShift[line]!, state.eMarks[line])
       let openingEnd = start
       let openingText = lineAt(start)
-      if (!/^<(GraphStack|GraphTable|Endpoint)(?=\s|>|$)/.test(openingText)) return false
+      const leading = openingText.match(/^<(GraphStack|GraphTable|Endpoint)(?=\s|>|$)/)
+      if (!leading || /\/>\s*$/.test(openingText)) return false
+      const name = leading[1] as ComponentName
+      const warn = (reason: string) => {
+        if (!silent) emitWarning(options, state.env, state.src, start, name, reason)
+      }
       const pattern = /^<(GraphStack|GraphTable|Endpoint)(\s(?:[^"'<>]|"[^"]*"|'[^']*')*)?>\s*$/
+      if (/^<[^>]+>\S|^<[^>]+>\s+\S/.test(openingText)) {
+        warn('Opening tag and content must be on separate lines')
+        return false
+      }
       let opening = openingText.match(pattern)
       while (!opening && openingEnd + 1 < end && openingEnd - start < 32) {
         openingText += '\n' + lineAt(++openingEnd)
         opening = openingText.match(pattern)
       }
       if (!opening || opening[2]?.trimEnd().endsWith('/')) return false
-      const name = opening[1] as ComponentName
       let close = openingEnd + 1
       let fence: { mark: string; length: number } | undefined
       for (; close < end; close++) {
@@ -74,7 +82,14 @@ export function mdxcnMarkdown(md: MarkdownIt, options: MarkdownOptions = {}): vo
         }
         if (!fence && line.trim() === `</${name}>`) break
       }
-      if (close === end) return false
+      if (close === end) {
+        warn('Closing component tag was not found')
+        return false
+      }
+      if (/^\s*[-+*]\s/.test(lineAt(openingEnd + 1))) {
+        warn('A blank line is required before a Markdown list inside a component')
+        return false
+      }
       if (silent) return true
       const body = state.getLines(openingEnd + 1, close, state.blkIndent, false)
       const attrs = opening[2] ?? ''
@@ -102,18 +117,7 @@ export function mdxcnMarkdown(md: MarkdownIt, options: MarkdownOptions = {}): vo
         state.line = close + 1
         return true
       } catch (error) {
-        const env = state.env as { path?: string; filePath?: string; relativePath?: string }
-        const warning: MarkdownWarning = {
-          file: env.path ?? env.filePath ?? env.relativePath ?? '<markdown>',
-          line: start + 1 + sourceLineOffset(state.src, state.env),
-          component: name,
-          reason: error instanceof Error ? error.message : String(error),
-        }
-        if (options.warn) options.warn(warning)
-        else
-          console.warn(
-            `[mdxcn-markdown] ${warning.file}:${warning.line} ${name}: ${warning.reason}; keeping runtime slot`,
-          )
+        warn(error instanceof Error ? error.message : String(error))
         return false
       }
     },

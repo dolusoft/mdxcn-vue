@@ -149,6 +149,10 @@ Unsupported or dynamic blocks retain runtime slots and emit `file:line` warnings
 Warning lines include removed VitePress frontmatter. VitePress `@include` expands
 content before parsing: locations refer to the expanded host document, not the
 included file; this plugin does not provide an include source map.
+Opening/closing component tags must occupy separate lines. Put a blank line
+before a component's Markdown list: without it, VitePress treats the list as
+raw HTML text. Both compile and runtime-slot paths retain this host behavior
+and emit a warning instead of claiming a successful graph conversion.
 Explicit data props also keep runtime field precedence. See the
 [compiler contract and limits](docs/markdown-contract.md). Grammar/clock helpers
 `words`, `numbers`, `splitDash` and `pad2` are exported from `mdxcn-vue/core`.
