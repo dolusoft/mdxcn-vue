@@ -65,17 +65,24 @@ type CoreState = import('markdown-it/lib/rules_core/state_core.mjs').default
 type Finalizer = (state: CoreState) => void
 const finalizers = new WeakMap<MarkdownIt, Partial<Record<'compile' | 'upgrades', Finalizer>>>()
 /** Run compilation before upgrade diagnostics, independent of plugin registration order. */
-export function registerFinalizer(md: MarkdownIt, phase: 'compile' | 'upgrades', rule: Finalizer): void {
+export function registerFinalizer(
+  md: MarkdownIt,
+  phase: 'compile' | 'upgrades',
+  rule: Finalizer,
+): void {
   let rules = finalizers.get(md)
   if (!rules) {
     rules = {}
     finalizers.set(md, rules)
-    const run: Finalizer = state => {
+    const run: Finalizer = (state) => {
       rules!.compile?.(state)
       rules!.upgrades?.(state)
     }
-    try { md.core.ruler.before('anchor', 'mdxcn_finalize', run) }
-    catch { md.core.ruler.push('mdxcn_finalize', run) }
+    try {
+      md.core.ruler.before('anchor', 'mdxcn_finalize', run)
+    } catch {
+      md.core.ruler.push('mdxcn_finalize', run)
+    }
   }
   rules[phase] = rule
 }

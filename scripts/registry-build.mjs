@@ -96,9 +96,14 @@ output('registry.json', {
   homepage: 'https://github.com/dolusoft/mdxcn-vue',
   meta: { license: 'MIT', notice: license },
   // The build index references real sources; payload transport details stay in public/r.
-  items: items.map(item => ({...item, files: item.files.map(({path, type, target}) => ({
-    path: path.replace(/\.txt$/, ''), type, target,
-  }))})),
+  items: items.map((item) => ({
+    ...item,
+    files: item.files.map(({ path, type, target }) => ({
+      path: path.replace(/\.txt$/, ''),
+      type,
+      target,
+    })),
+  })),
 })
 assert.equal(
   readdirSync(join(repo, 'public/r')).filter((path) => path.endsWith('.json')).length,

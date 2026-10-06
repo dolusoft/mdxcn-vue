@@ -43,14 +43,16 @@ describe('raw tokens to independent expected models', () => {
       ],
     })
   })
-  it.each([['js{1,3}', 'js'], ['ts:line-numbers', 'ts'], ['cpp{1}', 'cpp'], ['c++', 'c++']])(
-    'reads the fence language from %s',
-    (info, label) => {
-      expect(tokensToProps('Endpoint', raw(`\`\`\`${info}\nvalue\n\`\`\`\n`), md)).toMatchObject({
-        blocks: [{ label, code: 'value' }],
-      })
-    },
-  )
+  it.each([
+    ['js{1,3}', 'js'],
+    ['ts:line-numbers', 'ts'],
+    ['cpp{1}', 'cpp'],
+    ['c++', 'c++'],
+  ])('reads the fence language from %s', (info, label) => {
+    expect(tokensToProps('Endpoint', raw(`\`\`\`${info}\nvalue\n\`\`\`\n`), md)).toMatchObject({
+      blocks: [{ label, code: 'value' }],
+    })
+  })
   it('keeps rich stack labels and parses comma-separated numeric segments', () => {
     expect(
       tokensToProps(

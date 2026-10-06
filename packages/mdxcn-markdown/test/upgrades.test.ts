@@ -228,22 +228,26 @@ describe('VitePress host integration', () => {
 })
 
 it('summarizes missing components once per parser across documents', () => {
-  const {md,warnings}=parser()
-  for(const path of ['first.md','second.md']) md.render('> [!NOTE]\n> Body\n\n> [!TIP]\n> More\n\n> Quote\n> — Ada', {path})
-  expect(warnings.map(w=>w.component)).toEqual(['Callout','Quote'])
-  expect(warnings.every(w=>w.file==='first.md')).toBe(true)
+  const { md, warnings } = parser()
+  for (const path of ['first.md', 'second.md'])
+    md.render('> [!NOTE]\n> Body\n\n> [!TIP]\n> More\n\n> Quote\n> — Ada', { path })
+  expect(warnings.map((w) => w.component)).toEqual(['Callout', 'Quote'])
+  expect(warnings.every((w) => w.file === 'first.md')).toBe(true)
   expect(parser().warnings).toEqual([])
 })
 
-it.each([false,true])('does not warn for consumed Endpoint fences with upgrades first=%s', (upgradesFirst) => {
-  const warnings:MarkdownWarning[]=[]
-  const md=new MarkdownIt({html:true})
-  const options={warn:(warning:MarkdownWarning)=>warnings.push(warning)}
-  if(upgradesFirst)md.use(withMdxcn,options).use(mdxcnMarkdown,options)
-  else md.use(mdxcnMarkdown,options).use(withMdxcn,options)
-  const output=md.render('<Endpoint>\n\nPOST /api\n\n```console\n$ run\n```\n\n</Endpoint>')
-  expect(output).toContain('<Endpoint v-bind=')
-  expect(warnings).toEqual([])
-  md.render('```console\n$ run\n```')
-  expect(warnings.map(w=>w.component)).toEqual(['Terminal'])
-})
+it.each([false, true])(
+  'does not warn for consumed Endpoint fences with upgrades first=%s',
+  (upgradesFirst) => {
+    const warnings: MarkdownWarning[] = []
+    const md = new MarkdownIt({ html: true })
+    const options = { warn: (warning: MarkdownWarning) => warnings.push(warning) }
+    if (upgradesFirst) md.use(withMdxcn, options).use(mdxcnMarkdown, options)
+    else md.use(mdxcnMarkdown, options).use(withMdxcn, options)
+    const output = md.render('<Endpoint>\n\nPOST /api\n\n```console\n$ run\n```\n\n</Endpoint>')
+    expect(output).toContain('<Endpoint v-bind=')
+    expect(warnings).toEqual([])
+    md.render('```console\n$ run\n```')
+    expect(warnings.map((w) => w.component)).toEqual(['Terminal'])
+  },
+)

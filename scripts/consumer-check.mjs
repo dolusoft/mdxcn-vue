@@ -1,12 +1,12 @@
 import assert from 'node:assert/strict'
 import { spawnSync } from 'node:child_process'
-import { mkdirSync, mkdtempSync, readFileSync, readdirSync, writeFileSync } from 'node:fs'
+import { mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs'
 import { basename, dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const repo = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 // Keep fixtures outside the repository, under the authorized scratch directory.
-const scratch = resolve(repo, '../tmp/mdxcn-vue')
+const scratch = resolve(process.env.MDXCN_CONSUMER_DIR ?? resolve(repo, '../tmp/mdxcn-vue'))
 mkdirSync(scratch, { recursive: true })
 const root = mkdtempSync(join(scratch, 'consumer-'))
 const pnpmCli = process.env.npm_execpath
@@ -20,6 +20,8 @@ function run(args, cwd, capture = false) {
     {
       cwd,
       encoding: 'utf8',
+      timeout: 180_000,
+      stdio: ['ignore', 'pipe', 'pipe'],
       maxBuffer: 16 * 1024 * 1024,
       env: { ...process.env, CI: 'true' },
     },
@@ -38,6 +40,65 @@ function files(dir, extension) {
     .filter((name) => name.endsWith(extension))
     .map((name) => join(dir, name))
 }
+// Never pack stale dist files, even when this command is invoked alone.
+run(['--filter', 'mdxcn-vue', '--filter', 'mdxcn-markdown', 'build'], repo)
+// Attribute final, tree-shaken output spans to library sources rather than
+// counting pre-tree-shake module metadata. Unmapped glue is excluded.
+function mappedLibraryBytes(dir) {
+  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
+  let bytes = 0
+  for (const path of files(dir, '.js.map')) {
+    const map = JSON.parse(readFileSync(path, 'utf8'))
+    const lines = readFileSync(path.slice(0, -4), 'utf8').split('\n')
+    let source = 0
+    for (const [lineIndex, line] of map.mappings.split(';').entries()) {
+      let column = 0
+      const spans = []
+      for (const segment of line.split(',').filter(Boolean)) {
+        const fields = []
+        let value = 0,
+          shift = 0
+        for (const char of segment) {
+          const digit = alphabet.indexOf(char)
+          assert.ok(digit >= 0, 'Invalid source-map VLQ')
+          value += (digit & 31) * 2 ** shift
+          if (digit & 32) {
+            shift += 5
+            continue
+          }
+          fields.push(value & 1 ? -Math.floor(value / 2) : Math.floor(value / 2))
+          value = 0
+          shift = 0
+        }
+        column += fields[0]
+        if (fields.length > 1) source += fields[1]
+        spans.push({ column, source: fields.length > 1 ? source : undefined })
+      }
+      const code = lines[lineIndex] ?? ''
+      for (const [index, span] of spans.entries()) {
+        if (
+          span.source != null &&
+          map.sources[span.source].includes('/node_modules/mdxcn-vue/dist/')
+        )
+          bytes += Buffer.byteLength(
+            code.slice(span.column, spans[index + 1]?.column ?? code.length),
+          )
+      }
+    }
+  }
+  return bytes
+}
+const mapControl = join(root, 'map-control')
+write(mapControl, 'control.js', 'ğAxy')
+write(mapControl, 'control.js.map', {
+  sources: ['/node_modules/mdxcn-vue/dist/index.js', '/node_modules/vue/index.js'],
+  mappings: 'AAAA,ECAA',
+})
+assert.equal(
+  mappedLibraryBytes(mapControl),
+  3,
+  'Source-map attribution must count UTF-8 and exclude Vue',
+)
 const artifacts = join(root, 'artifacts')
 mkdirSync(artifacts)
 for (const name of ['mdxcn-vue', 'mdxcn-markdown']) {
@@ -90,6 +151,7 @@ const common = {
   tailwindcss: '4.3.3',
   '@tailwindcss/vite': '4.3.3',
   typescript: '6.0.3',
+  '@types/markdown-it': '14.2.0',
   'vue-tsc': '3.3.12',
 }
 const vueTar = `file:${join(artifacts, 'mdxcn-vue.tgz').replaceAll('\\', '/')}`
@@ -114,14 +176,19 @@ import tailwind from '@tailwindcss/vite';
 import {writeFileSync} from 'node:fs';
 export default defineConfig({plugins:[vue(),tailwind(),{
   name:'consumer-modules', generateBundle() {writeFileSync('modules.json',JSON.stringify([...this.getModuleIds()]));}
-}],build:{minify:false}});
+}],build:{minify:false,sourcemap:true}});
 `
 const app = join(root, 'vite-app')
 write(app, 'package.json', {
   name: 'consumer-app',
   private: true,
   type: 'module',
-  dependencies: { ...common, 'mdxcn-vue': vueTar, 'mdxcn-markdown': markdownTar, 'markdown-it': '14.1.0' },
+  dependencies: {
+    ...common,
+    'mdxcn-vue': vueTar,
+    'mdxcn-markdown': markdownTar,
+    'markdown-it': '14.1.0',
+  },
 })
 write(app, 'tsconfig.json', tsconfig)
 write(app, 'vite.config.ts', viteConfig)
@@ -147,14 +214,17 @@ write(
   'src/main.ts',
   "import {createApp} from 'vue';import App from './App.vue';import './style.css';createApp(App).mount('#app');",
 )
-write(app, 'src/type-contract.ts', `import {splitLabel} from 'mdxcn-vue/core';
+write(
+  app,
+  'src/type-contract.ts',
+  `import {splitLabel} from 'mdxcn-vue/core';
 import type {StackRow} from 'mdxcn-vue/core';
 import type {GraphStackProps} from 'mdxcn-vue';
 import {mdxcnMarkdown,withMdxcn} from 'mdxcn-markdown';
 import type {MdxcnOptions} from 'mdxcn-markdown';
 import MarkdownIt from 'markdown-it';
 const row:StackRow={label:splitLabel('Web: 1 js').label,segments:[{label:'js',value:1}]};
-const graph:GraphStackProps={rows:[row]};
+const graph:GraphStackProps={title:'STACK',rows:[row]};
 const options:MdxcnOptions={components:['Terminal']};
 new MarkdownIt().use(mdxcnMarkdown).use(withMdxcn,options);
 // @ts-expect-error Unknown fields must not silently become any.
@@ -165,16 +235,22 @@ graph.rows='wrong';
 options.components=['Missing'];
 // @ts-expect-error Subpath functions must preserve their return types.
 splitLabel('Web').nonexistent;
-`)
+`,
+)
 write(app, 'tsconfig.nodenext.json', {
-  compilerOptions: {...tsconfig.compilerOptions, module:'NodeNext',moduleResolution:'NodeNext'},
-  include:['src/type-contract.ts'],
+  compilerOptions: {
+    ...tsconfig.compilerOptions,
+    module: 'NodeNext',
+    moduleResolution: 'NodeNext',
+  },
+  include: ['src/type-contract.ts'],
 })
 run(['install'], app)
-run(['exec','tsc','--noEmit','-p','tsconfig.nodenext.json'],app)
+run(['exec', 'tsc', '--noEmit', '-p', 'tsconfig.nodenext.json'], app)
 console.log('TYPE CONTRACT PASSED: NodeNext, skipLibCheck=false; invalid fields rejected')
 run(['exec', 'vue-tsc', '--noEmit'], app)
 run(['exec', 'vite', 'build'], app)
+const fullLibraryBytes = mappedLibraryBytes(join(app, 'dist/assets'))
 const fullBytes = files(join(app, 'dist/assets'), '.js').reduce(
   (sum, path) => sum + Buffer.byteLength(readFileSync(path)),
   0,
@@ -238,6 +314,12 @@ assert.ok(!modules.some((id) => /mdxcn-markdown|markdown-it|@comark|shiki|knap/.
 const stackBytes = Buffer.byteLength(stackBundle)
 console.log(
   `TREE-SHAKE full=${fullBytes} bytes GraphStack=${stackBytes} bytes removed=${fullBytes - stackBytes} bytes; Vue runtime entries=${vueEntries.length}`,
+)
+
+const stackLibraryBytes = mappedLibraryBytes(join(app, 'dist/assets'))
+assert.ok(fullLibraryBytes > stackLibraryBytes && stackLibraryBytes > 0)
+console.log(
+  `LIBRARY ONLY (source-map attribution, Vue excluded, minify=false): full=${fullLibraryBytes} bytes GraphStack=${stackLibraryBytes} bytes`,
 )
 
 const site = join(root, 'vitepress-site')
@@ -346,7 +428,10 @@ const registryApp = readFileSync(join(app, 'src/App.vue'), 'utf8')
 write(registry, 'src/App.vue', registryApp)
 run(['install'], registry)
 const cliOutput = join(root, 'registry-build')
-run(['exec', 'shadcn-vue', 'build', 'registry.json', '--cwd', repo, '--output', cliOutput], registry)
+run(
+  ['exec', 'shadcn-vue', 'build', 'registry.json', '--cwd', repo, '--output', cliOutput],
+  registry,
+)
 run(['exec', 'node', 'scripts/registry-build.mjs', '--check', '--from-cli', cliOutput], repo)
 console.log('REGISTRY CLI BUILD PASSED: real source index and normalized payload parity')
 const registryPaths = files(join(repo, 'public/r'), '.json').sort()
@@ -355,8 +440,12 @@ const localItems = registryPaths.map((path) => {
   write(registry, target, readFileSync(path, 'utf8'))
   return `./${target}`
 })
-const registryInstall = run(['exec', 'shadcn-vue', 'add', '--overwrite', ...localItems], registry, true)
-assert.doesNotMatch(registryInstall, /overwrite.*(?:CSS|variables)|[?❯]/i)
+const registryInstall = run(
+  ['exec', 'shadcn-vue', 'add', '--overwrite', ...localItems],
+  registry,
+  true,
+)
+assert.doesNotMatch(registryInstall, /overwrite.*(?:CSS|variables)|Would you like|Do you want/i)
 console.log('REGISTRY PROMPT CHECK PASSED: closed stdin, no --yes')
 const copied = new Set()
 for (const path of registryPaths) {
@@ -384,14 +473,23 @@ for (const selector of ['.graph-frame', '.px-5', '.text-graph-muted'])
 console.log(
   `REGISTRY INSTALL PASSED: shadcn-vue 2.8.2, ${registryPaths.length} items, ${copied.size} source files; typecheck and build passed`,
 )
-write(root, 'results.json', {
+const results = {
   fullBytes,
   stackBytes,
   removedBytes: fullBytes - stackBytes,
+  fullLibraryBytes,
+  stackLibraryBytes,
   vueRuntimeEntries: vueEntries.length,
   vitepressFigures: 3,
   upgradeFallbacks: fallbackNames,
   registryItems: registryPaths.length,
   registryFiles: copied.size,
-})
-console.log(`CONSUMER CHECK PASSED; artifacts: ${root}`)
+}
+write(scratch, 'consumer-results.json', results)
+// Only remove the newly-created fixture, never the override directory itself.
+assert.equal(dirname(root), scratch)
+assert.ok(basename(root).startsWith('consumer-'))
+rmSync(root, { recursive: true, force: true })
+console.log(
+  `CONSUMER CHECK PASSED; fixture removed; results: ${join(scratch, 'consumer-results.json')}`,
+)
