@@ -157,6 +157,16 @@ describe('Endpoint reader', () => {
   })
 })
 describe('Endpoint rendering', () => {
+  it('names focusable code regions with the caption or an untitled fallback', async () => {
+    const wrapper = mount(Endpoint, { props: { blocks: [{ label: 'json', code: '{}' }] } })
+    const region = wrapper.get('[role="region"]')
+    expect(region.attributes('tabindex')).toBe('0')
+    expect(region.attributes('aria-labelledby')).toBe(wrapper.get('figcaption').attributes('id'))
+    await wrapper.setProps({ title: '' })
+    expect(region.attributes('aria-labelledby')).toBeUndefined()
+    expect(region.attributes('aria-label')).toBe('json')
+    wrapper.unmount()
+  })
   it('preserves rich hosts, upstream DOM/classes and required accessibility text', () => {
     const wrapper = mount(Endpoint, { slots: { default: nodes } })
     expect(wrapper.get('figcaption').text()).toBe('[ endpoint ]')

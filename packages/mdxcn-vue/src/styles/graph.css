@@ -1,6 +1,10 @@
 /* Derived from mdxcn, Copyright (c) 2026 Keshav Bagaade. MIT; see LICENSE. */
 @source "../";
 
+.graph-frame .graph-scroll-x:focus-visible {
+  outline-offset: 3px;
+}
+
 /* Preserve native table layout and graph geometry under host prose styles. */
 .graph-frame.graph-frame .graph-table {
   display: table;

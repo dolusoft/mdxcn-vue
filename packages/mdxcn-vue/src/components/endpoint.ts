@@ -45,7 +45,7 @@ export const Endpoint = defineComponent({
       return h(
         Graph,
         mergeProps({ title: props.title, corner: props.corner, className: props.className }, attrs),
-        () =>
+        ({ captionId }: { captionId?: string } = {}) =>
           h(GraphBody, { class: 'flex flex-col gap-4' }, () => [
             reveal(
               h('div', { class: 'flex flex-col gap-3' }, [
@@ -115,13 +115,25 @@ export const Endpoint = defineComponent({
                 h('div', { key: index, class: 'flex min-w-0 flex-col gap-3' }, [
                   h(GraphRule),
                   block.label ? h('p', { class: 'text-graph-muted' }, block.label) : null,
-                  h('div', { class: 'graph-scroll-x' }, [
-                    h(
-                      'pre',
-                      { class: 'm-0 min-w-max leading-relaxed whitespace-pre text-foreground/80' },
-                      [h('code', block.code)],
-                    ),
-                  ]),
+                  h(
+                    'div',
+                    {
+                      class: 'graph-scroll-x',
+                      tabindex: 0,
+                      role: 'region',
+                      'aria-labelledby': captionId,
+                      'aria-label': captionId ? undefined : block.label || 'Code',
+                    },
+                    [
+                      h(
+                        'pre',
+                        {
+                          class: 'm-0 min-w-max leading-relaxed whitespace-pre text-foreground/80',
+                        },
+                        [h('code', block.code)],
+                      ),
+                    ],
+                  ),
                 ]),
               ),
             ),

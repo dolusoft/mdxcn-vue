@@ -6,6 +6,11 @@ Sayım: 46 kullanıcı bileşeni + `graph-frame` temel bileşeni (`Graph`) + `md
 
 ## Okuma kuralları
 
+- Faz 2B-3 bilinçli erişilebilirlik farkı: Endpoint kod kaydırma bölgeleri tablo
+  bölgesi gibi `tabindex="0"`, `role="region"` ve caption adı taşır. Başlık yoksa
+  bölgeye `aria-label` verilir; mevcut olmayan caption kimliğine referans üretilmez.
+  Tablo ve kod bölgelerinde `:focus-visible` için `outline-offset: 3px` uygulanır.
+
 - Alanlar gerçek kaynak prop şemasından alınmıştır; `className` upstream adıdır. Vue tarafındaki `class` aktarımı Faz 2 sözleşmesinde kararlaştırılacak.
 - “Veri” yalnız literal `data` prop anlamına gelmez; `rows`, `items`, `value` gibi ilgili props anlamındadır. Sunum props tek başına veri dizisi desteği sayılmaz.
 - Markdown biçimleri upstream tarafından derlenmiş host elementleri üzerinden okunur. Vue hedefi derleme zamanında `markdown-it` token → tipli model; runtime için ayrı `Comark` AST adaptörüdür. Her bileşene üç giriş eklenmez.
