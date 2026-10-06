@@ -62,7 +62,7 @@ export const Terminal = defineComponent({
                       h('span', line.text || ' '),
                     ],
                   ),
-                  [[vReveal, { delay: index * 40 }]],
+                  [[vReveal, { delay: Math.min(index, 5) * 40 }]],
                 ),
               ),
             ),

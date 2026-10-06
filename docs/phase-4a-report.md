@@ -34,7 +34,9 @@ VNode fence okuyucusu iç adaptör olarak kalır.
 
 React Motion yerine mevcut `vReveal` kullanılır: SSR gizlenmez; hydration
 sonrasında mevcut reduced motion ve görünürlük davranışı sürer. Terminal satır
-gecikmesi upstream gibi 40 ms artar; observer/easing ayrıntıları mevcut Vue
+gecikmesi 40 ms artar ve Faz 4B düzeltmesiyle 200 ms'de sınırlanır; uzun blokta
+son satırın tek başına görünürlüğe girmesi observer/WAAPI mock testiyle doğrulanır.
+Observer/easing ayrıntıları mevcut Vue
 direktifinin sözleşmesidir, React Motion ile animasyon birebirliği iddia edilmez.
 `text` prop'u ve VitePress fence kontrollerini dışarıda bırakma Vue host uyarlamasıdır.
 Mevcut `Graph` caption kimlikleri/ARIA ilişkileri korunur.

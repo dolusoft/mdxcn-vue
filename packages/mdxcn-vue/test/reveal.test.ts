@@ -3,6 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { defineComponent, h, withDirectives } from 'vue'
 import { vReveal } from '../src/directives/reveal'
 import type { RevealOptions } from '../src/directives/reveal'
+import { Terminal } from '../src/components/terminal'
 
 let reduced: boolean
 let onChange: (() => void) | undefined
@@ -88,6 +89,15 @@ afterEach(() => {
 })
 
 describe('v-reveal lifecycle', () => {
+  it('caps Terminal stagger at 200 ms even when the last of 60 lines enters alone', () => {
+    const wrapper = mount(Terminal, { props: { text: Array(60).fill('output').join('\n') } })
+    wrappers.push(wrapper)
+    expect(observe).toHaveBeenCalledTimes(60)
+    intersect()
+    expect(animate.mock.calls[0]?.[1].delay).toBe(200)
+    expect(wrapper.findAll('code').at(-1)?.element.style.opacity).toBe('')
+    expect(animate).toHaveBeenCalledTimes(1)
+  })
   it('observes before hiding with threshold zero and rootMargin', () => {
     observe.mockImplementationOnce((element: HTMLElement) => expect(element.style.opacity).toBe(''))
     const wrapper = render({ rootMargin: '0px' })
