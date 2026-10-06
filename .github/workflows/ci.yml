@@ -55,8 +55,12 @@ jobs:
             if ([IO.Path]::GetFileName($launcher) -notin @('corepack', 'corepack.cmd', 'corepack.ps1')) {
               throw "Unexpected Corepack launcher: $launcher"
             }
-            if (Test-Path -LiteralPath $launcher) {
-              Remove-Item -LiteralPath $launcher
+            $launcherDirectory = Split-Path $launcher
+            foreach ($name in @('corepack', 'corepack.cmd', 'corepack.ps1')) {
+              $sibling = Join-Path $launcherDirectory $name
+              if (Test-Path -LiteralPath $sibling) {
+                Remove-Item -LiteralPath $sibling
+              }
             }
           }
           # Hosted runners can expose Corepack from a second Node installation.
