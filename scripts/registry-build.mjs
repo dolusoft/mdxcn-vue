@@ -64,9 +64,7 @@ const items = definitions.map(([name, entries]) => ({
   docs: 'Files use relative imports under src/components/mdxcn. Import styles/graph.css, host.css and optional theme.css from your Tailwind v4 CSS entry. Keep the full MIT notice with copied files.',
   files: [
     ...closure(entries).map((path) => ({
-      // CLI 2.8 parses CSS/LICENSE as JavaScript unless the transport ends in .txt.
-      // Explicit target preserves the actual TypeScript/CSS filename unchanged.
-      path: `packages/mdxcn-vue/src/${path}.txt`,
+      path: `packages/mdxcn-vue/src/${path}`,
       type: 'registry:file',
       target: `~/src/components/mdxcn/${path}`,
       content:
@@ -81,10 +79,10 @@ if (useCli) {
     assert.equal(built.files.length, item.files.length)
     for (const [index, file] of built.files.entries()) {
       const expected = item.files[index]
-      assert.equal(file.path + '.txt', expected.path)
+      assert.equal(file.path, expected.path)
       assert.equal(file.target, expected.target)
       assert.equal('/*\n' + license + '\n*/\n' + file.content, expected.content)
-      // Normalize CLI output for the 2.8 CSS parser and per-file MIT distribution.
+      // Normalize CLI output for per-file MIT distribution.
       expected.content = '/*\n' + license + '\n*/\n' + file.content
     }
   }
@@ -95,11 +93,11 @@ output('registry.json', {
   name: 'mdxcn-vue',
   homepage: 'https://github.com/dolusoft/mdxcn-vue',
   meta: { license: 'MIT', notice: license },
-  // The build index references real sources; payload transport details stay in public/r.
+  // The build index references real sources without embedded content.
   items: items.map((item) => ({
     ...item,
     files: item.files.map(({ path, type, target }) => ({
-      path: path.replace(/\.txt$/, ''),
+      path,
       type,
       target,
     })),

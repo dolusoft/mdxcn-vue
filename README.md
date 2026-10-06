@@ -220,7 +220,8 @@ published JS payload (all exports) and from the application's total size.
 items from the library sources: the four components, shared frame, core and CSS.
 The content-free build index references real files. The consumer check runs
 `shadcn-vue build registry.json` and verifies its output against the distributable
-payloads after adding the MIT notice and the CLI 2.8 transport suffix.
+payloads after adding the MIT notice. Our script generates `public/r`;
+`shadcn-vue build` is an equality check, not the payload generator.
 The CSS item uses `registry:file`, so it does not ask to overwrite host CSS variables.
 `pnpm registry:check` rejects stale payloads. The format follows the
 [shadcn-vue item schema](https://shadcn-vue.com/schema/registry-item.json).
@@ -229,9 +230,11 @@ Use `shadcn-vue add ./path/to/mdxcn-graph-stack.json` (and the
 CSS item) in a Vite/Vue project. Each item includes its local dependency closure
 and uses explicit `src/components/mdxcn/` targets; relative imports remain valid
 without a registry server or alias rewriting. Targets use the CLI's `~/` prefix
-to preserve `src/`. Payload paths use `.txt` transport suffixes because CLI 2.8.2
-otherwise parses CSS/license files as JavaScript; target files retain their
-actual extensions. Use relative local JSON paths on Windows (drive-letter paths
+to preserve `src/`. Payload paths match the real source paths in `registry.json`;
+CLI 2.8.2 installs CSS and TypeScript without a `.txt` suffix. The consumer check
+compares content exactly after CRLF/LF normalization (the CLI changes TypeScript
+line endings on Windows), with closed stdin and no `--yes` or `--overwrite`.
+See [registry verification](docs/registry.md). Use relative local JSON paths on Windows (drive-letter paths
 are treated as URLs by that CLI). Other project layouts can relocate
 the whole directory. CSS files need Tailwind v4 processing and imports from the
 host CSS entry; choose `host.css` and optional `theme.css` as with npm consumption.

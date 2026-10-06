@@ -37,8 +37,10 @@ test('built CSS contains graph rules and the docs font', () => {
   const preloads = [...html.matchAll(/<link[^>]*rel="preload"[^>]*as="font"[^>]*href="([^"]+)"/g)]
   assert.equal(preloads.length, 2)
   for (const [, href] of preloads) {
+    assert.ok(!href.startsWith('//'), `Protocol-relative font preload: ${href}`)
+    assert.ok(href.startsWith('/assets/'), `Unexpected font preload path: ${href}`)
     assert.ok(href.endsWith('.woff2'))
-    assert.ok(readdirSync(assets).includes(href.split('/').at(-1)))
+    assert.ok(readFileSync(new URL(`../.vitepress/dist${href}`, import.meta.url)).length > 0)
   }
   assert.ok(readdirSync(assets).some((name) => name.endsWith('.woff2')))
 })

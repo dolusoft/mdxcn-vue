@@ -1,11 +1,13 @@
 # Faz 3 karar kapısı
 
-Kanıt değerlendirmesi: 2026-10-07 Çarşamba 00:23 (Europe/Istanbul), bu turda
+Kanıt değerlendirmesi: 2026-10-07 Çarşamba 01:13 (Europe/Istanbul), bu turda
 sistemden alınan zaman. Yerel ortam Node `24.21.0`, pnpm `12.4.1`.
 
-**Karar:** uygulama ve dağıtım kontrolleri Faz 4 hazırlığı için yeterli;
-görsel kabul, güncel CLS ve canlı DevTools bağlantısı tamamlanmadan bütün
-tarayıcı kapılarının geçtiği söylenemez. Docs aracı VitePress
+**Karar:** uygulama ve dağıtım kontrolleri, güncel görünürlük/reduced motion
+ölçümleri ve iki DevTools UI kanıtı Faz 4 hazırlığı için yeterli. 1280 px
+CLS kapısı preload düzeltmesiyle kabul edildi; 960–1279 px aralığındaki
+yerleşim kayması Faz 4'te izlenir. Tam görsel matris ve JS kapalı dark tema
+kabulü bu kararın dışında kalır. Docs aracı VitePress
 `2.0.0-alpha.20` olarak sabit kalsın. Bu karar npm yayını veya tam katalog
 kapsamı onayı değildir.
 
@@ -16,24 +18,28 @@ kapsamı onayı değildir.
 | Production Markdown derlemesi | Geçti | `apps/docs/test/markdown-build.test.mjs`: gerçek docs config, bağımsız beklenen DOM, compile/runtime eşitliği, entity/fence/açılış sınırları; `pnpm -r build` | Trusted Markdown; `@include` kaynak haritası ve dinamik slotlar mevcut sözleşmenin dışında |
 | Hydration eşitliği | Otomatik kapı geçti | `stack.test.ts`: stable caption IDs; `table.test.ts`: hydration; `endpoint.test.ts`: visible SSR without mismatches; `timer.test.ts`: üç modda ilk istemci/SSR eşitliği | JSDOM gerçek tarayıcıya eşdeğer değildir; yeni font sonrası canlı kontrol yeniden yapılmalı |
 | Prop normalize | Geçti | `stack.test.ts`: own schema, boolean/kebab-case/default, string ticks; `table.test.ts`: field precedence; `endpoint.test.ts`: class/fence normalization; `timer.test.ts`: bağımsız alan önceliği | Kalan 42 bileşenin grammar ve boş girdi öncelikleri ayrı fixture gerektirir |
-| JS kapalıyken görünürlük | Önceki build arşivinde geçti | `../tmp/mdxcn-vue/f2b4-tools/nojs.out.json`, sekiz sayfa, 28 görünür figure; `f2b4-shots/nojs-*`; JSON ve PNG SHA-256 kayıtları `phase-3-evidence.json` | Güncel build ile yeniden ölçülmedi; font düzeni değişti |
-| Script yükleme hatasında görünürlük | Önceki build arşivinde geçti | `f2b4-tools/jsblocked.out.json`, dört sayfa, 14 görünür figure; `scriptsRan=false`, `hasVueApp=false` | Script engelleme kanıtı her olası mount sonrası exception durumunu kapsamaz |
-| Reduced motion | Otomatik kapı geçti | `reveal.test.ts`: ilk tercih, animation öncesi yeniden okuma, tercih değişiminde iptal, unmount temizliği, görünür başlangıç | `f2b4-tools/rm.mjs` bir ölçüm aracıdır; saklanmış sonucu yok, tek başına başarılı canlı ölçüm kanıtı sayılmaz |
+| JS kapalıyken görünürlük | Geçti | `f3-shots/visibility-nojs.json`: dört sayfa × iki tema tercihi, her grupta 14/14 görünür figure; `scriptsRan=false`, `hasVueApp=false` | Dark tercihte `htmlDarkClass=false`: VitePress inline betiği çalışmadığından bu sonuç dark tema kapı kanıtı değildir |
+| Script yükleme hatasında görünürlük | Geçti | `f3-shots/visibility-blocked.json`: dört sayfa × iki tema, her grupta 14/14 görünür figure; `scriptsRan=false`, `hasVueApp=false` | Script engelleme kanıtı her olası mount sonrası exception durumunu kapsamaz |
+| Reduced motion | Canlı ve otomatik kapı geçti | `f3-shots/reduced-motion.json`: dört sayfada `reducedMatches=true`, `animateCalls=0`, gizli öğe/figure animasyonu/transition yok; tercihsiz negatif kontrolde animasyon var; `reveal.test.ts` | `GraphStack` düşük opacity değerleri dekoratif öğelerdir; gizli öğe sayısı sıfır |
 | Temiz npm tüketimi | Geçti | `consumer:check`: iki tarball, Bundler ve NodeNext `skipLibCheck=false`, yanlış alanlar için `@ts-expect-error`, CSS `@source` negatif kontrolü, production Vite/VitePress build, tek Vue runtime | Paketler `0.0.0`; ilk yayın öncesi peer sürüm aralığı kararı gerekli |
-| Temiz registry tüketimi | Geçti | Gerçek `shadcn-vue 2.8.2 build`, kaynak/payload paritesi; `add --overwrite` (kapalı stdin, `--yes` yok), yedi öğe/21 dosya, typecheck/build | CLI 2.8 CSS ayrıştırma sınırı nedeniyle payload `.txt` taşıma suffix'i ve `~/` hedefi korunur; host CSS import'u gerekir |
-| CLS | Açık | Brifing önceki font CLS değerini `0.0007` bildiriyor; `trace-graph-stack-cold.json` içinde yeniden hesaplanabilir `LayoutShift` olayı bulunmadı | Değer bu fazda doğrulanmış ölçüm diye sunulmaz. Yeni fallback/preload sonrası cold-cache CLS ve kaynak atfı kaydedilmeli |
+| Temiz registry tüketimi | Geçti | Gerçek `shadcn-vue 2.8.2 build` eşitlik kontrolü; kendi betiğimizin `public/r` üretimi; `add` (kapalı stdin, `--yes`/`--overwrite` yok), yedi öğe/21 dosya, typecheck/build | `.txt` olmadan kurulum geçti; yalnız CRLF/LF farkı giderildiğinde içerik birebir aynı. `~/` hedefi ve host CSS import'u gerekir; [kanıt](registry.md) |
+| CLS, 1280 px | Preload düzeltmesiyle kabul | `f3-shots/cls-1280.json`: Slow 4G en yüksek `graph-table` değeri `0.0058948865`; `graph-title-ink` genişliği fallback 314 px → Geist 248 px. `cls-1280-preload-fixed-sim.json`: en yüksek `0.0000436589` | Başlık fallback farkı kabul; preload düzeltmesi yeterli. Simülasyon düzeltme sonrası yeni canlı ölçüm değildir; brifingdeki `≤0.00004` kesin sınırı hatalıdır |
+| CLS, 960–1279 px | Faz 4 izleme | `f3-shots/cls-992-preload-fixed-sim.json`: 992 px örneğinde `#VPContent` 52 px kayıyor, CLS yaklaşık `0.0533`; font preload düzeltmesiyle de sürüyor | İlk boyamadan yaklaşık 30 ms sonra oluşan kayma fonttan bağımsız; VitePress yerel nav olası kaynak, sebep doğrulanmadı; aralığın tamamı bu dosyada ölçülmedi |
 | Font yükleme | Build kapısı geçti | `stack-build.test.mjs`: `Geist Mono Fallback`, `size-adjust:134.59%`, iki gerçek `.woff2` preload hedefi | Arial bulunmayan sistemlerin yedeği farklıdır; latin-ext font ve glif fallback yolu canlı ölçülmeli |
 
-Arşivdeki `nojs-graph-stack-light-1280.png` görüntüsü ayrıca görsel olarak
-incelendi. Diğer sayfaların görünürlüğü saklanmış JSON çıktısıyla doğrulandı.
-Arşiv kaynakları repo dışında; hash özeti repo içinde kalır. Dev sunucusu ve
-yeni tarayıcı ölçüm oturumu başlatılmadı.
+Güncel arşivde dört sayfa × iki tema tercihi × iki mod (JS kapalı/script
+engelli) için 16 kayıt incelendi: her dört sayfalık grupta 14/14 görünür figure,
+toplam 56/56. JS kapalı dark tercihin gerçekte light kaldığı ayrıca doğrulandı.
+Vue DevTools bileşen/prop ekranı ve Vite DevTools modül grafiği görsel olarak
+incelendi. Arşiv kaynakları repo dışında; bütün `f3-shots/*.json` dosyalarının
+ve DevTools PNG görüntülerinin SHA-256 özeti `phase-3-evidence.json` içindedir.
+Bu düzeltme turunda dev sunucusu veya yeni tarayıcı ölçüm oturumu başlatılmadı.
 
 ## Docs aracı kararı
 
 | Ölçüt | VitePress `2.0.0-alpha.20` | `vite-ssg 28.3.0` |
 | --- | --- | --- |
-| Vue DevTools + Vite DevTools | `config.test.mjs` development config içinde iki gerçek eklentiyi ve injection/server yolunu doğrular; production config ikisini çıkarır. Bu fazda UI bağlantısı tekrarlanmadı | Normal Vite eklenti yolu uygun bir adaydır; bu repo için kurulup çalıştırılmadı, iki UI'nin birlikte çalıştığı iddia edilmez |
+| Vue DevTools + Vite DevTools | Geçti: aynı dev sunucusundaki UI'ler `f3-shots/*devtools*.png` ile kayıtlı; Vue bileşen/prop ekranı ve Vite modül grafiği incelendi. `config.test.mjs` development eklentilerini doğrular; production config ikisini çıkarır | Normal Vite eklenti yolu uygun bir adaydır; bu repo için kurulup çalıştırılmadı, iki UI'nin birlikte çalıştığı iddia edilmez |
 | SSR build | Workspace ve temiz tarball tüketicisinde client/server build + statik sayfa render geçti | Vue 3 için statik üretim sağlar; mevcut docs sayfaları bu araçla build edilmedi |
 | Markdown plugin yolu | Mevcut `markdown.config` üzerinden markdown-it; compiler ve `withMdxcn` host kuralları gerçek testlerle kapsanıyor | Markdown dönüştürme, Vue SFC üretimi, routing, highlighter, anchor ve footnote kuralları ayrıca bağlanmalı; doğrudan host eşdeğerliği kanıtlanmadı |
 | Sürüm riski | Alpha: exact pin, lockfile, production DOM testleri ve ayrı yükseltme incelemesiyle yönetilir | Alpha etiketi yok; geçişin kendi entegrasyon ve davranış paritesi riski var |

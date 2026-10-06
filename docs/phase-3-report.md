@@ -11,8 +11,10 @@ alınan zaman. Windows, Node `24.21.0`, pnpm `12.4.1`.
   düzeltilmiş iki `.d.ts` ağacının NodeNext kontrolü hatasız geçti.
 - **O2/O3:** CSS öğesi `registry:file`; onaysız gerçek CLI kurulumu geçti.
   `registry.json` içeriksiz dosya kayıtlarıyla gerçek kaynaklara bağlandı.
-  `shadcn-vue build` koşar; çıktısı MIT bildirimi ve `.txt` taşıma suffix'i
-  eklendikten sonra `public/r` ile karşılaştırılır. Böylece yeni bir CLI
+  `public/r` kendi `scripts/registry-build.mjs` betiğimizle üretilir.
+  `shadcn-vue build` eşitlik kontrolüdür; çıktısı MIT bildirimi
+  eklendikten sonra `public/r` ile karşılaştırılır. Faz 3B doğrulamasıyla
+  gereksiz `.txt` kaldırıldı. Böylece yeni bir CLI
   bağımlılığını köke kurmadan kaynak/payload eşitliği korunur.
 - **B-a:** `MdxcnSmoke` public API ve paket kaynaklarından çıktı; fixture
   `test/fixtures` altında kaldı. Export/tip snapshot'ı ve docs kaydı güncellendi.

@@ -1,5 +1,5 @@
 {
-  "capturedAt": "2026-10-06T21:23:41.287Z",
+  "capturedAt": "2026-10-06T22:14:27.047Z",
   "archiveRoot": "C:/Users/zahid/source/github/tmp/mdxcn-vue",
   "browser": {
     "nojs": [
@@ -8,56 +8,72 @@
         "scriptsRan": false,
         "hasVueApp": false,
         "figureCount": 5,
-        "allVisible": true
+        "allVisible": true,
+        "htmlDarkClass": false,
+        "bodyBg": "oklch(0.985 0 0)"
       },
       {
         "page": "light:graph-table",
         "scriptsRan": false,
         "hasVueApp": false,
         "figureCount": 4,
-        "allVisible": true
+        "allVisible": true,
+        "htmlDarkClass": false,
+        "bodyBg": "oklch(0.985 0 0)"
       },
       {
         "page": "light:endpoint",
         "scriptsRan": false,
         "hasVueApp": false,
         "figureCount": 2,
-        "allVisible": true
+        "allVisible": true,
+        "htmlDarkClass": false,
+        "bodyBg": "oklch(0.985 0 0)"
       },
       {
         "page": "light:graph-timer",
         "scriptsRan": false,
         "hasVueApp": false,
         "figureCount": 3,
-        "allVisible": true
+        "allVisible": true,
+        "htmlDarkClass": false,
+        "bodyBg": "oklch(0.985 0 0)"
       },
       {
         "page": "dark:graph-stack",
         "scriptsRan": false,
         "hasVueApp": false,
         "figureCount": 5,
-        "allVisible": true
+        "allVisible": true,
+        "htmlDarkClass": false,
+        "bodyBg": "oklch(0.985 0 0)"
       },
       {
         "page": "dark:graph-table",
         "scriptsRan": false,
         "hasVueApp": false,
         "figureCount": 4,
-        "allVisible": true
+        "allVisible": true,
+        "htmlDarkClass": false,
+        "bodyBg": "oklch(0.985 0 0)"
       },
       {
         "page": "dark:endpoint",
         "scriptsRan": false,
         "hasVueApp": false,
         "figureCount": 2,
-        "allVisible": true
+        "allVisible": true,
+        "htmlDarkClass": false,
+        "bodyBg": "oklch(0.985 0 0)"
       },
       {
         "page": "dark:graph-timer",
         "scriptsRan": false,
         "hasVueApp": false,
         "figureCount": 3,
-        "allVisible": true
+        "allVisible": true,
+        "htmlDarkClass": false,
+        "bodyBg": "oklch(0.985 0 0)"
       }
     ],
     "jsblocked": [
@@ -66,30 +82,76 @@
         "scriptsRan": false,
         "hasVueApp": false,
         "figureCount": 5,
-        "allVisible": true
+        "allVisible": true,
+        "htmlDarkClass": false,
+        "bodyBg": "oklch(0.985 0 0)"
       },
       {
         "page": "light:graph-table",
         "scriptsRan": false,
         "hasVueApp": false,
         "figureCount": 4,
-        "allVisible": true
+        "allVisible": true,
+        "htmlDarkClass": false,
+        "bodyBg": "oklch(0.985 0 0)"
       },
       {
         "page": "light:endpoint",
         "scriptsRan": false,
         "hasVueApp": false,
         "figureCount": 2,
-        "allVisible": true
+        "allVisible": true,
+        "htmlDarkClass": false,
+        "bodyBg": "oklch(0.985 0 0)"
       },
       {
         "page": "light:graph-timer",
         "scriptsRan": false,
         "hasVueApp": false,
         "figureCount": 3,
-        "allVisible": true
+        "allVisible": true,
+        "htmlDarkClass": false,
+        "bodyBg": "oklch(0.985 0 0)"
+      },
+      {
+        "page": "dark:graph-stack",
+        "scriptsRan": false,
+        "hasVueApp": false,
+        "figureCount": 5,
+        "allVisible": true,
+        "htmlDarkClass": true,
+        "bodyBg": "oklch(0.11 0 0)"
+      },
+      {
+        "page": "dark:graph-table",
+        "scriptsRan": false,
+        "hasVueApp": false,
+        "figureCount": 4,
+        "allVisible": true,
+        "htmlDarkClass": true,
+        "bodyBg": "oklch(0.11 0 0)"
+      },
+      {
+        "page": "dark:endpoint",
+        "scriptsRan": false,
+        "hasVueApp": false,
+        "figureCount": 2,
+        "allVisible": true,
+        "htmlDarkClass": true,
+        "bodyBg": "oklch(0.11 0 0)"
+      },
+      {
+        "page": "dark:graph-timer",
+        "scriptsRan": false,
+        "hasVueApp": false,
+        "figureCount": 3,
+        "allVisible": true,
+        "htmlDarkClass": true,
+        "bodyBg": "oklch(0.11 0 0)"
       }
-    ]
+    ],
+    "nojsDarkThemeVerified": false,
+    "nojsDarkThemeReason": "The VitePress inline script cannot set the dark class with JavaScript disabled"
   },
   "hashes": {
     "f2b4-tools/nojs.out.json": "f67392521ed77b3dc6ffe076e9eda196d98eb21e23a30e3bead059bbae75f32d",
@@ -105,12 +167,66 @@
     "f2b4-shots/nojs-graph-table-dark-1280.png": "142de7d629b9df9cb9d59352bbb5c6bcf5cb7d1effcd7e4f27c57d4445e11b8b",
     "f2b4-shots/nojs-graph-table-light-1280.png": "142de7d629b9df9cb9d59352bbb5c6bcf5cb7d1effcd7e4f27c57d4445e11b8b",
     "f2b4-shots/nojs-graph-timer-dark-1280.png": "12e7fe54096577dae23d153848f1e4a9ee3535114246287b35de3b2a4c3fb0c5",
-    "f2b4-shots/nojs-graph-timer-light-1280.png": "12e7fe54096577dae23d153848f1e4a9ee3535114246287b35de3b2a4c3fb0c5"
+    "f2b4-shots/nojs-graph-timer-light-1280.png": "12e7fe54096577dae23d153848f1e4a9ee3535114246287b35de3b2a4c3fb0c5",
+    "f3-shots/cls-1280-preload-fixed-sim.json": "ba291d8c0ccc7871be4b8f3038b33508261e16921530c9a0206084a153905aaf",
+    "f3-shots/cls-1280.json": "165fa658c15d7a9d057bbbe375f7473c8a848fe59fe0242101db2c47d11edd73",
+    "f3-shots/cls-375.json": "a73fbfea0799f183fe4b521fce3a420f33806bb2641fc635c5358fa1b34ff798",
+    "f3-shots/cls-992-preload-fixed-sim.json": "eb1d6b40ae915f1d6e581a58e3a6d367c13137b17ae0f1011ca946fa8cf9dd8b",
+    "f3-shots/cls.json": "97fab9ff1c07386250a92a272da196862c383eef50a81d0566764744d0da7755",
+    "f3-shots/dev-console.json": "227105acff7406e86880f2e4d1f53db8a8baf87224d07d383720713e70dee265",
+    "f3-shots/reduced-motion.json": "7e763a1211560b9f4f424e2c74aad4f73cbae4a77d4ecca06698a5b0527ff120",
+    "f3-shots/regress.json": "5cb7aaf405a956839b1c84ac158dffea17b0f24edafe708956ba0d36e5deee4d",
+    "f3-shots/visibility-blocked.json": "3e44f36791029089cefe8e5c68b57fcfbd37ccb689923c425c29042f3a39ce2b",
+    "f3-shots/visibility-nojs.json": "1845ecb7809249b5c98639ff843a707f9f25051664fc42226310d97235df1496",
+    "f3-shots/vite-devtools-ui-first.png": "9a0195bb99dcd55d06584b08d765059550ec54f9779557988541cde442d713e5",
+    "f3-shots/vite-devtools-ui-module-graph-view.png": "6771bdc23eaf2e92b1349f31b7c3b298278d1393f130856e9e7d6f76d2a1c37d",
+    "f3-shots/vite-devtools-ui-module-graph.png": "3df033d5b754a1f08f01a50f6a04e7d960e06f95146d663a9ec8e0a04268f728",
+    "f3-shots/vue-devtools-ui-components-search.png": "1f4d491104749ecc4eafba03e75c66e6a94b6e1f8e49478fa85fe00b24234455",
+    "f3-shots/vue-devtools-ui-first.png": "1ddda564d0093287ad9b14b16ba33106ff0e6314af93e46bd74ee1bd1054544f",
+    "f3-shots/vue-devtools-ui-graphstack-props.png": "08e26b72113f633bb4c0536c9043602587e3e58f501e70993c69b3d8551d41a2"
   },
   "cls": {
-    "reportedPreviousValue": 0.0007,
-    "verifiedThisPhase": false,
-    "layoutShiftEventsInArchive": 0,
-    "reason": "No persisted layout-shift score; remeasure after font changes"
+    "verifiedThisPhase": true,
+    "source": "f3-shots/cls-1280.json",
+    "viewportWidth": 1280,
+    "profile": "slow-4g",
+    "page": "graph-table",
+    "brokenPreloadMax": 0.005894886534510772,
+    "titleFallbackWidth": 314,
+    "titleGeistWidth": 248,
+    "fixedPreloadSimulationSource": "f3-shots/cls-1280-preload-fixed-sim.json",
+    "fixedPreloadSimulationMax": 0.00004365889952975363,
+    "correctedBriefBound": "The maximum exceeds 0.00004; the simulation is not a new measurement of the rebuilt site",
+    "decision": "Accept title fallback difference; fix preload",
+    "phase4Watch": {
+      "source": "f3-shots/cls-992-preload-fixed-sim.json",
+      "measuredViewportWidth": 992,
+      "watchViewportRange": [
+        960,
+        1279
+      ],
+      "max": 0.053297347762613814,
+      "contentShiftPx": 52,
+      "causeConfirmed": false,
+      "hypothesis": "VitePress local nav; persists with fixed font preload"
+    }
+  },
+  "reducedMotion": {
+    "passed": true,
+    "source": "f3-shots/reduced-motion.json",
+    "pages": 4,
+    "negativeControlPassed": true
+  },
+  "devtools": {
+    "passed": true,
+    "evidence": [
+      "f3-shots/vite-devtools-ui-first.png",
+      "f3-shots/vite-devtools-ui-module-graph-view.png",
+      "f3-shots/vite-devtools-ui-module-graph.png",
+      "f3-shots/vue-devtools-ui-components-search.png",
+      "f3-shots/vue-devtools-ui-first.png",
+      "f3-shots/vue-devtools-ui-graphstack-props.png"
+    ],
+    "verification": "Archived Vue component props and Vite module graph inspected; no new dev server started"
   }
 }

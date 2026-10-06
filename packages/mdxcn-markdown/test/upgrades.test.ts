@@ -121,6 +121,37 @@ describe('independent upstream Markdown upgrade fixtures', () => {
     expect(output).toContain('<cite>Ada &amp; Bob</cite>')
     expect(output).toContain('<footer>— <cite>Ada &amp; Bob</cite>, Book &lt;name&gt;</footer>')
   })
+  it.each([
+    { source: 'Book <name>', escaped: 'Book &lt;name&gt;', plain: 'Book' },
+    {
+      source: '<script>alert(1)</script>',
+      escaped: '&lt;script&gt;alert(1)&lt;/script&gt;',
+      plain: 'alert(1)',
+    },
+  ])(
+    'handles raw attribution $source according to the HTML setting',
+    ({ source, escaped, plain }) => {
+      for (const html of [false, true]) {
+        for (const registered of [false, true]) {
+          const md = new MarkdownIt({ html }).use(withMdxcn, {
+            components: registered ? ['Quote'] : [],
+            warn: () => {},
+          })
+          const output = md.render(`> **Rich**\n> — Ada & Bob, ${source}`)
+          expect(output).toContain('<strong>Rich</strong>')
+          expect(output).not.toMatch(/<(?:name|script)\b/)
+          if (registered) {
+            expect(props(output)).toEqual({ by: 'Ada & Bob', source: html ? plain : source })
+            expect(output).toContain(html ? plain : escaped)
+          } else {
+            expect(output).toContain(
+              `<footer>— <cite>Ada &amp; Bob</cite>, ${html ? plain : escaped}</footer>`,
+            )
+          }
+        }
+      }
+    },
+  )
   it('allows every feature to be disabled independently', () => {
     const { md, warnings } = parser({
       alerts: false,

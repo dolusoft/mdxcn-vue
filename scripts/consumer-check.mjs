@@ -35,6 +35,10 @@ function write(dir, path, value) {
   mkdirSync(dirname(join(dir, path)), { recursive: true })
   writeFileSync(join(dir, path), typeof value === 'string' ? value : JSON.stringify(value, null, 2))
 }
+function writeInstallPolicy(dir) {
+  // Match the repository's exact Vite release-age exception in isolated fixtures.
+  write(dir, 'pnpm-workspace.yaml', 'minimumReleaseAgeExclude:\n  - vite@8.3.3\n')
+}
 function files(dir, extension) {
   return readdirSync(dir, { recursive: true })
     .filter((name) => name.endsWith(extension))
@@ -245,6 +249,7 @@ write(app, 'tsconfig.nodenext.json', {
   },
   include: ['src/type-contract.ts'],
 })
+writeInstallPolicy(app)
 run(['install'], app)
 run(['exec', 'tsc', '--noEmit', '-p', 'tsconfig.nodenext.json'], app)
 console.log('TYPE CONTRACT PASSED: NodeNext, skipLibCheck=false; invalid fields rejected')
@@ -352,6 +357,7 @@ write(
   'index.md',
   '# Consumer\n\n<GraphStack title="STACK">\n\n- Web: 1 js\n\n</GraphStack>\n\n<GraphTable title="TABLE">\n\n| A |\n| --- |\n| B |\n\n</GraphTable>\n\n<Endpoint title="API">\n\nPOST /consumer\n\n```json\n{}\n```\n\n</Endpoint>',
 )
+writeInstallPolicy(site)
 run(['install'], site)
 run(['peers', 'check'], site)
 write(
@@ -426,6 +432,7 @@ const registryApp = readFileSync(join(app, 'src/App.vue'), 'utf8')
   )
   .replaceAll("'mdxcn-vue/core'", "'./components/mdxcn/core'")
 write(registry, 'src/App.vue', registryApp)
+writeInstallPolicy(registry)
 run(['install'], registry)
 const cliOutput = join(root, 'registry-build')
 run(
@@ -440,13 +447,12 @@ const localItems = registryPaths.map((path) => {
   write(registry, target, readFileSync(path, 'utf8'))
   return `./${target}`
 })
-const registryInstall = run(
-  ['exec', 'shadcn-vue', 'add', '--overwrite', ...localItems],
-  registry,
-  true,
+const registryInstall = run(['exec', 'shadcn-vue', 'add', ...localItems], registry, true)
+assert.doesNotMatch(
+  registryInstall,
+  /overwrite.*(?:CSS|variables)|Would you like|Do you want|Continue\?|\(y\/N\)/i,
 )
-assert.doesNotMatch(registryInstall, /overwrite.*(?:CSS|variables)|Would you like|Do you want/i)
-console.log('REGISTRY PROMPT CHECK PASSED: closed stdin, no --yes')
+console.log('REGISTRY PROMPT CHECK PASSED: closed stdin, no --yes or --overwrite')
 const copied = new Set()
 for (const path of registryPaths) {
   const item = JSON.parse(readFileSync(path, 'utf8'))
@@ -454,10 +460,11 @@ for (const path of registryPaths) {
   for (const file of item.files) {
     assert.match(file.content, /Keshav Bagaade/)
     assert.equal(
-      readFileSync(join(registry, file.target.replace(/^~\//, '')), 'utf8')
-        .replaceAll('\r\n', '\n')
-        .trim(),
-      file.content.replaceAll('\r\n', '\n').trim(),
+      readFileSync(join(registry, file.target.replace(/^~\//, '')), 'utf8').replaceAll(
+        '\r\n',
+        '\n',
+      ),
+      file.content,
       `Registry CLI changed ${file.target}`,
     )
     copied.add(file.target)
