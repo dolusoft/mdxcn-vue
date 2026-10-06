@@ -1,6 +1,6 @@
 import type { Theme } from 'vitepress'
 import DefaultTheme from 'vitepress/theme'
-import { GraphTimeline, Event, GraphSpec, Field, Chat, Keys, Steps, Step, Changelog, Change, Decision, Annotate, Env, Bar, Callout, Quote, Terminal, Endpoint, GraphStack, GraphTable, GraphTimer, Head, Row, Foot, Cell, Segment } from 'mdxcn-vue'
+import { GraphScore, GraphRank, GraphFunnel, Rank, Stage, GraphTimeline, Event, GraphSpec, Field, Chat, Keys, Steps, Step, Changelog, Change, Decision, Annotate, Env, Bar, Callout, Quote, Terminal, Endpoint, GraphStack, GraphTable, GraphTimer, Head, Row, Foot, Cell, Segment } from 'mdxcn-vue'
 import './style.css'
 import '@fontsource/geist-mono/400.css'
 import '@fontsource/geist-mono/600.css'
@@ -11,6 +11,7 @@ export default {
     app.component('GraphTimeline', GraphTimeline)
     app.component('Event', Event)
     app.component('GraphSpec', GraphSpec)
+    for (const [name, component] of Object.entries({ GraphScore, GraphRank, GraphFunnel, Rank, Stage })) app.component(name, component)
     app.component('Field', Field)
     app.component('Chat', Chat)
     app.component('Keys', Keys)

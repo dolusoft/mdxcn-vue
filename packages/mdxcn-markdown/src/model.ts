@@ -29,6 +29,9 @@ export type ComponentName =
   | 'Keys'
   | 'GraphTimeline'
   | 'GraphSpec'
+  | 'GraphScore'
+  | 'GraphRank'
+  | 'GraphFunnel'
 export type CompiledProps =
   | { rows: StackRow[] }
   | TableModel
@@ -184,6 +187,9 @@ export function tokensToProps(
     'Keys',
     'GraphTimeline',
     'GraphSpec',
+    'GraphScore',
+    'GraphRank',
+    'GraphFunnel',
   ].includes(name)
   const tree = blocks(tokens, md, env, options, stateList || name === 'Annotate' || name === 'Env')
   if (stateList) {
@@ -196,7 +202,7 @@ export function tokensToProps(
       throw new Error('Nested list items require runtime resolution')
     const has = (nodes: ProseNode[], type: 'strong' | 'em'): boolean =>
       nodes.some((node) => node.type !== 'text' && (node.type === type || has(node.children, type)))
-    if (name === 'GraphTimeline' || name === 'GraphSpec')
+    if (['GraphTimeline', 'GraphSpec', 'GraphScore', 'GraphRank', 'GraphFunnel'].includes(name))
       return {
         list: items.map((item) => {
           const paragraphs = item.children
@@ -212,7 +218,9 @@ export function tokensToProps(
             body: paragraphs.slice(1),
             text: proseText(content(item)).replace(/\s+/g, ' ').trim(),
             paragraphs,
-            strong: bold(head),
+            strong: ['GraphScore', 'GraphRank', 'GraphFunnel'].includes(name)
+              ? bold(content(item))
+              : bold(head),
             em: has(head, 'em'),
           }
         }),

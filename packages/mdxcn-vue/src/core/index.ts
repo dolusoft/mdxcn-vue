@@ -27,3 +27,6 @@ export { speakerPrefix, chatFromList, bindingFromList, chordsOf } from './chat-k
 
 export type { TimelineState } from './timeline-spec.js'
 export { timelineFromList, specFromList } from './timeline-spec.js'
+
+export { firstToken, numericFromList, scoreFromList, normalizeNumeric } from './numeric-list.js'
+export type { ScoreRow, RankItem, FunnelStep, NumericRow } from './numeric-list.js'

@@ -4,10 +4,10 @@ Vue 3 port of [mdxcn](https://github.com/shadcn-labs/mdxcn) — ASCII-style grap
 prose components (tables, bars, timelines, invoices, terminals, ...) that can be fed
 by typed props, item components or Markdown.
 
-> **Status:** work in progress. Phase 5C includes the shared frame, typed core,
+> **Status:** work in progress. Phase 6A includes the shared frame, typed core,
 > `v-reveal`, `GraphStack`, `GraphTable`, `Endpoint`, `GraphTimer`, `Callout`,
 > `Quote`, `Terminal`, `Annotate`, `Env`, `Steps`, `Changelog`, `Decision`, `Chat`,
-> `Keys`, `GraphTimeline` and `GraphSpec`;
+> `Keys`, `GraphTimeline`, `GraphSpec`, `GraphScore`, `GraphRank` and `GraphFunnel`;
 > build-time Markdown and packaged consumer checks are available; the remaining
 > components are still pending.
 

@@ -120,3 +120,13 @@ export type { TimelineEvent, SpecRow, SpecLine } from './adapters/timeline-spec.
 export type { TimelineState } from './core/timeline-spec.js'
 export { GraphSpec, Field } from './components/graph-spec.js'
 export type { GraphSpecProps } from './components/graph-spec.js'
+
+export { GraphScore } from './components/graph-score.js'
+export { GraphRank, Rank } from './components/graph-rank.js'
+export { GraphFunnel, Stage } from './components/graph-funnel.js'
+export type {
+  GraphScoreProps,
+  GraphRankProps,
+  GraphFunnelProps,
+} from './components/numeric-list.js'
+export type { ScoreRow, RankItem, FunnelStep } from './core/numeric-list.js'

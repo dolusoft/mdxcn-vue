@@ -7,6 +7,11 @@ import ts from 'typescript'
 
 // Deliberately maintained independently of export declarations.
 const publicNames = [
+  'GraphScore',
+  'GraphRank',
+  'GraphFunnel',
+  'Rank',
+  'Stage',
   'GraphTimeline',
   'Event',
   'GraphSpec',
@@ -108,6 +113,12 @@ it('exposes grammar and clock helpers only through core', () => {
 })
 
 const publicTypes = [
+  'GraphScoreProps',
+  'GraphRankProps',
+  'GraphFunnelProps',
+  'ScoreRow',
+  'RankItem',
+  'FunnelStep',
   'GraphTimelineProps',
   'TimelineEvent',
   'TimelineState',
@@ -167,6 +178,14 @@ const publicTypes = [
   'GraphTimerProps',
 ]
 const coreNames = [
+  'firstToken',
+  'numericFromList',
+  'scoreFromList',
+  'normalizeNumeric',
+  'ScoreRow',
+  'RankItem',
+  'FunnelStep',
+  'NumericRow',
   'TimelineState',
   'timelineFromList',
   'specFromList',

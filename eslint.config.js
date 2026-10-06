@@ -53,6 +53,8 @@ export default tseslint.config(
             'Keys',
             'Event',
             'Field',
+            'Rank',
+            'Stage',
           ],
         },
       ],

@@ -6,7 +6,7 @@ import type { Component } from 'vue'
 import type { RevealOptions } from '../src/directives/reveal'
 import { Annotate } from '../src/components/annotate'
 import { Env } from '../src/components/env'
-import { Chat, Keys, GraphTimeline, GraphSpec } from '../src'
+import { Chat, Keys, GraphTimeline, GraphSpec, GraphScore, GraphRank, GraphFunnel } from '../src'
 import { Terminal } from '../src/components/terminal'
 
 let reduced: boolean
@@ -94,6 +94,33 @@ afterEach(() => {
 
 describe('v-reveal lifecycle', () => {
   it.each([
+    {
+      component: GraphScore,
+      props: {
+        title: 'S',
+        items: Array.from({ length: 60 }, (_, i) => ({ label: String(i), value: 2 })),
+      },
+      cap: 250,
+      selector: 'li',
+    },
+    {
+      component: GraphRank,
+      props: {
+        title: 'R',
+        items: Array.from({ length: 60 }, (_, i) => ({ label: String(i), value: 2 })),
+      },
+      cap: 250,
+      selector: 'li',
+    },
+    {
+      component: GraphFunnel,
+      props: {
+        title: 'F',
+        steps: Array.from({ length: 60 }, (_, i) => ({ label: String(i), value: 2 })),
+      },
+      cap: 250,
+      selector: 'li',
+    },
     {
       component: Chat,
       props: { turns: Array.from({ length: 60 }, () => ({ by: 'you', children: 'hello' })) },

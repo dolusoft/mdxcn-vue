@@ -23,6 +23,9 @@ const dataFields: Record<ComponentName, string[]> = {
   Keys: ['bindings'],
   GraphTimeline: ['events', 'list'],
   GraphSpec: ['rows', 'list'],
+  GraphScore: ['items', 'list'],
+  GraphRank: ['items', 'list'],
+  GraphFunnel: ['steps', 'list'],
 }
 /** Trusted repository Markdown only: the output is executable Vue template source. */
 export function mdxcnMarkdown(md: MarkdownIt, options: MarkdownOptions = {}): void {
@@ -46,7 +49,7 @@ export function mdxcnMarkdown(md: MarkdownIt, options: MarkdownOptions = {}): vo
       let openingEnd = start
       let openingText = lineAt(start)
       const leading = openingText.match(
-        /^<(GraphStack|GraphTable|Endpoint|Annotate|Env|Steps|Changelog|Decision|Chat|Keys|GraphTimeline|GraphSpec)(?=\s|>|$)/,
+        /^<(GraphStack|GraphTable|Endpoint|Annotate|Env|Steps|Changelog|Decision|Chat|Keys|GraphTimeline|GraphSpec|GraphScore|GraphRank|GraphFunnel)(?=\s|>|$)/,
       )
       if (!leading || /\/>\s*$/.test(openingText)) return false
       const name = leading[1] as ComponentName
@@ -54,9 +57,9 @@ export function mdxcnMarkdown(md: MarkdownIt, options: MarkdownOptions = {}): vo
         if (!silent) emitWarning(options, state.env, state.src, start, name, reason)
       }
       const pattern =
-        /^<(GraphStack|GraphTable|Endpoint|Annotate|Env|Steps|Changelog|Decision|Chat|Keys|GraphTimeline|GraphSpec)(\s(?:[^"'<>]|"[^"]*"|'[^']*')*)?>\s*$/
+        /^<(GraphStack|GraphTable|Endpoint|Annotate|Env|Steps|Changelog|Decision|Chat|Keys|GraphTimeline|GraphSpec|GraphScore|GraphRank|GraphFunnel)(\s(?:[^"'<>]|"[^"]*"|'[^']*')*)?>\s*$/
       const inlineOpening = openingText.match(
-        /^<(GraphStack|GraphTable|Endpoint|Annotate|Env|Steps|Changelog|Decision|Chat|Keys|GraphTimeline|GraphSpec)(\s(?:[^"'<>]|"[^"]*"|'[^']*')*)?>(.*)$/,
+        /^<(GraphStack|GraphTable|Endpoint|Annotate|Env|Steps|Changelog|Decision|Chat|Keys|GraphTimeline|GraphSpec|GraphScore|GraphRank|GraphFunnel)(\s(?:[^"'<>]|"[^"]*"|'[^']*')*)?>(.*)$/,
       )
       if (inlineOpening?.[3]?.trim()) {
         warn('Opening tag and content must be on separate lines')
@@ -95,9 +98,18 @@ export function mdxcnMarkdown(md: MarkdownIt, options: MarkdownOptions = {}): vo
       }
       if (
         /^\s*[-+*]\s/.test(lineAt(openingEnd + 1)) ||
-        (['Steps', 'Changelog', 'Decision', 'Chat', 'Keys', 'GraphTimeline', 'GraphSpec'].includes(
-          name,
-        ) &&
+        ([
+          'Steps',
+          'Changelog',
+          'Decision',
+          'Chat',
+          'Keys',
+          'GraphTimeline',
+          'GraphSpec',
+          'GraphScore',
+          'GraphRank',
+          'GraphFunnel',
+        ].includes(name) &&
           /^\s*\d+[.)]\s/.test(lineAt(openingEnd + 1)))
       ) {
         warn('A blank line is required before a Markdown list inside a component')
