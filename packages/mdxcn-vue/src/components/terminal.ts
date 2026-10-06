@@ -1,4 +1,5 @@
 /* Derived from mdxcn, Copyright (c) 2026 Keshav Bagaade. MIT; see LICENSE. */
+import type { PropType } from 'vue'
 import { defineComponent, h, mergeProps, withDirectives } from 'vue'
 import { terminalModel } from '../adapters/terminal.js'
 import { vReveal } from '../directives/reveal.js'
@@ -24,7 +25,7 @@ export const Terminal = defineComponent({
   props: {
     title: { type: String, default: 'shell' },
     prompt: { type: String, default: '$' },
-    text: String,
+    text: String as PropType<TerminalProps['text']>,
     corner: String,
     className: String,
   },

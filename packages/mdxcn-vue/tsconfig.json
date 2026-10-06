@@ -3,5 +3,5 @@
   "compilerOptions": {
     "types": ["node"]
   },
-  "include": ["src/**/*.ts", "src/**/*.vue", "test/**/*.ts", "vite.config.ts"]
+  "include": ["src/**/*.ts", "src/**/*.vue", "test/**/*.ts", "test/**/*.vue", "vite.config.ts"]
 }
