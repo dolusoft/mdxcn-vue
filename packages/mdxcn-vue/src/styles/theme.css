@@ -1,0 +1,387 @@
+/* Derived from mdxcn, Copyright (c) 2026 Keshav Bagaade. MIT; see LICENSE. */
+@import './host.css';
+@theme inline {
+  --font-sans: 'Geist', 'Geist Fallback', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'Geist Mono', 'Geist Mono Fallback', ui-monospace, monospace;
+  --font-heading: 'Geist Mono', 'Geist Mono Fallback', ui-monospace, monospace;
+  --font-mono--font-feature-settings: 'ss01' 1, 'zero' 1;
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+  --color-graph-accent: var(--graph-accent);
+  --color-graph-accent-2: var(--graph-accent-2);
+  --color-graph-accent-3: var(--graph-accent-3);
+  --color-graph-frame: var(--graph-frame);
+  --color-site-rail: var(--site-rail);
+  --color-graph-muted: var(--graph-muted);
+  --color-graph-faint: var(--graph-faint);
+  --color-contrast-14: var(--contrast-14);
+  --color-contrast-23: var(--contrast-23);
+  --color-contrast-45: var(--contrast-45);
+  --color-contrast-70: var(--contrast-70);
+  --ease-out-quad: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --ease-out-cubic: cubic-bezier(0.215, 0.61, 0.355, 1);
+  --ease-out-quart: cubic-bezier(0.165, 0.84, 0.44, 1);
+  --ease-in-out-cubic: cubic-bezier(0.645, 0.045, 0.355, 1);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+:root {
+  --background: oklch(0.985 0 0);
+  --foreground: oklch(0.205 0 0);
+  --card: oklch(0.985 0 0);
+  --card-foreground: oklch(0.205 0 0);
+  --popover: oklch(0.985 0 0);
+  --popover-foreground: oklch(0.205 0 0);
+  --primary: oklch(0.205 0 0);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.96 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --muted: oklch(0.96 0 0);
+  --muted-foreground: oklch(0.46 0 0);
+  --accent: oklch(0.85 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.205 0 0);
+  --input: oklch(0.205 0 0);
+  --ring: oklch(0.55 0.16 255);
+  --chart-1: oklch(0.55 0.18 255);
+  --chart-2: oklch(0.5 0 0);
+  --chart-3: oklch(0.44 0 0);
+  --chart-4: oklch(0.37 0 0);
+  --chart-5: oklch(0.27 0 0);
+  --radius: 0;
+  --sidebar: oklch(0.97 0 0);
+  --sidebar-foreground: oklch(0.205 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.96 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.54 0 0);
+  --sidebar-ring: oklch(0.55 0.16 255);
+  --graph-accent: oklch(0.5 0.14 228);
+  --graph-accent-2: oklch(0.48 0.18 259);
+  --graph-accent-3: oklch(0.5 0.14 248);
+  --graph-frame: oklch(0.72 0 0);
+  --site-rail: oklch(0.38 0 0);
+  --graph-muted: oklch(0.48 0 0);
+  --graph-faint: oklch(0.82 0 0);
+  --contrast-14: oklch(0.88 0 0);
+  --contrast-23: oklch(0.76 0 0);
+  --contrast-45: oklch(0.48 0 0);
+  --contrast-70: oklch(0.28 0 0);
+  color-scheme: light;
+}
+
+.dark {
+  --background: oklch(0.11 0 0);
+  --foreground: oklch(0.86 0 0);
+  --card: oklch(0.14 0 0);
+  --card-foreground: oklch(0.86 0 0);
+  --popover: oklch(0.14 0 0);
+  --popover-foreground: oklch(0.86 0 0);
+  --primary: oklch(0.86 0 0);
+  --primary-foreground: oklch(0.11 0 0);
+  --secondary: oklch(0.18 0 0);
+  --secondary-foreground: oklch(0.86 0 0);
+  --muted: oklch(0.18 0 0);
+  --muted-foreground: oklch(0.68 0 0);
+  --accent: oklch(0.18 0 0);
+  --accent-foreground: oklch(0.86 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(0.28 0 0);
+  --input: oklch(0.28 0 0);
+  --ring: oklch(0.68 0.12 255);
+  --chart-1: oklch(0.68 0.12 255);
+  --chart-2: oklch(0.56 0 0);
+  --chart-3: oklch(0.44 0 0);
+  --chart-4: oklch(0.37 0 0);
+  --chart-5: oklch(0.27 0 0);
+  --sidebar: oklch(0.14 0 0);
+  --sidebar-foreground: oklch(0.86 0 0);
+  --sidebar-primary: oklch(0.68 0.12 255);
+  --sidebar-primary-foreground: oklch(0.11 0 0);
+  --sidebar-accent: oklch(0.18 0 0);
+  --sidebar-accent-foreground: oklch(0.86 0 0);
+  --sidebar-border: oklch(0.28 0 0);
+  --sidebar-ring: oklch(0.68 0.12 255);
+  --graph-accent: oklch(0.77 0.15 228);
+  --graph-accent-2: oklch(0.68 0.18 259);
+  --graph-accent-3: oklch(0.72 0.15 248);
+  --graph-frame: oklch(0.48 0 0);
+  --site-rail: oklch(0.22 0 0);
+  --graph-muted: oklch(0.68 0 0);
+  --graph-faint: oklch(0.28 0 0);
+  --contrast-14: oklch(0.22 0 0);
+  --contrast-23: oklch(0.34 0 0);
+  --contrast-45: oklch(0.62 0 0);
+  --contrast-70: oklch(0.84 0 0);
+  color-scheme: dark;
+}
+
+[data-accent='theme'] {
+  --graph-title-gradient: none;
+  --graph-title-color: var(--graph-accent);
+  --graph-accent: oklch(0.32 0 0);
+  --graph-accent-2: oklch(0.5 0 0);
+  --graph-accent-3: oklch(0.42 0 0);
+}
+.dark [data-accent='theme'],
+:where(.dark)[data-accent='theme'] {
+  --graph-accent: oklch(0.92 0 0);
+  --graph-accent-2: oklch(0.72 0 0);
+  --graph-accent-3: oklch(0.55 0 0);
+}
+
+[data-accent='mint'] {
+  --graph-title-gradient: none;
+  --graph-title-color: var(--graph-accent);
+  --graph-accent: oklch(0.52 0.14 163);
+  --graph-accent-2: oklch(0.58 0.1 163);
+  --graph-accent-3: oklch(0.45 0.08 163);
+}
+.dark [data-accent='mint'],
+:where(.dark)[data-accent='mint'] {
+  --graph-accent: oklch(0.77 0.15 163);
+  --graph-accent-2: oklch(0.68 0.1 163);
+  --graph-accent-3: oklch(0.58 0.08 163);
+}
+
+[data-accent='orange'] {
+  --graph-title-gradient: none;
+  --graph-title-color: var(--graph-accent);
+  --graph-accent: oklch(0.58 0.16 55);
+  --graph-accent-2: oklch(0.5 0.12 55);
+  --graph-accent-3: oklch(0.42 0.08 55);
+}
+.dark [data-accent='orange'],
+:where(.dark)[data-accent='orange'] {
+  --graph-accent: oklch(0.76 0.14 55);
+  --graph-accent-2: oklch(0.66 0.12 55);
+  --graph-accent-3: oklch(0.55 0.08 55);
+}
+
+[data-accent='green'] {
+  --graph-title-gradient: none;
+  --graph-title-color: var(--graph-accent);
+  --graph-accent: oklch(0.5 0.14 145);
+  --graph-accent-2: oklch(0.58 0.1 145);
+  --graph-accent-3: oklch(0.42 0.08 145);
+}
+.dark [data-accent='green'],
+:where(.dark)[data-accent='green'] {
+  --graph-accent: oklch(0.74 0.14 145);
+  --graph-accent-2: oklch(0.64 0.1 145);
+  --graph-accent-3: oklch(0.55 0.08 145);
+}
+
+[data-accent='cyan'] {
+  --graph-title-gradient: none;
+  --graph-title-color: var(--graph-accent);
+  --graph-accent: oklch(0.5 0.1 210);
+  --graph-accent-2: oklch(0.58 0.08 210);
+  --graph-accent-3: oklch(0.42 0.06 210);
+}
+.dark [data-accent='cyan'],
+:where(.dark)[data-accent='cyan'] {
+  --graph-accent: oklch(0.76 0.1 210);
+  --graph-accent-2: oklch(0.66 0.08 210);
+  --graph-accent-3: oklch(0.55 0.06 210);
+}
+
+[data-accent='blue'] {
+  --graph-title-gradient: none;
+  --graph-title-color: var(--graph-accent);
+  --graph-accent: oklch(0.5 0.18 255);
+  --graph-accent-2: oklch(0.58 0.12 255);
+  --graph-accent-3: oklch(0.42 0.1 255);
+}
+.dark [data-accent='blue'],
+:where(.dark)[data-accent='blue'] {
+  --graph-accent: oklch(0.7 0.12 255);
+  --graph-accent-2: oklch(0.62 0.1 255);
+  --graph-accent-3: oklch(0.52 0.08 255);
+}
+
+[data-accent='purple'] {
+  --graph-title-gradient: none;
+  --graph-title-color: var(--graph-accent);
+  --graph-accent: oklch(0.5 0.16 300);
+  --graph-accent-2: oklch(0.58 0.12 300);
+  --graph-accent-3: oklch(0.42 0.08 300);
+}
+.dark [data-accent='purple'],
+:where(.dark)[data-accent='purple'] {
+  --graph-accent: oklch(0.72 0.12 300);
+  --graph-accent-2: oklch(0.62 0.1 300);
+  --graph-accent-3: oklch(0.55 0.08 300);
+}
+
+[data-accent='pink'] {
+  --graph-title-gradient: none;
+  --graph-title-color: var(--graph-accent);
+  --graph-accent: oklch(0.55 0.18 8);
+  --graph-accent-2: oklch(0.5 0.12 8);
+  --graph-accent-3: oklch(0.42 0.08 8);
+}
+.dark [data-accent='pink'],
+:where(.dark)[data-accent='pink'] {
+  --graph-accent: oklch(0.74 0.14 8);
+  --graph-accent-2: oklch(0.64 0.1 8);
+  --graph-accent-3: oklch(0.55 0.08 8);
+}
+
+[data-accent='sunset'] {
+  --graph-title-gradient: linear-gradient(
+    90deg,
+    var(--graph-accent),
+    var(--graph-accent-2),
+    var(--graph-accent-3)
+  );
+  --graph-title-color: transparent;
+  --graph-accent: oklch(0.55 0.18 19);
+  --graph-accent-2: oklch(0.55 0.14 74);
+  --graph-accent-3: oklch(0.52 0.12 89);
+}
+.dark [data-accent='sunset'],
+:where(.dark)[data-accent='sunset'] {
+  --graph-accent: oklch(0.7 0.19 19);
+  --graph-accent-2: oklch(0.86 0.12 74);
+  --graph-accent-3: oklch(0.92 0.1 89);
+}
+
+[data-accent='ocean'] {
+  --graph-title-gradient: linear-gradient(
+    90deg,
+    var(--graph-accent),
+    var(--graph-accent-2),
+    var(--graph-accent-3)
+  );
+  --graph-title-color: transparent;
+  --graph-accent: oklch(0.5 0.14 228);
+  --graph-accent-2: oklch(0.48 0.18 259);
+  --graph-accent-3: oklch(0.5 0.14 248);
+}
+.dark [data-accent='ocean'],
+:where(.dark)[data-accent='ocean'] {
+  --graph-accent: oklch(0.77 0.15 228);
+  --graph-accent-2: oklch(0.68 0.18 259);
+  --graph-accent-3: oklch(0.72 0.15 248);
+}
+
+[data-accent='neon'] {
+  --graph-title-gradient: linear-gradient(
+    90deg,
+    var(--graph-accent),
+    var(--graph-accent-2),
+    var(--graph-accent-3)
+  );
+  --graph-title-color: transparent;
+  --graph-accent: oklch(0.48 0.16 129);
+  --graph-accent-2: oklch(0.48 0.14 162);
+  --graph-accent-3: oklch(0.5 0.12 220);
+}
+.dark [data-accent='neon'],
+:where(.dark)[data-accent='neon'] {
+  --graph-accent: oklch(0.92 0.23 129);
+  --graph-accent-2: oklch(0.89 0.18 162);
+  --graph-accent-3: oklch(0.8 0.15 220);
+}
+
+[data-accent='aurora'] {
+  --graph-title-gradient: linear-gradient(
+    90deg,
+    var(--graph-accent),
+    var(--graph-accent-2),
+    var(--graph-accent-3)
+  );
+  --graph-title-color: transparent;
+  --graph-accent: oklch(0.55 0.2 351);
+  --graph-accent-2: oklch(0.5 0.14 307);
+  --graph-accent-3: oklch(0.48 0.14 244);
+}
+.dark [data-accent='aurora'],
+:where(.dark)[data-accent='aurora'] {
+  --graph-accent: oklch(0.68 0.25 351);
+  --graph-accent-2: oklch(0.7 0.14 307);
+  --graph-accent-3: oklch(0.7 0.13 244);
+}
+
+[data-accent='fire'] {
+  --graph-title-gradient: linear-gradient(
+    90deg,
+    var(--graph-accent),
+    var(--graph-accent-2),
+    var(--graph-accent-3)
+  );
+  --graph-title-color: transparent;
+  --graph-accent: oklch(0.55 0.18 33);
+  --graph-accent-2: oklch(0.52 0.18 1);
+  --graph-accent-3: oklch(0.55 0.14 72);
+}
+.dark [data-accent='fire'],
+:where(.dark)[data-accent='fire'] {
+  --graph-accent: oklch(0.67 0.22 33);
+  --graph-accent-2: oklch(0.68 0.2 1);
+  --graph-accent-3: oklch(0.82 0.15 72);
+}
+
+[data-accent='prism'] {
+  --graph-title-gradient: linear-gradient(
+    90deg,
+    var(--graph-accent),
+    var(--graph-accent-2),
+    var(--graph-accent-3)
+  );
+  --graph-title-color: transparent;
+  --graph-accent: oklch(0.5 0.12 220);
+  --graph-accent-2: oklch(0.52 0.16 313);
+  --graph-accent-3: oklch(0.55 0.18 21);
+}
+.dark [data-accent='prism'],
+:where(.dark)[data-accent='prism'] {
+  --graph-accent: oklch(0.75 0.14 220);
+  --graph-accent-2: oklch(0.69 0.19 313);
+  --graph-accent-3: oklch(0.66 0.2 21);
+}
+
+@layer base {
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+  }
+}

@@ -25,6 +25,17 @@ export default tseslint.config(
     },
   },
   {
+    // Preserve upstream public primitive and item names.
+    rules: {
+      'vue/multi-word-component-names': ['error', { ignores: ['Graph', 'Bar', 'Segment'] }],
+    },
+  },
+  {
+    files: ['**/*.ts'],
+    // Render-function modules export related primitives; optional props use Vue defaults.
+    rules: { 'vue/one-component-per-file': 'off', 'vue/require-default-prop': 'off' },
+  },
+  {
     languageOptions: {
       globals: { ...globals.browser, ...globals.node },
     },

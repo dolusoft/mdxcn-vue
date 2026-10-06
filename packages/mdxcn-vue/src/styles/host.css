@@ -1,0 +1,33 @@
+/* Host tokens stay owned by the consuming application. */
+@import './graph.css';
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-destructive: var(--destructive);
+  --color-graph-accent: var(--graph-accent);
+  --color-graph-accent-2: var(--graph-accent-2);
+  --color-graph-accent-3: var(--graph-accent-3);
+  --color-graph-frame: var(--graph-frame);
+  --color-graph-muted: var(--graph-muted);
+  --color-graph-faint: var(--graph-faint);
+}
+
+@layer base {
+  :root {
+    --graph-accent: oklch(0.5 0.14 228);
+    --graph-accent-2: oklch(0.48 0.18 259);
+    --graph-accent-3: oklch(0.5 0.14 248);
+    --graph-frame: oklch(0.72 0 0);
+    --graph-muted: oklch(0.48 0 0);
+    --graph-faint: oklch(0.82 0 0);
+  }
+  .dark {
+    --graph-accent: oklch(0.77 0.15 228);
+    --graph-accent-2: oklch(0.68 0.18 259);
+    --graph-accent-3: oklch(0.72 0.15 248);
+    --graph-frame: oklch(0.48 0 0);
+    --graph-muted: oklch(0.68 0 0);
+    --graph-faint: oklch(0.28 0 0);
+  }
+}

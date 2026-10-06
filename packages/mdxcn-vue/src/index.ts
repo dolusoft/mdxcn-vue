@@ -1,2 +1,10 @@
-// Public entry of `mdxcn-vue`. Components are ported in phase 2.
+// Public entry of `mdxcn-vue`.
 export { default as MdxcnSmoke } from './components/MdxcnSmoke.vue'
+export * from './core/model'
+export * from './core/motion'
+export * from './core/stack'
+export * from './adapters/items'
+export * from './adapters/stack'
+export * from './directives/reveal'
+export * from './components/graph-frame'
+export * from './components/graph-stack'

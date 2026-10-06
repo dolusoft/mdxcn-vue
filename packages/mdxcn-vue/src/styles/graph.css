@@ -1,0 +1,92 @@
+/* Derived from mdxcn, Copyright (c) 2026 Keshav Bagaade. MIT; see LICENSE. */
+@source "../";
+
+@utility graph-title-ink {
+  background-image: var(--graph-title-gradient, none);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: var(--graph-title-color, var(--graph-accent));
+
+  /* Keep gradient ink above the accompanying Tailwind text color utility. */
+  &.text-graph-accent {
+    color: var(--graph-title-color, var(--graph-accent));
+  }
+}
+@utility graph-frame {
+  background-image:
+    repeating-linear-gradient(to right, var(--graph-frame) 0 2px, transparent 2px 7px),
+    repeating-linear-gradient(to bottom, var(--graph-frame) 0 2px, transparent 2px 7px),
+    repeating-linear-gradient(to right, var(--graph-frame) 0 2px, transparent 2px 7px),
+    repeating-linear-gradient(to bottom, var(--graph-frame) 0 2px, transparent 2px 7px);
+  background-repeat: repeat-x, repeat-y, repeat-x, repeat-y;
+  background-position:
+    0 0,
+    100% 0,
+    0 100%,
+    0 0;
+  background-size:
+    100% 1px,
+    1px 100%,
+    100% 1px,
+    1px 100%;
+}
+
+@utility graph-rule {
+  height: 1px;
+  background-image: repeating-linear-gradient(
+    to right,
+    var(--graph-frame) 0 2px,
+    transparent 2px 7px
+  );
+}
+
+@utility graph-rule-y {
+  width: 1px;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    var(--graph-frame) 0 2px,
+    transparent 2px 7px
+  );
+}
+
+@utility scrollbar-none {
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@utility scrollbar-graph {
+  scrollbar-width: thin;
+  scrollbar-color: var(--graph-frame) transparent;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: var(--graph-frame);
+    border-radius: 0;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    &::-webkit-scrollbar-thumb:hover {
+      background-color: var(--graph-muted);
+    }
+  }
+}
+
+@utility graph-scroll-x {
+  overflow-x: auto;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}

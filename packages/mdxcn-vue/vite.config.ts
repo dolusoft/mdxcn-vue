@@ -1,8 +1,23 @@
 import vue from '@vitejs/plugin-vue'
+import { readFileSync } from 'node:fs'
 import { defineConfig } from 'vitest/config'
 
 export default defineConfig({
-  plugins: [vue()],
+  plugins: [
+    vue(),
+    {
+      name: 'mdxcn-css-entries',
+      generateBundle() {
+        for (const entry of ['graph', 'host', 'theme']) {
+          const source = readFileSync(
+            new URL(`./src/styles/${entry}.css`, import.meta.url),
+            'utf8',
+          ).replace(/@source\s+['"]\.\.\/['"]/, '@source "./"')
+          this.emitFile({ type: 'asset', fileName: `${entry}.css`, source })
+        }
+      },
+    },
+  ],
   build: {
     lib: {
       entry: 'src/index.ts',
