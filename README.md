@@ -4,7 +4,7 @@ Vue 3 port of [mdxcn](https://github.com/shadcn-labs/mdxcn) — ASCII-style grap
 prose components (tables, bars, timelines, invoices, terminals, ...) that can be fed
 by typed props, item components or Markdown.
 
-> **Status:** work in progress. Phase 2B-4 includes the shared frame, typed core,
+> **Status:** work in progress. Phase 3 includes the shared frame, typed core,
 > `v-reveal`, `GraphStack`, `GraphTable`, `Endpoint` and `GraphTimer`;
 > build-time Markdown and packaged consumer checks are available; the remaining
 > components are still pending.
@@ -147,7 +147,7 @@ Inline strong/emphasis/code/links remain rich. The host supplies `markdown-it`;
 `mdxcn-markdown` requires `markdown-it ^14` as a peer. VitePress integration is
 tested with `2.0.0-alpha.20`; component block, entity and link behavior depends
 on that host version. Other hosts must supply equivalent token/renderer rules.
-the compiler does not ship a runtime Markdown renderer. `renderLinks: true`
+The compiler does not ship a runtime Markdown renderer. `renderLinks: true`
 retains host URL rewrites, link titles and external link attributes.
 
 Unsupported or dynamic blocks retain runtime slots and emit `file:line` warnings.
@@ -161,7 +161,11 @@ and emit a warning instead of claiming a successful graph conversion.
 Explicit data props also keep runtime field precedence. See the
 [compiler contract and limits](docs/markdown-contract.md). Grammar/clock helpers
 `words`, `numbers`, `splitDash` and `pad2` are exported from `mdxcn-vue/core`.
-The primary entry has an explicit reviewed export list.
+The primary entry has an explicit reviewed export list. Both entries support
+Bundler and NodeNext resolution with `skipLibCheck: false`.
+The plugin adds `data-mdxcn-language` to every language-labelled VitePress fence
+wrapper, including ordinary fences outside Endpoint. Unlabelled fences and
+non-VitePress renderers without a div wrapper do not receive this attribute.
 
 ## Markdown upgrades (`withMdxcn`)
 
@@ -183,24 +187,41 @@ footnote sections target `Footnotes`; the host must enable a footnote parser
 (VitePress already does). All four options default to `true`.
 
 The prose components are not yet ported. By default the plugin warns and renders
-native HTML: an alert aside, an attributed blockquote, the host's code block and
+native HTML: the original alert blockquote (or VitePress custom block), an
+attributed blockquote with its em dash, the host's code block and
 footnote section. IDs/backlinks, rich body content and code whitespace survive.
 Set `components` only to names actually registered by the host: `Callout`,
 `Quote`, `Terminal`, `Footnotes`. That enables named Vue tags; props are JSON
 bindings (`type`/`title`, `by`/`source`, `prompt`/`text`). Footnotes wrap the host
 section so its anchors remain intact. Missing names continue to use HTML.
-This is an opt-in plugin for trusted Markdown; it composes with `mdxcnMarkdown`.
+Missing-component warnings are summarized once per component per parser/site,
+with the first source location. Create a new parser for a separate site.
+This is an opt-in plugin for trusted Markdown; it composes with `mdxcnMarkdown`
+in either registration order. Register both in the host's Markdown configuration,
+and register each name listed in `components` in the Vue app separately.
 
 `pnpm consumer:check` packs both libraries and installs isolated Vite/Vue/Tailwind
 and VitePress projects outside the repo (`../tmp/mdxcn-vue/consumer-*`). It verifies
 published files and notices, declaration resolution, CSS source scanning (with
 a negative control), production builds, one Vue runtime entry, and tree-shaking
-of non-imported components/Markdown. The CI consumer job runs the same script.
+of non-imported components/Markdown. The command rebuilds both libraries before packing and removes successful
+fixtures. Failed fixtures remain for diagnosis. `MDXCN_CONSUMER_DIR` overrides
+the scratch parent directory; the script creates and deletes only its own child.
+The summary remains in `consumer-results.json` in that parent directory.
+The CI consumer job covers Linux and Windows on Node 22.18 and 24.
+Application bundle totals include Vue; separate source-map attribution excludes
+Vue and unmapped glue and reports final unminified library spans: GraphStack
+12,370 bytes and the four components 23,791 bytes. This differs from the complete
+published JS payload (all exports) and from the application's total size.
 
 ## shadcn-vue registry
 
 `pnpm registry:build` generates `registry.json` and seven `public/r/mdxcn-*.json`
 items from the library sources: the four components, shared frame, core and CSS.
+The content-free build index references real files. The consumer check runs
+`shadcn-vue build registry.json` and verifies its output against the distributable
+payloads after adding the MIT notice and the CLI 2.8 transport suffix.
+The CSS item uses `registry:file`, so it does not ask to overwrite host CSS variables.
 `pnpm registry:check` rejects stale payloads. The format follows the
 [shadcn-vue item schema](https://shadcn-vue.com/schema/registry-item.json).
 

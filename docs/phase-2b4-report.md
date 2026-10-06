@@ -138,3 +138,23 @@ Force, hook atlama veya AI co-author trailer kullanılmadı; npm yayını yapıl
   klavye kaydırması/odak, caption + kod adı, reveal/reduced-motion, GraphTimer
   yerel saat, JavaScript hata durumunda SSR görünürlüğü ve font yüklenmesinin CLS
   etkisi tarayıcıda ölçülmelidir.
+
+## Faz 3 düzeltme notu
+
+Önceki uygulama toplamları Vue içerir ve kütüphanenin kendi boyutu değildir.
+`consumer:check` artık son JS çıktısının source map eşlemesini kullanarak Vue
+hariç payı ayrı ölçer: yalnız `GraphStack` **12.370 byte**, dört bileşen
+**23.791 byte** (`minify: false`; eşlemesiz bağlantı kodu hariç).
+Brifingdeki yaklaşık 14/30 KB bu yöntemle yeniden üretilemedi; ölçülen değerler
+esas alındı. Bütün paket export'larını taşıyan dağıtım JS dosyaları ayrı bir ölçüdür.
+
+`data-mdxcn-language` yalnız Endpoint için değildir: dil etiketli bütün
+VitePress fence `div` kapsayıcılarına eklenir. Dilsiz fence ve `div`
+üretmeyen renderer için eklenmez.
+
+`withMdxcn` ile `mdxcnMarkdown` iki kayıt sırasında da çalışır. Eksik
+`Callout` kaydında host blockquote/custom-block çıktısı korunur; eksik hedef
+uyarısı parser/site başına bileşen başına bir kez çıkar. `components` listesi
+Vue uygulamasında gerçekten kayıtlı adları belirtir. Registry indeksi artık
+mevcut kaynakları gösterir; `.txt` yalnız dağıtım payload'larında kullanılır.
+Faz 3 ayrıntıları ve ölçüm sınırları [karar kapısında](phase-3-gate.md) kayıtlıdır.
