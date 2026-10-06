@@ -272,10 +272,10 @@ importers:
       markdown-it:
         specifier: ^14
         version: 14.3.2
+    devDependencies:
       mdxcn-vue:
         specifier: workspace:*
         version: link:../mdxcn-vue
-    devDependencies:
       typescript:
         specifier: 6.0.3
         version: 6.0.3

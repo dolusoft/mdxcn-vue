@@ -4,9 +4,10 @@ Vue 3 port of [mdxcn](https://github.com/shadcn-labs/mdxcn) — ASCII-style grap
 prose components (tables, bars, timelines, invoices, terminals, ...) that can be fed
 by typed props, item components or Markdown.
 
-> **Status:** work in progress. Phase 2B-2 includes the shared frame, typed core,
+> **Status:** work in progress. Phase 2B-4 includes the shared frame, typed core,
 > `v-reveal`, `GraphStack`, `GraphTable`, `Endpoint` and `GraphTimer`;
-> the remaining components and Markdown compiler are still pending.
+> build-time Markdown and packaged consumer checks are available; the remaining
+> components are still pending.
 
 ## Upstream
 
@@ -30,6 +31,7 @@ pnpm build
 pnpm test
 pnpm lint
 pnpm typecheck
+pnpm consumer:check
 ```
 
 The docs dev server ships with Vue DevTools (`vite-plugin-vue-devtools`, UI at
@@ -160,6 +162,12 @@ Explicit data props also keep runtime field precedence. See the
 [compiler contract and limits](docs/markdown-contract.md). Grammar/clock helpers
 `words`, `numbers`, `splitDash` and `pad2` are exported from `mdxcn-vue/core`.
 The primary entry has an explicit reviewed export list.
+
+`pnpm consumer:check` packs both libraries and installs isolated Vite/Vue/Tailwind
+and VitePress projects outside the repo (`../tmp/mdxcn-vue/consumer-*`). It verifies
+published files and notices, declaration resolution, CSS source scanning (with
+a negative control), production builds, one Vue runtime entry, and tree-shaking
+of non-imported components/Markdown. The CI consumer job runs the same script.
 
 ## License
 

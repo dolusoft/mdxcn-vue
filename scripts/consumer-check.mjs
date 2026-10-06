@@ -1,0 +1,260 @@
+import assert from 'node:assert/strict'
+import { spawnSync } from 'node:child_process'
+import { mkdirSync, mkdtempSync, readFileSync, readdirSync, writeFileSync } from 'node:fs'
+import { dirname, join, resolve } from 'node:path'
+import { fileURLToPath } from 'node:url'
+
+const repo = resolve(dirname(fileURLToPath(import.meta.url)), '..')
+// Keep fixtures outside the repository, under the authorized scratch directory.
+const scratch = resolve(repo, '../tmp/mdxcn-vue')
+mkdirSync(scratch, { recursive: true })
+const root = mkdtempSync(join(scratch, 'consumer-'))
+const pnpmCli = process.env.npm_execpath
+assert.ok(pnpmCli, 'Run this script with pnpm consumer:check')
+function run(args, cwd, capture = false) {
+  const native = pnpmCli.endsWith('.exe')
+  const result = spawnSync(
+    native ? pnpmCli : process.execPath,
+    native ? args : [pnpmCli, ...args],
+    {
+      cwd,
+      encoding: 'utf8',
+      maxBuffer: 16 * 1024 * 1024,
+      env: { ...process.env, CI: 'true' },
+    },
+  )
+  if (!capture || result.status !== 0) process.stdout.write(result.stdout ?? '')
+  if (result.stderr) process.stderr.write(result.stderr)
+  assert.equal(result.status, 0, `pnpm ${args.join(' ')} failed in ${cwd}: ${result.error ?? ''}`)
+  return result.stdout
+}
+function write(dir, path, value) {
+  mkdirSync(dirname(join(dir, path)), { recursive: true })
+  writeFileSync(join(dir, path), typeof value === 'string' ? value : JSON.stringify(value, null, 2))
+}
+function files(dir, extension) {
+  return readdirSync(dir, { recursive: true })
+    .filter((name) => name.endsWith(extension))
+    .map((name) => join(dir, name))
+}
+const artifacts = join(root, 'artifacts')
+mkdirSync(artifacts)
+for (const name of ['mdxcn-vue', 'mdxcn-markdown']) {
+  const cwd = join(repo, 'packages', name)
+  const packed = Object.values(
+    JSON.parse(run(['exec', 'npm', 'pack', '--dry-run', '--json'], cwd, true)),
+  )[0]
+  const names = packed.files.map((file) => file.path)
+  for (const required of [
+    'LICENSE',
+    'README.md',
+    'package.json',
+    'dist/index.d.ts',
+    'dist/index.js',
+  ])
+    assert.ok(names.includes(required), `${name}: missing ${required}`)
+  assert.ok(
+    names.every(
+      (path) =>
+        ['LICENSE', 'README.md', 'package.json'].includes(path) ||
+        /^dist\/.*\.(?:js|ts|css)$/.test(path),
+    ),
+    `${name}: unexpected packed files`,
+  )
+  if (name === 'mdxcn-vue')
+    for (const required of [
+      'dist/core.js',
+      'dist/core/index.d.ts',
+      'dist/graph.css',
+      'dist/host.css',
+      'dist/theme.css',
+    ])
+      assert.ok(names.includes(required))
+  assert.match(readFileSync(join(cwd, 'LICENSE'), 'utf8'), /Keshav Bagaade/)
+  assert.match(readFileSync(join(cwd, 'README.md'), 'utf8'), /Keshav Bagaade/)
+  run(['pack', '--out', join(artifacts, `${name}.tgz`)], cwd)
+  console.log(`PACK ${name}: ${names.length} files, ${packed.size} bytes`)
+}
+const vueDist = join(repo, 'packages/mdxcn-vue/dist')
+const libraryCode = files(vueDist, '.js')
+  .map((path) => readFileSync(path, 'utf8'))
+  .join('\n')
+assert.match(libraryCode, /from ["']vue["']/)
+assert.doesNotMatch(libraryCode, /function createApp|function createRenderer|@vue\/runtime-core/)
+
+const common = {
+  vue: '3.5.43',
+  vite: '8.3.3',
+  '@vitejs/plugin-vue': '6.0.9',
+  tailwindcss: '4.3.3',
+  '@tailwindcss/vite': '4.3.3',
+  typescript: '6.0.3',
+  'vue-tsc': '3.3.12',
+}
+const vueTar = `file:${join(artifacts, 'mdxcn-vue.tgz').replaceAll('\\', '/')}`
+const markdownTar = `file:${join(artifacts, 'mdxcn-markdown.tgz').replaceAll('\\', '/')}`
+const tsconfig = {
+  compilerOptions: {
+    target: 'ES2022',
+    module: 'ESNext',
+    moduleResolution: 'Bundler',
+    strict: true,
+    skipLibCheck: false,
+    lib: ['ES2022', 'DOM'],
+    types: ['vite/client'],
+  },
+  include: ['src/**/*.ts', 'src/**/*.vue'],
+}
+const css =
+  '@import "tailwindcss";\n@import "mdxcn-vue/graph.css";\n@import "mdxcn-vue/host.css";\n@import "mdxcn-vue/theme.css";\n'
+const viteConfig = `import {defineConfig} from 'vite';
+import vue from '@vitejs/plugin-vue';
+import tailwind from '@tailwindcss/vite';
+import {writeFileSync} from 'node:fs';
+export default defineConfig({plugins:[vue(),tailwind(),{
+  name:'consumer-modules', generateBundle() {writeFileSync('modules.json',JSON.stringify([...this.getModuleIds()]));}
+}],build:{minify:false}});
+`
+const app = join(root, 'vite-app')
+write(app, 'package.json', {
+  name: 'consumer-app',
+  private: true,
+  type: 'module',
+  dependencies: { ...common, 'mdxcn-vue': vueTar },
+})
+write(app, 'tsconfig.json', tsconfig)
+write(app, 'vite.config.ts', viteConfig)
+write(
+  app,
+  'index.html',
+  '<html><head></head><body><div id="app"></div><script type="module" src="/src/main.ts"></script></body></html>',
+)
+write(app, 'src/style.css', css)
+write(
+  app,
+  'src/App.vue',
+  `<script setup lang="ts">
+import {GraphStack,GraphTable,Endpoint,GraphTimer} from 'mdxcn-vue';
+import {splitLabel} from 'mdxcn-vue/core';
+import type {StackRow,TableModel} from 'mdxcn-vue/core';
+const rows: StackRow[]=[{label:splitLabel('Web: 1 js').label,segments:[{label:'js',value:1}]}];
+const table:TableModel={headers:['A'],rows:[['B']]};
+</script><template><GraphStack title="STACK" :rows="rows"/><GraphTable title="TABLE" v-bind="table"/><Endpoint/><GraphTimer title="TIMER" kind="clock"/></template>`,
+)
+write(
+  app,
+  'src/main.ts',
+  "import {createApp} from 'vue';import App from './App.vue';import './style.css';createApp(App).mount('#app');",
+)
+run(['install'], app)
+run(['exec', 'vue-tsc', '--noEmit'], app)
+run(['exec', 'vite', 'build'], app)
+const fullBytes = files(join(app, 'dist/assets'), '.js').reduce(
+  (sum, path) => sum + Buffer.byteLength(readFileSync(path)),
+  0,
+)
+const builtCss = files(join(app, 'dist/assets'), '.css')
+  .map((path) => readFileSync(path, 'utf8'))
+  .join('\n')
+for (const selector of [
+  '.graph-frame',
+  '.graph-scroll-x',
+  '.text-graph-muted',
+  '.grid-cols-',
+  '.px-5',
+])
+  assert.ok(builtCss.includes(selector), `Missing ${selector}`)
+
+// Negative control: without packaged @source, package-only utilities disappear.
+const noSource = ['graph', 'host', 'theme']
+  .map((name) =>
+    readFileSync(join(vueDist, `${name}.css`), 'utf8')
+      .replace(/@source[^;]+;/g, '')
+      .replace(/@import\s+['"]\.\/(?:graph|host|theme)\.css['"];?/g, ''),
+  )
+  .join('\n')
+write(app, 'src/no-source.css', '@import "tailwindcss" source(none);\n@source "./";\n' + noSource)
+write(
+  app,
+  'src/main.ts',
+  "import {createApp} from 'vue';import App from './App.vue';import './no-source.css';createApp(App).mount('#app');",
+)
+run(['exec', 'vite', 'build'], app)
+const negativeCss = files(join(app, 'dist/assets'), '.css')
+  .map((path) => readFileSync(path, 'utf8'))
+  .join('\n')
+assert.ok(
+  !negativeCss.includes('.px-5'),
+  'Negative control unexpectedly generated package-only utilities',
+)
+
+// A separate JS-only build measures GraphStack without other component imports.
+write(
+  app,
+  'src/main.ts',
+  "import {createApp,h} from 'vue';import {GraphStack} from 'mdxcn-vue';createApp({render:()=>h(GraphStack,{title:'ONLY',rows:[{label:'Web',segments:[{value:1,label:'js'}]}]})}).mount('#app');",
+)
+run(['exec', 'vite', 'build'], app)
+const stackBundle = files(join(app, 'dist/assets'), '.js')
+  .map((path) => readFileSync(path, 'utf8'))
+  .join('\n')
+assert.match(stackBundle, /GraphStack/)
+assert.doesNotMatch(
+  stackBundle,
+  /GraphTable|Endpoint|mdxcn-markdown|markdown-it|@comark|shiki|knap/,
+)
+const modules = JSON.parse(readFileSync(join(app, 'modules.json'), 'utf8'))
+const vueEntries = modules.filter((id) =>
+  /\/vue\/dist\/vue\.runtime\.esm-bundler\.js$/.test(id.replaceAll('\\', '/')),
+)
+assert.equal(vueEntries.length, 1, 'Expected exactly one Vue runtime entry')
+assert.ok(!modules.some((id) => /mdxcn-markdown|markdown-it|@comark|shiki|knap/.test(id)))
+const stackBytes = Buffer.byteLength(stackBundle)
+console.log(
+  `TREE-SHAKE full=${fullBytes} bytes GraphStack=${stackBytes} bytes removed=${fullBytes - stackBytes} bytes; Vue runtime entries=${vueEntries.length}`,
+)
+
+const site = join(root, 'vitepress-site')
+write(site, 'package.json', {
+  name: 'consumer-site',
+  private: true,
+  type: 'module',
+  dependencies: {
+    ...common,
+    'mdxcn-vue': vueTar,
+    'mdxcn-markdown': markdownTar,
+    'markdown-it': '14.1.0',
+    vitepress: '2.0.0-alpha.20',
+  },
+})
+write(
+  site,
+  '.vitepress/config.ts',
+  `import {defineConfig} from 'vitepress';import {mdxcnMarkdown} from 'mdxcn-markdown';import tailwind from '@tailwindcss/vite';
+export default defineConfig({markdown:{config:(md)=>md.use(mdxcnMarkdown,{warn:(w)=>{throw new Error(JSON.stringify(w))}})},vite:{plugins:[tailwind()]}});`,
+)
+write(
+  site,
+  '.vitepress/theme/index.ts',
+  `import DefaultTheme from 'vitepress/theme';import {GraphStack,GraphTable,Endpoint} from 'mdxcn-vue';import './style.css';export default {...DefaultTheme,enhanceApp({app}) {app.component('GraphStack',GraphStack);app.component('GraphTable',GraphTable);app.component('Endpoint',Endpoint);}};`,
+)
+write(site, '.vitepress/theme/style.css', css)
+write(
+  site,
+  'index.md',
+  '# Consumer\n\n<GraphStack title="STACK">\n\n- Web: 1 js\n\n</GraphStack>\n\n<GraphTable title="TABLE">\n\n| A |\n| --- |\n| B |\n\n</GraphTable>\n\n<Endpoint title="API">\n\nPOST /consumer\n\n```json\n{}\n```\n\n</Endpoint>',
+)
+run(['install'], site)
+run(['peers', 'check'], site)
+run(['exec', 'vitepress', 'build'], site)
+const html = readFileSync(join(site, '.vitepress/dist/index.html'), 'utf8')
+assert.equal((html.match(/<figure\b/g) ?? []).length, 3)
+for (const value of ['Web', 'B', '/consumer']) assert.ok(html.includes(value))
+write(root, 'results.json', {
+  fullBytes,
+  stackBytes,
+  removedBytes: fullBytes - stackBytes,
+  vueRuntimeEntries: vueEntries.length,
+  vitepressFigures: 3,
+})
+console.log(`CONSUMER CHECK PASSED; artifacts: ${root}`)
