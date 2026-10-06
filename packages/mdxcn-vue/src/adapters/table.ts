@@ -41,7 +41,7 @@ export function cellsOf(
 ): TableCell[] {
   if (Array.isArray(value)) return [...value]
   const nested = childItems(nodes, Cell)
-  if (nested.length) return nested.map((cell) => inlineCell(cell.children))
+  if (nested.length) return nested.map((cell) => inlineCell(cell.children, true))
   return splitCells(typeof value === 'string' ? value : textOf(nodes))
 }
 

@@ -53,6 +53,12 @@ const markdown = () =>
   ])
 
 describe('table readers', () => {
+  it('trims multiline Cell items while retaining rich content', () => {
+    expect(cellsOf(undefined, [h(Cell, null, '\n  plain\n  ')])).toEqual(['plain'])
+    expect(cellsOf(undefined, [h(Cell, null, () => ['\n  ', h('code', 'x()'), '\n '])])).toEqual([
+      [{ type: 'code', children: [{ type: 'text', value: 'x()' }] }],
+    ])
+  })
   it('unwraps unknown host tags without losing text or supported inline children', () => {
     const model = tableOf([
       h('table', [
