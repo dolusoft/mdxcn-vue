@@ -1,6 +1,6 @@
 import type { Theme } from 'vitepress'
 import DefaultTheme from 'vitepress/theme'
-import { Bar, GraphStack, MdxcnSmoke, Segment } from 'mdxcn-vue'
+import { Bar, GraphStack, GraphTable, Head, Row, Foot, Cell, MdxcnSmoke, Segment } from 'mdxcn-vue'
 import './style.css'
 import '@fontsource/geist-mono/400.css'
 import '@fontsource/geist-mono/600.css'
@@ -12,5 +12,10 @@ export default {
     app.component('GraphStack', GraphStack)
     app.component('Bar', Bar)
     app.component('Segment', Segment)
+    app.component('GraphTable', GraphTable)
+    app.component('Head', Head)
+    app.component('Row', Row)
+    app.component('Foot', Foot)
+    app.component('Cell', Cell)
   },
 } satisfies Theme

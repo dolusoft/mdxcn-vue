@@ -43,14 +43,14 @@ test('isolated consumer discovers package classes only through @source', async (
   writeFileSync(join(fixture, 'index.html'), '<main>Consumer fixture</main>')
   try {
     for (const registered of [true, false]) {
-      const target = join(fixture, registered ? 'registered' : 'control')
-      mkdirSync(target)
-      for (const name of ['theme.css', 'host.css', 'graph.css']) {
-        const content = readFileSync(join(distributed, name), 'utf8')
-        writeFileSync(join(target, name), name === 'graph.css'
-          ? content.replace(/@source\s+["'][^"']+["'];/, registered
-            ? `@source ${JSON.stringify(distributed.replaceAll('\\', '/') + '/')};`
-            : '') : content)
+      const target = registered ? distributed : join(fixture, 'control')
+      if (!registered) {
+        mkdirSync(target)
+        for (const name of ['theme.css', 'host.css', 'graph.css']) {
+          const content = readFileSync(join(distributed, name), 'utf8')
+          writeFileSync(join(target, name), name === 'graph.css'
+            ? content.replace(/@source\s+["'][^"']+["'];/, '') : content)
+        }
       }
       const compiler = await compile(css, {
         base: fixture,

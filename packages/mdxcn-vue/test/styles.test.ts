@@ -11,6 +11,18 @@ function luminance(block: string, name: string) {
 }
 
 describe('CSS contracts', () => {
+  it('protects table layout, spacing and header alignment from host prose', () => {
+    const graph = css('graph')
+    expect(graph).toContain('.graph-frame.graph-frame .graph-table {')
+    expect(graph).toContain('display: table;')
+    expect(graph).toContain('border-collapse: separate;')
+    expect(graph).toContain('.graph-frame.graph-frame .graph-table tbody td')
+    expect(graph).toContain('.graph-frame.graph-frame .graph-table th.text-right')
+    expect(graph).toContain('.graph-frame.graph-frame .graph-table tfoot tr[aria-hidden] td')
+    expect(graph).toContain('padding: 0.625rem 0.75rem;')
+    expect(graph).toContain('border: 0;')
+    expect(graph).toContain('background: transparent;')
+  })
   it('resets graph lists with specificity above VitePress prose selectors', () => {
     const graph = css('graph')
     for (const selector of ['ul', 'ol', 'li', 'li + li']) {

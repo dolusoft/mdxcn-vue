@@ -27,7 +27,11 @@ export default tseslint.config(
   {
     // Preserve upstream public primitive and item names.
     rules: {
-      'vue/multi-word-component-names': ['error', { ignores: ['Graph', 'Bar', 'Segment'] }],
+      'vue/multi-word-component-names': [
+        'error',
+        { ignores: ['Graph', 'Bar', 'Segment', 'Head', 'Row', 'Foot', 'Cell'] },
+      ],
+      'vue/no-reserved-component-names': ['error', { htmlElementCaseSensitive: true }],
     },
   },
   {

@@ -1,0 +1,105 @@
+/* Derived from mdxcn, Copyright (c) 2026 Keshav Bagaade. MIT; see LICENSE. */
+import { defineComponent, h, mergeProps, withDirectives } from 'vue'
+import type { PropType } from 'vue'
+import type { TableCell, TableData, GraphAlign } from '../core/table'
+import { tableModel } from '../adapters/table'
+import { vReveal } from '../directives/reveal'
+import { Graph, GraphRule, renderProse } from './graph-frame'
+
+export interface GraphTableProps extends TableData {
+  title: string
+  corner?: string
+  className?: string
+}
+
+const ruleY = () =>
+  h('span', {
+    'aria-hidden': 'true',
+    class: 'pointer-events-none absolute inset-y-0 left-0 graph-rule-y',
+  })
+const cellContent = (cell: TableCell) =>
+  Array.isArray(cell) ? renderProse([...cell]) : String(cell ?? '')
+
+export const GraphTable = defineComponent({
+  name: 'GraphTable',
+  inheritAttrs: false,
+  props: {
+    title: { type: String, required: true },
+    headers: [String, Array] as PropType<TableData['headers']>,
+    rows: Array as PropType<TableData['rows']>,
+    footer: Array as PropType<TableData['footer']>,
+    align: [String, Array] as PropType<TableData['align']>,
+    corner: String,
+    className: String,
+  },
+  setup(props, { slots, attrs }) {
+    return () => {
+      const model = tableModel(props, slots.default?.() ?? [])
+      const alignment = (index: number): GraphAlign =>
+        model.align?.[index] ?? (index === 0 ? 'left' : 'right')
+      const cells = (values: TableCell[], footer = false) =>
+        values.map((cell, index) =>
+          h(
+            'td',
+            {
+              key: index,
+              class: `relative px-3 ${footer ? 'pt-1' : 'py-2.5'} whitespace-nowrap ${alignment(index) === 'right' ? 'text-right tabular-nums' : 'text-left'}`,
+            },
+            [index > 0 ? ruleY() : null, ...[cellContent(cell)].flat()],
+          ),
+        )
+      return h(
+        Graph,
+        mergeProps({ title: props.title, corner: props.corner, className: props.className }, attrs),
+        () =>
+          h('div', { class: 'min-w-0 px-3 py-6 sm:px-6 sm:py-8' }, [
+            h('div', { class: '@container graph-scroll-x' }, [
+              h(
+                'table',
+                { class: 'graph-table w-full min-w-lg border-separate border-spacing-0' },
+                [
+                  h('thead', [
+                    h(
+                      'tr',
+                      model.headers.map((header, index) =>
+                        h(
+                          'th',
+                          {
+                            key: index,
+                            scope: 'col',
+                            class: `relative px-3 pb-3 font-normal whitespace-nowrap text-foreground ${alignment(index) === 'right' ? 'text-right' : 'text-left'}`,
+                          },
+                          [index > 0 ? ruleY() : null, header],
+                        ),
+                      ),
+                    ),
+                    h('tr', { 'aria-hidden': 'true' }, [
+                      h('th', { colspan: model.headers.length, class: 'p-0' }, [h(GraphRule)]),
+                    ]),
+                  ]),
+                  h(
+                    'tbody',
+                    model.rows.map((row, index) =>
+                      withDirectives(h('tr', { key: index }, cells(row)), [
+                        [vReveal, { delay: Math.min(index, 6) * 40 }],
+                      ]),
+                    ),
+                  ),
+                  model.footer
+                    ? h('tfoot', [
+                        h('tr', { 'aria-hidden': 'true' }, [
+                          h('td', { colspan: model.headers.length, class: 'pt-2 pb-3' }, [
+                            h(GraphRule),
+                          ]),
+                        ]),
+                        h('tr', cells(model.footer, true)),
+                      ])
+                    : null,
+                ],
+              ),
+            ]),
+          ]),
+      )
+    }
+  },
+})

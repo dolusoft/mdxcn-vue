@@ -4,8 +4,8 @@ Vue 3 port of [mdxcn](https://github.com/shadcn-labs/mdxcn) — ASCII-style grap
 prose components (tables, bars, timelines, invoices, terminals, ...) that can be fed
 by typed props, item components or Markdown.
 
-> **Status:** work in progress. Phase 2A adds the shared frame, typed core,
-> `v-reveal` and `GraphStack`; the remaining components are still pending.
+> **Status:** work in progress. Phase 2B-1 includes the shared frame, typed core,
+> `v-reveal`, `GraphStack` and `GraphTable`; the remaining components are still pending.
 
 ## Upstream
 
@@ -73,14 +73,28 @@ const rows: StackRow[] = [
 `host.css` connects existing host tokens without redefining them; `theme.css`
 adds the optional complete palette and fourteen scoped `data-accent` presets.
 Geist Mono is recommended for upstream font parity (licensed under OFL). It is
-host-supplied; the package does not distribute font files. Full-theme muted text contrast is at least
-4.5:1 in both modes; custom host backgrounds need their own contrast check.
+host-supplied; the package does not distribute font files. Full-theme muted text
+contrast is at least 4.5:1 in both modes; custom host backgrounds need their own contrast check.
 
 `GraphStack` supports typed rows, direct Markdown lists and `Bar`/`Segment` item
 tags. Empty `rows` suppress fallback inputs. See the
 [examples](apps/docs/components/graph-stack.md),
 [Phase 2B Markdown contract](docs/markdown-contract.md) and
 [Phase 2A report](docs/phase-2a-report.md) for supported structures and checks.
+
+## GraphTable
+
+```vue
+<GraphTable title="COST" :headers="['Agent', 'Tokens']"
+  :rows="[['Inks and paper', '115,207'], ['Overprint and drift', '135,218']]"
+  :footer="['Total', '250,425']" align="left right" />
+```
+
+Import `GraphTable` from `mdxcn-vue`. The table accepts typed props, direct Markdown
+tables or `Head`/`Row`/`Foot`/`Cell` items. Each field chooses data before items
+before Markdown; empty `Head` and `Foot` items still win. Shared `tableOf` and
+`labeledTable` readers are available for future table-family components.
+See the [three input forms and upstream datasets](apps/docs/components/graph-table.md).
 
 ## License
 

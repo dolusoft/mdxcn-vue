@@ -1,6 +1,45 @@
 /* Derived from mdxcn, Copyright (c) 2026 Keshav Bagaade. MIT; see LICENSE. */
 @source "../";
 
+/* Preserve native table layout and graph geometry under host prose styles. */
+.graph-frame.graph-frame .graph-table {
+  display: table;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: 0;
+  overflow: visible;
+}
+.graph-frame.graph-frame .graph-table tr,
+.graph-frame.graph-frame .graph-table th,
+.graph-frame.graph-frame .graph-table td {
+  border: 0;
+  background: transparent;
+  font-size: inherit;
+}
+.graph-frame.graph-frame .graph-table th {
+  color: var(--foreground);
+  font-weight: 400;
+  padding: 0 0.75rem 0.75rem;
+}
+.graph-frame.graph-frame .graph-table tbody td {
+  padding: 0.625rem 0.75rem;
+}
+.graph-frame.graph-frame .graph-table tfoot td {
+  padding: 0.25rem 0.75rem 0;
+}
+.graph-frame.graph-frame .graph-table th.text-right {
+  text-align: right;
+}
+.graph-frame.graph-frame .graph-table th.text-left {
+  text-align: left;
+}
+.graph-frame.graph-frame .graph-table thead tr[aria-hidden] th {
+  padding: 0;
+}
+.graph-frame.graph-frame .graph-table tfoot tr[aria-hidden] td {
+  padding: 0.5rem 0 0.75rem;
+}
+
 /* Unlayered host prose rules must not change graph list geometry. */
 .graph-frame.graph-frame ul,
 .graph-frame.graph-frame ol,
