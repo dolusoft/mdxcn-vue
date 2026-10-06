@@ -6,6 +6,12 @@ Sayım: 46 kullanıcı bileşeni + `graph-frame` temel bileşeni (`Graph`) + `md
 
 ## Okuma kuralları
 
+- Faz 6C: `GraphGantt`, `GraphDiff`, `GraphWaterfall` ve `Span`, `Line`, `Delta`
+  Vue portları tamamlandı. Açık derleyici `list` girdisi runtime liste ve item
+  girdilerinden önce gelir. Gantt sayısal kesirleri kullanır; tarih ayrıştırmaz.
+  Diff `rows` ve `footer` alanlarını bağımsız seçer; Waterfall açık başlangıç/son
+  değerlerini korur. Ayrıntılar: [Faz 6C raporu](phase-6c-report.md).
+
 - Faz 6B: `GraphStat`, `GraphSlope`, `GraphBullet` ve `Stat`, `Slope`, `Target`
   Vue portları tamamlandı. Upstream giriş sırası aşağıdaki üç satırdaki gibidir;
   Vue derleyicisinin açık `list` alanı runtime liste ve item girdilerini bastırır.

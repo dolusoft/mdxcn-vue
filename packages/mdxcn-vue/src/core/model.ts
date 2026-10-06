@@ -1,7 +1,7 @@
 /** Framework-independent inline content shared by future Markdown adapters. */
 export type ProseNode =
   | { type: 'text'; value: string }
-  | { type: 'strong' | 'em' | 'code'; children: ProseNode[] }
+  | { type: 'strong' | 'em' | 'code' | 'del'; children: ProseNode[] }
   | {
       type: 'link'
       href: string

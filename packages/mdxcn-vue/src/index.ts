@@ -138,3 +138,20 @@ export type { GraphStatProps } from './components/graph-stat.js'
 export type { GraphSlopeProps } from './components/graph-slope.js'
 export type { GraphBulletProps } from './components/graph-bullet.js'
 export type { StatItem, SlopeItem, BulletItem, BulletRow } from './core/stat-slope-bullet.js'
+
+export { GraphGantt, Span } from './components/graph-gantt.js'
+export { GraphDiff, Line } from './components/graph-diff.js'
+export { GraphWaterfall, Delta } from './components/graph-waterfall.js'
+export type { GraphGanttProps } from './components/graph-gantt.js'
+export type { GraphDiffProps } from './components/graph-diff.js'
+export type { GraphWaterfallProps } from './components/graph-waterfall.js'
+export type {
+  GanttItem,
+  GanttRow,
+  DiffSign,
+  DiffRow,
+  DiffLineProps,
+  WaterfallKind,
+  WaterfallItem,
+  WaterfallRow,
+} from './core/gantt-diff-waterfall.js'

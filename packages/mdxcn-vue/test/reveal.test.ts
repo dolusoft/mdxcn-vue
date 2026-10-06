@@ -7,6 +7,9 @@ import type { RevealOptions } from '../src/directives/reveal'
 import { Annotate } from '../src/components/annotate'
 import { Env } from '../src/components/env'
 import {
+  GraphGantt,
+  GraphDiff,
+  GraphWaterfall,
   GraphStat,
   GraphSlope,
   GraphBullet,
@@ -105,6 +108,33 @@ afterEach(() => {
 
 describe('v-reveal lifecycle', () => {
   it.each([
+    {
+      component: GraphGantt,
+      props: {
+        title: 'G',
+        items: Array.from({ length: 60 }, (_, i) => ({ label: String(i), start: 0, end: 1 })),
+      },
+      cap: 250,
+      selector: 'li',
+    },
+    {
+      component: GraphDiff,
+      props: {
+        title: 'D',
+        rows: Array.from({ length: 60 }, (_, i) => ({ label: String(i), value: '2' })),
+      },
+      cap: 200,
+      selector: 'li > div',
+    },
+    {
+      component: GraphWaterfall,
+      props: {
+        title: 'W',
+        items: Array.from({ length: 60 }, (_, i) => ({ label: String(i), value: 2 })),
+      },
+      cap: 250,
+      selector: 'li > div',
+    },
     {
       component: GraphStat,
       props: {

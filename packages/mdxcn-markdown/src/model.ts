@@ -35,6 +35,9 @@ export type ComponentName =
   | 'GraphStat'
   | 'GraphSlope'
   | 'GraphBullet'
+  | 'GraphGantt'
+  | 'GraphDiff'
+  | 'GraphWaterfall'
 export type CompiledProps =
   | { rows: StackRow[] }
   | TableModel
@@ -66,6 +69,7 @@ function inline(
   env: object,
   renderLinks: boolean,
   line?: number,
+  strike = false,
 ): ProseNode[] {
   const root: ProseNode[] = []
   const stack = [root]
@@ -89,7 +93,10 @@ function inline(
       children.push({ type: 'text', value })
     } else if (token.type === 'code_inline')
       children.push({ type: 'code', children: [{ type: 'text', value: token.content }] })
-    else if (['strong_open', 'em_open', 'link_open'].includes(token.type)) {
+    else if (
+      ['strong_open', 'em_open', 'link_open'].includes(token.type) ||
+      (strike && token.type === 's_open')
+    ) {
       if (token.type === 'link_open' && renderLinks) {
         token.meta = { ...token.meta, vpLine: line }
         md.renderer.rules.link_open?.(tokens, index, md.options, env, md.renderer)
@@ -106,10 +113,18 @@ function inline(
               ),
               children: [],
             }
-          : { type: token.type === 'strong_open' ? 'strong' : 'em', children: [] }
+          : {
+              type:
+                token.type === 'strong_open' ? 'strong' : token.type === 's_open' ? 'del' : 'em',
+              children: [],
+            }
       children.push(node)
       stack.push(node.children)
-    } else if (['strong_close', 'em_close', 'link_close'].includes(token.type)) stack.pop()
+    } else if (
+      ['strong_close', 'em_close', 'link_close'].includes(token.type) ||
+      (strike && token.type === 's_close')
+    )
+      stack.pop()
     else throw new Error(`Unsupported inline token: ${token.type}`)
   }
   return root
@@ -121,6 +136,7 @@ function blocks(
   env: object,
   options: TokenModelOptions,
   orderedLists = false,
+  strike = false,
 ): Block[] {
   const root: Block[] = []
   const stack = [root]
@@ -138,6 +154,7 @@ function blocks(
           env,
           options.renderLinks ?? false,
           (token.map?.[0] ?? 0) + (options.lineOffset ?? 0) + 1,
+          strike,
         ),
       })
     } else if (token.type === 'fence') stack.at(-1)!.push({ tag: 'fence', token, children: [] })
@@ -196,8 +213,18 @@ export function tokensToProps(
     'GraphStat',
     'GraphSlope',
     'GraphBullet',
+    'GraphGantt',
+    'GraphDiff',
+    'GraphWaterfall',
   ].includes(name)
-  const tree = blocks(tokens, md, env, options, stateList || name === 'Annotate' || name === 'Env')
+  const tree = blocks(
+    tokens,
+    md,
+    env,
+    options,
+    stateList || name === 'Annotate' || name === 'Env',
+    name === 'GraphDiff',
+  )
   if (stateList) {
     if (tree.some((block) => !['ul', 'ol', 'p'].includes(block.tag)))
       throw new Error(`${name} requires lists and paragraphs`)
@@ -218,6 +245,9 @@ export function tokensToProps(
         'GraphStat',
         'GraphSlope',
         'GraphBullet',
+        'GraphGantt',
+        'GraphDiff',
+        'GraphWaterfall',
       ].includes(name)
     )
       return {
@@ -242,6 +272,9 @@ export function tokensToProps(
               'GraphStat',
               'GraphSlope',
               'GraphBullet',
+              'GraphGantt',
+              'GraphDiff',
+              'GraphWaterfall',
             ].includes(name)
               ? bold(content(item))
               : bold(head),

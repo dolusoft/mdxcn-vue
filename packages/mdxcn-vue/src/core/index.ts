@@ -41,3 +41,26 @@ export {
   formatBullet,
 } from './stat-slope-bullet.js'
 export type { StatItem, SlopeItem, BulletItem, BulletRow } from './stat-slope-bullet.js'
+
+export {
+  ganttFromList,
+  normalizeGantt,
+  diffRewrite,
+  diffFromList,
+  waterfallFromList,
+  normalizeWaterfall,
+  waterfallSegments,
+  formatWaterfall,
+} from './gantt-diff-waterfall.js'
+export type {
+  GanttItem,
+  GanttRow,
+  DiffSign,
+  DiffRow,
+  DiffLineProps,
+  DiffPart,
+  WaterfallKind,
+  WaterfallItem,
+  WaterfallRow,
+  WaterfallSegment,
+} from './gantt-diff-waterfall.js'

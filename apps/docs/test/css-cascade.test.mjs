@@ -78,7 +78,7 @@ test('actual VitePress rules lose to graph resets and generated layered prose ut
     assert.equal(winner.value, amount === '1' ? 'var(--spacing)' : 'calc(var(--spacing) * 4)')
   }
   li.className = ''
-  for (const slug of ['steps', 'changelog', 'decision', 'env', 'keys', 'graph-stack', 'graph-score', 'graph-rank', 'graph-funnel', 'graph-stat', 'graph-slope', 'graph-bullet']) {
+  for (const slug of ['steps', 'changelog', 'decision', 'env', 'keys', 'graph-stack', 'graph-score', 'graph-rank', 'graph-funnel', 'graph-stat', 'graph-slope', 'graph-bullet', 'graph-gantt', 'graph-diff', 'graph-waterfall']) {
     const page = new JSDOM(readFileSync(new URL(`../.vitepress/dist/components/${slug}.html`, import.meta.url), 'utf8')).window.document
     const siblings = [...page.querySelectorAll('figure li + li')]
     if (slug === 'keys') {

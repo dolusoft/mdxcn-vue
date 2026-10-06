@@ -4,11 +4,11 @@ Vue 3 port of [mdxcn](https://github.com/shadcn-labs/mdxcn) — ASCII-style grap
 prose components (tables, bars, timelines, invoices, terminals, ...) that can be fed
 by typed props, item components or Markdown.
 
-> **Status:** work in progress. Phase 6B includes the shared frame, typed core,
+> **Status:** work in progress. Phase 6C includes the shared frame, typed core,
 > `v-reveal`, `GraphStack`, `GraphTable`, `Endpoint`, `GraphTimer`, `Callout`,
 > `Quote`, `Terminal`, `Annotate`, `Env`, `Steps`, `Changelog`, `Decision`, `Chat`,
 > `Keys`, `GraphTimeline`, `GraphSpec`, `GraphScore`, `GraphRank`, `GraphFunnel`,
-> `GraphStat`, `GraphSlope` and `GraphBullet`;
+> `GraphStat`, `GraphSlope`, `GraphBullet`, `GraphGantt`, `GraphDiff`, and `GraphWaterfall`;
 > build-time Markdown and packaged consumer checks are available; the remaining
 > components are still pending.
 
@@ -238,10 +238,20 @@ Vue and unmapped glue and reports final unminified library spans: GraphStack
 12,370 bytes and the four components 23,791 bytes. This differs from the complete
 published JS payload (all exports) and from the application's total size.
 
+## Gantt, diff and waterfall
+
+Import `GraphGantt` / `Span`, `GraphDiff` / `Line`, and `GraphWaterfall` / `Delta`
+from `mdxcn-vue`. These components accept typed data, Markdown lists and item
+markers. Gantt uses fractional positions and text axis labels; Diff preserves
+text values and expands strike rewrites; Waterfall accumulates changes while
+keeping supplied start/end totals. See [Gantt](apps/docs/components/graph-gantt.md),
+[Diff](apps/docs/components/graph-diff.md), [Waterfall](apps/docs/components/graph-waterfall.md),
+and the [Phase 6C report](docs/phase-6c-report.md).
+
 ## shadcn-vue registry
 
-`pnpm registry:build` generates `registry.json` and nineteen `public/r/mdxcn-*.json`
-items from the library sources: fourteen components, shared frame, core and CSS.
+`pnpm registry:build` generates `registry.json` and twenty-eight `public/r/mdxcn-*.json`
+items from the library sources: twenty-five components, shared frame, core and CSS.
 The content-free build index references real files. The consumer check runs
 `shadcn-vue build registry.json` and verifies its output against the distributable
 payloads after adding the MIT notice. Our script generates `public/r`;
@@ -263,7 +273,7 @@ are treated as URLs by that CLI). Other project layouts can relocate
 the whole directory. CSS files need Tailwind v4 processing and imports from the
 host CSS entry; choose `host.css` and optional `theme.css` as with npm consumption.
 Each copied file and JSON payload retains the full MIT notice. The consumer
-check installs all seven items with the real CLI, then typechecks and builds.
+check installs all twenty-eight items with the real CLI, then typechecks and builds.
 
 ## License
 

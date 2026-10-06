@@ -7,6 +7,12 @@ import ts from 'typescript'
 
 // Deliberately maintained independently of export declarations.
 const publicNames = [
+  'GraphGantt',
+  'GraphDiff',
+  'GraphWaterfall',
+  'Span',
+  'Line',
+  'Delta',
   'GraphStat',
   'GraphSlope',
   'GraphBullet',
@@ -119,6 +125,17 @@ it('exposes grammar and clock helpers only through core', () => {
 })
 
 const publicTypes = [
+  'GraphGanttProps',
+  'GraphDiffProps',
+  'GraphWaterfallProps',
+  'GanttItem',
+  'GanttRow',
+  'DiffSign',
+  'DiffRow',
+  'DiffLineProps',
+  'WaterfallKind',
+  'WaterfallItem',
+  'WaterfallRow',
   'GraphStatProps',
   'GraphSlopeProps',
   'GraphBulletProps',
@@ -191,6 +208,24 @@ const publicTypes = [
   'GraphTimerProps',
 ]
 const coreNames = [
+  'ganttFromList',
+  'normalizeGantt',
+  'diffRewrite',
+  'diffFromList',
+  'waterfallFromList',
+  'normalizeWaterfall',
+  'waterfallSegments',
+  'formatWaterfall',
+  'GanttItem',
+  'GanttRow',
+  'DiffSign',
+  'DiffRow',
+  'DiffLineProps',
+  'DiffPart',
+  'WaterfallKind',
+  'WaterfallItem',
+  'WaterfallRow',
+  'WaterfallSegment',
   'statFromList',
   'slopeFromList',
   'bulletFromList',
