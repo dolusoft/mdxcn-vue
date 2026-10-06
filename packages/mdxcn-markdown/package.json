@@ -4,6 +4,9 @@
   "description": "Build-time Markdown adapter for mdxcn-vue (markdown-it tokens to component props).",
   "license": "MIT",
   "type": "module",
+  "engines": {
+    "node": ">=22.18"
+  },
   "sideEffects": false,
   "files": [
     "dist",

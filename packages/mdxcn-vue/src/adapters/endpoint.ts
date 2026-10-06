@@ -50,16 +50,21 @@ function paramsOf(table?: VNode): EndpointParam[] {
 function blocksOf(elements: readonly VNode[]): EndpointBlock[] {
   return elements
     .flatMap((node) => {
-      if (node.type === 'pre') return [{ pre: node, wrapperClass: '' }]
+      if (node.type === 'pre') return [{ pre: node, wrapperClass: '', sourceLanguage: undefined }]
       const wrapperClass = normalizeClass(node.props?.class)
       if (node.type !== 'div' || !/\blanguage-\S*/.test(wrapperClass)) return []
       return childrenOf(node)
         .filter((child) => child.type === 'pre')
-        .map((pre) => ({ pre, wrapperClass }))
+        .map((pre) => ({
+          pre,
+          wrapperClass,
+          sourceLanguage: node.props?.['data-mdxcn-language'] as string | undefined,
+        }))
     })
-    .map(({ pre, wrapperClass }) => {
+    .map(({ pre, wrapperClass, sourceLanguage }) => {
       const code = childrenOf(pre).find((node) => node.type === 'code')
       const rawLanguage =
+        sourceLanguage ??
         wrapperClass.match(/language-(\S+)/)?.[1] ??
         normalizeClass(code?.props?.class ?? code?.props?.className).match(/language-(\S+)/)?.[1]
       const language = rawLanguage?.match(/^[^\s:{[]+/)?.[0]

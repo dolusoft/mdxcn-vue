@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs'
+import { readFileSync, existsSync } from 'node:fs'
 import { createRequire } from 'node:module'
 import assert from 'node:assert/strict'
 import { test } from 'node:test'
@@ -19,7 +19,9 @@ test('docs config compiles real page examples before highlighter and anchor outp
   }
 })
 
-const built = readFileSync(new URL('../.vitepress/dist/test/fixtures/compiler.html', import.meta.url), 'utf8')
+const builtPath = new URL('../.vitepress/dist/test/fixtures/compiler.html', import.meta.url)
+assert.ok(existsSync(builtPath), 'Missing production fixture. Run pnpm -r build before pnpm -r test.')
+const built = readFileSync(builtPath, 'utf8')
 const document = new JSDOM(built).window.document
 const figures = [...document.querySelectorAll('figure')]
 const texts = (figure, selector) => [...figure.querySelectorAll(selector)].map((node) => node.textContent)
@@ -81,7 +83,11 @@ test('both paths produce identical DOM and valid unique caption references', () 
     assert.ok(caption.id)
     assert.ok(!ids.has(caption.id))
     ids.add(caption.id)
-    for (const element of figure.querySelectorAll('[aria-labelledby]')) assert.equal(element.getAttribute('aria-labelledby'), caption.id)
+    for (const element of figure.querySelectorAll('[aria-labelledby]')) {
+      const references = element.getAttribute('aria-labelledby').split(' ')
+      assert.equal(references[0], caption.id)
+      for (const id of references) assert.ok(figure.querySelector(`[id="${id}"]`))
+    }
     for (const region of figure.querySelectorAll('[role="region"]')) assert.equal(region.getAttribute('tabindex'), '0')
     const clone = figure.cloneNode(true)
     const walker = document.createTreeWalker(clone, 128)
@@ -91,4 +97,34 @@ test('both paths produce identical DOM and valid unique caption references', () 
     return clone.outerHTML.replaceAll(caption.id, 'caption')
   })
   for (let index = 0; index < 3; index++) assert.equal(normalized[index], normalized[index + 3])
+})
+
+test('boundary inputs independently match expected values and both paths produce identical DOM', () => {
+  const html = readFileSync(new URL('../.vitepress/dist/test/fixtures/compiler-boundaries.html', import.meta.url), 'utf8')
+  const doc = new JSDOM(html).window.document
+  const items = [...doc.querySelectorAll('figure')]
+  assert.equal(items.length, 8)
+  for (const index of [0, 1]) assert.equal(items[index].querySelector('li[aria-label]').getAttribute('aria-label'), 'Web 🎉 & app: js 2, css 1')
+  for (const index of [2, 3]) assert.deepEqual(texts(items[index], 'tbody td'), ['A B C D', '2'])
+  for (const index of [4, 5]) {
+    assert.deepEqual(texts(items[index], 'pre code'), ['one\ntwo\nthree', 'value', 'value', 'value', 'unmarked'])
+    assert.deepEqual(texts(items[index], '.text-graph-muted'), ['js', 'ts', 'cpp', 'c++'])
+    const regions = items[index].querySelectorAll('[role="region"]')
+    for (const region of regions) {
+      const refs = region.getAttribute('aria-labelledby').split(' ')
+      const name = refs.map((id) => doc.getElementById(id).textContent).join(' ')
+      assert.ok(name.startsWith('[ LANG ]'))
+    }
+  }
+  for (const index of [6, 7]) assert.equal(items[index].querySelectorAll('li').length, 0)
+  const normalize = (figure) => {
+    const clone = figure.cloneNode(true)
+    const caption = clone.querySelector('figcaption').id
+    const walker = doc.createTreeWalker(clone, 128)
+    const comments = []
+    while (walker.nextNode()) comments.push(walker.currentNode)
+    comments.forEach((node) => node.remove())
+    return clone.outerHTML.replaceAll(caption, 'caption')
+  }
+  for (const index of [0, 2, 4, 6]) assert.equal(normalize(items[index]), normalize(items[index + 1]))
 })

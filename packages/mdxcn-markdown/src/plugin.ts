@@ -29,6 +29,15 @@ const escapeAttribute = (text: string) =>
 
 /** Trusted repository Markdown only: the output is executable Vue template source. */
 export function mdxcnMarkdown(md: MarkdownIt, options: MarkdownOptions = {}): void {
+  const fence = md.renderer.rules.fence!
+  md.renderer.rules.fence = (tokens, index, ...args) => {
+    const language = tokens[index]!.info.trim().match(/^[^\s:{[]+/)?.[0]
+    const html = fence(tokens, index, ...args)
+    // VitePress's highlighter truncates c++ to c. Preserve the source label.
+    return language && /^<div\b/.test(html)
+      ? html.replace(/^<div\b/, `<div data-mdxcn-language="${escapeAttribute(language)}"`)
+      : html
+  }
   const parse = md.parse.bind(md)
   md.parse = (source, env = {}) => {
     const previous = env.mdxcnSource
