@@ -115,6 +115,16 @@ describe('upstream prose fixtures', () => {
 })
 
 describe('Terminal normalization and independent upstream fixtures', () => {
+  it('preserves ordinary wrappers whose class only contains a language substring', () => {
+    expect(
+      terminalModel(undefined, [
+        h('div', { class: 'not-language-console' }, [
+          h('span', 'ordinary text'),
+          h('pre', ' code'),
+        ]),
+      ]),
+    ).toEqual([{ kind: 'output', text: 'ordinary text code' }])
+  })
   it('parses install commands, success marks and indented output', () => {
     expect(parseTerminal(install)).toEqual([
       { kind: 'command', text: 'pnpm dlx shadcn@latest add @mdxcn/callout' },

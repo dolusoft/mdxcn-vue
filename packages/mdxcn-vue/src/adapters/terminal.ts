@@ -11,7 +11,7 @@ export function terminalModel(
   prompt = '$',
 ) {
   const content = flattenNodes(nodes).flatMap((node) =>
-    node.type === 'div' && /\blanguage-\S*/.test(normalizeClass(node.props?.class))
+    node.type === 'div' && /(?:^|\s)language-\S*/.test(normalizeClass(node.props?.class))
       ? childrenOf(node).filter((child) => child.type === 'pre')
       : [node],
   )
