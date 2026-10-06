@@ -53,6 +53,30 @@ const markdown = () =>
   ])
 
 describe('table readers', () => {
+  it('unwraps unknown host tags without losing text or supported inline children', () => {
+    const model = tableOf([
+      h('table', [
+        h('tr', [h('th', 'Name')]),
+        h('tr', [
+          h('td', [
+            h('del', 'old'),
+            h('s', 'strike'),
+            h('kbd', [h('code', 'Ctrl')]),
+            h('img', { alt: 'diagram' }),
+            h('img'),
+            h('script', 'unsafe'),
+            h('style', 'hidden'),
+          ]),
+        ]),
+      ]),
+    ])
+    expect(model?.rows[0]?.[0]).toEqual([
+      { type: 'text', value: 'old' },
+      { type: 'text', value: 'strike' },
+      { type: 'code', children: [{ type: 'text', value: 'Ctrl' }] },
+      { type: 'text', value: 'diagram' },
+    ])
+  })
   it('splits comma-separated headers and align strings like upstream words', () => {
     expect(tableModel({ headers: 'Name, Value', align: 'left, right' }, [])).toEqual({
       headers: ['Name', 'Value'],

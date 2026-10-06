@@ -42,11 +42,13 @@ export const Segment = defineItem<SegmentProps>('Segment', {
   value: { type: 'number', default: 0 },
 })
 
-/** Deliberately limited to documented inline host tags, never custom components. */
+/** Preserve supported inline markup, unwrap other host tags, and skip executable content. */
 export function readProse(nodes: readonly VNode[]): ProseNode[] {
   return flattenNodes(nodes).flatMap((node): ProseNode[] => {
     if (node.type === Text) return [{ type: 'text', value: String(node.children ?? '') }]
     if (typeof node.type !== 'string') return []
+    if (node.type === 'script' || node.type === 'style') return []
+    if (node.type === 'img') return [{ type: 'text', value: String(node.props?.alt ?? '') }]
     const children =
       typeof node.children === 'string'
         ? [{ type: 'text' as const, value: node.children }]
@@ -55,7 +57,7 @@ export function readProse(nodes: readonly VNode[]): ProseNode[] {
     if (node.type === 'b') return [{ type: 'strong', children }]
     if (node.type === 'strong' || node.type === 'em' || node.type === 'code')
       return [{ type: node.type, children }]
-    return node.type === 'p' || node.type === 'span' ? children : []
+    return children
   })
 }
 
