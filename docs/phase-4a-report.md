@@ -88,12 +88,10 @@ görünümü, `Callout` glyph hizası ve `Terminal` satır aralığı karşıla�
 Önceki Faz 3 raporundaki 960–1279 px VitePress nav kayması bu kapsamda
 değiştirilmedi. Bu teslimatta gerçek tarayıcı veya yeni E2E oturumu çalıştırılmadı.
 
-## Git teslimat engeli
+## Git teslimatı
 
-`git commit -S` denendi ve `gpg: signing failed: No secret key` hatasıyla
-başarısız oldu. Yapılandırmada `user.signingkey` yok; GPG kullanıcının mevcut
-email adresi için secret key bulamadı. Bu oturumun AGENTS.md kuralı imzasız
-commit işlemini otomatik yapmayı yasakladığından imza kaldırılmadı. Commit
-oluşmadı, push yapılmadı; değişiklikler staged durumunda. İmza anahtarı veya
-bu commit için açık imzasız commit izni bekleniyor. Temiz Git durumu ve
-remote eşitliği henüz kabul edilmedi.
+İlk imzalı commit denemesi `gpg: signing failed: No secret key` hatasıyla
+başarısız oldu. Ardından açık izinle imzasız `4fcc486` commit'i oluşturuldu
+ve `origin/main` dalına push edildi. Faz 4B başlangıcında `git status --short`
+boş çıktı verdi; `git rev-parse HEAD origin/main` iki referans için de
+`4fcc48609852e1b2a9e2a5ec0b148debc2e7e1fd` döndürdü. Git teslimat engeli yoktur.
