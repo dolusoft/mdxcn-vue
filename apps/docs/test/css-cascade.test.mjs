@@ -45,11 +45,13 @@ test('actual VitePress rules lose to graph resets and generated layered prose ut
   const document = new JSDOM(html).window.document
   const prose = document.querySelector('figure .leading-relaxed')
   assert.ok(prose)
-  prose.insertAdjacentHTML('beforeend', '<ul><li>one</li><li>two</li></ul><a href="/docs"><code>code</code></a>')
-  const resolve = (element, property) => {
+  prose.insertAdjacentHTML('beforeend', '<ul><li>one</li><li>two</li></ul><a data-cascade href="/docs"><code>code</code></a>')
+  const resolve = (element, property, hover = false) => {
     const candidates = rules.flatMap((rule) => {
-      try { if (!element.matches(rule.selector)) return [] } catch { return [] }
-      return rule.declarations.filter(([name]) => name === property).map(([, value]) => ({ ...rule, value }))
+      try { if (!element.matches(hover ? rule.selector.replace(/:hover/g, '') : rule.selector)) return [] } catch { return [] }
+      return rule.declarations.filter(([name]) => name === property ||
+        ((property.startsWith('padding-') || property.startsWith('margin-')) && name === property.split('-')[0])
+      ).map(([, value]) => ({ ...rule, value }))
     }).sort((a, b) => {
       const rank = (layer) => ({ base: 0, components: 1, utilities: 2, '': 3 })[layer] ?? -1
       return rank(b.layer) - rank(a.layer) || specificity(b.selector) - specificity(a.selector) || b.order - a.order
@@ -60,15 +62,19 @@ test('actual VitePress rules lose to graph resets and generated layered prose ut
   }
   const ul = prose.querySelector('ul')
   const li = prose.querySelector('li + li')
-  const a = prose.querySelector('a')
+  const a = prose.querySelector('a[data-cascade]')
   const code = a.querySelector('code')
   for (const [element, property] of [[ul, 'padding'], [ul, 'margin'], [ul, 'list-style'], [li, 'margin']])
     assert.match(resolve(element, property).selector, /graph-frame/)
   assert.equal(resolve(li, 'padding-left').layer, 'utilities')
+  assert.equal(resolve(ul, 'padding-left').layer, '')
+  assert.match(resolve(li, 'margin-top').selector, /graph-frame/)
   assert.equal(resolve(a, 'color').layer, 'utilities')
   assert.equal(resolve(a, 'text-underline-offset').layer, 'utilities')
   assert.equal(resolve(code, 'color').layer, 'utilities')
   assert.equal(resolve(code, 'font-weight').layer, 'utilities')
+  assert.equal(resolve(a, 'color', true).layer, 'utilities')
+  assert.equal(resolve(code, 'color', true).layer, 'utilities')
   for (const property of ['padding', 'background-color', 'border-radius', 'font-size']) {
     const winner = resolve(code, property)
     assert.ok(!winner || winner.layer, `${property} must not retain host prose styling`)

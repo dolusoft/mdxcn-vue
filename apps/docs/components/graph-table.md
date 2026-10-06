@@ -95,8 +95,8 @@ Each field selects its input separately: `headers` prop → first `Head` → Mar
 headers; `rows` prop → nonempty `Row` items → Markdown rows; `footer` prop → first
 `Foot` → Markdown footer; `align` prop → `Head` cell alignment → Markdown alignment.
 Empty arrays and an empty first `Head`/`Foot` still win. Pipe text preserves empty
-cells; plain text separates words on whitespace. Nested `Cell` items preserve inline
-strong/emphasis/code/links. Typed cells accept strings, numbers or `ProseNode[]`.
+cells; plain text separates words on whitespace and commas. Nested `Cell` items preserve inline
+strong/emphasis/code/links and trim edge whitespace. Typed cells accept strings, numbers, VNodes or `ProseNode[]`.
 
 The Markdown reader consumes a direct host `table` with `thead`/`tbody`/`tfoot` and
 `tr`/`th`/`td` slots. Without `thead`, the first body row supplies headings. With no
@@ -106,6 +106,7 @@ first column and right for subsequent columns; `center` is ignored, as upstream.
 Fragments are transparent and custom component wrappers stay opaque.
 
 The table keeps native semantics and column header scope. Decorative rules are
-hidden from assistive technology. Narrow containers scroll horizontally. SSR
+hidden from assistive technology. Narrow containers scroll horizontally; the scroll
+region is keyboard focusable and shares the table's accessible caption name. SSR
 content remains visible; offscreen rows reveal once with a 40ms stagger, capped
 at six increments. Reduced motion disables animation.

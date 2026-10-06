@@ -52,14 +52,16 @@
 }
 
 /* Discard the unlayered host values so layered utilities and preflight win. */
-.graph-frame.graph-frame a {
+.graph-frame.graph-frame a,
+.graph-frame.graph-frame a:hover {
   color: revert-layer;
   font-weight: revert-layer;
   text-decoration: revert-layer;
   text-underline-offset: revert-layer;
   transition: revert-layer;
 }
-.graph-frame.graph-frame code {
+.graph-frame.graph-frame code,
+.graph-frame.graph-frame a:hover > code {
   color: revert-layer;
   font-size: revert-layer;
   border-radius: revert-layer;

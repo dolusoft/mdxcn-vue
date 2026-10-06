@@ -51,7 +51,7 @@ export const GraphTable = defineComponent({
       return h(
         Graph,
         mergeProps({ title: props.title, corner: props.corner, className: props.className }, attrs),
-        ({ captionId }: { captionId: string }) =>
+        ({ captionId }: { captionId?: string } = {}) =>
           h('div', { class: 'min-w-0 px-3 py-6 sm:px-6 sm:py-8' }, [
             h(
               'div',
