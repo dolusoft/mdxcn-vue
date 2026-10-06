@@ -51,53 +51,65 @@ export const GraphTable = defineComponent({
       return h(
         Graph,
         mergeProps({ title: props.title, corner: props.corner, className: props.className }, attrs),
-        () =>
+        ({ captionId }: { captionId: string }) =>
           h('div', { class: 'min-w-0 px-3 py-6 sm:px-6 sm:py-8' }, [
-            h('div', { class: '@container graph-scroll-x' }, [
-              h(
-                'table',
-                { class: 'graph-table w-full min-w-lg border-separate border-spacing-0' },
-                [
-                  h('thead', [
-                    h(
-                      'tr',
-                      model.headers.map((header, index) =>
-                        h(
-                          'th',
-                          {
-                            key: index,
-                            scope: 'col',
-                            class: `relative px-3 pb-3 font-normal whitespace-nowrap text-foreground ${alignment(index) === 'right' ? 'text-right' : 'text-left'}`,
-                          },
-                          [index > 0 ? ruleY() : null, header],
+            h(
+              'div',
+              {
+                class: '@container graph-scroll-x',
+                tabindex: 0,
+                role: 'region',
+                'aria-labelledby': captionId,
+              },
+              [
+                h(
+                  'table',
+                  {
+                    class: 'graph-table w-full min-w-lg border-separate border-spacing-0',
+                    'aria-labelledby': captionId,
+                  },
+                  [
+                    h('thead', [
+                      h(
+                        'tr',
+                        model.headers.map((header, index) =>
+                          h(
+                            'th',
+                            {
+                              key: index,
+                              scope: 'col',
+                              class: `relative px-3 pb-3 font-normal whitespace-nowrap text-foreground ${alignment(index) === 'right' ? 'text-right' : 'text-left'}`,
+                            },
+                            [index > 0 ? ruleY() : null, header],
+                          ),
                         ),
                       ),
-                    ),
-                    h('tr', { 'aria-hidden': 'true' }, [
-                      h('th', { colspan: model.headers.length, class: 'p-0' }, [h(GraphRule)]),
-                    ]),
-                  ]),
-                  h(
-                    'tbody',
-                    model.rows.map((row, index) =>
-                      withDirectives(h('tr', { key: index }, cells(row)), [
-                        [vReveal, { delay: Math.min(index, 6) * 40 }],
+                      h('tr', { 'aria-hidden': 'true' }, [
+                        h('th', { colspan: model.headers.length, class: 'p-0' }, [h(GraphRule)]),
                       ]),
-                    ),
-                  ),
-                  model.footer
-                    ? h('tfoot', [
-                        h('tr', { 'aria-hidden': 'true' }, [
-                          h('td', { colspan: model.headers.length, class: 'pt-2 pb-3' }, [
-                            h(GraphRule),
-                          ]),
+                    ]),
+                    h(
+                      'tbody',
+                      model.rows.map((row, index) =>
+                        withDirectives(h('tr', { key: index }, cells(row)), [
+                          [vReveal, { delay: Math.min(index, 6) * 40 }],
                         ]),
-                        h('tr', cells(model.footer, true)),
-                      ])
-                    : null,
-                ],
-              ),
-            ]),
+                      ),
+                    ),
+                    model.footer
+                      ? h('tfoot', [
+                          h('tr', { 'aria-hidden': 'true' }, [
+                            h('td', { colspan: model.headers.length, class: 'pt-2 pb-3' }, [
+                              h(GraphRule),
+                            ]),
+                          ]),
+                          h('tr', cells(model.footer, true)),
+                        ])
+                      : null,
+                  ],
+                ),
+              ],
+            ),
           ]),
       )
     }

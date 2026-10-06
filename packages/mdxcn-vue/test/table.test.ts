@@ -221,6 +221,14 @@ describe('table readers', () => {
 })
 
 describe('GraphTable rendering', () => {
+  it('names the keyboard-focusable scroll region and table from the figcaption', () => {
+    const wrapper = mount(GraphTable, { props: { title: 'COST', ...data } })
+    const id = wrapper.get('figcaption').attributes('id')
+    expect(wrapper.get('[role="region"]').attributes('tabindex')).toBe('0')
+    expect(wrapper.get('[role="region"]').attributes('aria-labelledby')).toBe(id)
+    expect(wrapper.get('table').attributes('aria-labelledby')).toBe(id)
+    wrapper.unmount()
+  })
   it('renders VNode data cells and observes reactive replacements', async () => {
     const wrapper = mount(GraphTable, {
       props: {

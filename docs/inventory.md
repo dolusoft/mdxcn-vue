@@ -148,6 +148,7 @@ Bunlar onaylanmış hedef sözleşmelerdir; Faz 1’de henüz bileşen uygulamas
 4. Registry dağıtımında eksik `graph-scroll-x`, `scrollbar-graph`, `graph-title-ink` utility tanımları tamamlanacak. Uygulamadaki mevcut CSS’e örtük bağımlılık bırakılmayacak.
 5. Accent: graph stilleri, host tema bağlantıları (`--destructive` dahil) ve isteğe bağlı tam tema/presetler ayrı girişler olacak. Preset kapsayıcıda çalışacak; yalnız `html` üzerinde global uygulama zorunlu olmayacak. 14 preset temel bileşen bağımlılığı sayılmayacak.
 6. React `motion` yerine Vue `v-reveal` + WAAPI kullanılacak; `0.4` opacity ve glif gecikmeleri korunacak. Markdown derleme zamanı adaptörü ve runtime adaptörü ayrı tutulacak; framework iç API çağrıları taşınmayacak.
+7. `GraphTable` yatay kaydırma kabı `tabindex="0"`, `role="region"` ve `aria-labelledby` taşır. Hem bu bölge hem `<table>` aynı `figcaption` kimliğiyle adlandırılır; klavye erişimi upstream'den bilinçli iyileştirmedir.
 
 ## Lisans ve telif
 
