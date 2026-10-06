@@ -1,5 +1,4 @@
 // Public entry of `mdxcn-vue`; internal helpers belong to the core subpath.
-export { default as MdxcnSmoke } from './components/MdxcnSmoke.vue'
 export type { ProseNode, StackSegment, StackRow, SegmentRow, BarRow } from './core/model'
 export { proseText, sliceProse } from './core/model'
 export type { GlyphSetName, Glyphs, GraphPalette } from './core/motion'

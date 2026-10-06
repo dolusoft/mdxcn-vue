@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
-import { MdxcnSmoke } from '../src'
+import MdxcnSmoke from './fixtures/MdxcnSmoke.vue'
 
 describe('MdxcnSmoke', () => {
   it('renders the default label', () => {

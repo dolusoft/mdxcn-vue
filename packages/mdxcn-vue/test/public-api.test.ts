@@ -28,7 +28,6 @@ const publicNames = [
   'GraphTrack',
   'Head',
   'INTENSITY_GLYPHS',
-  'MdxcnSmoke',
   'Row',
   'Segment',
   'alignsOf',
