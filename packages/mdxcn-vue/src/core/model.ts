@@ -55,3 +55,21 @@ export function sliceProse(nodes: readonly ProseNode[], start: number, end: numb
     ]
   })
 }
+
+/** Collapse whitespace across inline boundaries, retaining the original nesting. */
+export function normalizeProseWhitespace(nodes: readonly ProseNode[]): ProseNode[] {
+  let inWhitespace = true
+  const visit = (items: readonly ProseNode[]): ProseNode[] =>
+    items.map((node) => {
+      if (node.type !== 'text') return { ...node, children: visit(node.children) }
+      let value = ''
+      for (const character of node.value) {
+        const whitespace = /\s/.test(character)
+        if (!whitespace || !inWhitespace) value += whitespace ? ' ' : character
+        inWhitespace = whitespace
+      }
+      return { type: 'text', value }
+    })
+  const normalized = visit(nodes)
+  return sliceProse(normalized, 0, proseText(normalized).trimEnd().length)
+}

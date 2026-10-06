@@ -1,7 +1,13 @@
 import type MarkdownIt from 'markdown-it'
 import type Token from 'markdown-it/lib/token.mjs'
 import type { ProseNode, StackRow, TableModel } from 'mdxcn-vue/core'
-import { proseText, sliceProse, splitLabel, segmentsFromText } from 'mdxcn-vue/core'
+import {
+  proseText,
+  sliceProse,
+  splitLabel,
+  segmentsFromText,
+  normalizeProseWhitespace,
+} from 'mdxcn-vue/core'
 import type { EndpointBlock, EndpointParam } from 'mdxcn-vue'
 
 export type ComponentName = 'GraphStack' | 'GraphTable' | 'Endpoint'
@@ -116,7 +122,7 @@ function trim(nodes: ProseNode[]): ProseNode[] {
   return sliceProse(nodes, text.length - text.trimStart().length, text.trimEnd().length)
 }
 const cell = (block: Block): string | ProseNode[] => {
-  const nodes = trim(content(block))
+  const nodes = normalizeProseWhitespace(content(block))
   return nodes.some((node) => node.type !== 'text') ? nodes : proseText(nodes)
 }
 const bold = (nodes: ProseNode[]): boolean =>
@@ -146,19 +152,7 @@ export function tokensToProps(
             throw new Error('Nested list items are not supported')
           // Match the runtime reader whitespace normalization across inline boundaries.
           const raw = content(item)
-          let whitespace = true
-          const normalize = (nodes: ProseNode[]): ProseNode[] =>
-            nodes.map((node) => {
-              if (node.type !== 'text') return { ...node, children: normalize(node.children) }
-              let value = ''
-              for (const character of node.value) {
-                const next = /\s/.test(character)
-                if (!next || !whitespace) value += next ? ' ' : character
-                whitespace = next
-              }
-              return { type: 'text', value }
-            })
-          const prose = trim(normalize(raw))
+          const prose = normalizeProseWhitespace(raw)
           const text = proseText(prose)
           const { label, rest } = splitLabel(text)
           const start = text.indexOf(label)

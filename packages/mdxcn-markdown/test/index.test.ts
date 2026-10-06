@@ -27,6 +27,21 @@ const compile = (source: string) => {
 const text = (value: string) => ({ type: 'text', value })
 
 describe('raw tokens to independent expected models', () => {
+  it('normalizes table whitespace across rich inline boundaries', () => {
+    expect(
+      tokensToProps('GraphTable', raw('| Name |\n| --- |\n| A   *B  C*   D |\n'), md),
+    ).toMatchObject({
+      rows: [
+        [
+          [
+            { type: 'text', value: 'A ' },
+            { type: 'em', children: [{ type: 'text', value: 'B C' }] },
+            { type: 'text', value: ' D' },
+          ],
+        ],
+      ],
+    })
+  })
   it.each(['js{1,3}', 'ts:line-numbers', 'cpp{1}', 'c++'])(
     'reads the fence language from %s',
     (info) => {

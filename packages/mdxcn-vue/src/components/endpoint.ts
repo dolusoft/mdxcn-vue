@@ -119,14 +119,27 @@ export const Endpoint = defineComponent({
               reveal(
                 h('div', { key: index, class: 'flex min-w-0 flex-col gap-3' }, [
                   h(GraphRule),
-                  block.label ? h('p', { class: 'text-graph-muted' }, block.label) : null,
+                  block.label
+                    ? h(
+                        'p',
+                        {
+                          id: captionId ? `${captionId}-code-${index}` : undefined,
+                          class: 'text-graph-muted',
+                        },
+                        block.label,
+                      )
+                    : null,
                   h(
                     'div',
                     {
                       class: 'graph-scroll-x',
                       tabindex: 0,
                       role: 'region',
-                      'aria-labelledby': captionId,
+                      'aria-labelledby': captionId
+                        ? [captionId, ...(block.label ? [`${captionId}-code-${index}`] : [])].join(
+                            ' ',
+                          )
+                        : undefined,
                       'aria-label': captionId ? undefined : block.label || 'Code',
                     },
                     [

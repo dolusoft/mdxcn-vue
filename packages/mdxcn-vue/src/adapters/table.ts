@@ -2,7 +2,7 @@
 import type { VNode } from 'vue'
 import { normalizeStyle } from 'vue'
 import type { ProseNode } from '../core/model'
-import { sliceProse, proseText } from '../core/model'
+import { normalizeProseWhitespace, proseText } from '../core/model'
 import type { GraphAlign, TableCell, TableData, TableModel } from '../core/table'
 import { cellText, resolveTable, splitCells, toLabeledTable } from '../core/table'
 import { childItems, childrenOf, defineItem, flattenNodes, textOf } from './items'
@@ -28,10 +28,7 @@ export const Cell = defineItem<CellProps>('Cell', { align: { type: 'string' } })
 
 function inlineCell(nodes: readonly VNode[], trim = false): string | ProseNode[] {
   const prose = readProse(nodes)
-  const text = proseText(prose)
-  const content: ProseNode[] = trim
-    ? sliceProse(prose, text.length - text.trimStart().length, text.trimEnd().length)
-    : prose
+  const content: ProseNode[] = trim ? normalizeProseWhitespace(prose) : prose
   return content.some((node) => node.type !== 'text') ? content : proseText(content)
 }
 

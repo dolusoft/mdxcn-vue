@@ -360,3 +360,22 @@ describe('GraphTable rendering', () => {
     vi.restoreAllMocks()
   })
 })
+
+it('normalizes whitespace across rich host-table inline boundaries', () => {
+  expect(
+    tableOf([
+      h('table', [
+        h('thead', [h('tr', [h('th', 'Name')])]),
+        h('tbody', [h('tr', [h('td', [' A   ', h('em', 'B  C'), '   D '])])]),
+      ]),
+    ])?.rows,
+  ).toEqual([
+    [
+      [
+        { type: 'text', value: 'A ' },
+        { type: 'em', children: [{ type: 'text', value: 'B C' }] },
+        { type: 'text', value: ' D' },
+      ],
+    ],
+  ])
+})

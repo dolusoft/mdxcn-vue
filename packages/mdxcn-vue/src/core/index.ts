@@ -6,3 +6,5 @@ export { parseInstant, pad2, formatHms, formatAgo, formatClock } from './clock'
 export { numberOf, splitLabel, segmentsFromText, normalizeRows, resolveStackRows } from './stack'
 export type { GraphAlign, TableCell, TableData, TableModel } from './table'
 export { cellText, splitCells, resolveTable, toLabeledTable } from './table'
+
+export { normalizeProseWhitespace } from './model'
