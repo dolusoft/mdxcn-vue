@@ -264,7 +264,9 @@ describe('host fallback preservation and registration order', () => {
       disposeMdItInstance()
       const warnings: MarkdownWarning[] = []
       const md = await createMarkdownRenderer('.', {
-        config: (md) => md.use(withMdxcn, { warn: (w: MarkdownWarning) => warnings.push(w) }),
+        config: (md) => {
+          md.use(withMdxcn, { warn: (w: MarkdownWarning) => warnings.push(w) })
+        },
       })
       expect(await md.renderAsync(source)).toBe(expected)
       expect(warnings.map((w) => w.component)).toEqual(['Callout'])
@@ -272,7 +274,9 @@ describe('host fallback preservation and registration order', () => {
   )
   it('upgrades a host alert only when Callout is registered', async () => {
     const md = await createMarkdownRenderer('.', {
-      config: (md) => md.use(withMdxcn, { components: ['Callout'] }),
+      config: (md) => {
+        md.use(withMdxcn, { components: ['Callout'] })
+      },
     })
     const output = await md.renderAsync('> [!NOTE]\n> **Body**')
     expect(props(output)).toEqual({ type: 'note' })
