@@ -1,7 +1,7 @@
 # dashboards
 
-Three made-up products, one screen each. Every tile is a Markdown figure in a
-plain CSS grid, so the same source works as a page, a README or a status post.
+Small product screens, from full tiles down to single-line rows. Every figure
+is plain Markdown in a CSS grid or table, and the products are made up.
 
 ## lumen · site analytics
 
@@ -30,13 +30,7 @@ the bottom row says where readers came from and where they left.
 
 </GraphMeter>
 
-<GraphKpi title="READ TIME">
-
-**3m 12s** — +14s
-
-5 5 6 6 7 6 7 8
-
-</GraphKpi>
+<GraphKpi title="READ TIME" value="3m 12s" label="per visit" hint="+14s" data="5 5 6 6 7 6 7 8" />
 
 </div>
 
@@ -142,7 +136,7 @@ anything failing, is the queue draining, which job is slow.
 
 <GraphStat title="LAST 24H">
 
-- 18.2k runs
+- 18k runs
 - 37 retried
 - **4 failed**
 
@@ -271,6 +265,29 @@ product team reads the plan mix and the churn reasons.
 
 </div>
 
+### revenue bridge
+
+All values are USD thousands; the closing balance includes every movement.
+
+<div class="dashboard-grid">
+
+<div class="dashboard-wide">
+
+<GraphWaterfall title="MRR BRIDGE" palette="duo">
+
+- Opening: 80
+- New: 8
+- Expansion: 3
+- Contraction: -2
+- Churn: -4.8
+- Closing: 84.2
+
+</GraphWaterfall>
+
+</div>
+
+</div>
+
 ## pulse · mini tiles
 
 The same figures at their smallest. A tile needs a title and one number, so a
@@ -387,6 +404,190 @@ whole status wall fits in the width of a single chart.
 31 28 25 22 20 18 16 14
 
 </GraphKpi>
+
+</div>
+
+## loom · room availability
+
+Each cell is one desk. Gaps show where a team can still sit together.
+
+<div class="dashboard-grid dashboard-mini">
+
+<GraphCells title="NORTH">
+
+- 8 of 12 occupied: 1 1 1 0 / 1 1 0 0 / 1 1 1 0
+
+</GraphCells>
+
+<GraphCells title="SOUTH">
+
+- 5 of 12 occupied: 1 1 0 0 / 1 0 0 0 / 1 1 0 0
+
+</GraphCells>
+
+<GraphCells title="EAST">
+
+- 12 of 12 occupied: 1 1 1 1 / 1 1 1 1 / 1 1 1 1
+
+</GraphCells>
+
+<GraphCells title="WEST">
+
+- 2 of 12 occupied: 0 0 0 0 / 0 1 1 0 / 0 0 0 0
+
+</GraphCells>
+
+<GraphCells title="LAB">
+
+- 4 of 6 occupied: 1 0 1 / 1 1 0
+
+</GraphCells>
+
+</div>
+
+## cadence · publishing rhythm
+
+Recent publishing activity sits beside the next editorial milestones.
+
+<div class="dashboard-grid">
+
+<GraphActivity title="PUBLISHED">
+
+- 2026-09-01: 1 2 0 3 1 0 0 2 3 1 4 2 0 0 1 2 3 2 1 0 0 3 4 2 5 3 0 0
+
+</GraphActivity>
+
+<GraphCalendar title="OCTOBER" :year="2026" :month="10">
+
+- 9: draft review
+- 16: issue ready
+- 23: publish
+- 30: retrospective
+
+</GraphCalendar>
+
+</div>
+
+## drift · release room
+
+One release, seen as a schedule and as the work still in motion.
+
+<div class="dashboard-grid">
+
+<div class="dashboard-wide">
+
+<GraphGantt title="RELEASE" stage="build" :progress="0.55" :ticks="['w1','w2','w3','w4']">
+
+- design: 0 0.25 1
+- **build**: 0.15 0.7 0.65
+- verify: 0.55 0.9 0.1
+- ship: 0.9 1
+
+</GraphGantt>
+
+</div>
+
+<div class="dashboard-wide">
+
+<GraphBoard title="HANDOFF">
+
+### Ready
+- Token review
+
+### Active
+- **Keyboard pass**
+- **Migration notes**
+
+### Next
+- *Release rehearsal*
+
+</GraphBoard>
+
+</div>
+
+</div>
+
+## folio · delivery receipt
+
+A completed package, with the work and its price in one place.
+
+<div class="dashboard-grid">
+
+<div class="dashboard-wide">
+
+<GraphInvoice title="INVOICE 0042" from="folio" to="Northwind">
+
+- No.: 0042
+- Status: awaiting payment
+
+| Description | Qty | Rate | Amount |
+| --- | --- | --- | --- |
+| Icon set | 1 | 600 | 600 |
+| Review session | 2 | 150 | 300 |
+
+**Amount due** USD 900
+
+Payment by bank transfer.
+
+</GraphInvoice>
+
+</div>
+
+</div>
+
+## trace · service handoff
+
+The ownership map and the latest probe explain where to look next.
+
+<div class="dashboard-grid">
+
+<GraphTree title="OWNERS">
+
+- checkout
+  - api — ada
+  - **payments** — bora
+  - receipts — cem
+
+</GraphTree>
+
+<Terminal title="LAST PROBE">
+
+```text
+$ trace probe checkout
+api       84ms
+payments  620ms
+receipts  91ms
+result: payments above 500ms
+```
+
+</Terminal>
+
+</div>
+
+## prism · response review
+
+Compare each operation with the same response-time target.
+
+<div class="dashboard-grid">
+
+<GraphSpec title="TARGET">
+
+- Scope: three regions
+- Metric: p95
+- **Limit: 200ms**
+- Window: 24 hours
+
+</GraphSpec>
+
+<GraphMatrix title="P95 MS">
+
+| | iad | sfo | nrt |
+| --- | --- | --- | --- |
+| read | 84 | 96 | 132 |
+| write | 142 | 188 | 260 |
+| queue | 18 | 24 | 39 |
+
+</GraphMatrix>
 
 </div>
 
@@ -1691,3 +1892,48 @@ The heaviest processes on one host: CPU share now, and resident memory over ten 
 </table>
 </div>
 
+## spool · batch outcomes
+
+Outcome shares are done / retry / failed. Each health mark is one check.
+
+<div class="dashboard-table dashboard-compact">
+<table>
+<thead>
+<tr><th>queue</th><th>outcome mix</th><th>share %</th><th>last 7 checks</th></tr>
+</thead>
+<tbody>
+<tr>
+<td>images</td>
+<td class="dashboard-stack-cell">
+
+<GraphStack title="" palette="multi" :ticks="16" :rows="[{ label: '', segments: [{ label: 'done', value: 92 }, { label: 'retry', value: 6 }, { label: 'failed', value: 2 }] }]" />
+
+</td>
+<td>92 / 6 / 2</td>
+<td>
+
+<GraphUptime :days="'ok ok degraded ok ok ok ok'">
+
+</GraphUptime>
+
+</td>
+</tr>
+<tr>
+<td>exports</td>
+<td class="dashboard-stack-cell">
+
+<GraphStack title="" palette="multi" :ticks="16" :rows="[{ label: '', segments: [{ label: 'done', value: 71 }, { label: 'retry', value: 21 }, { label: 'failed', value: 8 }] }]" />
+
+</td>
+<td>71 / 21 / 8</td>
+<td>
+
+<GraphUptime :days="'ok ok down degraded ok ok ok'">
+
+</GraphUptime>
+
+</td>
+</tr>
+</tbody>
+</table>
+</div>
