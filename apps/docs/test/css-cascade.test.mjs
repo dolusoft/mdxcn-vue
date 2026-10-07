@@ -65,8 +65,18 @@ test('actual VitePress rules lose to graph resets and generated layered prose ut
   const li = prose.querySelector('li + li')
   const a = prose.querySelector('a[data-cascade]')
   const code = a.querySelector('code')
-  for (const [element, property] of [[ul, 'padding'], [ul, 'margin'], [ul, 'list-style']])
+  for (const [element, property] of [[ul, 'padding'], [ul, 'list-style']])
     assert.match(resolve(element, property).selector, /graph-frame/)
+  // List margins revert past the unlayered host prose rule to preflight, so margin utilities still win.
+  assert.notEqual(resolve(ul, 'margin-top').layer, '', 'unlayered host prose margin must not win')
+  ul.className = 'mt-1'
+  assert.equal(resolve(ul, 'margin-top').layer, 'utilities')
+  ul.className = ''
+  const checkPage = new JSDOM(readFileSync(new URL('../.vitepress/dist/components/graph-check.html', import.meta.url), 'utf8')).window.document
+  const nested = checkPage.querySelector('figure li ul.mt-1, figure li ol.mt-1')
+  assert.ok(nested, 'graph-check needs a nested list')
+  assert.equal(resolve(nested, 'margin-top').layer, 'utilities')
+  assert.equal(resolve(nested, 'margin-top').value, 'var(--spacing)')
   assert.equal(resolve(li, 'padding-left').layer, 'utilities')
   assert.equal(resolve(ul, 'padding-left').layer, '')
   assert.equal(resolve(li, 'margin-top').layer, 'base')
