@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.1 — 2026-10-07
+
+- Publish from GitHub Actions with npm trusted publishing; releases carry provenance.
+- Update the READMEs now that both packages are on npm.
+
 ## 0.1.0 — 2026-10-07
 
 Initial release candidate; not yet published. Package names remain provisional.

@@ -625,7 +625,7 @@ assert.ok(Object.keys(badPeers).every((name) => name === 'mdxcn-vue'))
 for (const issue of badPeers['mdxcn-vue'] ?? []) {
   assert.equal(issue.wantedRange, '^0.1.0')
   assert.equal(issue.foundVersion, 'file:../artifacts/mdxcn-vue.tgz')
-  assert.deepEqual(issue.parents, [{ name: 'mdxcn-markdown', version: '0.1.0' }])
+  assert.deepEqual(issue.parents, [{ name: 'mdxcn-markdown', version: '0.1.1' }])
   assert.equal(issue.optional, false)
 }
 const installedVue = JSON.parse(
@@ -634,10 +634,10 @@ const installedVue = JSON.parse(
 const installedMarkdown = JSON.parse(
   readFileSync(join(site, 'node_modules/mdxcn-markdown/package.json'), 'utf8'),
 )
-assert.equal(installedVue.version, '0.1.0')
+assert.equal(installedVue.version, '0.1.1')
 assert.equal(installedMarkdown.peerDependencies['mdxcn-vue'], '^0.1.0')
 console.log(
-  'PACKED PEERS PASSED: installed 0.1.0 satisfies ^0.1.0; pnpm file-locator diagnostic isolated',
+  'PACKED PEERS PASSED: installed 0.1.1 satisfies ^0.1.0; pnpm file-locator diagnostic isolated',
 )
 write(
   site,

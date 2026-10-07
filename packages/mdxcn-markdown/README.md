@@ -6,7 +6,7 @@ Install both `mdxcn-markdown` and its `mdxcn-vue` peer in the host project.
 
 ## Install and requirements
 
-The 0.1.0 candidate has not been published. After publication, with provisional names:
+Install from npm:
 
 ```sh
 npm install mdxcn-markdown@^0.1.0 mdxcn-vue@^0.1.0 markdown-it@^14 vue@^3.5.0

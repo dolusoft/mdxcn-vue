@@ -4,8 +4,8 @@ Vue 3 port of [mdxcn](https://github.com/shadcn-labs/mdxcn) — ASCII-style grap
 prose components (tables, bars, timelines, invoices, terminals, ...) that can be fed
 by typed props, item components or Markdown.
 
-> **Status:** 0.1.0 release candidate; publication is pending. All 46 upstream
-> components are ported. Package names may change before the first publication.
+> **Status:** published on npm as `mdxcn-vue` and `mdxcn-markdown`. All 46 upstream
+> components are ported.
 
 ## Installation and requirements
 

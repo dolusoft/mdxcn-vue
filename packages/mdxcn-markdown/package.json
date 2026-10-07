@@ -1,6 +1,6 @@
 {
   "name": "mdxcn-markdown",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Build-time Markdown adapter for mdxcn-vue (markdown-it tokens to component props).",
   "license": "MIT",
   "type": "module",

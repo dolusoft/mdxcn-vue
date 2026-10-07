@@ -1,6 +1,6 @@
 {
   "name": "mdxcn-vue",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Vue 3 port of mdxcn: ASCII-style graph and prose components.",
   "license": "MIT",
   "type": "module",

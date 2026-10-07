@@ -5,7 +5,7 @@ Requires Node >=22.18 and Vue ^3.5 (peer dependency, external to the library).
 
 ## Install
 
-The 0.1.0 candidate is not published yet; names are provisional. After publication:
+Install from npm:
 
 ```sh
 npm install mdxcn-vue@^0.1.0 vue@^3.5.0
