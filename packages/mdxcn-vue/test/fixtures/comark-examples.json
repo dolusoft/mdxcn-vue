@@ -1,0 +1,128 @@
+[
+  {
+    "tag": "graph-stat",
+    "family": "stat-slope-bullet",
+    "source": "::graph-stat{title=\"THIS WEEK\"}\n- **142ms read — −18ms**\n::",
+    "text": "142ms"
+  },
+  {
+    "tag": "graph-gantt",
+    "family": "gantt-diff-waterfall",
+    "source": "::graph-gantt{title=\"LAUNCH\" progress=0.58}\n- design: 0 0.35 1\n- **build**: 0.2 0.75 0.55\n- docs: 0.55 0.9 0.2\n- ship: 0.85 1\n::",
+    "text": "build"
+  },
+  {
+    "tag": "callout",
+    "family": "prose",
+    "source": "::callout{type=\"warning\"}\nThe CLI copies files into `registry/default`. Edit the source.\n::",
+    "text": "The CLI copies files into registry/default. Edit the source."
+  },
+  {
+    "tag": "terminal",
+    "family": "fence",
+    "source": "::terminal{title=\"SHELL\"}\n```\n$ pnpm dlx shadcn@latest add @mdxcn/all\n✓ 51 files written\n```\n::",
+    "text": "51 files written"
+  },
+  {
+    "tag": "graph-timeline",
+    "family": "state-list",
+    "source": "::graph-timeline\n---\ntitle: NIGHT\nevents:\n  - { date: \"14:11\", label: \"rolled back the cache flag\", state: now }\n---\n::",
+    "text": "rolled back the cache flag"
+  },
+  {
+    "tag": "graph-rank",
+    "family": "numeric-list",
+    "source": "::graph-rank\n---\ntitle: ROUTES\nitems:\n  - { label: /docs, value: 12400 }\n---\n::",
+    "text": "/docs"
+  },
+  {
+    "tag": "faq",
+    "family": "sections",
+    "source": "::faq\n### Is this an npm package?\n\nNo. The CLI copies the source.\n::",
+    "text": "No. The CLI copies the source."
+  },
+  {
+    "tag": "graph-sheet",
+    "family": "sections-table",
+    "source": "::graph-sheet\n---\ntitle: RFC\nheaders: [Item, Owner, Status]\nsections:\n  - title: Scope\n    rows: [[CLI copies files, priya, done]]\n---\n::",
+    "text": "CLI copies files"
+  },
+  {
+    "tag": "graph-invoice",
+    "family": "invoice",
+    "source": "::graph-invoice\n---\ntitle: INVOICE\nitems:\n  - { description: Design, qty: \"24\", rate: \"$150\", amount: \"$3,600\" }\n---\n::",
+    "text": "$3,600"
+  },
+  {
+    "tag": "graph-table",
+    "family": "table",
+    "source": "::graph-table\n---\ntitle: WHAT THE RESEARCH COST\nheaders: [Agent, Tokens]\nrows: [[Inks and paper, \"115,207\"]]\n---\n::",
+    "text": "115,207"
+  },
+  {
+    "tag": "graph-compare",
+    "family": "labeled-table",
+    "source": "::graph-compare\n---\ntitle: host\ncolumns: [JSX, ASCII, Comark]\nrows:\n  - { label: App .md file, values: [false, false, true] }\n---\n::",
+    "text": "App .md file"
+  },
+  {
+    "tag": "graph-tree",
+    "family": "nested-list",
+    "source": "::graph-tree\n---\ntitle: REGISTRY\nnodes:\n  - label: registry/default\n    children:\n      - { label: graph-frame.tsx, meta: ui }\n---\n::",
+    "text": "graph-frame.tsx"
+  },
+  {
+    "tag": "graph-flow",
+    "family": "flow",
+    "source": "::graph-flow{title=\"PIPELINE\"}\n- input -> parse -> render\n::",
+    "text": "parse"
+  },
+  {
+    "tag": "graph-spark",
+    "family": "series",
+    "source": "::graph-spark\n---\ntitle: LATENCY\ndata: [2, 3, 4, 3, 6, 5, 8, 7, 9, 6, 10, 8]\ncaption: last point is the accent\n---\n::",
+    "text": "last point is the accent"
+  },
+  {
+    "tag": "graph-kpi",
+    "family": "kpi",
+    "source": "::graph-kpi{title=\"READS\"}\n**12,400** this week — +18%\n\n4 5 5 6 8 7 9 8 11 10 12 14\n::",
+    "text": "12,400"
+  },
+  {
+    "tag": "graph-cells",
+    "family": "grid",
+    "source": "::graph-cells\n---\ntitle: TWO WAYS TO LEARN\nitems:\n  - { label: fragments, cells: [[1, 0, 1], [0, 1, 0]] }\n---\n::",
+    "text": "fragments"
+  },
+  {
+    "tag": "graph-meter",
+    "family": "fraction",
+    "source": "::graph-meter{value=0.86 ticks=28}\n---\ntitle: COVERAGE\ncaption: 86% of statements\n---\n::",
+    "text": "86% of statements"
+  },
+  {
+    "tag": "graph-activity",
+    "family": "dated-runs",
+    "source": "::graph-activity\n---\ntitle: COMMITS\ndays:\n  - { date: 2026-06-01, count: 3 }\n---\n::",
+    "text": "COMMITS"
+  },
+  {
+    "tag": "graph-calendar",
+    "family": "calendar",
+    "source": "::graph-calendar\n---\ntitle: SHIP WEEK\nyear: 2026\nmonth: 3\nmarks: [{day: 12, accent: true}, {day: 18}]\n---\n::",
+    "text": "SHIP WEEK"
+  },
+  {
+    "tag": "graph-uptime",
+    "family": "status-runs",
+    "source": "::graph-uptime\n---\ntitle: API\nfrom: Aug 14\nto: Aug 27\ndays: [ok, ok, ok, ok, ok, degraded, ok, ok, down, down, ok, ok, ok, ok]\n---\n::",
+    "text": "79 percent uptime over 14 days, Aug 14 to Aug 27"
+  },
+  {
+    "tag": "graph-countdown",
+    "family": "instant",
+    "source": "::graph-countdown\n---\ntitle: FREEZE\nto: 2027-01-01T00:00:00Z\ncaption: until launch\n---\n::",
+    "text": "remaining 00:00:00"
+  }
+]

@@ -9,6 +9,519 @@
   "items": [
     {
       "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+      "name": "mdxcn-graph-comark",
+      "type": "registry:component",
+      "title": "mdxcn graph-comark",
+      "description": "Vue 3 graph-comark from the mdxcn-vue source tree.",
+      "dependencies": [
+        "vue@^3.5.0"
+      ],
+      "meta": {
+        "license": "MIT",
+        "notice": "MIT License\n\nCopyright (c) 2026 Keshav Bagaade (mdxcn, original React implementation)\nCopyright (c) 2026 Dolusoft (mdxcn-vue, Vue 3 port)\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.",
+        "upstream": "shadcn-labs/mdxcn@16d817a"
+      },
+      "docs": "Files use relative imports under src/components/mdxcn. Import styles/graph.css, host.css and optional theme.css from your Tailwind v4 CSS entry. Keep the full MIT notice with copied files.",
+      "files": [
+        {
+          "path": "packages/mdxcn-vue/src/adapters/annotate.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/adapters/annotate.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/adapters/chat.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/adapters/chat.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/adapters/code-readers.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/adapters/code-readers.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/adapters/comark-hints.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/adapters/comark-hints.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/adapters/comark.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/adapters/comark.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/adapters/dated-calendar.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/adapters/dated-calendar.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/adapters/endpoint.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/adapters/endpoint.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/adapters/env.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/adapters/env.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/adapters/gantt-diff-waterfall.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/adapters/gantt-diff-waterfall.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/adapters/grid-fraction.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/adapters/grid-fraction.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/adapters/items.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/adapters/items.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/adapters/labeled-table.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/adapters/labeled-table.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/adapters/nested-flow.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/adapters/nested-flow.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/adapters/numeric-list.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/adapters/numeric-list.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/adapters/sections.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/adapters/sections.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/adapters/series.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/adapters/series.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/adapters/sheet-invoice.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/adapters/sheet-invoice.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/adapters/stack.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/adapters/stack.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/adapters/stat-slope-bullet.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/adapters/stat-slope-bullet.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/adapters/state-list.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/adapters/state-list.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/adapters/table.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/adapters/table.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/adapters/terminal.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/adapters/terminal.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/adapters/timeline-spec.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/adapters/timeline-spec.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/adapters/uptime-countdown.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/adapters/uptime-countdown.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/components/annotate.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/components/annotate.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/components/callout.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/components/callout.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/components/changelog.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/components/changelog.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/components/chat.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/components/chat.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/components/decision.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/components/decision.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/components/endpoint.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/components/endpoint.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/components/env.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/components/env.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/components/faq.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/components/faq.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/components/graph-activity.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/components/graph-activity.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/components/graph-bars.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/components/graph-bars.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/components/graph-board.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/components/graph-board.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/components/graph-bullet.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/components/graph-bullet.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/components/graph-calendar.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/components/graph-calendar.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/components/graph-cells.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/components/graph-cells.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/components/graph-check.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/components/graph-check.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/components/graph-comark.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/components/graph-comark.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/components/graph-compare.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/components/graph-compare.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/components/graph-countdown.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/components/graph-countdown.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/components/graph-diff.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/components/graph-diff.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/components/graph-flow.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/components/graph-flow.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/components/graph-frame.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/components/graph-frame.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/components/graph-funnel.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/components/graph-funnel.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/components/graph-gantt.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/components/graph-gantt.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/components/graph-heatmap.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/components/graph-heatmap.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/components/graph-invoice.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/components/graph-invoice.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/components/graph-kpi.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/components/graph-kpi.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/components/graph-matrix.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/components/graph-matrix.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/components/graph-meter.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/components/graph-meter.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/components/graph-plot.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/components/graph-plot.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/components/graph-rank.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/components/graph-rank.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/components/graph-score.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/components/graph-score.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/components/graph-sheet.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/components/graph-sheet.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/components/graph-slope.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/components/graph-slope.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/components/graph-spark.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/components/graph-spark.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/components/graph-spec.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/components/graph-spec.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/components/graph-stack.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/components/graph-stack.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/components/graph-stat.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/components/graph-stat.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/components/graph-table.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/components/graph-table.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/components/graph-timeline.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/components/graph-timeline.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/components/graph-timer.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/components/graph-timer.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/components/graph-tree.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/components/graph-tree.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/components/graph-uptime.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/components/graph-uptime.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/components/graph-waffle.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/components/graph-waffle.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/components/graph-waterfall.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/components/graph-waterfall.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/components/keys.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/components/keys.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/components/numeric-list.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/components/numeric-list.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/components/quote.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/components/quote.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/components/steps.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/components/steps.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/components/terminal.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/components/terminal.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/composables/graph-now.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/composables/graph-now.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/core/annotate.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/core/annotate.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/core/chat-keys.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/core/chat-keys.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/core/clock.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/core/clock.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/core/dated-calendar.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/core/dated-calendar.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/core/env.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/core/env.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/core/gantt-diff-waterfall.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/core/gantt-diff-waterfall.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/core/grid-fraction.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/core/grid-fraction.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/core/kpi.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/core/kpi.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/core/labeled-table.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/core/labeled-table.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/core/markdown.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/core/markdown.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/core/model.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/core/model.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/core/motion.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/core/motion.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/core/nested-flow.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/core/nested-flow.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/core/numeric-list.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/core/numeric-list.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/core/sections.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/core/sections.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/core/series.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/core/series.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/core/sheet-invoice.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/core/sheet-invoice.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/core/stack.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/core/stack.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/core/stat-slope-bullet.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/core/stat-slope-bullet.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/core/state-list.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/core/state-list.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/core/table.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/core/table.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/core/terminal.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/core/terminal.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/core/timeline-spec.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/core/timeline-spec.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/core/uptime-countdown.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/core/uptime-countdown.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/directives/reveal.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/directives/reveal.ts"
+        }
+      ]
+    },
+    {
+      "$schema": "https://shadcn-vue.com/schema/registry-item.json",
       "name": "mdxcn-graph-uptime",
       "type": "registry:component",
       "title": "mdxcn graph-uptime",

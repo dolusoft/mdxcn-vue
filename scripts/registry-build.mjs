@@ -10,6 +10,7 @@ const check = process.argv.includes('--check')
 const cliOutput = process.argv[process.argv.indexOf('--from-cli') + 1]
 const useCli = process.argv.includes('--from-cli')
 const definitions = [
+  ['graph-comark', ['components/graph-comark.ts']],
   ['graph-uptime', ['components/graph-uptime.ts']],
   ['graph-countdown', ['components/graph-countdown.ts']],
   ['graph-activity', ['components/graph-activity.ts']],

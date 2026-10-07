@@ -193,6 +193,8 @@ write(app, 'package.json', {
     'mdxcn-vue': vueTar,
     'mdxcn-markdown': markdownTar,
     'markdown-it': '14.1.0',
+    comark: '0.7.0',
+    '@comark/vue': '0.7.0',
   },
 })
 write(app, 'tsconfig.json', tsconfig)
@@ -223,6 +225,16 @@ write(
   app,
   'src/type-contract.ts',
   `import {splitLabel} from 'mdxcn-vue/core';
+import {createGraphComponents,graphComponents,coerceProps,GraphRow,PendingGraph,GRAPH_ADAPTERS,GraphStack} from 'mdxcn-vue';
+import type {GraphComponentMap,GraphTag,GraphAdapter,NumericProps} from 'mdxcn-vue';
+const installed:GraphComponentMap={'graph-stack':GraphStack};
+const tag:GraphTag='graph-stack';
+const hints:GraphAdapter={numeric:['ticks'],required:['rows']};
+const numeric:NumericProps=['ticks'];
+void [createGraphComponents(installed),graphComponents,coerceProps({ticks:'24'},numeric),GraphRow,PendingGraph,GRAPH_ADAPTERS[tag],hints];
+// @ts-expect-error Unknown graph names must not enter the allowlist.
+const invalidGraph:GraphComponentMap={'graph-knap':GraphStack};
+void invalidGraph;
 import type {StackRow} from 'mdxcn-vue/core';
 import type {GraphUptimeProps,GraphCountdownProps,GraphActivityProps,GraphCalendarProps,GraphCellsProps,GraphMeterProps,GraphWaffleProps,GraphPlotProps,GraphKpiProps,GraphBarsProps,GraphSparkProps,GraphTreeProps,GraphCheckProps,GraphFlowProps,GraphSheetProps,GraphInvoiceProps,FaqProps,GraphBoardProps,GraphCompareProps,GraphMatrixProps,GraphHeatmapProps,GraphStackProps,CalloutProps,QuoteProps,TerminalProps,AnnotateProps,EnvProps,StepsProps,StepProps,ChangelogProps,ChangeProps,DecisionProps,ChatProps,ChatTurn,KeysProps,KeyBinding,GraphTimelineProps,TimelineEvent,TimelineState,GraphSpecProps,SpecRow,GraphScoreProps,GraphRankProps,GraphFunnelProps,GraphStatProps,GraphSlopeProps,GraphBulletProps,GraphGanttProps,GraphDiffProps,GraphWaterfallProps} from 'mdxcn-vue';
 import {mdxcnMarkdown,withMdxcn} from 'mdxcn-markdown';
@@ -404,6 +416,20 @@ write(app, 'tsconfig.nodenext.json', {
 })
 writeInstallPolicy(app)
 run(['install'], app)
+write(
+  app,
+  'comark-check.mjs',
+  `import assert from 'node:assert/strict';
+import {createSSRApp,h} from 'vue';import {renderToString} from 'vue/server-renderer';
+import {parseMarkdown} from 'comark';import {MarkdownDocument} from '@comark/vue';
+import {graphComponents} from 'mdxcn-vue';
+const value=await parseMarkdown('::graph-meter{value=0.5 ticks=10}\\n---\\ncaption: packed Comark\\n---\\n::');
+const html=await renderToString(createSSRApp({render:()=>h(MarkdownDocument,{value,components:graphComponents})}));
+assert.match(html,/<figure\\b/);assert.match(html,/packed Comark/);assert.match(html,/50%/);
+assert.doesNotMatch(html,/· · ·|<graph-meter\\b/);
+console.log('COMARK PACKED CONSUMER PASSED: real parser and Vue renderer');`,
+)
+run(['exec', 'node', 'comark-check.mjs'], app)
 run(['exec', 'tsc', '--noEmit', '-p', 'tsconfig.nodenext.json'], app)
 console.log('TYPE CONTRACT PASSED: NodeNext, skipLibCheck=false; invalid fields rejected')
 run(['exec', 'vue-tsc', '--noEmit'], app)

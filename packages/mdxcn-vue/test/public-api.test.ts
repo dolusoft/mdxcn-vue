@@ -7,6 +7,13 @@ import ts from 'typescript'
 
 // Deliberately maintained independently of export declarations.
 const publicNames = [
+  'createGraphComponents',
+  'graphComponents',
+  'graphTags',
+  'coerceProps',
+  'PendingGraph',
+  'GraphRow',
+  'GRAPH_ADAPTERS',
   'GraphUptime',
   'GraphCountdown',
   'GraphActivity',
@@ -158,6 +165,10 @@ it('exposes grammar and clock helpers only through core', () => {
 })
 
 const publicTypes = [
+  'GraphComponentMap',
+  'NumericProps',
+  'GraphAdapter',
+  'GraphTag',
   'GraphUptimeProps',
   'GraphCountdownProps',
   'UptimeStatus',

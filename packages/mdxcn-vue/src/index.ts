@@ -1,4 +1,10 @@
 // Public entry of `mdxcn-vue`; internal helpers belong to the core subpath.
+export { createGraphComponents, graphComponents, graphTags } from './components/graph-comark.js'
+export type { GraphComponentMap } from './components/graph-comark.js'
+export { coerceProps, PendingGraph, GraphRow } from './adapters/comark.js'
+export type { NumericProps, GraphAdapter } from './adapters/comark.js'
+export { GRAPH_ADAPTERS } from './adapters/comark-hints.js'
+export type { GraphTag } from './adapters/comark-hints.js'
 export { GraphTree, Node } from './components/graph-tree.js'
 export { GraphCheck, Task } from './components/graph-check.js'
 export { GraphFlow, Path } from './components/graph-flow.js'
