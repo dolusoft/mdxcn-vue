@@ -1,3 +1,7 @@
+<script setup lang="ts">
+import { Line, Span } from 'mdxcn-vue'
+</script>
+
 # Gantt, diff and waterfall fixtures
 
 <GraphGantt title="LAUNCH" stage="build" :progress="0.58" :ticks="['q1','q2','q3','q4']">

@@ -1,3 +1,7 @@
+<script setup lang="ts">
+import { Head } from 'mdxcn-vue'
+</script>
+
 # GraphTable
 
 Native tables from typed data, Markdown tables or declarative items. The first

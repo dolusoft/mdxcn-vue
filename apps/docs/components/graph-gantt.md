@@ -1,3 +1,7 @@
+<script setup lang="ts">
+import { Span } from 'mdxcn-vue'
+</script>
+
 # GraphGantt
 
 Use fractional `start` and `end` positions, optional `complete`, and text `ticks`. Dates are not parsed. `columns` defaults to 24; `stage`, `progress`, `glyphs`, and `palette` customize focus and the track. Data `items` → explicit compiler `list` → nonempty runtime list → `Span` items. Empty data/list arrays suppress fallback; null permits it. Values are clamped for drawing; accessible percentages retain the supplied numeric values. Stagger is capped at 250 ms.

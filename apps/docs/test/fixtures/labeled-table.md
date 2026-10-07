@@ -1,3 +1,7 @@
+<script setup lang="ts">
+import { Col } from 'mdxcn-vue'
+</script>
+
 # Labeled table paths
 
 <GraphCompare title="PLANS" accent="Studio">

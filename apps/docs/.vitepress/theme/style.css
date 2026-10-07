@@ -30,3 +30,66 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Derived from mdxcn `app/globals.css`, Copyright (c) 2026 Keshav Bagaade. MIT; see LICENSE. */
+@utility site-rail {
+  background-image:
+    repeating-linear-gradient(
+      to right,
+      var(--site-rail) 0 1px,
+      transparent 1px 4px
+    ),
+    repeating-linear-gradient(
+      to bottom,
+      var(--site-rail) 0 1px,
+      transparent 1px 4px
+    ),
+    repeating-linear-gradient(
+      to right,
+      var(--site-rail) 0 1px,
+      transparent 1px 4px
+    ),
+    repeating-linear-gradient(
+      to bottom,
+      var(--site-rail) 0 1px,
+      transparent 1px 4px
+    );
+  background-repeat: repeat-x, repeat-y, repeat-x, repeat-y;
+  background-position:
+    0 0,
+    100% 0,
+    0 100%,
+    0 0;
+  background-size:
+    100% 1px,
+    1px 100%,
+    100% 1px,
+    1px 100%;
+}
+
+@utility site-rule {
+  height: 1px;
+  background-image: repeating-linear-gradient(
+    to right,
+    var(--site-rail) 0 1px,
+    transparent 1px 4px
+  );
+}
+
+@utility site-rule-y {
+  width: 1px;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    var(--site-rail) 0 1px,
+    transparent 1px 4px
+  );
+}
+
+/* The site header (`.vitepress/theme/site/SiteHeader.vue`) replaces the default nav. */
+.VPNav {
+  display: none;
+}
+
+:root {
+  --vp-nav-height: 0px;
+}
