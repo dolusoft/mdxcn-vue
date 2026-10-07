@@ -699,8 +699,15 @@ function asciiWaffle({
   columns?: number
   caption?: string
 }) {
-  // Invalid dimensions would otherwise leave the upstream drawing loops unbounded.
-  if (!Number.isFinite(columns) || columns <= 0 || !Number.isFinite(cells) || cells < 0) {
+  // Bound loop work and output size, including tiny fractional column counts.
+  if (
+    !Number.isInteger(columns) ||
+    columns < 1 ||
+    columns > 200 ||
+    !Number.isInteger(cells) ||
+    cells < 0 ||
+    cells > 10_000
+  ) {
     throw new Error('Invalid waffle dimensions')
   }
   const clamped = Math.min(1, Math.max(0, value))

@@ -67,5 +67,8 @@ untrusted Markdown; the filters are not a sanitizer. See [Comark](./comark).
 ASCII follows upstream's independent print schema and drawing grammar. For
 example, Bars uses `from` and `to`, Table uses `headers` and `rows`; runtime item
 components and Vue `written`/`list` models are not interpreted. Invalid waffle
-dimensions fail with a warning. Nested YAML objects and YAML-like string values
+dimensions fail with a warning. Unlike upstream, ASCII waffle dimensions must
+be integers: `cells` is limited to 0–10,000 and `columns` to 1–200. Larger or
+fractional dimensions return the original input with a warning to bound work
+and output size. Nested YAML objects and YAML-like string values
 are preserved, fixing upstream serialization errors.

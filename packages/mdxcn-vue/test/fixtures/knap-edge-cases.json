@@ -1,0 +1,66 @@
+{
+  "revision": "16d817ad5ec54d89142e4c1cf26027b60d6df853",
+  "padEnd": {
+    "text": "abcdef",
+    "size": 3,
+    "expected": "abc"
+  },
+  "rank": {
+    "title": "RANK",
+    "items": [
+      {
+        "label": "fraction",
+        "value": 0.26
+      }
+    ],
+    "max": 1,
+    "ticks": 10
+  },
+  "funnel": {
+    "title": "FUNNEL",
+    "steps": [
+      {
+        "label": "read",
+        "value": 1234.5
+      }
+    ],
+    "ticks": 5
+  },
+  "flowMap": {
+    "rows": [
+      {
+        "x, y": "value"
+      }
+    ]
+  },
+  "nestedKey": {
+    "outer": {
+      "x: y": "value"
+    }
+  },
+  "nestedMapKey": {
+    "x: y": {
+      "child": "value"
+    }
+  },
+  "malformed": [
+    {
+      "name": "graph_meter",
+      "value": "{\"value\":\"oops\"}",
+      "expected": "```\n+------------------- [ METER ] --------------------+\n|                                                  |\n| []  NaN%                                         |\n|                                                  |\n+--------------------------------------------------+\n```"
+    },
+    {
+      "name": "graph_spec",
+      "value": "{\"rows\":[{\"label\":\"x\"},{\"label\":\"y\",\"value\":{\"x\":1}}]}",
+      "expected": "```\n+-------------------- [ SPEC ] --------------------+\n|                                                  |\n| x  undefined                                     |\n| y  [object Object]                               |\n|                                                  |\n+--------------------------------------------------+\n```"
+    }
+  ],
+  "rankExpected": "+-------------------- [ RANK ] --------------------+\n|                                                  |\n| fraction  [===-------]  0.3                      |\n|                                                  |\n+--------------------------------------------------+",
+  "funnelExpected": "+------------------- [ FUNNEL ] -------------------+\n|                                                  |\n| read  █████  1,234.5                             |\n|                                                  |\n+--------------------------------------------------+",
+  "flowMapUpstream": "rows:\n  - { x, y: value }",
+  "nestedKeyUpstream": "outer:   x: y: value",
+  "nestedMapKeyUpstream": "x: y:   child: value",
+  "flowMapExpected": "rows:\n  - { \"x, y\": value }",
+  "nestedKeyExpected": "outer:\n  \"x: y\": value",
+  "nestedMapKeyExpected": "\"x: y\":\n  child: value"
+}
