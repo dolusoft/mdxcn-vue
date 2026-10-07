@@ -349,3 +349,20 @@ it.each(['Faq', 'GraphBoard'])('%s caps the 60th item reveal delay', (name) => {
   vi.restoreAllMocks()
   vi.unstubAllGlobals()
 })
+it('ignores the VitePress heading permalink and separates loose Board paragraphs', () => {
+  const permalink = h('a', { class: 'header-anchor', href: '#q' }, '​')
+  expect(faqEntries([h('h3', ['Q ', permalink]), h('p', 'a')])).toMatchObject([
+    { question: 'Q', answer: expect.any(Array) },
+  ])
+  const nodes = [
+    h('h3', ['Now ', permalink]),
+    h('ul', [h('li', [h('p', 'one'), h('p', [h('strong', 'two')]), h('ul', [h('li', 'nested')])])]),
+  ]
+  expect(boardColumns(nodes)).toEqual([
+    { title: 'Now', items: [{ label: 'one two', state: 'now', note: undefined }] },
+  ])
+  const w = mount(GraphBoard, { props: { title: 'T' }, slots: { default: () => nodes } })
+  expect(w.get('section').attributes('aria-label')).toBe('Now')
+  expect(w.get('.sr-only').text()).toBe('Now: 1. 1 items.')
+  w.unmount()
+})

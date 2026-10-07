@@ -297,9 +297,13 @@ export function tokensToProps(
             items: items.map((item) => {
               const visible = item.children
                 .filter((block) => block.tag !== 'ul' && block.tag !== 'ol')
-                .flatMap(content)
+                .map((block) => {
+                  const text = proseText(content(block))
+                  return block.tag === 'p' ? ` ${text} ` : text
+                })
+                .join('')
               return boardFromList(
-                proseText(visible).replace(/\s+/g, ' ').trim(),
+                visible.replace(/\s+/g, ' ').trim(),
                 has(content(item), 'strong'),
                 has(content(item), 'em'),
               )

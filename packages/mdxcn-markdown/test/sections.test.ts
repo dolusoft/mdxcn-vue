@@ -118,3 +118,9 @@ it('Faq falls back for fences and tables while retaining their runtime content',
     expect(warnings[0]?.reason).toContain('Unsupported FAQ block')
   }
 })
+it('GraphBoard separates the paragraphs of a loose item with a space', () => {
+  const md = new MarkdownIt()
+  expect(tokensToProps('GraphBoard', md.parse('### A\n\n- one\n\n  two\n', {}), md)).toEqual({
+    columns: [{ title: 'A', items: [{ label: 'one two', state: 'done' }] }],
+  })
+})

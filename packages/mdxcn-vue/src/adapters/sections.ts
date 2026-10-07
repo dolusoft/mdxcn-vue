@@ -1,5 +1,5 @@
 /* Derived from mdxcn, Copyright (c) 2026 Keshav Bagaade. MIT; see LICENSE. */
-import { Fragment, h } from 'vue'
+import { Fragment, h, normalizeClass } from 'vue'
 import type { VNode } from 'vue'
 import type { BoardColumn, FaqEntry, ProseBlock } from '../core/sections.js'
 import { boardFromList, headingSections } from '../core/sections.js'
@@ -8,13 +8,16 @@ import { hasStateHost } from './state-list.js'
 import { readerListItems } from './code-readers.js'
 import { renderProse } from '../components/graph-frame.js'
 
+/** VitePress appends a permalink holding a zero-width space; it is not heading text. */
+const permalink = (node: VNode) =>
+  node.type === 'a' && /(?:^|\s)header-anchor(?:\s|$)/.test(normalizeClass(node.props?.class))
 function hostSections(nodes: readonly VNode[]) {
   return headingSections(
     flattenNodes(nodes).filter((node) => typeof node.type !== 'symbol'),
     (node) =>
       /^h[1-6]$/.test(String(node.type))
         ? {
-            title: textOf(childrenOf(node)).trim(),
+            title: textOf(childrenOf(node).filter((child) => !permalink(child))).trim(),
             accent: hasStateHost(childrenOf(node), ['strong', 'b']),
           }
         : undefined,
@@ -33,7 +36,11 @@ export function boardColumns(nodes: readonly VNode[]): BoardColumn[] {
     items: readerListItems(section.children).map((item) => {
       const children = childrenOf(item)
       return boardFromList(
-        textOf(children.filter((node) => node.type !== 'ul' && node.type !== 'ol'))
+        children
+          .filter((node) => node.type !== 'ul' && node.type !== 'ol')
+          // Compiled templates drop the newline between paragraphs; MDX keeps it.
+          .map((node) => (node.type === 'p' ? ` ${textOf([node])} ` : textOf([node])))
+          .join('')
           .replace(/\s+/g, ' ')
           .trim(),
         hasStateHost(children, ['strong', 'b']),
