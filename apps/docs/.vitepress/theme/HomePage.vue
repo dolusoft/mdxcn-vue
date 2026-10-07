@@ -21,6 +21,7 @@ import {
 import { data } from '../home.data'
 import { bars, meter, table } from '../home-examples'
 import HomeFigure from './HomeFigure.vue'
+import { useAccent } from './accent'
 import AccentPicker from './site/AccentPicker.vue'
 import SiteCorners from './site/SiteCorners.vue'
 
@@ -31,7 +32,7 @@ async function copyInstall() {
   copied.value = true
   setTimeout(() => (copied.value = false), 1500)
 }
-const accent = ref('ocean')
+const accent = useAccent()
 // Same fixed datasets as mdxcn `components/site/home-graph-demos.tsx`, so SSR and hydration match.
 function activityDays(start: string, length: number) {
   const [year, month, day] = start.split('-').map(Number) as [number, number, number]
@@ -91,7 +92,7 @@ const questions = [
 </script>
 
 <template>
-  <main class="mdxcn-home" :data-accent="accent">
+  <main class="mdxcn-home">
     <section class="home-hero" aria-labelledby="home-title">
       <p class="home-eyebrow">mdxcn / vue 3</p>
       <h1

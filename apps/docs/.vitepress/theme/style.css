@@ -99,3 +99,27 @@ html {
   scrollbar-color: var(--graph-frame) transparent;
 }
 
+
+/* Docs pages share the header's `max-w-6xl` column: a 16rem sidebar, then the
+   page up to the right rail. The outline column is dropped, as in mdxcn.
+   `.Layout` outranks the default theme's scoped `[data-v-*]` selectors. */
+@media (min-width: 60rem) {
+  .Layout .VPContent.has-sidebar {
+    padding-right: max(0px, calc((100% - 72rem) / 2));
+    padding-left: calc(max(0px, calc((100% - 72rem) / 2)) + 16rem);
+  }
+  .Layout .VPDoc {
+    padding: 2.5rem 2rem 8rem;
+  }
+  .Layout .VPDoc .container,
+  .Layout .VPDoc .content,
+  .Layout .VPDoc.has-aside .content-container,
+  .Layout .VPDoc .content-container {
+    max-width: none;
+    margin: 0;
+    padding: 0;
+  }
+  .Layout .VPDoc .aside {
+    display: none;
+  }
+}
