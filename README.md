@@ -9,14 +9,14 @@ by typed props, item components or Markdown.
 
 ## Installation and requirements
 
-After publication (these names are currently provisional):
+Both packages are published on npm:
 
 ```sh
-npm install mdxcn-vue@^0.1.0 vue@^3.5.0
-npm install mdxcn-markdown@^0.1.0 markdown-it@^14
+npm install mdxcn-vue@^0.1.1 vue@^3.5.0
+npm install mdxcn-markdown@^0.1.1 markdown-it@^14
 ```
 
-Before publication, build this repository and install local `pnpm pack` tarballs.
+For local development, build this repository and install local `pnpm pack` tarballs.
 Node >=22.18 and Vue ^3.5 are required. CSS requires Tailwind v4 processing.
 Vite 8.3.3, TypeScript 6.0.3 and vue-tsc 3.3.12 are the verified consumer
 toolchain; older Vite/TypeScript versions have not been qualified. VitePress
@@ -74,6 +74,21 @@ tests resolve development and production configs without starting a server;
 both tools are excluded from production builds. Previous browser measurements
 are recorded in [Phase 10A](docs/phase-10a-report.md) and
 [Phase 11A](docs/phase-11a-report.md).
+
+The documentation homepage includes scoped accent selection and Vue/ASCII
+previews generated from shared data by the Knap filters at build time.
+`.github/workflows/pages.yml` builds and deploys the docs on `main` pushes or
+manual dispatch, using `MDXCN_PAGES=true` to set the `/mdxcn-vue/` base for
+`https://dolusoft.github.io/mdxcn-vue/`. Local builds retain the `/` base.
+Enable GitHub Pages with **GitHub Actions** as the source in the repository
+settings before deploying. To verify the Pages output locally in PowerShell:
+
+```powershell
+$env:MDXCN_PAGES = 'true'
+pnpm --filter @mdxcn-vue/docs build
+node --test apps/docs/test/home-build.test.mjs
+Remove-Item Env:MDXCN_PAGES
+```
 
 ## GraphStack
 

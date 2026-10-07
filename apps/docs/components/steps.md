@@ -32,7 +32,7 @@ A numbered procedure. Bold selects the current step; italic selects the next.
 
 ## Items
 
-<Steps title="ITEMS"><Step title="Install">Run the CLI.</Step><Step title="Register" state="now"><p>Read <a href="/components/terminal">Terminal</a>.</p></Step><Step title="Write" state="next">Use it between paragraphs.</Step></Steps>
+<Steps title="ITEMS"><Step title="Install">Run the CLI.</Step><Step title="Register" state="now"><p>Read <a href="./terminal.html">Terminal</a>.</p></Step><Step title="Write" state="next">Use it between paragraphs.</Step></Steps>
 
 ```vue
 <Steps title="INSTALL">

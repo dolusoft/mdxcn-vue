@@ -24,7 +24,7 @@ Release notes with added, changed, fixed, and removed states.
 
 ## Items
 
-<Changelog version="1.2.0"><Change type="add"><p>Read <a href="/components/steps">Steps</a>.</p></Change><Change type="fix">Timeline connector on Safari</Change><Change type="remove">The legacy accent prop</Change></Changelog>
+<Changelog version="1.2.0"><Change type="add"><p>Read <a href="./steps.html">Steps</a>.</p></Change><Change type="fix">Timeline connector on Safari</Change><Change type="remove">The legacy accent prop</Change></Changelog>
 
 ```vue
 <Changelog version="1.2.0">
