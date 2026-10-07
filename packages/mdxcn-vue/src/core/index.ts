@@ -111,3 +111,6 @@ export type {
 
 export type { FaqEntry, ProseBlock, BoardItem, BoardColumn, BoardState } from './sections.js'
 export { headingSections, boardFromList, normalizeBoard } from './sections.js'
+
+export { seriesOf, barsFromList } from './series.js'
+export type { SeriesData, BarSeries, SeriesProps, SeriesListItem } from './series.js'

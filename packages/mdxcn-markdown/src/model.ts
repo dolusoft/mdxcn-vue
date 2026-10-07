@@ -22,7 +22,12 @@ import type { StateListItem, DecisionOption } from 'mdxcn-vue/core'
 import { bindingFromList } from 'mdxcn-vue/core'
 import type { ChatListItem, KeyBinding } from 'mdxcn-vue/core'
 
+import { seriesOf, barsFromList } from 'mdxcn-vue/core'
+import type { BarSeries, SeriesData, SeriesListItem } from 'mdxcn-vue/core'
+
 export type ComponentName =
+  | 'GraphBars'
+  | 'GraphSpark'
   | 'GraphTree'
   | 'GraphCheck'
   | 'GraphFlow'
@@ -55,6 +60,8 @@ export type ComponentName =
   | 'GraphDiff'
   | 'GraphWaterfall'
 export type CompiledProps =
+  | { series: BarSeries[] }
+  | { written: SeriesData }
   | { nodes: TreeNode[] }
   | { items: CheckItem[] }
   | { rows: FlowRow[] }
@@ -261,6 +268,49 @@ export function tokensToProps(
   env: object = {},
   options: TokenModelOptions = {},
 ): CompiledProps {
+  if (name === 'GraphBars' || name === 'GraphSpark') {
+    const tree = blocks(tokens, md, env, options, true, true, true)
+    const hasFence = (nodes: readonly Block[]): boolean =>
+      nodes.some((b) => b.tag === 'fence' || hasFence(b.children))
+    if (hasFence(tree)) throw new Error(name + ' fences require runtime resolution')
+    const lists = tree.filter((b) => b.tag === 'ul' || b.tag === 'ol')
+    const items = lists.length
+      ? lists.flatMap((b) => b.children)
+      : tree.filter((b) => b.tag === 'li')
+    const list: SeriesListItem[] = items.map((item) => ({
+      text: proseText(
+        item.children.filter((b) => b.tag !== 'ul' && b.tag !== 'ol').flatMap(content),
+      )
+        .replace(/\s+/g, ' ')
+        .trim(),
+      strong: bold(content(item)),
+    }))
+    if (name === 'GraphBars') return { series: barsFromList(list) }
+    const sourceProse = (nodes: readonly ProseNode[]): string =>
+      nodes
+        .map((node) => {
+          if (node.type === 'text') return node.value
+          const inner = sourceProse(node.children)
+          const mark =
+            node.type === 'strong'
+              ? '**'
+              : node.type === 'em'
+                ? '*'
+                : node.type === 'del'
+                  ? '~~'
+                  : ''
+          return mark + inner + mark
+        })
+        .join('')
+    const source = (nodes: readonly Block[]): string =>
+      nodes
+        .map((b) => {
+          const inner = b.prose ? sourceProse(b.prose) : source(b.children)
+          return ['p', 'li', 'br'].includes(b.tag) ? inner + '\n' : inner
+        })
+        .join('')
+    return { written: seriesOf(list, source(tree)) }
+  }
   if (['GraphTree', 'GraphCheck', 'GraphFlow'].includes(name)) {
     const tree = blocks(tokens, md, env, options, true, false, true, name === 'GraphCheck')
     const hasFence = (nodes: readonly Block[]): boolean =>

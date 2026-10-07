@@ -1,7 +1,7 @@
 # Registry üretimi ve doğrulaması
 
 `pnpm registry:build` komutu kendi `scripts/registry-build.mjs` betiğimizle
-`registry.json` kaynak dizinini ve 38 `public/r/mdxcn-*.json` payload dosyasını
+`registry.json` kaynak dizinini ve 40 `public/r/mdxcn-*.json` payload dosyasını
 üretir. Kaynak dizini içerik taşımaz; gerçek TS/CSS dosyalarını gösterir.
 Payload dosyalarının `path` alanları kaynak diziniyle aynıdır; `.txt` gerekmez.
 `~/src/components/mdxcn/` hedefi, CLI'nin `src/` dizinini koruması için kalır.

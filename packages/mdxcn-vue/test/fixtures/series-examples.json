@@ -1,0 +1,57 @@
+[
+  {
+    "name": "GraphBars",
+    "props": { "title": "THROUGHPUT", "palette": "duo" },
+    "body": "- before: 2 4 3 5 2\n- **after**: 2 4 3 5 2",
+    "model": {
+      "series": [
+        { "label": "before", "values": [2, 4, 3, 5, 2] },
+        { "label": "after", "values": [2, 4, 3, 5, 2], "size": "lg" }
+      ]
+    }
+  },
+  {
+    "name": "GraphBars",
+    "props": { "title": "DRAFT TO SHIPPED", "processor": "edit" },
+    "body": "- draft: 1 2 2 3 1\n- **shipped**: 3 5 4 6 5",
+    "model": {
+      "series": [
+        { "label": "draft", "values": [1, 2, 2, 3, 1] },
+        { "label": "shipped", "values": [3, 5, 4, 6, 5], "size": "lg" }
+      ]
+    }
+  },
+  {
+    "name": "GraphSpark",
+    "props": { "title": "DEPLOYS" },
+    "body": "2 3 0*3 5 8 6 9 — three quiet days, then a busy week",
+    "model": {
+      "written": {
+        "data": [2, 3, 0, 0, 0, 5, 8, 6, 9],
+        "labels": [],
+        "caption": "three quiet days, then a busy week"
+      }
+    },
+    "points": "▃▃▁▁▁▅▇▆█"
+  },
+  {
+    "name": "GraphSpark",
+    "props": {
+      "title": "LATENCY",
+      "data": "2 3 4 3 6 5 8 7 9 6 10 8",
+      "caption": "last point is the accent"
+    },
+    "model": {},
+    "points": "▂▃▄▃▅▅▇▆▇▅█▇"
+  },
+  {
+    "name": "GraphSpark",
+    "props": {
+      "title": "REQUESTS",
+      "data": [4, 4, 5, 3, 6, 8, 7, 9, 8, 6, 5, 7],
+      "caption": "last twelve deploys"
+    },
+    "model": {},
+    "points": "▄▄▅▃▆▇▆█▇▆▅▆"
+  }
+]

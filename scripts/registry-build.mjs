@@ -10,6 +10,8 @@ const check = process.argv.includes('--check')
 const cliOutput = process.argv[process.argv.indexOf('--from-cli') + 1]
 const useCli = process.argv.includes('--from-cli')
 const definitions = [
+  ['graph-bars', ['components/graph-bars.ts']],
+  ['graph-spark', ['components/graph-spark.ts']],
   ['graph-tree', ['components/graph-tree.ts']],
   ['graph-check', ['components/graph-check.ts']],
   ['graph-flow', ['components/graph-flow.ts']],
