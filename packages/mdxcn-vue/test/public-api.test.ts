@@ -7,6 +7,10 @@ import ts from 'typescript'
 
 // Deliberately maintained independently of export declarations.
 const publicNames = [
+  'GraphCells',
+  'Grid',
+  'GraphMeter',
+  'GraphWaffle',
   'GraphBars',
   'Series',
   'GraphSpark',
@@ -150,6 +154,12 @@ it('exposes grammar and clock helpers only through core', () => {
 })
 
 const publicTypes = [
+  'GraphCellsProps',
+  'GraphMeterProps',
+  'GraphWaffleProps',
+  'CellGrid',
+  'GridProps',
+  'FractionData',
   'GraphBarsProps',
   'GraphSparkProps',
   'GraphPlotProps',
@@ -280,6 +290,13 @@ const publicTypes = [
   'GraphTimerProps',
 ]
 const coreNames = [
+  'fraction',
+  'fractionOf',
+  'gridCellsOf',
+  'gridsFromList',
+  'CellGrid',
+  'GridProps',
+  'FractionData',
   'seriesOf',
   'kpiOf',
   'KpiData',

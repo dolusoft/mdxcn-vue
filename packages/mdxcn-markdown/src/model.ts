@@ -27,7 +27,13 @@ import type { KpiData } from 'mdxcn-vue/core'
 import { seriesOf, barsFromList } from 'mdxcn-vue/core'
 import type { BarSeries, SeriesData, SeriesListItem } from 'mdxcn-vue/core'
 
+import { fractionOf, gridsFromList } from 'mdxcn-vue/core'
+import type { FractionData, CellGrid } from 'mdxcn-vue/core'
+
 export type ComponentName =
+  | 'GraphCells'
+  | 'GraphMeter'
+  | 'GraphWaffle'
   | 'GraphBars'
   | 'GraphSpark'
   | 'GraphPlot'
@@ -64,6 +70,8 @@ export type ComponentName =
   | 'GraphDiff'
   | 'GraphWaterfall'
 export type CompiledProps =
+  | { items: CellGrid[] }
+  | { written: FractionData }
   | { series: BarSeries[] }
   | { written: SeriesData }
   | { written: KpiData }
@@ -251,6 +259,30 @@ function joinText(nodes: ProseNode[]): ProseNode[] {
 // Join per inline run only; separate paragraphs of one item stay separate text nodes.
 const flowContent = (block: Block): ProseNode[] =>
   block.prose ? joinText(block.prose) : block.children.flatMap(flowContent)
+// Match Vue's whitespace-only text removal at element boundaries before condensation.
+function gridFractionInline(nodes: readonly ProseNode[]): string {
+  const runs: { text: string; element: boolean }[] = []
+  for (const node of nodes) {
+    const element = node.type !== 'text'
+    const text = node.type === 'text' ? node.value : gridFractionInline(node.children)
+    const last = runs.at(-1)
+    if (!element && last && !last.element) last.text += text
+    else runs.push({ text, element })
+  }
+  return runs
+    .map((run, index) => {
+      if (run.element) return run.text
+      if (
+        /^[ \t\r\n\f]+$/.test(run.text) &&
+        (index === 0 ||
+          index === runs.length - 1 ||
+          (/[\r\n]/.test(run.text) && runs[index - 1]?.element && runs[index + 1]?.element))
+      )
+        return ''
+      return run.text.replace(/[ \t\r\n\f]+/g, ' ')
+    })
+    .join('')
+}
 const bold = (nodes: ProseNode[]): boolean =>
   nodes.some((node) => node.type !== 'text' && (node.type === 'strong' || bold(node.children)))
 const route = /^\s*(GET|POST|PUT|PATCH|DELETE|HEAD|OPTIONS|QUERY)\s+(\S+)\s*$/i
@@ -291,6 +323,29 @@ export function tokensToProps(
   env: object = {},
   options: TokenModelOptions = {},
 ): CompiledProps {
+  if (['GraphCells', 'GraphMeter', 'GraphWaffle'].includes(name)) {
+    const tree = blocks(tokens, md, env, options, true, true, true)
+    const hasFence = (nodes: readonly Block[]): boolean =>
+      nodes.some((b) => b.tag === 'fence' || hasFence(b.children))
+    if (hasFence(tree)) throw new Error(name + ' fences require runtime resolution')
+    // Vue condenses each inline text run, including softbreaks; element boundaries add no spaces.
+    const visible = (nodes: readonly Block[]): string =>
+      nodes.map((b) => (b.prose ? gridFractionInline(b.prose) : visible(b.children))).join('')
+    if (name !== 'GraphCells') return { written: fractionOf(visible(tree)) }
+    const lists = tree.filter((b) => b.tag === 'ul' || b.tag === 'ol')
+    const items = lists.length
+      ? lists.flatMap((b) => b.children)
+      : tree.filter((b) => b.tag === 'li')
+    return {
+      items: gridsFromList(
+        items.map((item) =>
+          visible(item.children.filter((b) => b.tag !== 'ul' && b.tag !== 'ol'))
+            .replace(/\s+/g, ' ')
+            .trim(),
+        ),
+      ),
+    }
+  }
   if (['GraphBars', 'GraphSpark', 'GraphPlot', 'GraphKpi'].includes(name)) {
     const tree = blocks(tokens, md, env, options, true, true, true)
     const hasFence = (nodes: readonly Block[]): boolean =>

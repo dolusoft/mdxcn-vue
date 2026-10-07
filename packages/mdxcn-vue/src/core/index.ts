@@ -117,3 +117,6 @@ export type { SeriesData, BarSeries, SeriesProps, SeriesListItem } from './serie
 
 export { kpiOf } from './kpi.js'
 export type { KpiData } from './kpi.js'
+
+export { fraction, fractionOf, gridCellsOf, gridsFromList } from './grid-fraction.js'
+export type { CellGrid, GridProps, FractionData } from './grid-fraction.js'

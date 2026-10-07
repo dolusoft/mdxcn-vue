@@ -1,0 +1,95 @@
+[
+  {
+    "name": "GraphCells",
+    "props": { "title": "TWO WAYS TO LEARN" },
+    "body": "- fragments: 1 0 1 0 0 / 0 1 0 1 0 / 1 0 0 0 1\n- a system: 1 1 1 1 1 / 1 1 1 1 1 / 1 1 1 1 1",
+    "model": {
+      "items": [
+        {
+          "label": "fragments",
+          "cells": [
+            [1, 0, 1, 0, 0],
+            [0, 1, 0, 1, 0],
+            [1, 0, 0, 0, 1]
+          ]
+        },
+        {
+          "label": "a system",
+          "cells": [
+            [1, 1, 1, 1, 1],
+            [1, 1, 1, 1, 1],
+            [1, 1, 1, 1, 1]
+          ]
+        }
+      ]
+    },
+    "glyphs": "█·█···█·█·█···████████████████",
+    "filled": 21
+  },
+  {
+    "name": "GraphCells",
+    "props": { "title": "COVERAGE" },
+    "body": "- this week: 1 1 1 1 0 / 1 1 0 1 1 / 1 0 1 1 1",
+    "model": {
+      "items": [
+        {
+          "label": "this week",
+          "cells": [
+            [1, 1, 1, 1, 0],
+            [1, 1, 0, 1, 1],
+            [1, 0, 1, 1, 1]
+          ]
+        }
+      ]
+    },
+    "glyphs": "████·██·███·███",
+    "filled": 12
+  },
+  {
+    "name": "GraphMeter",
+    "props": { "title": "DISK" },
+    "body": "78% — of 500 GB",
+    "model": { "written": { "token": "78%", "caption": "of 500 GB" } },
+    "glyphs": "===========---",
+    "filled": 11,
+    "summary": "78 percent of 500 GB"
+  },
+  {
+    "name": "GraphMeter",
+    "props": { "title": "SHIPPED", "value": "67%", "caption": "characters, not a progress bar" },
+    "model": { "written": { "token": "", "caption": "characters, not a progress bar" } },
+    "glyphs": "=========-----",
+    "filled": 9,
+    "summary": "67 percent characters, not a progress bar"
+  },
+  {
+    "name": "GraphMeter",
+    "props": { "title": "COVERAGE", "value": 0.92, "ticks": 10, "caption": "tests passing" },
+    "model": { "written": { "token": "", "caption": "tests passing" } },
+    "glyphs": "=========-",
+    "filled": 9,
+    "summary": "92 percent tests passing"
+  },
+  {
+    "name": "GraphWaffle",
+    "props": { "title": "TESTS" },
+    "body": "91% — 182 of 200 green",
+    "model": { "written": { "token": "91%", "caption": "182 of 200 green" } },
+    "filled": 91,
+    "summary": "91 percent. 182 of 200 green"
+  },
+  {
+    "name": "GraphWaffle",
+    "props": { "title": "COVERAGE", "value": "73%", "caption": "73 of 100 tests green" },
+    "model": { "written": { "token": "", "caption": "73 of 100 tests green" } },
+    "filled": 73,
+    "summary": "73 percent. 73 of 100 tests green"
+  },
+  {
+    "name": "GraphWaffle",
+    "props": { "title": "QUOTA", "value": 0.4, "cells": 40, "columns": 8, "caption": "seats used" },
+    "model": { "written": { "token": "", "caption": "seats used" } },
+    "filled": 16,
+    "summary": "40 percent. seats used"
+  }
+]

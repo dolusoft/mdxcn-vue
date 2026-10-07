@@ -31,6 +31,7 @@ export default tseslint.config(
         'error',
         {
           ignores: [
+            'Grid',
             'Series',
             'Node',
             'Task',
