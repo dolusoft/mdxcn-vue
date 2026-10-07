@@ -30,7 +30,7 @@ test('FAQ answer prose and Board states, counts, labels and notes survive VitePr
 })
 test('both documentation pages render upstream examples with visible native semantics', () => {
   for(const [slug,count] of [['faq',1],['graph-board',2]]) {
-    const page = new JSDOM(readFileSync(new URL(`../.vitepress/dist/components/${slug}.html`, import.meta.url),'utf8')).window.document
+    const page = new JSDOM(readFileSync(new URL(`../.vitepress/dist/docs/${slug}.html`, import.meta.url),'utf8')).window.document
     assert.equal(page.querySelectorAll('figure').length,count)
     assert.doesNotMatch(page.querySelector('.vp-doc').innerHTML, /<(?:Faq|GraphBoard)\b/)
   }

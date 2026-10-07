@@ -67,7 +67,7 @@ test('compiler, host, data and item paths have equal visible DOM with unique cap
 })
 test('timeline and spec docs render six upstream examples with resolved components',()=>{
   for(const slug of ['graph-timeline','graph-spec']){
-    const html=readFileSync(new URL(`../.vitepress/dist/components/${slug}.html`,import.meta.url),'utf8')
+    const html=readFileSync(new URL(`../.vitepress/dist/docs/${slug}.html`,import.meta.url),'utf8')
     const document=new JSDOM(html).window.document
     assert.equal(document.querySelectorAll('figure').length,3)
     assert.equal(document.querySelectorAll('figure figure').length,0)

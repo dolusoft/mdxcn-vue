@@ -62,7 +62,7 @@ test('state-list SSR DOM is visible, caption ids are unique, and equivalent path
 })
 test('new component docs render all three examples without unresolved components', () => {
   for (const slug of ['steps', 'changelog', 'decision']) {
-    const html = readFileSync(new URL(`../.vitepress/dist/components/${slug}.html`, import.meta.url), 'utf8')
+    const html = readFileSync(new URL(`../.vitepress/dist/docs/${slug}.html`, import.meta.url), 'utf8')
     const doc = new JSDOM(html).window.document
     assert.equal(doc.querySelectorAll('figure').length, 3)
     assert.equal(doc.querySelectorAll('figure figure').length, 0)

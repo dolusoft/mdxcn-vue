@@ -4,7 +4,7 @@
 // MIT; see LICENSE), scrolled by the shadcn `ScrollArea`.
 import { useScrollLock } from '@vueuse/core'
 import { inBrowser, useRoute, withBase } from 'vitepress'
-import { useLayout } from 'vitepress/theme'
+import { useLayout } from 'vitepress/theme-without-fonts'
 import { useTemplateRef, watch } from 'vue'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { cn } from '@/lib/utils'

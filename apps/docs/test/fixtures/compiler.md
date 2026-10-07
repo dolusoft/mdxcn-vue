@@ -2,7 +2,7 @@
 
 <GraphStack title="STACK" :ticks="3">
 
-- **Web** *app* `ui` [docs](/components/graph-table): 2 js, 1 css
+- **Web** *app* `ui` [docs](/docs/graph-table): 2 js, 1 css
 
 </GraphStack>
 
@@ -11,7 +11,7 @@
 | Name | Count |
 | --- | ---: |
 | *Web* | `2` |
-| [Docs](/components/graph-table) | 3 |
+| [Docs](/docs/graph-table) | 3 |
 | **Sum** | 5 |
 
 </GraphTable>
@@ -20,7 +20,7 @@
 
 POST /api/test
 
-See **docs** and [link](/components/graph-table).
+See **docs** and [link](/docs/graph-table).
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -40,7 +40,7 @@ See **docs** and [link](/components/graph-table).
 
 <GraphStack title="STACK" :ticks="3" v-if="true">
 
-- **Web** *app* `ui` [docs](/components/graph-table): 2 js, 1 css
+- **Web** *app* `ui` [docs](/docs/graph-table): 2 js, 1 css
 
 </GraphStack>
 
@@ -49,7 +49,7 @@ See **docs** and [link](/components/graph-table).
 | Name | Count |
 | --- | ---: |
 | *Web* | `2` |
-| [Docs](/components/graph-table) | 3 |
+| [Docs](/docs/graph-table) | 3 |
 | **Sum** | 5 |
 
 </GraphTable>
@@ -58,7 +58,7 @@ See **docs** and [link](/components/graph-table).
 
 POST /api/test
 
-See **docs** and [link](/components/graph-table).
+See **docs** and [link](/docs/graph-table).
 
 | Param | Type | Description |
 | --- | --- | --- |

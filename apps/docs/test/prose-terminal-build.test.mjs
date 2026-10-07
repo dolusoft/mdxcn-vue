@@ -74,10 +74,10 @@ test('real docs config upgrades the three new pages and keeps explicit terminal 
   const config = await resolveConfig(root, 'build')
   const md = await createMarkdownRenderer(root, config.markdown)
   for (const [slug, name] of [['callout', 'Callout'], ['quote', 'Quote'], ['terminal', 'Terminal']]) {
-    const source = readFileSync(new URL(`../components/${slug}.md`, import.meta.url), 'utf8')
-    const output = await md.renderAsync(source, { path: `components/${slug}.md` })
+    const source = readFileSync(new URL(`../docs/${slug}.md`, import.meta.url), 'utf8')
+    const output = await md.renderAsync(source, { path: `docs/${slug}.md` })
     assert.ok(output.includes(`<${name} v-bind=`))
-    const html = readFileSync(new URL(`../.vitepress/dist/components/${slug}.html`, import.meta.url), 'utf8')
+    const html = readFileSync(new URL(`../.vitepress/dist/docs/${slug}.html`, import.meta.url), 'utf8')
     const page = new JSDOM(html).window.document
     assert.equal(page.querySelectorAll('figure').length, 3)
     assert.equal(page.querySelectorAll('figure figure').length, 0)

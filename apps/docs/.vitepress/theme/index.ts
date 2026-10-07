@@ -1,5 +1,6 @@
 import type { Theme } from 'vitepress'
-import DefaultTheme from 'vitepress/theme'
+// The site sets in Geist, so the default theme's Inter is never downloaded.
+import DefaultTheme from 'vitepress/theme-without-fonts'
 import { Footnotes, GraphUptime,GraphCountdown,GraphActivity,GraphCalendar,GraphCells,GraphMeter,GraphWaffle,Grid,GraphBars,GraphSpark,GraphPlot,GraphKpi,Series,GraphTree,GraphCheck,GraphFlow,Node,Task,GraphSheet, GraphInvoice, From, To, Item, Total, Faq, GraphBoard, GraphCompare, GraphMatrix, GraphHeatmap, GraphGantt, GraphDiff, GraphWaterfall, Delta, GraphStat, GraphSlope, GraphBullet, Stat, Slope, Target, GraphScore, GraphRank, GraphFunnel, Rank, Stage, GraphTimeline, Event, GraphSpec, Field, Chat, Keys, Steps, Step, Changelog, Change, Decision, Annotate, Env, Bar, Callout, Quote, Terminal, Endpoint, GraphStack, GraphTable, GraphTimer, Row, Foot, Cell, Segment } from 'mdxcn-vue'
 import SiteLayout from './SiteLayout.vue'
 import './style.css'

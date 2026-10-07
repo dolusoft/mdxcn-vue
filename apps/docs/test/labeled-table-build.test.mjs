@@ -37,7 +37,7 @@ test('compiler, runtime, props and items share visible native DOM and caption la
 })
 test('all three component documentation pages render both upstream examples', () => {
   for (const slug of ['graph-compare','graph-matrix','graph-heatmap']) {
-    const page = new JSDOM(readFileSync(new URL(`../.vitepress/dist/components/${slug}.html`, import.meta.url), 'utf8')).window.document
+    const page = new JSDOM(readFileSync(new URL(`../.vitepress/dist/docs/${slug}.html`, import.meta.url), 'utf8')).window.document
     assert.equal(page.querySelectorAll('figure').length, 2)
     assert.doesNotMatch(page.querySelector('.vp-doc').innerHTML, /<(?:GraphCompare|GraphMatrix|GraphHeatmap|Col|Row)\b/)
   }

@@ -19,7 +19,7 @@ test('Plot and KPI retain equal compiler/runtime/model DOM in production VitePre
 })
 test('Plot and KPI docs render all six upstream examples visibly',()=>{
   for(const slug of ['graph-plot','graph-kpi']){
-    const figures=[...page(`components/${slug}`).querySelectorAll('figure')]
+    const figures=[...page(`docs/${slug}`).querySelectorAll('figure')]
     assert.equal(figures.length,3)
     for(const f of figures) assert.doesNotMatch(f.outerHTML,/header-anchor|opacity:0(?:;|"|$)|translateY|<(?:GraphPlot|GraphKpi)\b/)
   }

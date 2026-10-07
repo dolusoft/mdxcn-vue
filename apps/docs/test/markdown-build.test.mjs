@@ -13,8 +13,8 @@ test('docs config compiles real page examples before highlighter and anchor outp
   const config = await resolveConfig(root, 'build')
   const md = await createMarkdownRenderer(root, config.markdown)
   for (const [name, component, count] of [['graph-stack', 'GraphStack', 3], ['graph-table', 'GraphTable', 2], ['endpoint', 'Endpoint', 1]]) {
-    const source = readFileSync(new URL(`../components/${name}.md`, import.meta.url), 'utf8')
-    const output = await md.renderAsync(source, { path: `components/${name}.md` })
+    const source = readFileSync(new URL(`../docs/${name}.md`, import.meta.url), 'utf8')
+    const output = await md.renderAsync(source, { path: `docs/${name}.md` })
     assert.equal((output.match(new RegExp(`<${component} v-bind=`, 'g')) ?? []).length, count)
   }
 })
@@ -25,7 +25,7 @@ const built = readFileSync(builtPath, 'utf8')
 const document = new JSDOM(built).window.document
 const figures = [...document.querySelectorAll('figure')]
 const texts = (figure, selector) => [...figure.querySelectorAll(selector)].map((node) => node.textContent)
-const target = '/components/graph-table.html'
+const target = '/docs/graph-table.html'
 
 test('compiled and runtime stack DOM each match an independent expected fixture', () => {
   assert.equal(figures.length, 6)

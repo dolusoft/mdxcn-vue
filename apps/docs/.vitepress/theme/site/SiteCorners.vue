@@ -26,7 +26,9 @@ const cornerClass: Record<Corner, string> = {
     aria-hidden="true"
     :class="
       cn(
-        'pointer-events-none absolute z-20 flex size-4 items-center justify-center bg-background select-none',
+        'pointer-events-none absolute z-20 flex size-4 items-center justify-center select-none',
+        // No `bg-background` cut-out: on a surface of another tone it shows as a
+        // filled square. The plus alone covers the dotted line.
         props.tone === 'frame' ? 'text-graph-frame' : 'text-site-rail',
         cornerClass[corner],
         props.class,

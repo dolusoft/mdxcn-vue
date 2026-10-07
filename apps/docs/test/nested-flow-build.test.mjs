@@ -32,7 +32,7 @@ test('seven upstream examples have identical compiler, runtime and typed data DO
 })
 test('three docs pages render all seven examples visibly without unresolved tags', () => {
   for(const [slug,count] of [['graph-tree',2],['graph-check',3],['graph-flow',2]]) {
-    const doc=new JSDOM(readFileSync(new URL(`../.vitepress/dist/components/${slug}.html`,import.meta.url),'utf8')).window.document
+    const doc=new JSDOM(readFileSync(new URL(`../.vitepress/dist/docs/${slug}.html`,import.meta.url),'utf8')).window.document
     assert.equal(doc.querySelectorAll('figure').length,count)
     assert.doesNotMatch(doc.querySelector('.vp-doc').innerHTML,/<(?:GraphTree|GraphCheck|GraphFlow)\b/)
     for(const f of doc.querySelectorAll('figure')) assert.doesNotMatch(f.outerHTML,/opacity:\s*0(?:;|"|$)|translateY|header-anchor/)

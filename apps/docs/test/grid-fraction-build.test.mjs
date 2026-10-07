@@ -21,7 +21,7 @@ test('Grid/fraction production compiler, runtime and direct props produce equal 
 })
 test('Grid/fraction docs render eight upstream examples visibly with correct default track sizes', () => {
   for(const [slug,count] of [['graph-cells',2],['graph-meter',3],['graph-waffle',3]]) {
-    const figures=[...page(`components/${slug}`).querySelectorAll('figure')]
+    const figures=[...page(`docs/${slug}`).querySelectorAll('figure')]
     assert.equal(figures.length,count)
     for(const f of figures) assert.doesNotMatch(f.outerHTML,/header-anchor|opacity:0(?:;|"|$)|translateY|<(?:GraphCells|GraphMeter|GraphWaffle)\b/)
     if(slug==='graph-meter') assert.equal(figures[0].querySelectorAll('.block.w-full').length,14)

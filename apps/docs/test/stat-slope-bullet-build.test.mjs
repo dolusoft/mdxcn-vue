@@ -40,7 +40,7 @@ test('compiler, runtime, props and item paths render equal DOM with unique acces
 })
 test('stat, slope and bullet docs resolve both upstream examples',()=>{
   for(const slug of ['graph-stat','graph-slope','graph-bullet']){
-    const html=readFileSync(new URL(`../.vitepress/dist/components/${slug}.html`,import.meta.url),'utf8')
+    const html=readFileSync(new URL(`../.vitepress/dist/docs/${slug}.html`,import.meta.url),'utf8')
     const page=new JSDOM(html).window.document
     assert.equal(page.querySelectorAll('figure').length,2)
     assert.doesNotMatch(page.querySelector('.vp-doc').innerHTML,/<(?:GraphStat|GraphSlope|GraphBullet|Stat|Slope|Target)\b/)

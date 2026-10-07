@@ -68,8 +68,8 @@ test('all built pages keep absolute local URLs under the build base', () => {
     ['changelog', 'steps'],
     ['steps', 'terminal'],
   ]) {
-    const content = readFileSync(new URL(`components/${page}.html`, dist), 'utf8')
+    const content = readFileSync(new URL(`docs/${page}.html`, dist), 'utf8')
     assert.ok(content.includes(`href="./${link}.html"`))
-    assert.ok(existsSync(new URL(`components/${link}.html`, dist)))
+    assert.ok(existsSync(new URL(`docs/${link}.html`, dist)))
   }
 })

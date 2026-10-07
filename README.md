@@ -130,7 +130,7 @@ contrast is at least 4.5:1 in both modes; custom host backgrounds need their own
 
 `GraphStack` supports typed rows, direct Markdown lists and `Bar`/`Segment` item
 tags. Empty `rows` suppress fallback inputs. See the
-[examples](apps/docs/components/graph-stack.md),
+[examples](apps/docs/docs/graph-stack.md),
 [Phase 2B Markdown contract](docs/markdown-contract.md) and
 [Phase 2A report](docs/phase-2a-report.md) for supported structures and checks.
 
@@ -153,7 +153,7 @@ Import `GraphTable` from `mdxcn-vue`. The table accepts typed props, direct Mark
 tables or `Head`/`Row`/`Foot`/`Cell` items. Each field chooses data before items
 before Markdown; empty `Head` and `Foot` items still win. Shared `tableOf` and
 `labeledTable` readers are available for future table-family components.
-See the [three input forms and upstream datasets](apps/docs/components/graph-table.md).
+See the [three input forms and upstream datasets](apps/docs/docs/graph-table.md).
 
 Typed row/footer cells also accept VNodes. Plain headers and alignment strings
 split on whitespace and commas. The table and keyboard-focusable scroll region
@@ -173,7 +173,7 @@ share the figcaption's accessible name.
 Import `Endpoint` from `mdxcn-vue`. It reads typed data or direct host paragraphs,
 parameter tables and `pre > code` blocks. Code/link descriptions remain rich;
 each prop selects its input independently. See the
-[upstream example and input contract](apps/docs/components/endpoint.md).
+[upstream example and input contract](apps/docs/docs/endpoint.md).
 
 ## GraphTimer
 
@@ -184,7 +184,7 @@ each prop selects its input independently. See the
 Import `GraphTimer` from `mdxcn-vue`. The `elapsed`, `ago` and `clock` modes share
 a deterministic SSR/first-client placeholder and update once per second after
 mount. `useGraphNow` clears its interval on unmount. See the
-[three upstream examples](apps/docs/components/graph-timer.md) for instant and caption inputs.
+[three upstream examples](apps/docs/docs/graph-timer.md) for instant and caption inputs.
 
 ## Build-time Markdown
 
@@ -305,8 +305,8 @@ Import `GraphGantt` / `Span`, `GraphDiff` / `Line`, and `GraphWaterfall` / `Delt
 from `mdxcn-vue`. These components accept typed data, Markdown lists and item
 markers. Gantt uses fractional positions and text axis labels; Diff preserves
 text values and expands strike rewrites; Waterfall accumulates changes while
-keeping supplied start/end totals. See [Gantt](apps/docs/components/graph-gantt.md),
-[Diff](apps/docs/components/graph-diff.md), [Waterfall](apps/docs/components/graph-waterfall.md),
+keeping supplied start/end totals. See [Gantt](apps/docs/docs/graph-gantt.md),
+[Diff](apps/docs/docs/graph-diff.md), [Waterfall](apps/docs/docs/graph-waterfall.md),
 and the [Phase 6C report](docs/phase-6c-report.md).
 
 ## Compare, matrix and heatmap
@@ -318,9 +318,9 @@ uses the shared `table` model, with item rows retaining precedence.
 The Vue port uses native tables with column/row headers and caption-labeled
 keyboard scroll regions; upstream uses grids and lists. Heatmap exposes numeric
 cell text to screen readers while keeping the glyphs decorative. See
-[Compare](apps/docs/components/graph-compare.md),
-[Matrix](apps/docs/components/graph-matrix.md) and
-[Heatmap](apps/docs/components/graph-heatmap.md).
+[Compare](apps/docs/docs/graph-compare.md),
+[Matrix](apps/docs/docs/graph-matrix.md) and
+[Heatmap](apps/docs/docs/graph-heatmap.md).
 
 ## shadcn-vue registry
 

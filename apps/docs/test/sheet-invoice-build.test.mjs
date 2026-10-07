@@ -17,7 +17,7 @@ test('four upstream Sheet/Invoice examples have identical compiled and typed dat
 })
 test('documentation renders all four examples without unresolved tags or hidden SSR', () => {
   for(const slug of ['graph-sheet','graph-invoice']) {
-    const doc = new JSDOM(readFileSync(new URL(`../.vitepress/dist/components/${slug}.html`,import.meta.url),'utf8')).window.document
+    const doc = new JSDOM(readFileSync(new URL(`../.vitepress/dist/docs/${slug}.html`,import.meta.url),'utf8')).window.document
     assert.equal(doc.querySelectorAll('figure').length,2)
     assert.doesNotMatch(doc.querySelector('.vp-doc').innerHTML,/<(?:GraphSheet|GraphInvoice)\b/)
     for(const f of doc.querySelectorAll('figure')) assert.doesNotMatch(f.outerHTML,/opacity:\s*0(?:;|"|$)|translateY/)

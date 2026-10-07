@@ -21,7 +21,7 @@ test('dated/calendar production compiler, runtime and direct models preserve DOM
 })
 test('dated/calendar documentation renders all six upstream examples visibly',()=> {
   for(const slug of ['graph-activity','graph-calendar']) {
-    const figures=[...page(`components/${slug}`).querySelectorAll('figure')]
+    const figures=[...page(`docs/${slug}`).querySelectorAll('figure')]
     assert.equal(figures.length,3)
     for(const f of figures) assert.doesNotMatch(f.outerHTML,/header-anchor|opacity:0(?:;|"|$)|translateY|<(?:GraphActivity|GraphCalendar)\b/)
   }
