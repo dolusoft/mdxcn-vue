@@ -13,7 +13,7 @@
 
 </GraphCells>
 
-`items` wins even when empty. Otherwise a nonempty direct Markdown list wins over `Grid` items. Each `Grid` uses its `cells` prop (including an empty array) before its body. Multiple direct element blocks each become a row; otherwise slash-separated rows win over paragraph/newline rows. Row tokens use `Number` and discard nonfinite values, without run expansion. Only the exact number `1` fills a cell. Nested lists do not supply parent row text.
+`items` wins even when empty. Otherwise a nonempty direct Markdown list wins over `Grid` items. Each `Grid` uses its `cells` prop (including an empty array) before its body. Multiple direct element blocks each become a row; otherwise slash-separated rows win over separate paragraphs. Softbreaks within one paragraph become spaces in Vue runtime templates and do not create rows. Row tokens use `Number` and discard nonfinite values, without run expansion. Only the exact number `1` fills a cell. Nested lists do not supply parent row text.
 
 ```vue
 <GraphCells title="GRID">
