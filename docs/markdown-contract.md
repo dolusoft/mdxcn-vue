@@ -1,7 +1,7 @@
-# Markdown derleme arayüzü (Faz 2B-4)
+# Markdown compilation interface (Phase 2B-4)
 
-`mdxcn-markdown` paketindeki `mdxcnMarkdown` işlevi bir `markdown-it` plugin'idir.
-VitePress `markdown.config` alanına takılır; ek Vite transform gerekmez:
+The `mdxcnMarkdown` function in the `mdxcn-markdown` package is a `markdown-it` plugin.
+It plugs into the VitePress `markdown.config` field; no additional Vite transform is required:
 
 ```ts
 import { mdxcnMarkdown } from 'mdxcn-markdown'
@@ -13,177 +13,177 @@ export default {
 }
 ```
 
-`StackRow`, `StackSegment` ve `ProseNode` model tipleri `mdxcn-vue` paketindeki
-framework bağımsız `src/core/` dizininde tanımlıdır. Derleyici `markdown-it`
-token değerlerini bu modele dönüştürür; Vue VNode üretmez. Host tarafından
-sağlanan parser kullanılır; runtime Markdown renderer eklenmez.
-`labelContent` alanı metnin zengin biçimini,
-`label` alanı erişilebilirlik metnini ve satır anahtarını taşır.
-`segmentsFromText` düzeltmesi tam sayı grammar tanımı değildir.
+The `StackRow`, `StackSegment`, and `ProseNode` model types are defined in the
+framework-independent `src/core/` directory of the `mdxcn-vue` package. The compiler converts
+`markdown-it` token values into this model; it does not produce Vue VNodes. The parser
+provided by the host is used; no runtime Markdown renderer is added.
+The `labelContent` field carries the rich formatting of the text,
+and the `label` field carries the accessibility text and row key.
+The `segmentsFromText` fix is not a complete number grammar definition.
 
-## Desteklenen derleme blokları
+## Supported compilation blocks
 
-- `GraphStack`: doğrudan `ul > li` listeleri → `rows`; satır etiketi içinde
-  `strong`, `em`, `code`, `link` korunur. İç içe ve sıralı listeler fallback kullanır.
-- `GraphTable`: tek Markdown tablosu → `headers`, `rows`, isteğe bağlı `footer`
-  ve `align`. Son satırın ilk hücresi yalnız bold ise veya `Total` yazıyorsa ve
-  en az iki gövde satırı varsa footer olur. `center` upstream gibi yok sayılır.
-- `Endpoint`: paragraflar, en fazla bir parametre tablosu ve fence bölümleri →
-  `method`, `path`, `params`, `blocks`, `about`. Parametre tablosunda footer
-  algılaması yapılmaz; boş açıklama `undefined` olur. `about` alanı paragraf
-  başına bir `ProseNode[]` taşır. Kod girintisi korunur; yalnız bir son newline
-  çıkarılır. `$ ` ve `curl` önekleri `request` etiketi üretir.
-- `Annotate`: ilk fence → `code` ve varsayılan `title`; doğrudan `ol`/`ul`
-  notları → zengin `ProseNode[][]` içeren `notes`. İşaretler runtime core
-  okuyucusunda ayrıştırılır. İki veri alanının önceliği bağımsızdır; boş değerler
-  fallback yapmaz. Kod yoksa boş bir satır çizilir. Birden fazla paragraf veya
-  iç içe liste içeren notlar yapıyı korumak için runtime okuyucusuna bırakılır;
-  upstream gibi iç içe not listeleri çizilmez.
-- `Env`: ilk fence (boş olsa da) → boş olmayan doğrudan liste → ham metin;
-  sonuç `vars` dizisidir. Açık `vars` alanı tüm Markdown girdilerinden önce gelir.
-  Liste metni `KEY: value — note` biçimindedir; kalın öğe `required` bayrağını
-  üretir. Core `parseEnv` upstream gösterim grammar davranışını korur: boş
-  satır yorumları temizler, geçersiz satır atlanır ve ` #` dizisi tırnak içinde
-  bile inline yorum başlatır. Bu bir dotenv yükleyicisi değildir.
-- `GraphTimeline`: `ol`/`ul` listeleri → `list`; ilk görünür paragraf `head`,
-  sonraki paragraflar `body` olur. `date: label — note` metni ayrıştırılır;
-  `body` varsa inline notun önüne geçer. `strong`/`em` durum işaretleri yalnız
-  `head` içinde aranır, `strong` önceliklidir. Saat metni tarih alanında korunur.
-- `GraphSpec`: aynı başlık/gövde modeli → `list`; `label: value` ayrıştırılır.
-  `head` içindeki kod ve linkler zengin değer olarak korunur; etiket öneki ham
-  metin ofsetiyle kırpılır. `strong` yalnız başlıkta accent üretir. Gövde nottur.
-  `del`/`s` gibi desteklenmeyen token değerleri runtime yolunda korunur.
+- `GraphStack`: direct `ul > li` lists → `rows`; `strong`, `em`, `code`, and `link`
+  are preserved within the row label. Nested and ordered lists use fallback.
+- `GraphTable`: a single Markdown table → `headers`, `rows`, optional `footer`
+  and `align`. The last row becomes the footer if its first cell is entirely bold or
+  reads `Total`, and there are at least two body rows. `center` is ignored, as upstream does.
+- `Endpoint`: paragraphs, at most one parameter table, and fence sections →
+  `method`, `path`, `params`, `blocks`, `about`. Footer detection is not performed
+  in the parameter table; an empty description becomes `undefined`. The `about` field
+  carries one `ProseNode[]` per paragraph. Code indentation is preserved; only one trailing newline
+  is removed. The `$ ` and `curl` prefixes produce a `request` label.
+- `Annotate`: the first fence → `code` and the default `title`; direct `ol`/`ul`
+  notes → `notes` containing rich `ProseNode[][]`. Markers are parsed in the runtime core
+  reader. The precedence of the two data fields is independent; empty values
+  do not fall back. If there is no code, an empty line is rendered. Notes containing multiple paragraphs or
+  nested lists are left to the runtime reader to preserve their structure;
+  nested note lists are not rendered, as upstream does.
+- `Env`: the first fence (even if empty) → a nonempty direct list → raw text;
+  the result is the `vars` array. An explicit `vars` field takes precedence over all Markdown inputs.
+  List text uses the `KEY: value — note` format; a bold item
+  produces the `required` flag. Core `parseEnv` preserves the upstream display
+  grammar behavior: an empty line clears comments, invalid lines are skipped, and the ` #` sequence
+  starts an inline comment even inside quotes. This is not a dotenv loader.
+- `GraphTimeline`: `ol`/`ul` lists → `list`; the first visible paragraph becomes `head`,
+  and subsequent paragraphs become `body`. The `date: label — note` text is parsed;
+  if `body` exists, it takes precedence over the inline note. The `strong`/`em` state markers are searched for
+  only within `head`, with `strong` taking precedence. Time text is preserved in the date field.
+- `GraphSpec`: the same heading/body model → `list`; `label: value` is parsed.
+  Code and links within `head` are preserved as rich values; the label prefix is trimmed
+  using the raw text offset. `strong` produces an accent only in the heading. The body is the note.
+  Unsupported token values such as `del`/`s` are preserved in the runtime path.
 
-Bu iki bileşende veri props (`events`/`rows`) → derleyici `list` girdisi veya
-boş olmayan host listesi → `Event`/`Field` sırası kullanılır. Boş veri dizisi
-slotu bastırır; `null`/`undefined` fallback kullanır. Veri ve item notları Vue
-`VNodeChild` içerir. `StateListItem.head`/`body` alanları mevcut kullanıcıların
-eski girdilerini bozmamak için isteğe bağlıdır; 5C derleyicisi bunları üretir.
-Eski `Steps`, `Changelog`, `Decision` ve `Keys` grammar/payload davranışı korunur.
+These two components use the following order: data props (`events`/`rows`) → compiler `list` input or
+a nonempty host list → `Event`/`Field`. An empty data array
+suppresses the slot; `null`/`undefined` use fallback. Data and item notes contain Vue
+`VNodeChild`. The `StateListItem.head`/`body` fields are optional to avoid breaking
+existing users' older inputs; the 5C compiler produces them.
+The older `Steps`, `Changelog`, `Decision`, and `Keys` grammar/payload behavior is preserved.
 
-Plugin, `html_block` kuralından önce ham blokları alır; gövde token değerlerini
-host core kurallarına bırakır. Model dönüşümü `inline`, emoji, typographer ve
-`text_join` adımlarından sonra, `anchor` adımından önce yapılır. Host entity
-renderer işlevinin metin anlamı bir kez çözülür; `text_special` metin sayılır.
-JSON, HTML attribute için escape edilir ve bileşene `v-bind` ile
-aktarılır; başarılı blokta Markdown slotu kaldırılır. Çok satırlı açılış etiketi
-model derleyicisinin desteklediği bileşenlerde en fazla 33 satırdır; açılış/kapanış kendi satırlarında olmalıdır. Dış HTML
-sarmalayıcı ile bileşen arasında Markdown blok sınırı için boş satır gerekir.
-Açılışın ardından liste varsa önüne boş satır konur. Aksi halde VitePress
-listeyi ham HTML metni sayar; iki yol da bu davranışı korur ve uyarı verir.
-Kapanışı bulunmayan ve açılış satırında gövde içeren bloklar da konumlu uyarı verir.
-Uyarı satırları frontmatter farkını içerir; `@include` konumları genişletilmiş
-host dosyasına aittir, dahil edilen dosyaya ayrı kaynak eşlemesi yapılmaz.
+The plugin captures raw blocks before the `html_block` rule; it leaves body token values
+to the host core rules. Model conversion happens after the `inline`, emoji, typographer, and
+`text_join` steps, and before the `anchor` step. The text meaning of the host entity
+renderer function is decoded once; `text_special` is treated as text.
+JSON is escaped for an HTML attribute and passed to the component via `v-bind`;
+the Markdown slot is removed from a successful block. A multiline opening tag
+is limited to 33 lines for components supported by the model compiler; opening/closing tags must be on their own lines. A blank line is required
+between an outer HTML wrapper and the component to establish a Markdown block boundary.
+If a list follows the opening tag, a blank line is inserted before it. Otherwise, VitePress
+treats the list as raw HTML text; both paths preserve this behavior and issue a warning.
+Blocks without a closing tag and blocks with a body on the opening line also issue warnings with locations.
+Warning lines account for the frontmatter offset; `@include` locations refer to the expanded
+host file, with no separate source mapping to the included file.
 
-`renderLinks: true` seçeneği host `link_open` renderer işlevini kullanarak
-VitePress URL dönüşümünü, dead-link kaydını, `title`, `target`, `rel` alanlarını
-korur. Varsayılan `false`, özgün href değerini korur. Reference link tanımları
-inline dönüşümünden önce tamamlandığından sonraki tanımlar da derlenebilir.
-Tablo ve liste metninin boşlukları iki yolda aynı core işleviyle normalize edilir.
-Fence dil etiketi `/^[^\s:{[]+/` kuralıyla meta bilgiden ayrılır; VitePress
-highlighter işlevinin kısalttığı `c++`, kaynak metadata değerinden geri alınır.
-Dilsiz fence blokları `undefined` etiketle korunur. Endpoint kod bölgesinin
-erişilebilir adı caption ve kod etiketini birlikte içerir.
+The `renderLinks: true` option uses the host `link_open` renderer function to preserve
+VitePress URL transformation, dead-link recording, and the `title`, `target`, and `rel` fields.
+The default, `false`, preserves the original href value. Since reference link definitions
+are completed before inline conversion, later definitions can also be compiled.
+Whitespace in table and list text is normalized with the same core function in both paths.
+The fence language label is separated from metadata using the `/^[^\s:{[]+/` rule; `c++`,
+which the VitePress highlighter function truncates, is recovered from the source metadata value.
+Fences without a language are preserved with an `undefined` label. The accessible name
+of an Endpoint code region includes both the caption and the code label.
 
-## Fallback ve güven sınırı
+## Fallback and trust boundary
 
-`{{ }}` interpolasyon, Vue direktifleri, özel bileşenler, item etiketleri, ham
-HTML, desteklenmeyen inline/block token'ları ve henüz çözülmemiş reference link
-bulunursa blok dönüştürülmez. Açık veri props bulunan bloklar da alan bazındaki
-runtime önceliğini korumak için fallback kullanır. Kaynak Markdown normal host
-derlemesine bırakılır; `[mdxcn-markdown] dosya:satır` uyarısı nedenini belirtir.
-`warn` callback seçeneği aynı bilgiyi yapılandırılmış biçimde alır. Başarılı
-derleme bloğunun kaynak aralığı token `map` alanında tutulur.
+If `{{ }}` interpolation, Vue directives, custom components, item tags, raw
+HTML, unsupported inline/block tokens, or unresolved reference links
+are found, the block is not converted. Blocks with explicit data props also
+use fallback to preserve field-level runtime precedence. The source Markdown
+is left to normal host compilation; a `[mdxcn-markdown] file:line` warning states the reason.
+The `warn` callback option receives the same information in structured form. The source range
+of a successfully compiled block is stored in the token `map` field.
 
-**Yalnız repo içindeki güvenilir Markdown kullanılır.** Üretilen Vue şablonu
-çalıştırılabilir; bu plugin kullanıcı girdisi için sanitization sağlamaz.
-Runtime Markdown/Comark bu fazın dışındadır. `GraphTimer` derleme desteği
-eklenmedi; mevcut runtime sözleşmesi sürer.
+**Only trusted Markdown within the repository is used.** The generated Vue template
+is executable; this plugin does not provide sanitization for user input.
+Runtime Markdown/Comark is outside the scope of this phase. Compilation support for `GraphTimer`
+was not added; its existing runtime contract continues.
 
-## `withMdxcn` dönüşümleri
+## `withMdxcn` transformations
 
-Ayrı `withMdxcn` plugin'i aynı güvenilir Markdown host'una takılır.
-`alerts`, `quotes`, `terminals`, `footnotes` seçenekleri varsayılan `true` olur.
-GitHub alert ve upstream Obsidian alias değerleri `Callout`, son satırındaki
-byline işareti `—`/`―`/`–`/`--` olan alıntılar `Quote`, console/session fence
-ve baskın `$ ` prompt içeren shell fence blokları `Terminal` hedefini kullanır.
-Prompt içermeyen shell script değişmez. Footnote token değerlerini host üretir;
-VitePress bunu sağlar, düz `markdown-it` host'u kendi footnote plugin'ini takar.
+The separate `withMdxcn` plugin plugs into the same trusted Markdown host.
+The `alerts`, `quotes`, `terminals`, and `footnotes` options default to `true`.
+GitHub alerts and upstream Obsidian alias values target `Callout`; quotes with a
+`—`/`―`/`–`/`--` byline marker on the last line target `Quote`; console/session fences
+and shell fences with predominantly `$ ` prompts target `Terminal`.
+Shell scripts without prompts remain unchanged. The host produces footnote token values;
+VitePress provides this, while a plain `markdown-it` host installs its own footnote plugin.
 
-`components` listesi yalnız host'un kaydettiği `Callout`, `Quote`, `Terminal`,
-`Footnotes` adlarını içerir. Listelenen hedefler bileşen etiketi üretir;
-`Callout` için `type`/`title`, `Quote` için `by`/`source`, `Terminal` için
-`prompt`/`text` değerleri JSON binding ile aktarılır. `Footnotes` özgün host
-bölümünü sarar; ID, ileri bağlantı ve backlink değerleri korunur.
-Faz 4A'da `Callout`, `Quote`, `Terminal` gerçek Vue bileşenleri olarak sağlanır.
-`Terminal` için `text` upstream'de olmayan derleyici girdisidir: açık değer slot
-metninden önce gelir; boş string slotu bastırır, `null`/`undefined` slotu okur.
-Prose bileşenlerinin gövdesi slot olarak kalır; item adaptörü yoktur.
-`Terminal`, `Endpoint`, `Annotate` ve `Env` etiketleri içindeki fence blokları kendi okuyucularına
-bırakılır; iç içe otomatik `Terminal` üretilmez.
+The `components` list contains only the `Callout`, `Quote`, `Terminal`, and
+`Footnotes` names registered by the host. Listed targets produce component tags;
+`type`/`title` for `Callout`, `by`/`source` for `Quote`, and
+`prompt`/`text` for `Terminal` are passed through JSON binding. `Footnotes` wraps the original host
+section; ID, forward-link, and backlink values are preserved.
+In Phase 4A, `Callout`, `Quote`, and `Terminal` are provided as real Vue components.
+For `Terminal`, `text` is a compiler input that does not exist upstream: an explicit value takes precedence
+over slot text; an empty string suppresses the slot, while `null`/`undefined` read the slot.
+The bodies of prose components remain slots; there is no item adapter.
+Fences inside `Terminal`, `Endpoint`, `Annotate`, and `Env` tags are left to their own readers;
+no nested automatic `Terminal` is produced.
 
-`withMdxcn` çerçeve içindeki `blockquote` token değerlerini de işler: açık
-`Callout` veya `Quote` gövdesindeki alert/byline, kayıtlı hedefe dönüşebilir.
-Çerçeve için genel bir dönüşüm engeli yoktur. Yalnız eşleşen kod okuyucusu
-etiketleri fence yükseltmesini engeller; HTML yorumları ve kapanışsız etiketler
-sonraki fence bloklarını engellemez.
+`withMdxcn` also processes `blockquote` token values inside a frame: an alert/byline
+in an explicit `Callout` or `Quote` body can be converted to a registered target.
+There is no general transformation barrier for the frame. Only matching code reader
+tags prevent fence upgrades; HTML comments and unclosed tags
+do not block subsequent fences.
 
-Varsayılan boş liste kaynak konumlu uyarıyla HTML üretir: host alert çıktısı
-(kendi alert renderer işlevi yoksa `aside`), byline içeren `blockquote`, host
-`pre > code` yapısı ve özgün footnote bölümü. Zengin gövde biçimleri korunur.
-Seçenekler yalnız bu plugin'in dönüşümlerini kapatır; VitePress'in kendi alert
-işlevi gibi host özelliklerini kapatmaz. Registry on altı bileşen ile frame,
-core ve CSS dosyalarını içerir; toplam on dokuz öğedir.
+The default empty list produces HTML with a source-located warning: host alert output
+(`aside` if it has no alert renderer function of its own), a `blockquote` with a byline, the host
+`pre > code` structure, and the original footnote section. Rich body formatting is preserved.
+Options disable only this plugin's transformations; they do not disable host features
+such as VitePress's own alert function. The registry contains sixteen components plus frame,
+core, and CSS files, for a total of nineteen items.
 
-Runtime Endpoint, VitePress `div.language-* > pre` sarmalayıcısını tek seviyede
-açar; `button.copy` ve `span.lang` içerik sayılmaz. Highlighter kaynak kodun
-sonundaki boş satırları silmişse VNode okuyucusu bunları geri getiremez. Derleme
-yolu ham fence değerini korur; anlamlı son newline paritesi fixture'ında bu
-nedenle doğrudan `pre > code` runtime girdisi kullanılır.
+Runtime Endpoint unwraps the VitePress `div.language-* > pre` wrapper by one level;
+`button.copy` and `span.lang` are not treated as content. If the highlighter has removed
+empty lines at the end of the source code, the VNode reader cannot restore them. The compilation
+path preserves the raw fence value; for this reason, the significant trailing newline parity fixture
+uses direct `pre > code` runtime input.
 
-## Doğrulama
+## Verification
 
-Token → model testleri bağımsız beklenen nesneleri kullanır. Docs config testi
-gerçek üç sayfada dönüşümü doğrular. Production fixture'ı derleme/runtime
-yollarının her birini bağımsız beklenen hücre, prose, glyph, erişilebilir ad ve
-boşluk duyarlı kod değerleriyle sınar; ardından DOM eşitliğini kontrol eder.
-Yalnız caption kimlikleri normalize edilir ve Vue yorum düğümleri çıkarılır;
-gerçek kimliklerin benzersizliği ve ilişkileri ayrıca doğrulanır. Kod boşlukları
-sıkıştırılmaz. Tarayıcı hydration ve görsel ölçüm ayrı doğrulama konusudur.
+Token → model tests use independent expected objects. The docs config test
+verifies transformation on three real pages. The production fixture tests each of the compilation/runtime
+paths against independent expected cell, prose, glyph, accessible name, and
+whitespace-sensitive code values; it then checks DOM equality.
+Only caption IDs are normalized, and Vue comment nodes are removed;
+the uniqueness and relationships of actual IDs are verified separately. Code whitespace
+is not collapsed. Browser hydration and visual measurements require separate verification.
 
-Faz 2A okuyucusu yalnız slot kökündeki `ul > li` yapısını, isteğe bağlı `p`/`span`
-ve `strong`/`em`/`code`/`a` düğümlerini kabul eder. `Fragment` açılır, `Comment`
-elenir. Özel bileşen sınırları ve iç içe listeler yorumlanmaz. Item şeması yalnız
-bildirilen alanları okur; kebab-case anahtarları camelCase biçimine çevirir,
-boolean boş değeri `true` yapar ve varsayılanları uygular. Slotlar `computed`
-içinde önbelleğe alınmaz; her render sırasında okunur.
+The Phase 2A reader accepts only the `ul > li` structure at the slot root, optional `p`/`span`,
+and `strong`/`em`/`code`/`a` nodes. `Fragment` is unwrapped, and `Comment`
+is filtered out. Custom component boundaries and nested lists are not interpreted. The item schema reads
+only declared fields; it converts kebab-case keys to camelCase,
+sets empty boolean values to `true`, and applies defaults. Slots are not cached
+inside `computed`; they are read on each render.
 
-## Callout içindeki VitePress fence görünümü
+## VitePress fence appearance inside Callout
 
-`Callout` gövdesi host tarafından üretilen slotu korur. VitePress bir kod fence
-için `div.language-*` sarmalayıcısı, temaya bağlı arka plan, `button.copy`,
-`span.lang` ve dikey `1rem` dış boşluk üretir (varsayılan kök fontta 16 px).
-Dar ekranda yatay boşluk `-1.5rem`, `40rem` üzerindeyse `0` olur.
-Bunlar upstream `GraphProse` sözleşmesinin parçası
-değildir; mevcut `host.css` bu fence arayüzünü nötrleştirmez. Dolayısıyla bu
-girdi biçiminde görsel upstream paritesi garanti edilmez. Düz `pre > code`
-slotu, VitePress fence arayüzü olmadan upstream prose yapısını kullanır.
+The `Callout` body preserves the host-generated slot. For a code fence, VitePress
+produces a `div.language-*` wrapper, a theme-dependent background, `button.copy`,
+`span.lang`, and a vertical `1rem` margin (16 px with the default root font).
+On narrow screens, the horizontal margin is `-1.5rem`; above `40rem`, it is `0`.
+These are not part of the upstream `GraphProse` contract;
+the current `host.css` does not neutralize this fence interface. Therefore,
+visual upstream parity is not guaranteed for this input format. A plain `pre > code`
+slot uses the upstream prose structure without the VitePress fence interface.
 
-Bu sınır belgelendi: genel bir CSS sıfırlaması kopyalama/dil ve highlighter
-özelliklerini değiştireceği için dar kapsamlı bu teslimatta host arayüzü korundu.
-Tarayıcıda fence boşlukları ve light/dark renkleri ayrıca ölçülmelidir.
+This boundary was documented: the host interface was preserved in this narrowly scoped delivery
+because a general CSS reset would change copy/language and highlighter features.
+Fence spacing and light/dark colors should be measured separately in the browser.
 
-## Terminal açılış etiketi sınırı
+## Terminal opening tag limit
 
-`Terminal`, yukarıdaki model derleyicisinin desteklediği bileşenler arasında
-bulunmaz. Açık `Terminal` etiketi tek satırda yazılmalıdır; çok satırlı açılış
-etiketi Markdown host yolunda desteklenmez:
+`Terminal` is not among the components supported by the model compiler above.
+An explicit `Terminal` tag must be written on a single line; a multiline opening
+tag is not supported in the Markdown host path:
 
 ```md
 <Terminal prompt="$">
 ```
 
-`<Terminal` / `prompt="$"` / `>` biçiminde üç satıra bölünmüş açılış,
-`markdown-it` tarafından paragraph ve blockquote olarak okunur. İçindeki console
-fence ayrıca otomatik `Terminal` dönüşümü alabilir; dış etiket korunmuş bir
-runtime bileşen sayılmaz. 33 satırlık destek bu etikete uygulanmaz.
+An opening tag split across three lines as `<Terminal` / `prompt="$"` / `>`
+is read by `markdown-it` as a paragraph and blockquote. A console fence inside it
+may also receive an automatic `Terminal` transformation; the outer tag is not considered
+a preserved runtime component. The 33-line support does not apply to this tag.
