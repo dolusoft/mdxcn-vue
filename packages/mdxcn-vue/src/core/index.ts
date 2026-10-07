@@ -120,3 +120,21 @@ export type { KpiData } from './kpi.js'
 
 export { fraction, fractionOf, gridCellsOf, gridsFromList } from './grid-fraction.js'
 export type { CellGrid, GridProps, FractionData } from './grid-fraction.js'
+
+export {
+  DAY_MS,
+  MONTH_NAMES,
+  parseUTC,
+  toISO,
+  activityDays,
+  buildWeeks,
+  activityMonths,
+  calendarMark,
+  calendarWeeks,
+} from './dated-calendar.js'
+export type {
+  ActivityDay,
+  ActivityCell,
+  CalendarMark,
+  CalendarWrittenMark,
+} from './dated-calendar.js'

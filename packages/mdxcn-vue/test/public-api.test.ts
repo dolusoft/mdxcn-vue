@@ -7,6 +7,8 @@ import ts from 'typescript'
 
 // Deliberately maintained independently of export declarations.
 const publicNames = [
+  'GraphActivity',
+  'GraphCalendar',
   'GraphCells',
   'Grid',
   'GraphMeter',
@@ -154,6 +156,12 @@ it('exposes grammar and clock helpers only through core', () => {
 })
 
 const publicTypes = [
+  'GraphActivityProps',
+  'GraphCalendarProps',
+  'ActivityDay',
+  'ActivityCell',
+  'CalendarMark',
+  'CalendarWrittenMark',
   'GraphCellsProps',
   'GraphMeterProps',
   'GraphWaffleProps',
@@ -290,6 +298,19 @@ const publicTypes = [
   'GraphTimerProps',
 ]
 const coreNames = [
+  'DAY_MS',
+  'MONTH_NAMES',
+  'parseUTC',
+  'toISO',
+  'activityDays',
+  'buildWeeks',
+  'activityMonths',
+  'calendarMark',
+  'calendarWeeks',
+  'ActivityDay',
+  'ActivityCell',
+  'CalendarMark',
+  'CalendarWrittenMark',
   'fraction',
   'fractionOf',
   'gridCellsOf',

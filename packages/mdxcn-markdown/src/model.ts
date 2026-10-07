@@ -30,7 +30,12 @@ import type { BarSeries, SeriesData, SeriesListItem } from 'mdxcn-vue/core'
 import { fractionOf, gridsFromList } from 'mdxcn-vue/core'
 import type { FractionData, CellGrid } from 'mdxcn-vue/core'
 
+import { activityDays, calendarMark } from 'mdxcn-vue/core'
+import type { ActivityDay, CalendarWrittenMark } from 'mdxcn-vue/core'
+
 export type ComponentName =
+  | 'GraphActivity'
+  | 'GraphCalendar'
   | 'GraphCells'
   | 'GraphMeter'
   | 'GraphWaffle'
@@ -70,6 +75,8 @@ export type ComponentName =
   | 'GraphDiff'
   | 'GraphWaterfall'
 export type CompiledProps =
+  | { days: ActivityDay[] }
+  | { written: CalendarWrittenMark[] }
   | { items: CellGrid[] }
   | { written: FractionData }
   | { series: BarSeries[] }
@@ -260,11 +267,16 @@ function joinText(nodes: ProseNode[]): ProseNode[] {
 const flowContent = (block: Block): ProseNode[] =>
   block.prose ? joinText(block.prose) : block.children.flatMap(flowContent)
 // Match Vue's whitespace-only text removal at element boundaries before condensation.
-function gridFractionInline(nodes: readonly ProseNode[]): string {
+function gridFractionInline(nodes: readonly ProseNode[], source = false): string {
   const runs: { text: string; element: boolean }[] = []
   for (const node of nodes) {
     const element = node.type !== 'text'
-    const text = node.type === 'text' ? node.value : gridFractionInline(node.children)
+    const mark =
+      node.type === 'strong' ? '**' : node.type === 'em' ? '*' : node.type === 'del' ? '~~' : ''
+    const text =
+      node.type === 'text'
+        ? node.value
+        : (source ? mark : '') + gridFractionInline(node.children, source) + (source ? mark : '')
     const last = runs.at(-1)
     if (!element && last && !last.element) last.text += text
     else runs.push({ text, element })
@@ -323,6 +335,36 @@ export function tokensToProps(
   env: object = {},
   options: TokenModelOptions = {},
 ): CompiledProps {
+  if (name === 'GraphActivity' || name === 'GraphCalendar') {
+    const tree = blocks(tokens, md, env, options, true, true, true)
+    const visible = (nodes: readonly Block[], source = false): string =>
+      nodes
+        .map((b) => {
+          if (b.tag === 'fence') throw new Error('Dated fences require runtime resolution')
+          const text = b.prose ? gridFractionInline(b.prose, source) : visible(b.children, source)
+          return source && ['p', 'li', 'br'].includes(b.tag) ? text + '\n' : text
+        })
+        .join('')
+    visible(tree)
+    const lists = tree.filter((b) => b.tag === 'ul' || b.tag === 'ol')
+    const items = lists.length
+      ? lists.flatMap((b) => b.children)
+      : tree.filter((b) => b.tag === 'li')
+    const itemChildren = (b: Block) =>
+      b.children.filter((child) => child.tag !== 'ul' && child.tag !== 'ol')
+    return name === 'GraphActivity'
+      ? {
+          days: activityDays(
+            items.map((b) => visible(itemChildren(b), true).trim()),
+            visible(tree, true),
+          ),
+        }
+      : {
+          written: items.flatMap((b) =>
+            calendarMark(visible(itemChildren(b)).replace(/\s+/g, ' ').trim(), bold(content(b))),
+          ),
+        }
+  }
   if (['GraphCells', 'GraphMeter', 'GraphWaffle'].includes(name)) {
     const tree = blocks(tokens, md, env, options, true, true, true)
     const hasFence = (nodes: readonly Block[]): boolean =>

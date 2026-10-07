@@ -11,6 +11,7 @@ export default tseslint.config(
       '**/node_modules/**',
       '**/.vitepress/cache/**',
       '**/coverage/**',
+      'public/r/**',
       '**/playwright-report/**',
       '**/test-results/**',
     ],

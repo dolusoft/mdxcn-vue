@@ -218,3 +218,14 @@ export type { GraphCellsProps } from './components/graph-cells.js'
 export type { GraphMeterProps } from './components/graph-meter.js'
 export type { GraphWaffleProps } from './components/graph-waffle.js'
 export type { CellGrid, GridProps, FractionData } from './core/grid-fraction.js'
+
+export { GraphActivity } from './components/graph-activity.js'
+export { GraphCalendar } from './components/graph-calendar.js'
+export type { GraphActivityProps } from './components/graph-activity.js'
+export type { GraphCalendarProps } from './components/graph-calendar.js'
+export type {
+  ActivityDay,
+  ActivityCell,
+  CalendarMark,
+  CalendarWrittenMark,
+} from './core/dated-calendar.js'

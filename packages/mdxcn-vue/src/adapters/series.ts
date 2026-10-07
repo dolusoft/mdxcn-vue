@@ -14,7 +14,7 @@ export const Series = defineItem<SeriesProps>('Series', {
   values: { type: 'node' },
   size: { type: 'string' },
 })
-function visibleText(nodes: readonly VNode[], source = false): string {
+export function visibleText(nodes: readonly VNode[], source = false): string {
   return flattenNodes(nodes)
     .map((node) => {
       if (node.type === Text) return textOf([node])
