@@ -240,6 +240,24 @@ html {
 .vp-doc .dashboard-compact td .graph-frame > div {
   padding: 0.125rem 0;
 }
+/* Grid items keep their track width; long content scrolls or wraps inside. */
+.vp-doc .dashboard-grid > * {
+  min-width: 0;
+}
+/* Table text stays on one line; the wrapper scrolls on narrow screens. */
+.vp-doc .dashboard-table th,
+.vp-doc .dashboard-table td {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+/* A stack inside a cell: the row label lives in the table, so its column goes. */
+.vp-doc .dashboard-stack-cell .graph-frame > div > ul:first-child > li {
+  grid-template-columns: minmax(0, 1fr);
+  column-gap: 0;
+}
+.vp-doc .dashboard-stack-cell .graph-frame > div > ul:first-child > li > span:first-child {
+  display: none;
+}
 /* A tile whose labels need the full row, such as a slope chart. */
 .vp-doc .dashboard-wide {
   grid-column: 1 / -1;
