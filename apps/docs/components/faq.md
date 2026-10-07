@@ -19,3 +19,5 @@ Your `mdx-components.tsx` swaps `li` for its own component. Wrap the map in `wit
 </Faq>
 
 Explicit `entries` (including `[]`) override headings; `null` falls back. Bold questions use the primary palette tone. Answers accept plain strings, Vue VNodes or portable prose blocks. Strings remain literal text. No item component or accordion is defined upstream.
+
+Fences and tables inside answers use the runtime slot reader and emit a compiler fallback warning; their host-rendered content stays visible.

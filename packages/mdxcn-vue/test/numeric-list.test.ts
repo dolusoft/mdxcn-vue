@@ -23,6 +23,29 @@ const review = () => [
 ]
 const routes = () => list('12,400 /docs', '4,100 /install', '860 /plot', '420 /rank')
 const install = () => list('12,400 docs', '4,100 copy', '860 ship')
+it('formats display-less Funnel values with en-US independently of the host default', () => {
+  const original = Number.prototype.toLocaleString
+  const formatter = vi.spyOn(Number.prototype, 'toLocaleString').mockImplementation(function (
+    this: number,
+    locales,
+    options,
+  ) {
+    return original.call(this, locales ?? 'tr-TR', options)
+  })
+  try {
+    expect((12400.5).toLocaleString()).toBe('12.400,5')
+    formatter.mockClear()
+    const w = mount(GraphFunnel, {
+      props: { title: 'LOCALE', steps: [{ label: 'read', value: 12400.5 }] },
+    })
+    expect(w.text()).toContain('12,400.5')
+    expect(w.text()).not.toContain('12.400,5')
+    expect(formatter.mock.calls.some(([locale]) => locale === 'en-US')).toBe(true)
+    w.unmount()
+  } finally {
+    formatter.mockRestore()
+  }
+})
 it('matches review dots, halves, accent and accessibility independently', () => {
   const w = mount(GraphScore, { props: { title: 'REVIEW' }, slots: { default: review } })
   expect(w.findAll('li > span:last-child').map((n) => n.text())).toEqual([
