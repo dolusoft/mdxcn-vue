@@ -6,13 +6,17 @@ import { withBase } from 'vitepress'
 import {
   Faq,
   GraphActivity,
+  GraphBullet,
   GraphBars,
   GraphCalendar,
   GraphHeatmap,
   GraphKpi,
   GraphMeter,
+  GraphRank,
   GraphTable,
+  GraphTimer,
   GraphUptime,
+  GraphWaterfall,
 } from 'mdxcn-vue'
 import { data } from '../home.data'
 import { bars, meter, table } from '../home-examples'
@@ -27,14 +31,34 @@ async function copyInstall() {
   copied.value = true
   setTimeout(() => (copied.value = false), 1500)
 }
-const accent = ref('mint')
-// Fixed example data keeps SSR and hydration identical.
-const activity = Array.from({ length: 91 }, (_, index) => ({
-  date: new Date(Date.UTC(2026, 6, 1 + index)).toISOString().slice(0, 10),
-  count: [0, 1, 3, 7, 12, 0, 2][index % 7]!,
-}))
-const uptime = Array.from({ length: 60 }, (_, index) =>
-  index === 22 ? ('down' as const) : index === 23 ? ('degraded' as const) : ('ok' as const),
+const accent = ref('ocean')
+// Same fixed datasets as mdxcn `components/site/home-graph-demos.tsx`, so SSR and hydration match.
+function activityDays(start: string, length: number) {
+  const [year, month, day] = start.split('-').map(Number) as [number, number, number]
+  const origin = Date.UTC(year, month - 1, day)
+  return Array.from({ length }, (_, index) => {
+    const time = origin + index * 86_400_000
+    const date = new Date(time).toISOString().slice(0, 10)
+    const dow = new Date(time).getUTCDay()
+    const week = Math.floor(index / 7)
+    let count = 0
+    if (dow > 0 && dow < 6) {
+      const pulse = (week + dow) % 9
+      count =
+        pulse === 0 ? 12 : pulse === 4 ? 7 : pulse % 3 === 0 ? 3 : index % 5 === 0 ? 1 : 0
+    } else if (index % 13 === 0) {
+      count = 2
+    }
+    return { date, count }
+  })
+}
+const commits = activityDays('2025-09-01', 371)
+const uptime = Array.from({ length: 90 }, (_, index) =>
+  index === 41 || index === 42
+    ? ('down' as const)
+    : index === 18 || index === 60 || index === 61
+      ? ('degraded' as const)
+      : ('ok' as const),
 )
 const questions = [
   {
@@ -107,55 +131,89 @@ const questions = [
       </div>
     </section>
 
-    <section class="home-section" aria-labelledby="palette-title">
-      <h2 id="palette-title">pick a palette, copy the component</h2>
-      <p>
-        Text glyphs, your theme tokens, one shared frame. Try an accent, then explore a component.
-        All figures below use populated example datasets.
-      </p>
-      <AccentPicker v-model="accent" class="mb-8" />
-      <GraphActivity
-        title="COMMITS"
-        :days="activity"
-        palette="multi"
-        caption="Example activity · Jul–Sep 2026"
-      />
-      <div class="home-grid">
-        <GraphMeter v-bind="meter" palette="duo" />
-        <GraphBars v-bind="bars" palette="duo" />
-        <GraphCalendar
-          title="OCT 2026 · EXAMPLE"
-          :year="2026"
-          :month="10"
-          :today="7"
-          :marks="[
-            { day: 12, label: 'Documentation' },
-            { day: 18, label: 'Release review' },
+    <section class="home-section flex flex-col gap-8 font-sans" aria-labelledby="palette-title">
+      <div class="flex flex-col gap-4">
+        <h2
+          id="palette-title"
+          class="m-0! max-w-[35ch] font-sans text-2xl! font-semibold tracking-tight! text-balance"
+        >
+          pick a palette, copy the component
+        </h2>
+        <p class="max-w-[56ch] leading-relaxed text-pretty text-foreground/88">
+          every graph uses text glyphs, your theme tokens, and one shared frame. try an accent
+          below, then copy the component you need.
+        </p>
+      </div>
+      <AccentPicker v-model="accent" />
+      <GraphActivity :days="commits" palette="multi" title="COMMITS" />
+      <div class="grid gap-8 lg:grid-cols-2">
+        <GraphWaterfall
+          :items="[
+            { label: 'Revenue', value: 48 },
+            { label: 'Refunds', value: -6 },
+            { label: 'Hosting', value: -4 },
+            { label: 'Profit', value: 38 },
           ]"
           palette="duo"
+          :ticks="18"
+          title="MARGIN"
         />
-        <GraphUptime title="API" :days="uptime" from="sample 1" to="sample 60" palette="duo" />
+        <GraphBullet
+          :items="[
+            { label: 'CPU', value: 72, target: 80, max: 100 },
+            { label: 'RAM', value: 34, target: 64, max: 100 },
+            { label: 'SSD', value: 91, target: 90, max: 100 },
+          ]"
+          palette="duo"
+          title="LOAD"
+        />
+      </div>
+      <div class="grid gap-8 lg:grid-cols-2">
+        <GraphCalendar :marks="[12, 18]" :month="8" palette="duo" :today="27" :year="2026" />
+        <GraphUptime :days="uptime" from="Jun 1" palette="duo" title="API" to="Aug 29" />
+      </div>
+      <div class="grid gap-8 lg:grid-cols-2">
         <GraphHeatmap
-          title="DEPLOYS"
           :columns="['0', '4', '8', '12', '16', '20']"
+          palette="multi"
           :rows="[
             { label: 'Mon', values: [0, 1, 4, 8, 6, 1] },
             { label: 'Tue', values: [0, 0, 5, 9, 4, 2] },
             { label: 'Wed', values: [1, 0, 6, 12, 5, 1] },
+            { label: 'Thu', values: [0, 2, 4, 7, 8, 3] },
+            { label: 'Fri', values: [0, 1, 3, 5, 2, 0] },
           ]"
-          palette="multi"
+          title="DEPLOYS"
         />
+        <GraphRank
+          :items="[
+            { label: '/docs', value: 12400 },
+            { label: '/install', value: 4100 },
+            { label: '/plot', value: 860 },
+            { label: '/rank', value: 420 },
+          ]"
+          palette="duo"
+          title="ROUTES"
+        />
+      </div>
+      <div class="grid gap-8 lg:grid-cols-2">
         <GraphKpi
+          :data="[4, 5, 5, 6, 8, 7, 9, 8, 11, 10, 12, 14]"
+          hint="+18%"
+          label="this week"
+          palette="duo"
           title="READS"
           value="12,400"
-          hint="+18%"
-          label="example week"
-          :data="[4, 5, 5, 6, 8, 7, 9, 8, 11, 10, 12, 14]"
+        />
+        <GraphTimer
+          at="2026-08-01T00:00:00Z"
+          caption="api"
+          kind="elapsed"
           palette="duo"
+          title="UPTIME"
         />
       </div>
     </section>
-
     <section class="home-section" aria-labelledby="formats-title">
       <h2 id="formats-title">one figure, two formats</h2>
       <p>

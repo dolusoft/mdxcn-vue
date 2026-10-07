@@ -20,7 +20,7 @@ test('home renders populated Vue figures and genuine fenced filter output withou
   assert.match(html, /npm install mdxcn-vue mdxcn-markdown/)
   assert.equal((html.match(/role="tablist"/g) ?? []).length, 3)
   assert.equal((html.match(/role="tabpanel"/g) ?? []).length, 6)
-  assert.equal((html.match(/<figure\b/g) ?? []).length, 11)
+  assert.equal((html.match(/<figure\b/g) ?? []).length, 13)
   assert.doesNotMatch(html, /class="VPSidebar|<(?:Graph\w+|Faq)\b/)
   const expected = graphFilters.graph_meter(
     JSON.stringify({ title: 'SHIPPED', value: 0.67, ticks: 14, caption: '8 of 12 milestones' }),
