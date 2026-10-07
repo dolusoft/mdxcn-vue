@@ -20,7 +20,7 @@ export interface GraphStackProps {
   className?: string
 }
 
-export const GraphStack = defineComponent({
+export const GraphStack = /* @__PURE__ */ defineComponent({
   name: 'GraphStack',
   inheritAttrs: false,
   props: {

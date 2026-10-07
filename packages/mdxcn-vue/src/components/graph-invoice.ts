@@ -17,7 +17,7 @@ const party = (label: string, value: InvoiceParty) =>
     h('p', { class: 'text-foreground' }, value.name),
     ...(value.lines?.map((line, i) => h('p', { key: i, class: 'text-graph-muted' }, line)) ?? []),
   ])
-export const GraphInvoice = defineComponent({
+export const GraphInvoice = /* @__PURE__ */ defineComponent({
   name: 'GraphInvoice',
   inheritAttrs: false,
   props: {

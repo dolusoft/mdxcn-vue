@@ -20,7 +20,7 @@ export interface GraphActivityProps {
   corner?: string
   className?: string
 }
-export const GraphActivity = defineComponent({
+export const GraphActivity = /* @__PURE__ */ defineComponent({
   name: 'GraphActivity',
   inheritAttrs: false,
   props: {

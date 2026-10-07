@@ -14,7 +14,7 @@ export interface GraphTreeProps {
   corner?: string
   className?: string
 }
-export const GraphTree = defineComponent({
+export const GraphTree = /* @__PURE__ */ defineComponent({
   name: 'GraphTree',
   inheritAttrs: false,
   props: {

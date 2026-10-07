@@ -23,7 +23,7 @@ export interface GraphPlotProps {
   className?: string
 }
 const formatTick = (value: number) => (Number.isInteger(value) ? String(value) : value.toFixed(1))
-export const GraphPlot = defineComponent({
+export const GraphPlot = /* @__PURE__ */ defineComponent({
   name: 'GraphPlot',
   inheritAttrs: false,
   props: {

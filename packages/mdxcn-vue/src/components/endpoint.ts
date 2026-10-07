@@ -25,7 +25,7 @@ function description(value: EndpointParam['description']) {
 }
 const reveal = (node: VNode, delay = 0) => withDirectives(node, [[vReveal, { delay }]])
 
-export const Endpoint = defineComponent({
+export const Endpoint = /* @__PURE__ */ defineComponent({
   name: 'Endpoint',
   inheritAttrs: false,
   props: {

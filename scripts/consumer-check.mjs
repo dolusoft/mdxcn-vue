@@ -47,6 +47,7 @@ function files(dir, extension) {
 }
 // Never pack stale dist files, even when this command is invoked alone.
 run(['--filter', 'mdxcn-vue', '--filter', 'mdxcn-markdown', 'build'], repo)
+run(['exec', 'node', 'scripts/tree-shaking-check.mjs'], repo)
 // Attribute final, tree-shaken output spans to library sources rather than
 // counting pre-tree-shake module metadata. Unmapped glue is excluded.
 function mappedLibraryBytes(dir) {
@@ -506,7 +507,7 @@ const stackBundle = files(join(app, 'dist/assets'), '.js')
 assert.match(stackBundle, /GraphStack/)
 assert.doesNotMatch(
   stackBundle,
-  /GraphTable|Endpoint|mdxcn-markdown|markdown-it|@comark|shiki|knap/,
+  /GraphTable|Endpoint|Footnotes|coerceProps|PendingGraph|mdxcn-markdown|markdown-it|@comark|shiki|knap/,
 )
 const modules = JSON.parse(readFileSync(join(app, 'modules.json'), 'utf8'))
 const vueEntries = modules.filter((id) =>
@@ -524,6 +525,10 @@ assert.ok(
   ),
 )
 const stackBytes = Buffer.byteLength(stackBundle)
+assert.ok(
+  stackBytes < fullBytes * 0.75,
+  'GraphStack must be substantially smaller than the full consumer',
+)
 console.log(
   `TREE-SHAKE full=${fullBytes} bytes GraphStack=${stackBytes} bytes removed=${fullBytes - stackBytes} bytes; Vue runtime entries=${vueEntries.length}`,
 )
@@ -533,6 +538,23 @@ assert.ok(fullLibraryBytes > stackLibraryBytes && stackLibraryBytes > 0)
 console.log(
   `LIBRARY ONLY (source-map attribution, Vue excluded, minify=false): full=${fullLibraryBytes} bytes GraphStack=${stackLibraryBytes} bytes`,
 )
+write(
+  app,
+  'src/main.ts',
+  "import {createApp,h} from 'vue';import {Footnotes} from 'mdxcn-vue';createApp({render:()=>h(Footnotes)}).mount('#app');",
+)
+run(['exec', 'vite', 'build'], app)
+const footnotesBundle = files(join(app, 'dist/assets'), '.js')
+  .map((path) => readFileSync(path, 'utf8'))
+  .join('\n')
+assert.match(footnotesBundle, /Footnotes/)
+assert.doesNotMatch(
+  footnotesBundle,
+  /GraphStack|coerceProps|PendingGraph|graphFilters|toComarkBlock/,
+)
+const footnotesBytes = Buffer.byteLength(footnotesBundle)
+assert.ok(footnotesBytes < stackBytes, 'Footnotes must not retain graph drawing modules')
+console.log(`TREE-SHAKE Footnotes=${footnotesBytes} bytes`)
 
 const site = join(root, 'vitepress-site')
 write(site, 'package.json', {
@@ -791,6 +813,7 @@ console.log(
 const results = {
   fullBytes,
   stackBytes,
+  footnotesBytes,
   removedBytes: fullBytes - stackBytes,
   fullLibraryBytes,
   stackLibraryBytes,

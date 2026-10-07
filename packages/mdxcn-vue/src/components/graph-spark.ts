@@ -19,7 +19,7 @@ export interface GraphSparkProps {
   corner?: string
   className?: string
 }
-export const GraphSpark = defineComponent({
+export const GraphSpark = /* @__PURE__ */ defineComponent({
   name: 'GraphSpark',
   inheritAttrs: false,
   props: {

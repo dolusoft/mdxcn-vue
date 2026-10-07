@@ -19,7 +19,7 @@ const tone = {
   ok: 'text-graph-accent',
   output: 'text-graph-muted',
 }
-export const Terminal = defineComponent({
+export const Terminal = /* @__PURE__ */ defineComponent({
   name: 'Terminal',
   inheritAttrs: false,
   props: {

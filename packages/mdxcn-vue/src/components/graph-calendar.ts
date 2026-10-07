@@ -21,7 +21,7 @@ export interface GraphCalendarProps {
   corner?: string
   className?: string
 }
-export const GraphCalendar = defineComponent({
+export const GraphCalendar = /* @__PURE__ */ defineComponent({
   name: 'GraphCalendar',
   inheritAttrs: false,
   props: {

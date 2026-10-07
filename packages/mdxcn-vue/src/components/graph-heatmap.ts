@@ -19,7 +19,7 @@ export interface GraphHeatmapProps extends LabeledTableData<HeatRow> {
   corner?: string
   className?: string
 }
-export const GraphHeatmap = defineComponent({
+export const GraphHeatmap = /* @__PURE__ */ defineComponent({
   name: 'GraphHeatmap',
   inheritAttrs: false,
   props: {

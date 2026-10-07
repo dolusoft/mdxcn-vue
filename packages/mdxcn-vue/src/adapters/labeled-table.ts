@@ -5,7 +5,7 @@ import { Row, tableOf } from './table.js'
 import type { LabeledTableData } from '../core/labeled-table.js'
 import { resolveLabeledTable } from '../core/labeled-table.js'
 
-export const Col = defineItem<object>('Col', {})
+export const Col = /* @__PURE__ */ defineItem<object>('Col', {})
 /** Read during render; no cloned or patched input VNodes. */
 export function labeledModel<Values extends readonly unknown[]>(
   data: LabeledTableData<{ label: string; values: Values }>,

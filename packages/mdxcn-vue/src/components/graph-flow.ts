@@ -35,7 +35,7 @@ function arrow(accent: boolean, stretch?: boolean) {
     ],
   )
 }
-export const GraphFlow = defineComponent({
+export const GraphFlow = /* @__PURE__ */ defineComponent({
   name: 'GraphFlow',
   inheritAttrs: false,
   props: {

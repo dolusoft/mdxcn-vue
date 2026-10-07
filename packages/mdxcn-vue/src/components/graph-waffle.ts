@@ -20,7 +20,7 @@ export interface GraphWaffleProps {
   corner?: string
   className?: string
 }
-export const GraphWaffle = defineComponent({
+export const GraphWaffle = /* @__PURE__ */ defineComponent({
   name: 'GraphWaffle',
   inheritAttrs: false,
   props: {

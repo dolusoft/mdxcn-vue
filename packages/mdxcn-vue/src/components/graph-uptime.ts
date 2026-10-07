@@ -19,7 +19,7 @@ export interface GraphUptimeProps {
   corner?: string
   className?: string
 }
-export const GraphUptime = defineComponent({
+export const GraphUptime = /* @__PURE__ */ defineComponent({
   name: 'GraphUptime',
   inheritAttrs: false,
   props: {

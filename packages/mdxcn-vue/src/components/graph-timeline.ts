@@ -20,7 +20,7 @@ export interface GraphTimelineProps {
   corner?: string
   className?: string
 }
-export const GraphTimeline = defineComponent({
+export const GraphTimeline = /* @__PURE__ */ defineComponent({
   name: 'GraphTimeline',
   inheritAttrs: false,
   props: {

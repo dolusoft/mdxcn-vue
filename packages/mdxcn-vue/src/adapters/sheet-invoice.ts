@@ -22,15 +22,15 @@ export interface SectionProps {
   title: string
   rows?: SheetSection<VNode>['rows'] | null
 }
-export const Section = defineItem<SectionProps>('Section', {
+export const Section = /* @__PURE__ */ defineItem<SectionProps>('Section', {
   title: { type: 'string' },
   rows: { type: 'array' },
 })
-export const From = defineItem<InvoiceParty>('From', {
+export const From = /* @__PURE__ */ defineItem<InvoiceParty>('From', {
   name: { type: 'string' },
   lines: { type: 'array' },
 })
-export const To = defineItem<InvoiceParty>('To', {
+export const To = /* @__PURE__ */ defineItem<InvoiceParty>('To', {
   name: { type: 'string' },
   lines: { type: 'array' },
 })
@@ -49,17 +49,17 @@ export interface TotalProps {
   value?: string
   accent?: boolean
 }
-export const Meta = defineItem<MetaProps>('Meta', {
+export const Meta = /* @__PURE__ */ defineItem<MetaProps>('Meta', {
   label: { type: 'string' },
   value: { type: 'string' },
 })
-export const Item = defineItem<ItemProps>('Item', {
+export const Item = /* @__PURE__ */ defineItem<ItemProps>('Item', {
   description: { type: 'string' },
   qty: { type: 'string' },
   rate: { type: 'string' },
   amount: { type: 'string' },
 })
-export const Total = defineItem<TotalProps>('Total', {
+export const Total = /* @__PURE__ */ defineItem<TotalProps>('Total', {
   label: { type: 'string' },
   value: { type: 'string' },
   accent: { type: 'boolean' },

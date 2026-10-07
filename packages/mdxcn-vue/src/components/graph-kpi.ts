@@ -21,7 +21,7 @@ export interface GraphKpiProps {
   corner?: string
   className?: string
 }
-export const GraphKpi = defineComponent({
+export const GraphKpi = /* @__PURE__ */ defineComponent({
   name: 'GraphKpi',
   inheritAttrs: false,
   props: {

@@ -23,7 +23,7 @@ export interface DecisionProps {
   className?: string
 }
 const glyph = { chosen: '●', open: '○', rejected: '×' }
-export const Decision = defineComponent({
+export const Decision = /* @__PURE__ */ defineComponent({
   name: 'Decision',
   inheritAttrs: false,
   props: {

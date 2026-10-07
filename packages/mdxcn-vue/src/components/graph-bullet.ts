@@ -21,7 +21,7 @@ export interface GraphBulletProps {
   corner?: string
   className?: string
 }
-export const GraphBullet = defineComponent({
+export const GraphBullet = /* @__PURE__ */ defineComponent({
   name: 'GraphBullet',
   inheritAttrs: false,
   props: {

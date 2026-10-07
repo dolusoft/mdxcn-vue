@@ -27,7 +27,7 @@ export interface GraphWaterfallProps {
   corner?: string
   className?: string
 }
-export const GraphWaterfall = defineComponent({
+export const GraphWaterfall = /* @__PURE__ */ defineComponent({
   name: 'GraphWaterfall',
   inheritAttrs: false,
   props: {

@@ -19,7 +19,7 @@ export interface GraphMeterProps {
   corner?: string
   className?: string
 }
-export const GraphMeter = defineComponent({
+export const GraphMeter = /* @__PURE__ */ defineComponent({
   name: 'GraphMeter',
   inheritAttrs: false,
   props: {

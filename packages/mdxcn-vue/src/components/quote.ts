@@ -10,7 +10,7 @@ export interface QuoteProps {
   corner?: string
   className?: string
 }
-export const Quote = defineComponent({
+export const Quote = /* @__PURE__ */ defineComponent({
   name: 'Quote',
   inheritAttrs: false,
   props: { by: String, source: String, title: String, corner: String, className: String },

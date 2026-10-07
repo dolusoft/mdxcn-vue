@@ -19,11 +19,11 @@ export interface StepsProps {
   corner?: string
   className?: string
 }
-export const Step = defineItem<StepProps>('Step', {
+export const Step = /* @__PURE__ */ defineItem<StepProps>('Step', {
   title: { type: 'string' },
   state: { type: 'string', default: 'done' },
 })
-export const Steps = defineComponent({
+export const Steps = /* @__PURE__ */ defineComponent({
   name: 'Steps',
   inheritAttrs: false,
   props: {

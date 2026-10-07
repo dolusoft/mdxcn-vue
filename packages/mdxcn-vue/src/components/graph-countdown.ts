@@ -19,7 +19,7 @@ export interface GraphCountdownProps {
   corner?: string
   className?: string
 }
-export const GraphCountdown = defineComponent({
+export const GraphCountdown = /* @__PURE__ */ defineComponent({
   name: 'GraphCountdown',
   inheritAttrs: false,
   props: {

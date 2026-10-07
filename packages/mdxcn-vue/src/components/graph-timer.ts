@@ -20,7 +20,7 @@ export interface GraphTimerProps {
   corner?: string
   className?: string
 }
-export const GraphTimer = defineComponent({
+export const GraphTimer = /* @__PURE__ */ defineComponent({
   name: 'GraphTimer',
   inheritAttrs: false,
   props: {

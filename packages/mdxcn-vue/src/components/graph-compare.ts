@@ -16,7 +16,7 @@ export interface GraphCompareProps extends LabeledTableData<CompareRow> {
   corner?: string
   className?: string
 }
-export const GraphCompare = defineComponent({
+export const GraphCompare = /* @__PURE__ */ defineComponent({
   name: 'GraphCompare',
   inheritAttrs: false,
   props: {

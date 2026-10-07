@@ -5,7 +5,7 @@ import { readerListItems } from './code-readers.js'
 import { fractionOf, gridCellsOf, gridsFromList } from '../core/grid-fraction.js'
 import type { CellGrid, GridProps } from '../core/grid-fraction.js'
 
-export const Grid = defineItem<GridProps>('Grid', {
+export const Grid = /* @__PURE__ */ defineItem<GridProps>('Grid', {
   label: { type: 'string' },
   cells: { type: 'array' },
 })

@@ -40,7 +40,7 @@ function checkRow(entry: CheckItem, palette?: GraphPalette): VNode {
     ]),
   ])
 }
-export const GraphCheck = defineComponent({
+export const GraphCheck = /* @__PURE__ */ defineComponent({
   name: 'GraphCheck',
   inheritAttrs: false,
   props: {

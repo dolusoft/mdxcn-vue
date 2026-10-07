@@ -15,16 +15,16 @@ export interface RowProps {
 export interface CellProps {
   align?: GraphAlign
 }
-export const Head = defineItem<object>('Head', {})
-export const Row = defineItem<RowProps>('Row', {
+export const Head = /* @__PURE__ */ defineItem<object>('Head', {})
+export const Row = /* @__PURE__ */ defineItem<RowProps>('Row', {
   label: { type: 'string' },
   cells: { type: 'array' },
 })
-export const Foot = defineItem<RowProps>('Foot', {
+export const Foot = /* @__PURE__ */ defineItem<RowProps>('Foot', {
   label: { type: 'string' },
   cells: { type: 'array' },
 })
-export const Cell = defineItem<CellProps>('Cell', { align: { type: 'string' } })
+export const Cell = /* @__PURE__ */ defineItem<CellProps>('Cell', { align: { type: 'string' } })
 
 function inlineCell(nodes: readonly VNode[], trim = false): string | ProseNode[] {
   const prose = readProse(nodes)

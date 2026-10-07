@@ -18,13 +18,31 @@ function host(name: string, tag: string, classes: string, hidden = false) {
   })
 }
 
-export const GraphBody = host('GraphBody', 'div', 'min-w-0 px-5 py-7 sm:px-8 sm:py-8')
-export const GraphRule = host('GraphRule', 'div', 'graph-rule w-full', true)
-export const GraphRuleY = host('GraphRuleY', 'div', 'graph-rule-y self-stretch', true)
-export const GraphTrack = host('GraphTrack', 'span', 'flex w-full min-w-0 select-none', true)
-export const GraphTick = host('GraphTick', 'span', 'min-w-0 flex-1 overflow-hidden text-center')
+export const GraphBody = /* @__PURE__ */ host(
+  'GraphBody',
+  'div',
+  'min-w-0 px-5 py-7 sm:px-8 sm:py-8',
+)
+export const GraphRule = /* @__PURE__ */ host('GraphRule', 'div', 'graph-rule w-full', true)
+export const GraphRuleY = /* @__PURE__ */ host(
+  'GraphRuleY',
+  'div',
+  'graph-rule-y self-stretch',
+  true,
+)
+export const GraphTrack = /* @__PURE__ */ host(
+  'GraphTrack',
+  'span',
+  'flex w-full min-w-0 select-none',
+  true,
+)
+export const GraphTick = /* @__PURE__ */ host(
+  'GraphTick',
+  'span',
+  'min-w-0 flex-1 overflow-hidden text-center',
+)
 
-export const GraphTitle = defineComponent({
+export const GraphTitle = /* @__PURE__ */ defineComponent({
   name: 'GraphTitle',
   inheritAttrs: false,
   setup(_, { attrs, slots }) {
@@ -49,7 +67,7 @@ export const GraphTitle = defineComponent({
   },
 })
 
-export const GraphCorners = defineComponent({
+export const GraphCorners = /* @__PURE__ */ defineComponent({
   name: 'GraphCorners',
   props: { mark: { type: String, default: '+' } },
   setup(props) {
@@ -71,7 +89,7 @@ export const GraphCorners = defineComponent({
   },
 })
 
-export const Graph = defineComponent({
+export const Graph = /* @__PURE__ */ defineComponent({
   name: 'Graph',
   inheritAttrs: false,
   props: { title: String, corner: { type: String, default: '+' }, className: String },
@@ -126,7 +144,7 @@ export function renderProse(nodes: readonly ProseNode[]): (VNode | string)[] {
   )
 }
 
-export const GraphProse = defineComponent({
+export const GraphProse = /* @__PURE__ */ defineComponent({
   name: 'GraphProse',
   inheritAttrs: false,
   props: { nodes: Array as PropType<ProseNode[]> },

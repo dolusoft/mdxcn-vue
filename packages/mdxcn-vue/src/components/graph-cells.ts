@@ -16,7 +16,7 @@ export interface GraphCellsProps {
   corner?: string
   className?: string
 }
-export const GraphCells = defineComponent({
+export const GraphCells = /* @__PURE__ */ defineComponent({
   name: 'GraphCells',
   inheritAttrs: false,
   props: {

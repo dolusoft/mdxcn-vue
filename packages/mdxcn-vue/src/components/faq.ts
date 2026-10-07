@@ -15,7 +15,7 @@ export interface FaqProps {
   corner?: string
   className?: string
 }
-export const Faq = defineComponent({
+export const Faq = /* @__PURE__ */ defineComponent({
   name: 'Faq',
   inheritAttrs: false,
   props: {

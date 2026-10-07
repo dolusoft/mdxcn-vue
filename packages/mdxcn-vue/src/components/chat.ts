@@ -22,7 +22,7 @@ export interface ChatProps {
   corner?: string
   className?: string
 }
-export const Chat = defineComponent({
+export const Chat = /* @__PURE__ */ defineComponent({
   name: 'Chat',
   inheritAttrs: false,
   props: {

@@ -23,12 +23,12 @@ export interface ChangelogProps {
   corner?: string
   className?: string
 }
-export const Change = defineItem<ChangeProps>('Change', {
+export const Change = /* @__PURE__ */ defineItem<ChangeProps>('Change', {
   type: { type: 'string', default: 'change' },
 })
 const glyph = { add: '+', change: '~', fix: '*', remove: '-' }
 const label = { add: 'added', change: 'changed', fix: 'fixed', remove: 'removed' }
-export const Changelog = defineComponent({
+export const Changelog = /* @__PURE__ */ defineComponent({
   name: 'Changelog',
   inheritAttrs: false,
   props: {

@@ -8,7 +8,7 @@ import type { SeriesProps, SeriesListItem, BarSeries } from '../core/series.js'
 import { kpiOf } from '../core/kpi.js'
 import { numbers } from '../core/markdown.js'
 
-export const Series = defineItem<SeriesProps>('Series', {
+export const Series = /* @__PURE__ */ defineItem<SeriesProps>('Series', {
   label: { type: 'string' },
   // Preserve both numeric arrays and run strings for the shared numbers reader.
   values: { type: 'node' },

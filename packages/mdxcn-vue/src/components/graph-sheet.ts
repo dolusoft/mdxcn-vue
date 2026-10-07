@@ -17,7 +17,7 @@ const ruleY = () =>
     'aria-hidden': 'true',
     class: 'pointer-events-none absolute inset-y-0 left-0 graph-rule-y',
   })
-export const GraphSheet = defineComponent({
+export const GraphSheet = /* @__PURE__ */ defineComponent({
   name: 'GraphSheet',
   inheritAttrs: false,
   props: {

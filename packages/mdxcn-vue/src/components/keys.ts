@@ -16,7 +16,7 @@ export interface KeysProps {
   corner?: string
   className?: string
 }
-export const Keys = defineComponent({
+export const Keys = /* @__PURE__ */ defineComponent({
   name: 'Keys',
   inheritAttrs: false,
   props: {

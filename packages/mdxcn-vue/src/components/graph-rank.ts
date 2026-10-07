@@ -3,7 +3,7 @@ import type { PropType } from 'vue'
 import { numericSetup } from './numeric-list.js'
 import type { GraphRankProps } from './numeric-list.js'
 export type { GraphRankProps } from './numeric-list.js'
-export const GraphRank = defineComponent({
+export const GraphRank = /* @__PURE__ */ defineComponent({
   name: 'GraphRank',
   inheritAttrs: false,
   props: {

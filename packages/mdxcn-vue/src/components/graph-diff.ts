@@ -20,7 +20,7 @@ export interface GraphDiffProps {
   className?: string
 }
 const signGlyph: Record<DiffSign, string> = { add: '+', remove: '-', keep: ' ' }
-export const GraphDiff = defineComponent({
+export const GraphDiff = /* @__PURE__ */ defineComponent({
   name: 'GraphDiff',
   inheritAttrs: false,
   props: {

@@ -6,20 +6,20 @@ import { itemParts } from './state-list.js'
 import { numericList } from './numeric-list.js'
 import { diffRewrite, diffFromList } from '../core/gantt-diff-waterfall.js'
 import type { GanttItem, DiffLineProps, WaterfallItem } from '../core/gantt-diff-waterfall.js'
-export const Span = defineItem<GanttItem>('Span', {
+export const Span = /* @__PURE__ */ defineItem<GanttItem>('Span', {
   label: { type: 'string' },
   start: { type: 'number' },
   end: { type: 'number' },
   complete: { type: 'number' },
   accent: { type: 'boolean' },
 })
-export const Line = defineItem<DiffLineProps>('Line', {
+export const Line = /* @__PURE__ */ defineItem<DiffLineProps>('Line', {
   label: { type: 'string' },
   value: { type: 'string' },
   sign: { type: 'string' },
   total: { type: 'boolean' },
 })
-export const Delta = defineItem<WaterfallItem>('Delta', {
+export const Delta = /* @__PURE__ */ defineItem<WaterfallItem>('Delta', {
   label: { type: 'string' },
   value: { type: 'number' },
   display: { type: 'string' },

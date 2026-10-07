@@ -22,7 +22,7 @@ const columnGrid: Record<number, string> = {
   3: 'sm:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)_auto_minmax(0,1fr)]',
   4: 'sm:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)_auto_minmax(0,1fr)_auto_minmax(0,1fr)]',
 }
-export const GraphBoard = defineComponent({
+export const GraphBoard = /* @__PURE__ */ defineComponent({
   name: 'GraphBoard',
   inheritAttrs: false,
   props: {

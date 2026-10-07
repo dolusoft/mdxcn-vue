@@ -3,7 +3,7 @@ import type { PropType } from 'vue'
 import { numericSetup } from './numeric-list.js'
 import type { GraphScoreProps } from './numeric-list.js'
 export type { GraphScoreProps } from './numeric-list.js'
-export const GraphScore = defineComponent({
+export const GraphScore = /* @__PURE__ */ defineComponent({
   name: 'GraphScore',
   inheritAttrs: false,
   props: {

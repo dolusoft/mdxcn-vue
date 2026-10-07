@@ -25,7 +25,7 @@ export interface GraphGanttProps {
   corner?: string
   className?: string
 }
-export const GraphGantt = defineComponent({
+export const GraphGantt = /* @__PURE__ */ defineComponent({
   name: 'GraphGantt',
   inheritAttrs: false,
   props: {

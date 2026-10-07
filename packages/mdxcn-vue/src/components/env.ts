@@ -15,7 +15,7 @@ export interface EnvProps {
   corner?: string
   className?: string
 }
-export const Env = defineComponent({
+export const Env = /* @__PURE__ */ defineComponent({
   name: 'Env',
   inheritAttrs: false,
   props: {

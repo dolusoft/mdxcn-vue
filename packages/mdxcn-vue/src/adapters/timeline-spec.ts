@@ -22,13 +22,13 @@ export interface SpecRow {
 export interface SpecLine extends SpecRow {
   rich?: VNodeChild
 }
-export const Event = defineItem<TimelineEvent>('Event', {
+export const Event = /* @__PURE__ */ defineItem<TimelineEvent>('Event', {
   date: { type: 'string' },
   label: { type: 'string' },
   state: { type: 'string' },
   note: { type: 'node' },
 })
-export const Field = defineItem<SpecRow>('Field', {
+export const Field = /* @__PURE__ */ defineItem<SpecRow>('Field', {
   label: { type: 'string' },
   value: { type: 'string' },
   accent: { type: 'boolean' },

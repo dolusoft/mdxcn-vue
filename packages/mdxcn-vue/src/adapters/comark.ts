@@ -33,7 +33,7 @@ export function coerceProps(raw: Record<string, unknown>, numeric: NumericProps 
   return out
 }
 
-export const PendingGraph = defineComponent({
+export const PendingGraph = /* @__PURE__ */ defineComponent({
   name: 'PendingGraph',
   props: { title: String },
   setup(props) {
@@ -46,7 +46,7 @@ export const PendingGraph = defineComponent({
   },
 })
 
-export const GraphRow = defineComponent({
+export const GraphRow = /* @__PURE__ */ defineComponent({
   name: 'GraphRow',
   inheritAttrs: false,
   props: { cols: { type: [Number, String], default: 2 } },

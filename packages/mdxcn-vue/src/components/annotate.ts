@@ -22,7 +22,7 @@ function noteBody(note: AnnotateNote) {
 }
 const reveal = (node: VNode, delay = 0) => withDirectives(node, [[vReveal, { delay }]])
 
-export const Annotate = defineComponent({
+export const Annotate = /* @__PURE__ */ defineComponent({
   name: 'Annotate',
   inheritAttrs: false,
   props: {

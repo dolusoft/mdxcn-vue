@@ -20,7 +20,7 @@ export interface GraphSlopeProps {
   corner?: string
   className?: string
 }
-export const GraphSlope = defineComponent({
+export const GraphSlope = /* @__PURE__ */ defineComponent({
   name: 'GraphSlope',
   inheritAttrs: false,
   props: {

@@ -19,7 +19,7 @@ export interface GraphBarsProps {
   corner?: string
   className?: string
 }
-export const GraphBars = defineComponent({
+export const GraphBars = /* @__PURE__ */ defineComponent({
   name: 'GraphBars',
   inheritAttrs: false,
   props: {

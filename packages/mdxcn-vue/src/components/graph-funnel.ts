@@ -3,7 +3,7 @@ import type { PropType } from 'vue'
 import { numericSetup } from './numeric-list.js'
 import type { GraphFunnelProps } from './numeric-list.js'
 export type { GraphFunnelProps } from './numeric-list.js'
-export const GraphFunnel = defineComponent({
+export const GraphFunnel = /* @__PURE__ */ defineComponent({
   name: 'GraphFunnel',
   inheritAttrs: false,
   props: {

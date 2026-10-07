@@ -17,11 +17,11 @@ export interface SegmentProps {
   value?: number | string
 }
 
-export const Bar = defineItem<BarProps>('Bar', {
+export const Bar = /* @__PURE__ */ defineItem<BarProps>('Bar', {
   label: { type: 'string', default: '' },
   segments: { type: 'array' },
 })
-export const Segment = defineItem<SegmentProps>('Segment', {
+export const Segment = /* @__PURE__ */ defineItem<SegmentProps>('Segment', {
   label: { type: 'string' },
   value: { type: 'number', default: 0 },
 })

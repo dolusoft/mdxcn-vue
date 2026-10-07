@@ -17,7 +17,7 @@ export interface GraphSpecProps {
   corner?: string
   className?: string
 }
-export const GraphSpec = defineComponent({
+export const GraphSpec = /* @__PURE__ */ defineComponent({
   name: 'GraphSpec',
   inheritAttrs: false,
   props: {

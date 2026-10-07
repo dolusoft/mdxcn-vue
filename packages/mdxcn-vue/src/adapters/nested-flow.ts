@@ -16,18 +16,18 @@ export interface NodeProps {
 export interface PathProps {
   children?: VNodeChild
 }
-export const Node = defineItem<NodeProps>('Node', {
+export const Node = /* @__PURE__ */ defineItem<NodeProps>('Node', {
   label: { type: 'string' },
   meta: { type: 'string' },
   accent: { type: 'boolean' },
 })
-export const Task = defineItem<CheckItem>('Task', {
+export const Task = /* @__PURE__ */ defineItem<CheckItem>('Task', {
   label: { type: 'string' },
   done: { type: 'boolean' },
   note: { type: 'string' },
   items: { type: 'array' },
 })
-export const Path = defineItem<PathProps>('Path', {})
+export const Path = /* @__PURE__ */ defineItem<PathProps>('Path', {})
 const list = (node: VNode) => node.type === 'ul' || node.type === 'ol'
 const permalink = (node: VNode) =>
   node.type === 'a' && /(?:^|\s)header-anchor(?:\s|$)/.test(normalizeClass(node.props?.class))

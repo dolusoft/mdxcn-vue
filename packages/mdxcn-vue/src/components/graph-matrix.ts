@@ -20,7 +20,7 @@ const ruleY = () =>
     'aria-hidden': 'true',
     class: 'pointer-events-none absolute inset-y-0 left-0 graph-rule-y',
   })
-export const GraphMatrix = defineComponent({
+export const GraphMatrix = /* @__PURE__ */ defineComponent({
   name: 'GraphMatrix',
   inheritAttrs: false,
   props: {

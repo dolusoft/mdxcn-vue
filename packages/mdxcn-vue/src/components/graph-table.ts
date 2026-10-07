@@ -20,7 +20,7 @@ const ruleY = () =>
 const cellContent = (cell: TableCell<VNode>) =>
   isVNode(cell) ? cell : Array.isArray(cell) ? renderProse([...cell]) : String(cell ?? '')
 
-export const GraphTable = defineComponent({
+export const GraphTable = /* @__PURE__ */ defineComponent({
   name: 'GraphTable',
   inheritAttrs: false,
   props: {

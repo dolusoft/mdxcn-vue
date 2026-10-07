@@ -11,7 +11,7 @@ export interface FootnotesProps {
 }
 
 /** Preserve host heading IDs, note IDs and backlink VNodes without cloning. */
-export const Footnotes = defineComponent({
+export const Footnotes = /* @__PURE__ */ defineComponent({
   name: 'Footnotes',
   inheritAttrs: false,
   props: { title: String, corner: String, className: String },

@@ -4,12 +4,12 @@ import { readerListItems } from './code-readers.js'
 import { hasStateHost } from './state-list.js'
 import type { StateListItem } from '../core/state-list.js'
 import type { RankItem, FunnelStep } from '../core/numeric-list.js'
-export const Rank = defineItem<RankItem>('Rank', {
+export const Rank = /* @__PURE__ */ defineItem<RankItem>('Rank', {
   label: { type: 'string' },
   value: { type: 'number' },
   display: { type: 'string' },
 })
-export const Stage = defineItem<FunnelStep>('Stage', {
+export const Stage = /* @__PURE__ */ defineItem<FunnelStep>('Stage', {
   label: { type: 'string' },
   value: { type: 'number' },
   display: { type: 'string' },

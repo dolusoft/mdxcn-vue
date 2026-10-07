@@ -19,7 +19,7 @@ const tone = {
   danger: 'text-destructive',
 }
 
-export const Callout = defineComponent({
+export const Callout = /* @__PURE__ */ defineComponent({
   name: 'Callout',
   inheritAttrs: false,
   props: {
