@@ -125,6 +125,11 @@ html {
   .Layout .VPDoc .aside {
     display: none;
   }
+  /* Below 1280px the default theme keeps the local nav for the outline; with
+     the outline gone and the sidebar shown, it would be an empty band. */
+  .Layout .VPLocalNav {
+    display: none;
+  }
 }
 
 /* The narrow-screen menu bar: no outline here either, and the page background
