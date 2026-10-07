@@ -9,12 +9,18 @@ name: Release
 on:
   push:
     tags: ['v*']
+  # Re-runs an existing tag with the workflow of the default branch.
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing tag to publish, e.g. v0.1.0
+        required: true
 
 permissions:
   contents: read
 
 concurrency:
-  group: release-${{ github.ref }}
+  group: release-${{ inputs.tag || github.ref }}
   cancel-in-progress: false
 
 jobs:
@@ -25,10 +31,11 @@ jobs:
       contents: read
       id-token: write
     env:
-      TAG: ${{ github.ref_name }}
+      TAG: ${{ inputs.tag || github.ref_name }}
     steps:
       - uses: actions/checkout@v7
         with:
+          ref: ${{ inputs.tag || github.ref }}
           persist-credentials: false
       - uses: pnpm/action-setup@v6
       - uses: actions/setup-node@v7
@@ -77,5 +84,5 @@ jobs:
               echo "$pkg@$version is already published: skipped."
               continue
             fi
-            npm publish "release/$pkg-$version.tgz" --access public
+            npm publish "./release/$pkg-$version.tgz" --access public
           done
