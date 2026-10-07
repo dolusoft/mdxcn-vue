@@ -91,7 +91,15 @@ function colWidth(values: string[]) {
 }
 
 function fence(ascii: string) {
-  return `\`\`\`\n${ascii}\n\`\`\``
+  // Cell text may contain newlines; a line that starts with a backtick run could otherwise close
+  // the fence early and turn the rest of the drawing into live Markdown. Framed output never has
+  // such a line, so ordinary drawings keep the upstream three-backtick fence byte for byte.
+  let longest = 0
+  for (const match of ascii.matchAll(/(?:^|[\r\n]) {0,3}(`+)/g)) {
+    longest = Math.max(longest, match[1]!.length)
+  }
+  const mark = '`'.repeat(Math.max(3, longest + 1))
+  return `${mark}\n${ascii}\n${mark}`
 }
 
 export {

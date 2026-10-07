@@ -9,6 +9,7 @@ import {
   resolveGraphProps,
 } from '../src/knap/graph-knap.js'
 import type { GraphFilterName } from '../src/knap/graph-knap.js'
+import { asciiWaffle } from '../src/knap/graphs.js'
 import fixtures from './fixtures/knap-upstream.json'
 
 // Captured by executing shadcn-labs/mdxcn@16d817a, never by executing the port.
@@ -117,6 +118,29 @@ it.each([0, -1, Infinity, NaN])('rejects unbounded waffle columns %s before draw
     }),
   ).toBe('original')
   expect(reportWarning).toHaveBeenCalledOnce()
+})
+it.each([0, -1, Infinity, NaN])('asciiWaffle rejects columns %s without looping', (columns) => {
+  expect(() => asciiWaffle({ title: 'W', value: 0.5, columns })).toThrow(
+    'Invalid waffle dimensions',
+  )
+})
+it('lengthens the fence when multi-line cell text could close it early', () => {
+  const evil = 'a\n```\n<img src=x onerror=alert(1)>\n````\nb'
+  const cases = [
+    ['graph_meter', { value: 0.5, title: evil, caption: evil }],
+    ['graph_stat', { items: [{ value: evil, label: evil, hint: evil }] }],
+    ['graph_table', { headers: [evil], rows: [[evil]] }],
+    ['graph_tree', { nodes: [{ label: evil }] }],
+  ] as const
+  for (const [name, rawValue] of cases) {
+    const lines = graphFilters[name]('ignored', undefined, { rawValue }).split('\n')
+    const open = /^`+$/.exec(lines[0]!)?.[0] ?? ''
+    expect(open.length).toBeGreaterThan(4)
+    const closes = (line: string) => (/^ {0,3}(`+)\s*$/.exec(line)?.[1]?.length ?? 0) >= open.length
+    expect(lines.slice(1, -1).filter(closes)).toEqual([])
+    expect(lines.at(-1)).toBe(open)
+  }
+  expect(graphFilters.graph_meter('0.5', 'X')).toMatch(/^```\n[^`]*\n```$/)
 })
 it('explicit comark overrides ASCII and preserves nested objects, grids, YAML-like strings and keys', async () => {
   const rawValue = {
