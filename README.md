@@ -4,11 +4,12 @@ Vue 3 port of [mdxcn](https://github.com/shadcn-labs/mdxcn) — ASCII-style grap
 prose components (tables, bars, timelines, invoices, terminals, ...) that can be fed
 by typed props, item components or Markdown.
 
-> **Status:** work in progress. Phase 6C includes the shared frame, typed core,
+> **Status:** work in progress. Phase 7A includes the shared frame, typed core,
 > `v-reveal`, `GraphStack`, `GraphTable`, `Endpoint`, `GraphTimer`, `Callout`,
 > `Quote`, `Terminal`, `Annotate`, `Env`, `Steps`, `Changelog`, `Decision`, `Chat`,
 > `Keys`, `GraphTimeline`, `GraphSpec`, `GraphScore`, `GraphRank`, `GraphFunnel`,
-> `GraphStat`, `GraphSlope`, `GraphBullet`, `GraphGantt`, `GraphDiff`, and `GraphWaterfall`;
+> `GraphStat`, `GraphSlope`, `GraphBullet`, `GraphGantt`, `GraphDiff`, `GraphWaterfall`,
+> `GraphCompare`, `GraphMatrix`, and `GraphHeatmap`;
 > build-time Markdown and packaged consumer checks are available; the remaining
 > components are still pending.
 
@@ -248,10 +249,23 @@ keeping supplied start/end totals. See [Gantt](apps/docs/components/graph-gantt.
 [Diff](apps/docs/components/graph-diff.md), [Waterfall](apps/docs/components/graph-waterfall.md),
 and the [Phase 6C report](docs/phase-6c-report.md).
 
+## Compare, matrix and heatmap
+
+`GraphCompare`, `GraphMatrix` and `GraphHeatmap` accept independent `columns`
+and `rows` props, labeled Markdown tables, or `Row` items. Compare also accepts
+`Col` items. Empty data arrays suppress fallback; null permits it. Static Markdown
+uses the shared `table` model, with item rows retaining precedence.
+The Vue port uses native tables with column/row headers and caption-labeled
+keyboard scroll regions; upstream uses grids and lists. Heatmap exposes numeric
+cell text to screen readers while keeping the glyphs decorative. See
+[Compare](apps/docs/components/graph-compare.md),
+[Matrix](apps/docs/components/graph-matrix.md) and
+[Heatmap](apps/docs/components/graph-heatmap.md).
+
 ## shadcn-vue registry
 
-`pnpm registry:build` generates `registry.json` and twenty-eight `public/r/mdxcn-*.json`
-items from the library sources: twenty-five components, shared frame, core and CSS.
+`pnpm registry:build` generates `registry.json` and thirty-one `public/r/mdxcn-*.json`
+items from the library sources: twenty-eight components, shared frame, core and CSS.
 The content-free build index references real files. The consumer check runs
 `shadcn-vue build registry.json` and verifies its output against the distributable
 payloads after adding the MIT notice. Our script generates `public/r`;

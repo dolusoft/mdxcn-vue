@@ -213,3 +213,7 @@ Tek ön sürüm istisnası `vitepress@2.0.0-alpha.20` exact sürümüdür. Works
 - VitePress varsayılan dev port 5173; port meşgulse sunucunun bildirdiği port kullanılmalı. Bu fazda dev sunucusu başlatılmaz.
 - VitePress dev HTML akışı `server.transformIndexHtml` çağırır; dolayısıyla DevTools HTML injection yolu mevcuttur. Config çözümlemesi sunucu açmadan iki eklentiyi doğrular; UI, bağlantı ve browser ölçümü ayrı canlı doğrulamanın işidir.
 - `apps/docs/test/config.test.mjs` iki gerçek kontrol içerir: development yapılandırmasında Vue DevTools, Vite DevTools injection/server ve Tailwind; production yapılandırmasında iki DevTools eklentisinin yokluğu. Önceki `echo` test yer tutucusu kaldırılmıştır.
+
+## Faz 7A uygulama notu
+
+`GraphCompare`, `GraphMatrix` ve `GraphHeatmap` tamamlandı. Veri alanları bağımsız seçilir; boş diziler fallback girdisini bastırır, null fallback verir. Compiler `table` alanı ortak `TableModel` taşır; item satırları bundan önce gelir. `Col` yalnız Compare sütunlarını sağlar. Ortak tablo okuyucusu değişmedi. Upstream grid/liste yerine native `table`, `th scope` ve caption ile adlandırılan odaklanabilir kaydırma bölgesi bilinçli erişilebilirlik farkıdır. Heatmap glifleri dekoratif kalır; gerçek sayılar her hücrede `sr-only` metin olarak korunur. Matrix/Heatmap metin ayrıştırması boş hücreleri upstream gibi atlar.

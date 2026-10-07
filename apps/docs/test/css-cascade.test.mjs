@@ -50,6 +50,7 @@ test('actual VitePress rules lose to graph resets and generated layered prose ut
     const candidates = rules.flatMap((rule) => {
       try { if (!element.matches(hover ? rule.selector.replace(/:hover/g, '') : rule.selector)) return [] } catch { return [] }
       return rule.declarations.filter(([name]) => name === property ||
+        (property.startsWith('padding-') && name === (['padding-top', 'padding-bottom'].includes(property) ? 'padding-block' : 'padding-inline')) ||
         ((property.startsWith('padding-') || property.startsWith('margin-')) && name === property.split('-')[0])
       ).map(([, value]) => ({ ...rule, value }))
     }).sort((a, b) => {
@@ -125,6 +126,23 @@ test('actual VitePress rules lose to graph resets and generated layered prose ut
   assert.equal(resolve(table, 'display').value, 'table')
   assert.equal(resolve(table, 'border-collapse').value, 'separate')
   assert.equal(resolve(table, 'border-spacing').value, '0')
+  for (const slug of ['graph-compare', 'graph-matrix', 'graph-heatmap']) {
+    const page = new JSDOM(readFileSync(new URL(`../.vitepress/dist/components/${slug}.html`, import.meta.url), 'utf8')).window.document
+    const labeled = page.querySelector('figure table')
+    assert.equal(resolve(labeled, 'display').value, 'table')
+    assert.equal(resolve(labeled, 'border-collapse').value, 'separate')
+    assert.equal(resolve(labeled.querySelector('thead th[scope]:nth-child(2)'), 'color').layer, 'utilities')
+    assert.equal(resolve(labeled.querySelector('thead th[scope]:nth-child(2)'), 'padding-bottom').layer, 'utilities')
+    for (const element of [labeled.querySelector('tbody th'), labeled.querySelector('tbody td')]) {
+      assert.equal(resolve(element, 'padding-top').layer, 'utilities')
+      assert.equal(resolve(element, 'text-align').layer, 'utilities')
+      assert.equal(resolve(element, 'border').value, '0')
+      assert.equal(resolve(element, 'background').value, 'transparent')
+    }
+    const ink = slug === 'graph-heatmap' ? labeled.querySelector('tbody td > [aria-hidden]') : labeled.querySelector('tbody td')
+    assert.equal(resolve(ink, 'color').layer, 'utilities')
+    if (slug === 'graph-matrix') assert.equal(resolve(labeled.querySelector('thead tr[aria-hidden] th'), 'padding').value, '0')
+  }
   assert.equal(resolve(code, 'color', true).layer, 'utilities')
   const quoteHtml = readFileSync(new URL('../.vitepress/dist/components/quote.html', import.meta.url), 'utf8')
   const quote = new JSDOM(quoteHtml).window.document.querySelector('figure blockquote')

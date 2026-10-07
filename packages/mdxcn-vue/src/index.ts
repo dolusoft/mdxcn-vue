@@ -1,4 +1,17 @@
 // Public entry of `mdxcn-vue`; internal helpers belong to the core subpath.
+export { GraphCompare, Col } from './components/graph-compare.js'
+export { GraphMatrix } from './components/graph-matrix.js'
+export { GraphHeatmap } from './components/graph-heatmap.js'
+export type { GraphCompareProps } from './components/graph-compare.js'
+export type { GraphMatrixProps } from './components/graph-matrix.js'
+export type { GraphHeatmapProps } from './components/graph-heatmap.js'
+export type {
+  CompareCell,
+  CompareRow,
+  MatrixRow,
+  HeatRow,
+  LabeledTableData,
+} from './core/labeled-table.js'
 export type { ProseNode, StackSegment, StackRow, SegmentRow, BarRow } from './core/model.js'
 export { proseText, sliceProse } from './core/model.js'
 export type { GlyphSetName, Glyphs, GraphPalette } from './core/motion.js'

@@ -44,6 +44,22 @@
   padding: 0.5rem 0 0.75rem;
 }
 
+/* Labeled graphs carry their own geometry and palette utilities on native cells. */
+.graph-frame.graph-frame .graph-labeled-table th,
+.graph-frame.graph-frame .graph-labeled-table tbody td {
+  padding: revert-layer;
+  color: revert-layer;
+  text-align: revert-layer;
+  line-height: revert-layer;
+}
+.graph-frame.graph-frame .graph-labeled-table thead tr[aria-hidden] th {
+  padding: 0;
+}
+.graph-frame.graph-frame .graph-labeled-table th.text-left,
+.graph-frame.graph-frame .graph-labeled-table th.text-right {
+  text-align: revert-layer;
+}
+
 /* Unlayered host prose rules must not change graph list geometry. */
 .graph-frame.graph-frame ul,
 .graph-frame.graph-frame ol {

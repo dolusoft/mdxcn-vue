@@ -1,0 +1,203 @@
+[
+  {
+    "name": "GraphCompare",
+    "slug": "graph-compare",
+    "source": "<GraphCompare title=\"PLANS\" accent=\"Studio\">\n\n| | Solo | Studio |\n| --- | --- | --- |\n| Registry | yes | yes |\n| Accent picker | yes | yes |\n| Private source | no | yes |\n| Price | $0 | $24 |\n\n</GraphCompare>",
+    "body": "| | Solo | Studio |\n| --- | --- | --- |\n| Registry | yes | yes |\n| Accent picker | yes | yes |\n| Private source | no | yes |\n| Price | $0 | $24 |",
+    "props": {
+      "title": "PLANS",
+      "accent": "Studio"
+    },
+    "columns": ["Solo", "Studio"],
+    "rows": [
+      {
+        "label": "Registry",
+        "values": [true, true]
+      },
+      {
+        "label": "Accent picker",
+        "values": [true, true]
+      },
+      {
+        "label": "Private source",
+        "values": [false, true]
+      },
+      {
+        "label": "Price",
+        "values": ["$0", "$24"]
+      }
+    ],
+    "raw": [
+      ["Registry", "yes", "yes"],
+      ["Accent picker", "yes", "yes"],
+      ["Private source", "no", "yes"],
+      ["Price", "$0", "$24"]
+    ]
+  },
+  {
+    "name": "GraphCompare",
+    "slug": "graph-compare",
+    "source": "<GraphCompare title=\"RENDER\" accent=\"This\">\n\n| | Mermaid | SVG | This |\n| --- | --- | --- | --- |\n| Source | .md | .svg | .tsx |\n| In git | yes | no | yes |\n| Themable | no | no | yes |\n\n</GraphCompare>",
+    "body": "| | Mermaid | SVG | This |\n| --- | --- | --- | --- |\n| Source | .md | .svg | .tsx |\n| In git | yes | no | yes |\n| Themable | no | no | yes |",
+    "props": {
+      "title": "RENDER",
+      "accent": "This"
+    },
+    "columns": ["Mermaid", "SVG", "This"],
+    "rows": [
+      {
+        "label": "Source",
+        "values": [".md", ".svg", ".tsx"]
+      },
+      {
+        "label": "In git",
+        "values": [true, false, true]
+      },
+      {
+        "label": "Themable",
+        "values": [false, false, true]
+      }
+    ],
+    "raw": [
+      ["Source", ".md", ".svg", ".tsx"],
+      ["In git", "yes", "no", "yes"],
+      ["Themable", "no", "no", "yes"]
+    ]
+  },
+  {
+    "name": "GraphMatrix",
+    "slug": "graph-matrix",
+    "source": "<GraphMatrix title=\"DETECT\" accent=\"Pos\">\n\n| | Pos | Neg |\n| --- | --- | --- |\n| Pos | 41 | 3 |\n| Neg | 2 | 54 |\n\n</GraphMatrix>",
+    "body": "| | Pos | Neg |\n| --- | --- | --- |\n| Pos | 41 | 3 |\n| Neg | 2 | 54 |",
+    "props": {
+      "title": "DETECT",
+      "accent": "Pos"
+    },
+    "columns": ["Pos", "Neg"],
+    "rows": [
+      {
+        "label": "Pos",
+        "values": [41, 3]
+      },
+      {
+        "label": "Neg",
+        "values": [2, 54]
+      }
+    ],
+    "raw": [
+      ["Pos", "41", "3"],
+      ["Neg", "2", "54"]
+    ]
+  },
+  {
+    "name": "GraphMatrix",
+    "slug": "graph-matrix",
+    "source": "<GraphMatrix title=\"P95\" accent=\"write\">\n\n| | iad | sfo | nrt |\n| --- | --- | --- | --- |\n| read | 12 | 18 | 41 |\n| write | 28 | 33 | 67 |\n| queue | 4 | 6 | 9 |\n\n</GraphMatrix>",
+    "body": "| | iad | sfo | nrt |\n| --- | --- | --- | --- |\n| read | 12 | 18 | 41 |\n| write | 28 | 33 | 67 |\n| queue | 4 | 6 | 9 |",
+    "props": {
+      "title": "P95",
+      "accent": "write"
+    },
+    "columns": ["iad", "sfo", "nrt"],
+    "rows": [
+      {
+        "label": "read",
+        "values": [12, 18, 41]
+      },
+      {
+        "label": "write",
+        "values": [28, 33, 67]
+      },
+      {
+        "label": "queue",
+        "values": [4, 6, 9]
+      }
+    ],
+    "raw": [
+      ["read", "12", "18", "41"],
+      ["write", "28", "33", "67"],
+      ["queue", "4", "6", "9"]
+    ]
+  },
+  {
+    "name": "GraphHeatmap",
+    "slug": "graph-heatmap",
+    "source": "<GraphHeatmap title=\"DEPLOYS\" palette=\"duo\">\n\n| | 0 | 4 | 8 | 12 | 16 | 20 |\n| --- | --- | --- | --- | --- | --- | --- |\n| Mon | 0 | 1 | 4 | 8 | 6 | 1 |\n| Tue | 0 | 0 | 5 | 9 | 4 | 2 |\n| Wed | 1 | 0 | 6 | 12 | 5 | 1 |\n| Thu | 0 | 2 | 4 | 7 | 8 | 3 |\n| Fri | 0 | 1 | 3 | 5 | 2 | 0 |\n| Sat | 0 | 0 | 1 | 0 | 0 | 0 |\n| Sun | 0 | 0 | 0 | 1 | 0 | 0 |\n\n</GraphHeatmap>",
+    "body": "| | 0 | 4 | 8 | 12 | 16 | 20 |\n| --- | --- | --- | --- | --- | --- | --- |\n| Mon | 0 | 1 | 4 | 8 | 6 | 1 |\n| Tue | 0 | 0 | 5 | 9 | 4 | 2 |\n| Wed | 1 | 0 | 6 | 12 | 5 | 1 |\n| Thu | 0 | 2 | 4 | 7 | 8 | 3 |\n| Fri | 0 | 1 | 3 | 5 | 2 | 0 |\n| Sat | 0 | 0 | 1 | 0 | 0 | 0 |\n| Sun | 0 | 0 | 0 | 1 | 0 | 0 |",
+    "props": {
+      "title": "DEPLOYS",
+      "palette": "duo"
+    },
+    "columns": ["0", "4", "8", "12", "16", "20"],
+    "rows": [
+      {
+        "label": "Mon",
+        "values": [0, 1, 4, 8, 6, 1]
+      },
+      {
+        "label": "Tue",
+        "values": [0, 0, 5, 9, 4, 2]
+      },
+      {
+        "label": "Wed",
+        "values": [1, 0, 6, 12, 5, 1]
+      },
+      {
+        "label": "Thu",
+        "values": [0, 2, 4, 7, 8, 3]
+      },
+      {
+        "label": "Fri",
+        "values": [0, 1, 3, 5, 2, 0]
+      },
+      {
+        "label": "Sat",
+        "values": [0, 0, 1, 0, 0, 0]
+      },
+      {
+        "label": "Sun",
+        "values": [0, 0, 0, 1, 0, 0]
+      }
+    ],
+    "raw": [
+      ["Mon", "0", "1", "4", "8", "6", "1"],
+      ["Tue", "0", "0", "5", "9", "4", "2"],
+      ["Wed", "1", "0", "6", "12", "5", "1"],
+      ["Thu", "0", "2", "4", "7", "8", "3"],
+      ["Fri", "0", "1", "3", "5", "2", "0"],
+      ["Sat", "0", "0", "1", "0", "0", "0"],
+      ["Sun", "0", "0", "0", "1", "0", "0"]
+    ]
+  },
+  {
+    "name": "GraphHeatmap",
+    "slug": "graph-heatmap",
+    "source": "<GraphHeatmap title=\"TESTS\" :max=\"10\" :legend=\"false\">\n\n| | a | b | c | d |\n| --- | --- | --- | --- | --- |\n| auth | 10 | 8 | 4 | 2 |\n| billing | 6 | 10 | 7 | 1 |\n| docs | 2 | 3 | 9 | 8 |\n\n</GraphHeatmap>",
+    "body": "| | a | b | c | d |\n| --- | --- | --- | --- | --- |\n| auth | 10 | 8 | 4 | 2 |\n| billing | 6 | 10 | 7 | 1 |\n| docs | 2 | 3 | 9 | 8 |",
+    "props": {
+      "title": "TESTS",
+      "max": 10,
+      "legend": false
+    },
+    "columns": ["a", "b", "c", "d"],
+    "rows": [
+      {
+        "label": "auth",
+        "values": [10, 8, 4, 2]
+      },
+      {
+        "label": "billing",
+        "values": [6, 10, 7, 1]
+      },
+      {
+        "label": "docs",
+        "values": [2, 3, 9, 8]
+      }
+    ],
+    "raw": [
+      ["auth", "10", "8", "4", "2"],
+      ["billing", "6", "10", "7", "1"],
+      ["docs", "2", "3", "9", "8"]
+    ]
+  }
+]

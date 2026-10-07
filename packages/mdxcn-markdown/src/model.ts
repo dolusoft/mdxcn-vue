@@ -17,6 +17,9 @@ import { bindingFromList } from 'mdxcn-vue/core'
 import type { ChatListItem, KeyBinding } from 'mdxcn-vue/core'
 
 export type ComponentName =
+  | 'GraphCompare'
+  | 'GraphMatrix'
+  | 'GraphHeatmap'
   | 'GraphStack'
   | 'GraphTable'
   | 'Endpoint'
@@ -39,6 +42,7 @@ export type ComponentName =
   | 'GraphDiff'
   | 'GraphWaterfall'
 export type CompiledProps =
+  | { table: TableModel }
   | { rows: StackRow[] }
   | TableModel
   | { code: string; notes: ProseNode[][]; title: string }
@@ -199,6 +203,8 @@ export function tokensToProps(
   env: object = {},
   options: TokenModelOptions = {},
 ): CompiledProps {
+  if (['GraphCompare', 'GraphMatrix', 'GraphHeatmap'].includes(name))
+    return { table: tokensToProps('GraphTable', tokens, md, env, options) as TableModel }
   const stateList = [
     'Steps',
     'Changelog',

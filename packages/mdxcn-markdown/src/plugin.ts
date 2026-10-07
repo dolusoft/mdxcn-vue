@@ -11,6 +11,9 @@ export interface MarkdownOptions extends WarningOptions {
   renderLinks?: boolean
 }
 const dataFields: Record<ComponentName, string[]> = {
+  GraphCompare: ['columns', 'rows', 'table'],
+  GraphMatrix: ['columns', 'rows', 'table'],
+  GraphHeatmap: ['columns', 'rows', 'table'],
   GraphStack: ['rows'],
   GraphTable: ['headers', 'rows', 'footer', 'align'],
   Endpoint: ['method', 'path', 'params', 'blocks', 'about'],
@@ -55,7 +58,7 @@ export function mdxcnMarkdown(md: MarkdownIt, options: MarkdownOptions = {}): vo
       let openingEnd = start
       let openingText = lineAt(start)
       const leading = openingText.match(
-        /^<(GraphStack|GraphTable|Endpoint|Annotate|Env|Steps|Changelog|Decision|Chat|Keys|GraphTimeline|GraphSpec|GraphScore|GraphRank|GraphFunnel|GraphStat|GraphSlope|GraphBullet|GraphGantt|GraphDiff|GraphWaterfall)(?=\s|>|$)/,
+        /^<(GraphCompare|GraphMatrix|GraphHeatmap|GraphStack|GraphTable|Endpoint|Annotate|Env|Steps|Changelog|Decision|Chat|Keys|GraphTimeline|GraphSpec|GraphScore|GraphRank|GraphFunnel|GraphStat|GraphSlope|GraphBullet|GraphGantt|GraphDiff|GraphWaterfall)(?=\s|>|$)/,
       )
       if (!leading || /\/>\s*$/.test(openingText)) return false
       const name = leading[1] as ComponentName
@@ -63,9 +66,9 @@ export function mdxcnMarkdown(md: MarkdownIt, options: MarkdownOptions = {}): vo
         if (!silent) emitWarning(options, state.env, state.src, start, name, reason)
       }
       const pattern =
-        /^<(GraphStack|GraphTable|Endpoint|Annotate|Env|Steps|Changelog|Decision|Chat|Keys|GraphTimeline|GraphSpec|GraphScore|GraphRank|GraphFunnel|GraphStat|GraphSlope|GraphBullet|GraphGantt|GraphDiff|GraphWaterfall)(\s(?:[^"'<>]|"[^"]*"|'[^']*')*)?>\s*$/
+        /^<(GraphCompare|GraphMatrix|GraphHeatmap|GraphStack|GraphTable|Endpoint|Annotate|Env|Steps|Changelog|Decision|Chat|Keys|GraphTimeline|GraphSpec|GraphScore|GraphRank|GraphFunnel|GraphStat|GraphSlope|GraphBullet|GraphGantt|GraphDiff|GraphWaterfall)(\s(?:[^"'<>]|"[^"]*"|'[^']*')*)?>\s*$/
       const inlineOpening = openingText.match(
-        /^<(GraphStack|GraphTable|Endpoint|Annotate|Env|Steps|Changelog|Decision|Chat|Keys|GraphTimeline|GraphSpec|GraphScore|GraphRank|GraphFunnel|GraphStat|GraphSlope|GraphBullet|GraphGantt|GraphDiff|GraphWaterfall)(\s(?:[^"'<>]|"[^"]*"|'[^']*')*)?>(.*)$/,
+        /^<(GraphCompare|GraphMatrix|GraphHeatmap|GraphStack|GraphTable|Endpoint|Annotate|Env|Steps|Changelog|Decision|Chat|Keys|GraphTimeline|GraphSpec|GraphScore|GraphRank|GraphFunnel|GraphStat|GraphSlope|GraphBullet|GraphGantt|GraphDiff|GraphWaterfall)(\s(?:[^"'<>]|"[^"]*"|'[^']*')*)?>(.*)$/,
       )
       if (inlineOpening?.[3]?.trim()) {
         warn('Opening tag and content must be on separate lines')

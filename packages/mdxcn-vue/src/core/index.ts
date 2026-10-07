@@ -1,4 +1,21 @@
 // Framework-independent helpers for adapters and advanced consumers.
+export type {
+  CompareCell,
+  CompareRow,
+  MatrixRow,
+  HeatRow,
+  LabeledTableData,
+} from './labeled-table.js'
+export {
+  compareCell,
+  compareValues,
+  matrixValues,
+  formatMatrixCell,
+  resolveLabeledTable,
+  compareFromTable,
+  matrixFromTable,
+  heatFromTable,
+} from './labeled-table.js'
 export type { ProseNode, StackSegment, StackRow, SegmentRow, BarRow } from './model.js'
 export { proseText, sliceProse } from './model.js'
 export { words, numbers, splitDash } from './markdown.js'

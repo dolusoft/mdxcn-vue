@@ -7,6 +7,10 @@ import ts from 'typescript'
 
 // Deliberately maintained independently of export declarations.
 const publicNames = [
+  'GraphCompare',
+  'GraphMatrix',
+  'GraphHeatmap',
+  'Col',
   'GraphGantt',
   'GraphDiff',
   'GraphWaterfall',
@@ -125,6 +129,14 @@ it('exposes grammar and clock helpers only through core', () => {
 })
 
 const publicTypes = [
+  'GraphCompareProps',
+  'GraphMatrixProps',
+  'GraphHeatmapProps',
+  'CompareCell',
+  'CompareRow',
+  'MatrixRow',
+  'HeatRow',
+  'LabeledTableData',
   'GraphGanttProps',
   'GraphDiffProps',
   'GraphWaterfallProps',
@@ -208,6 +220,19 @@ const publicTypes = [
   'GraphTimerProps',
 ]
 const coreNames = [
+  'CompareCell',
+  'CompareRow',
+  'MatrixRow',
+  'HeatRow',
+  'LabeledTableData',
+  'compareCell',
+  'compareValues',
+  'matrixValues',
+  'formatMatrixCell',
+  'resolveLabeledTable',
+  'compareFromTable',
+  'matrixFromTable',
+  'heatFromTable',
   'ganttFromList',
   'normalizeGantt',
   'diffRewrite',

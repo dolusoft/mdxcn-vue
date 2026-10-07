@@ -61,6 +61,7 @@ export default tseslint.config(
             'Span',
             'Line',
             'Delta',
+            'Col',
           ],
         },
       ],
