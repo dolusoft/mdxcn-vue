@@ -149,6 +149,36 @@ html {
   background-repeat: no-repeat;
   background-size: 100% 1px;
 }
+/* Examples page: the jump links under the lead, and the mono caption under
+   each figure that names its component, as in mdxcn's recipe cards. */
+.vp-doc .example-index {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+}
+.vp-doc .example-caption {
+  margin: -1.25rem 0 2rem;
+  color: var(--muted-foreground);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+}
+/* Dashboards page: tiles in a grid that drops to one column on phones. The
+   frame margin is replaced by the gap, which leaves room for the titles. */
+.vp-doc .dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+  gap: 2.5rem 2rem;
+  margin: 2.5rem 0;
+}
+/* A tile whose labels need the full row, such as a slope chart. */
+.vp-doc .dashboard-wide {
+  grid-column: 1 / -1;
+}
+.vp-doc .dashboard-grid .graph-frame {
+  margin: 0;
+}
 /* Site-only tweak: mdxcn's dark rail (0.22 on a 0.11 background) is hard to
    see on low-contrast screens, so the docs site lifts it a little. */
 .dark {
