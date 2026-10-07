@@ -14,7 +14,10 @@ export const Series = defineItem<SeriesProps>('Series', {
   values: { type: 'node' },
   size: { type: 'string' },
 })
-export function visibleText(nodes: readonly VNode[], source = false): string {
+// Compiled templates drop the whitespace between blocks; MDX keeps it. Pad every block.
+const BLOCK = /^(?:p|li|ul|ol|blockquote|h[1-6]|tr|td|th|div|pre)$/
+// `lines` is for KPI, which splits on newlines: MDX keeps one at every block and `br` boundary.
+export function visibleText(nodes: readonly VNode[], source = false, lines = false): string {
   return flattenNodes(nodes)
     .map((node) => {
       if (node.type === Text) return textOf([node])
@@ -24,7 +27,7 @@ export function visibleText(nodes: readonly VNode[], source = false): string {
         /(?:^|\s)header-anchor(?:\s|$)/.test(normalizeClass(node.props?.class))
       )
         return ''
-      const inner = visibleText(childrenOf(node), source)
+      const inner = visibleText(childrenOf(node), source, lines)
       if (source && ['strong', 'b', 'em', 'i', 'del', 's'].includes(node.type)) {
         const mark = ['strong', 'b'].includes(node.type)
           ? '**'
@@ -33,7 +36,9 @@ export function visibleText(nodes: readonly VNode[], source = false): string {
             : '~~'
         return `${mark}${inner}${mark}`
       }
-      return source && ['p', 'li', 'br'].includes(node.type) ? `${inner}\n` : inner
+      if (node.type === 'br') return source || lines ? `${inner}\n` : ' '
+      if (!BLOCK.test(node.type)) return inner
+      return source ? `${inner}\n` : lines ? `\n${inner}\n` : ` ${inner} `
     })
     .join('')
 }
@@ -68,7 +73,7 @@ export function kpiModel(nodes: readonly VNode[]) {
     const paragraphs = flattenNodes(input).filter((node) => node.type === 'p')
     return paragraphs.length
       ? paragraphs.flatMap((node) => lines(childrenOf(node)))
-      : visibleText(input)
+      : visibleText(input, false, true)
           .split('\n')
           .map((line) => line.trim())
           .filter(Boolean)

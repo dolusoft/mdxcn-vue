@@ -8,7 +8,7 @@ const page = (slug) => new JSDOM(readFileSync(new URL(`../.vitepress/dist/${slug
 const normalize = (f) => f.outerHTML.replace(/<!--[\s\S]*?-->/g, '').replace(/ id="[^"]*"/g, '').replace(/ aria-labelledby="[^"]*"/g, '')
 test('Grid/fraction production compiler, runtime and direct props produce equal DOM including softbreaks', () => {
   const figures = [...page('test/fixtures/grid-fraction').querySelectorAll('figure')]
-  assert.equal(figures.length, 27)
+  assert.equal(figures.length, 36)
   for(let i=0;i<figures.length;i+=3) {
     assert.equal(normalize(figures[i]),normalize(figures[i+1]))
     assert.equal(normalize(figures[i]),normalize(figures[i+2]))

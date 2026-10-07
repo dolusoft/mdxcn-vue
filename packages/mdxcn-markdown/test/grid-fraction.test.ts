@@ -66,7 +66,7 @@ it.each(['GraphMeter', 'GraphWaffle'] as const)(
       written: { token: '67%', caption: 'disk usage' },
     })
     expect(tokensToProps(name, md.parse('67%\n\ncaption', {}), md)).toEqual({
-      written: { token: '67%caption', caption: undefined },
+      written: { token: '67%', caption: 'caption' },
     })
   },
 )
@@ -110,3 +110,17 @@ it.each(['GraphMeter', 'GraphWaffle'] as const)(
     })
   },
 )
+it('static path keeps block boundaries separate, matching MDX newlines', () => {
+  const md = new MarkdownIt()
+  const props = (name: ComponentName, body: string) =>
+    JSON.parse(JSON.stringify(tokensToProps(name, md.parse(body, {}), md)))
+  expect(props('GraphMeter', '67%\n\nused')).toEqual({
+    written: { token: '67%', caption: 'used' },
+  })
+  expect(props('GraphWaffle', '- 67%\n- 33%')).toEqual({
+    written: { token: '67%', caption: '33%' },
+  })
+  expect(props('GraphCells', '- a: 1 0\n\n  0 1')).toEqual({
+    items: [{ label: 'a', cells: [[1, 0, 0, 1]] }],
+  })
+})

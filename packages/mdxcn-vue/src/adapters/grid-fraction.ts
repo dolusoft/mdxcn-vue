@@ -9,6 +9,8 @@ export const Grid = defineItem<GridProps>('Grid', {
   label: { type: 'string' },
   cells: { type: 'array' },
 })
+// Compiled templates drop the whitespace between blocks; MDX keeps a newline there.
+const BLOCK = /^(?:p|li|ul|ol|blockquote|h[1-6]|tr|td|th|table|thead|tbody|div|pre)$/
 /** Host text only; fragments are transparent and permalink labels are excluded. */
 export function gridFractionText(nodes: readonly VNode[]): string {
   return flattenNodes(nodes)
@@ -20,7 +22,9 @@ export function gridFractionText(nodes: readonly VNode[]): string {
         /(?:^|\s)header-anchor(?:\s|$)/.test(normalizeClass(node.props?.class))
       )
         return ''
-      return gridFractionText(childrenOf(node))
+      const inner = gridFractionText(childrenOf(node))
+      if (node.type === 'br') return `${inner}\n`
+      return BLOCK.test(node.type) ? `\n${inner}\n` : inner
     })
     .join('')
 }

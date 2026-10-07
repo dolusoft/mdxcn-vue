@@ -354,3 +354,15 @@ it('Cells palette, Grid cells and reactive props/slots retain schema ownership',
   expect(w.text()).toContain('second')
   w.unmount()
 })
+it('block boundaries keep MDX newlines the template compiler drops', () => {
+  // `67%` and `used` are separate blocks: gluing them would read `67%used`, which is 100 percent.
+  expect(fractionModel([h('p', '67%'), h('p', 'used')])).toEqual(fractionOf('67%\nused'))
+  expect(fractionModel([h('p', '67%'), h('p', '— used')])).toEqual(fractionOf('67%\n— used'))
+  expect(fractionModel([h('ul', [h('li', '67%'), h('li', '33%')])])).toEqual(fractionOf('67%\n33%'))
+  expect(fractionModel([h('h3', '67%'), h('p', 'used')])).toEqual(fractionOf('67%\nused'))
+  expect(fractionModel([h('p', '67%'), h('p', 'used')]).token).toBe('67%')
+  // Loose item: the second paragraph is a new line of cells, never glued to the first.
+  expect(cellsModel([h('ul', [h('li', [h('p', 'a: 1 0'), h('p', '0 1')])])])).toEqual([
+    { label: 'a', cells: [[1, 0, 0, 1]] },
+  ])
+})

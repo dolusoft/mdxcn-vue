@@ -8,7 +8,7 @@ const page = (slug) => new JSDOM(readFileSync(new URL(`../.vitepress/dist/${slug
 const normalize = (f) => f.outerHTML.replace(/<!--[\s\S]*?-->/g,'').replace(/ id="[^"]*"/g,'').replace(/ aria-labelledby="[^"]*"/g,'')
 test('Plot and KPI retain equal compiler/runtime/model DOM in production VitePress',()=>{
   const figures=[...page('test/fixtures/plot-kpi').querySelectorAll('figure')]
-  assert.equal(figures.length,6)
+  assert.equal(figures.length,12)
   for(let i=0;i<figures.length;i+=3){
     assert.equal(normalize(figures[i]),normalize(figures[i+1]))
     assert.equal(normalize(figures[i]),normalize(figures[i+2]))

@@ -139,3 +139,55 @@ usage
 </GraphWaffle>
 
 <GraphWaffle title="INLINE" value="67%used" />
+
+<GraphMeter title="BLOCKS" >
+
+67%
+
+used
+
+</GraphMeter>
+
+<GraphMeter title="BLOCKS" :written="null">
+
+67%
+
+used
+
+</GraphMeter>
+
+<GraphMeter title="BLOCKS" value="67%" caption="used" />
+
+<GraphWaffle title="BLOCKS" >
+
+- 67%
+- used
+
+</GraphWaffle>
+
+<GraphWaffle title="BLOCKS" :written="null">
+
+- 67%
+- used
+
+</GraphWaffle>
+
+<GraphWaffle title="BLOCKS" value="67%" caption="used" />
+
+<GraphCells title="BLOCKS" >
+
+- a: 1 0
+
+  0 1
+
+</GraphCells>
+
+<GraphCells title="BLOCKS" :items="null">
+
+- a: 1 0
+
+  0 1
+
+</GraphCells>
+
+<GraphCells title="BLOCKS" v-bind='{"items": [{"label": "a", "cells": [[1, 0, 0, 1]]}]}' />

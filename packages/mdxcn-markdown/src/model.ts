@@ -118,6 +118,8 @@ interface Block {
   children: Block[]
   prose?: ProseNode[]
 }
+// Block tags after which MDX keeps a newline text node (Vue's compiler drops it).
+const blockBreak = /^(?:p|li|ul|ol|blockquote|h[1-6]|tr|td|th|table|thead|tbody)$/
 const allowed = new Set(['ul', 'li', 'p', 'table', 'thead', 'tbody', 'tr', 'th', 'td'])
 
 function inline(
@@ -379,8 +381,17 @@ export function tokensToProps(
       nodes.some((b) => b.tag === 'fence' || hasFence(b.children))
     if (hasFence(tree)) throw new Error(name + ' fences require runtime resolution')
     // Vue condenses each inline text run, including softbreaks; element boundaries add no spaces.
+    // MDX keeps a newline at every block boundary, which the compiled template drops: add it back.
     const visible = (nodes: readonly Block[]): string =>
-      nodes.map((b) => (b.prose ? gridFractionInline(b.prose) : visible(b.children))).join('')
+      nodes
+        .map((b) =>
+          b.prose
+            ? gridFractionInline(b.prose)
+            : (blockBreak.test(b.tag) ? '\n' : '') +
+              visible(b.children) +
+              (blockBreak.test(b.tag) ? '\n' : ''),
+        )
+        .join('')
     if (name !== 'GraphCells') return { written: fractionOf(visible(tree)) }
     const lists = tree.filter((b) => b.tag === 'ul' || b.tag === 'ol')
     const items = lists.length
@@ -402,11 +413,20 @@ export function tokensToProps(
       nodes.some((b) => b.tag === 'fence' || hasFence(b.children))
     if (hasFence(tree)) throw new Error(name + ' fences require runtime resolution')
     if (name === 'GraphKpi') {
+      // MDX keeps a newline at every block boundary; KPI splits on newlines.
+      const lined = (b: Block): string =>
+        b.prose
+          ? proseText(b.prose)
+          : (blockBreak.test(b.tag) ? '\n' : '') +
+            b.children.map(lined).join('') +
+            (blockBreak.test(b.tag) ? '\n' : '')
       const lines = (nodes: readonly Block[]): string[] => {
         const paragraphs = nodes.filter((b) => b.tag === 'p')
         return paragraphs.length
           ? paragraphs.flatMap((b) => lines(b.children))
-          : proseText(nodes.flatMap(content))
+          : nodes
+              .map(lined)
+              .join('')
               .split('\n')
               .map((line) => line.trim())
               .filter(Boolean)
@@ -417,10 +437,17 @@ export function tokensToProps(
     const items = lists.length
       ? lists.flatMap((b) => b.children)
       : tree.filter((b) => b.tag === 'li')
+    // Compiled templates drop the newline between blocks; MDX keeps it. Pad every block.
+    const seriesBlock = /^(?:p|li|ul|ol|blockquote|h[1-6]|tr|td|th)$/
+    const spaced = (b: Block): string =>
+      (seriesBlock.test(b.tag) ? ' ' : '') +
+      (b.prose ? proseText(b.prose) : b.children.map(spaced).join('')) +
+      (seriesBlock.test(b.tag) ? ' ' : '')
     const list: SeriesListItem[] = items.map((item) => ({
-      text: proseText(
-        item.children.filter((b) => b.tag !== 'ul' && b.tag !== 'ol').flatMap(content),
-      )
+      text: item.children
+        .filter((b) => b.tag !== 'ul' && b.tag !== 'ol')
+        .map(spaced)
+        .join('')
         .replace(/\s+/g, ' ')
         .trim(),
       strong: bold(content(item)),
@@ -446,7 +473,7 @@ export function tokensToProps(
       nodes
         .map((b) => {
           const inner = b.prose ? sourceProse(b.prose) : source(b.children)
-          return ['p', 'li', 'br'].includes(b.tag) ? inner + '\n' : inner
+          return seriesBlock.test(b.tag) || b.tag === 'br' ? inner + '\n' : inner
         })
         .join('')
     return { written: seriesOf(list, source(tree)) }

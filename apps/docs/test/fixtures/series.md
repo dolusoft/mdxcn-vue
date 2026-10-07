@@ -66,7 +66,7 @@
 
 </GraphBars>
 
-<GraphBars title="LOOSE" v-bind="{&quot;series&quot;:[{&quot;label&quot;:&quot;A&quot;,&quot;values&quot;:[12],&quot;size&quot;:&quot;lg&quot;}]}" />
+<GraphBars title="LOOSE" v-bind="{&quot;series&quot;:[{&quot;label&quot;:&quot;A&quot;,&quot;values&quot;:[1,2],&quot;size&quot;:&quot;lg&quot;}]}" />
 
 <GraphSpark title="LABELS">
 

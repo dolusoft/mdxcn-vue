@@ -89,3 +89,14 @@ it.each(['GraphPlot', 'GraphKpi'] as const)(
     expect(warnings).toHaveLength(1)
   },
 )
+it('KPI static path keeps one line per list item and quoted paragraph', () => {
+  const md = new MarkdownIt()
+  const props = (body: string) =>
+    JSON.parse(JSON.stringify(tokensToProps('GraphKpi', md.parse(body, {}), md)))
+  expect(props('- 12,400 docs — +18%\n- 4 5 6')).toEqual({
+    written: { value: '12,400', label: 'docs', hint: '+18%', data: [4, 5, 6] },
+  })
+  expect(props('> 12 docs\n>\n> 1 2 3')).toEqual({
+    written: { value: '12', label: 'docs', data: [1, 2, 3] },
+  })
+})

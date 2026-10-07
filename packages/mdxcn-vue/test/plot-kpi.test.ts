@@ -278,3 +278,18 @@ it('KPI raw multiline input and null field props use visible fallback', () => {
   expect(w.get('[class~="gap-0.5"]').text()).toBe('▅█')
   w.unmount()
 })
+it('KPI keeps one line per block, as MDX newlines separate list items and quoted paragraphs', () => {
+  const ul = h('ul', [h('li', '12,400 docs — +18%'), h('li', '4 5 6')])
+  expect(kpiModel([ul])).toEqual({
+    value: '12,400',
+    label: 'docs',
+    hint: '+18%',
+    data: [4, 5, 6],
+  })
+  expect(kpiModel([h('blockquote', [h('p', '12 docs'), h('p', '1 2 3')])])).toEqual({
+    value: '12',
+    label: 'docs',
+    hint: undefined,
+    data: [1, 2, 3],
+  })
+})

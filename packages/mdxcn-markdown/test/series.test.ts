@@ -90,9 +90,19 @@ it('Spark source preserves emphasis delimiters and paragraph separators', () => 
     tokensToProps('GraphSpark', md.parse('1 **2** *3*\n\n4 — **bold** [link](/)', {}), md),
   ).toEqual({ written: { data: [1, 4], labels: [], caption: '**bold** link' } })
 })
-it('Bars retains upstream concatenated loose paragraph text and descendant size emphasis', () => {
+it('Bars keeps the MDX newline between loose paragraphs and reads descendant size emphasis', () => {
   const md = new MarkdownIt()
+  // MDX emits "\n" between the paragraphs of a loose item, so upstream reads `1 2`, never `12`.
   expect(
     tokensToProps('GraphBars', md.parse('- A: 1\n\n  2\n\n  - **child**: 99', {}), md),
-  ).toEqual({ series: [{ label: 'A', values: [12], size: 'lg' }] })
+  ).toEqual({ series: [{ label: 'A', values: [1, 2], size: 'lg' }] })
+})
+it('Spark source separates headings and blockquotes like MDX newlines', () => {
+  const md = new MarkdownIt()
+  expect(tokensToProps('GraphSpark', md.parse('### 5\n\n6 7', {}), md)).toEqual({
+    written: { data: [5, 6, 7], labels: [], caption: undefined },
+  })
+  expect(tokensToProps('GraphSpark', md.parse('> 1 2\n>\n> 3 4 — cap', {}), md)).toEqual({
+    written: { data: [1, 2, 3, 4], labels: [], caption: 'cap' },
+  })
 })

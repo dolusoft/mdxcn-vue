@@ -155,6 +155,23 @@ it('runtime filters header-anchor from list, raw source and Series body paths', 
   expect(barsModel([ul(['A: 2 3', anchor()])])[0]?.values).toEqual([2, 3])
   expect(barsModel([h(Series, { label: 'A' }, () => ['2 3', anchor()])])[0]?.values).toEqual([2, 3])
 })
+it('block boundaries stay separate numbers, as MDX keeps newlines the template compiler drops', () => {
+  const nodes = [
+    h(Series, { label: 'a' }, () => [h('p', '1 2'), h('p', '3 4')]),
+    h(Series, { label: 'b' }, () => [ul('1', '2', '3')]),
+  ]
+  expect(barsModel(nodes).map((s) => s.values)).toEqual([
+    [1, 2, 3, 4],
+    [1, 2, 3],
+  ])
+  expect(barsModel([ul([h('p', 'A: 1 2'), h('p', '3 4')], 'B: 5')]).map((s) => s.values)).toEqual([
+    [1, 2, 3, 4],
+    [5],
+  ])
+  expect(sparkModel([h('h3', 'T'), h('p', '1 2 — cap')]).data).toEqual([1, 2])
+  expect(sparkModel([h('blockquote', [h('p', '1 2'), h('p', '3')])]).data).toEqual([1, 2, 3])
+  expect(sparkModel([ul([h('p', 'Mon: 1'), h('p', '2')])]).data).toEqual([1])
+})
 it('Spark data suppresses written caption while explicit caption, including empty, wins', () => {
   const input = () => hosts('DEPLOYS')
   for (const [props, caption] of [
