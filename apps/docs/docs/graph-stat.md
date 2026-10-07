@@ -1,4 +1,4 @@
-# GraphStat
+# stat
 
 The first token stays visible as written, including units and comma separators. An em/en dash introduces a hint; bold marks the accent. Up to four responsive columns are used.
 

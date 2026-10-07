@@ -1,4 +1,4 @@
-# Steps
+# steps
 
 A numbered procedure. Bold selects the current step; italic selects the next.
 

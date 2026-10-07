@@ -1,4 +1,4 @@
-# Quote
+# quote
 
 A framed pull quote. The prose body is a slot; attribution comes only from `by`
 and `source`. The pinned upstream examples are shown below.

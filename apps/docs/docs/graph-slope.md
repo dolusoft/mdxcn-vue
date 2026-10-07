@@ -1,4 +1,4 @@
-# GraphSlope
+# slope
 
 Write `label: from → to` with `→`, `->`, `—>` or `=>`. Values use US formatting with at most one decimal. Direction changes the tone; both directions use the upstream arrow, and equal values use `–`. `fromLabel` and `toLabel` are required props.
 

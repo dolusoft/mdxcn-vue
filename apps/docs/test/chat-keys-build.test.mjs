@@ -54,7 +54,7 @@ test('Chat and Keys paths produce identical visible SSR DOM and unique caption a
 })
 test('Chat and Keys docs render all examples with resolved components', () => {
   for (const [slug, count] of [['chat', 3], ['keys', 2]]) {
-    const html = readFileSync(new URL(`../.vitepress/dist/components/${slug}.html`, import.meta.url), 'utf8')
+    const html = readFileSync(new URL(`../.vitepress/dist/docs/${slug}.html`, import.meta.url), 'utf8')
     const doc = new JSDOM(html).window.document
     assert.equal(doc.querySelectorAll('figure').length, count)
     assert.equal(doc.querySelectorAll('figure figure').length, 0)

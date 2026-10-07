@@ -1,4 +1,4 @@
-# GraphCells
+# cells
 
 <GraphCells title="TWO WAYS TO LEARN">
 

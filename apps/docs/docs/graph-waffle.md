@@ -1,4 +1,4 @@
-# GraphWaffle
+# waffle
 
 <GraphWaffle title="TESTS">
 

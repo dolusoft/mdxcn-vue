@@ -1,4 +1,4 @@
-# GraphHeatmap
+# heatmap
 
 As upstream does, the shared table reader moves a final `Total` row or a row with an entirely bold first cell into the footer when there are multiple body rows. Heatmap does not render that footer, so the row is invisible.
 

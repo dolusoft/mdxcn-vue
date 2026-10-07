@@ -2,7 +2,7 @@
 import { Line } from 'mdxcn-vue'
 </script>
 
-# GraphDiff
+# diff
 
 Write `label: +value` or `label: -value`; values remain text. Bold marks the first footer. Direct `~~old~~ new` rewrites in the first paragraph expand into removed and added rows with a shared prefix. `rows` and `footer` independently override compiler/runtime lists and `Line` items. Empty `rows` suppress body rows while preserving a list footer; null permits fallback. An explicit empty `list` suppresses both list fields. Item `total` selects the footer. Stagger is capped at 200 ms; decorative signs are hidden from assistive technology.
 

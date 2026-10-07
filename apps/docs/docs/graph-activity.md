@@ -1,4 +1,4 @@
-# GraphActivity
+# activity
 
 <GraphActivity title="COMMITS">
 

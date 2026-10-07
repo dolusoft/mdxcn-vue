@@ -125,7 +125,7 @@ const questions = [
         </button>
       </div>
       <div class="home-links">
-        <a :href="withBase('/components/graph-stack')">browse components ↗</a
+        <a :href="withBase('/docs/graph-stack')">browse components ↗</a
         ><a href="https://github.com/dolusoft/mdxcn-vue#shadcn-vue-registry"
           >copy sources with shadcn-vue ↗</a
         >

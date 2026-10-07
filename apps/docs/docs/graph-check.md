@@ -1,4 +1,4 @@
-# GraphCheck
+# check
 
 <GraphCheck title="LAUNCH">
 

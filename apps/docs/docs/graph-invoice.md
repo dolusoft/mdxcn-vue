@@ -1,4 +1,4 @@
-# GraphInvoice
+# invoice
 
 <GraphInvoice
   title="INVOICE 0041"

@@ -1,4 +1,4 @@
-# Keys
+# keys
 
 Keyboard shortcuts from Markdown lists or typed bindings.
 

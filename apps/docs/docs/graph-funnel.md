@@ -1,4 +1,4 @@
-# GraphFunnel
+# funnel
 
 Stage values and percentages of the first stage. `steps` takes precedence over a nonempty list, then `Stage` markers. Width uses the largest value; every stage gets at least one filled cell. `stage` dims other rows in the mono palette.
 

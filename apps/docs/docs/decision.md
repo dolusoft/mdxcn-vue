@@ -1,4 +1,4 @@
-# Decision
+# decision
 
 Options, reasons, and the prose that follows a decision. Bold selects chosen;
 italic selects rejected; plain items remain open.

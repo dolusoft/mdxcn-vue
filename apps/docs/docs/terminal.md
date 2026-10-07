@@ -1,4 +1,4 @@
-# Terminal
+# terminal
 
 A shell session with command, comment, success and output lines. These are the
 two pinned upstream examples. The default frame title is `shell` and prompt is `$`.

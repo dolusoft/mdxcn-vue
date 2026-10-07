@@ -45,7 +45,7 @@ test('compiler, runtime, props and item paths produce equal visible DOM and uniq
 })
 test('Gantt, Diff and Waterfall docs resolve every upstream example', () => {
   for (const [slug, count] of [['graph-gantt',2],['graph-diff',3],['graph-waterfall',2]]) {
-    const page = new JSDOM(readFileSync(new URL(`../.vitepress/dist/components/${slug}.html`, import.meta.url), 'utf8')).window.document
+    const page = new JSDOM(readFileSync(new URL(`../.vitepress/dist/docs/${slug}.html`, import.meta.url), 'utf8')).window.document
     assert.equal(page.querySelectorAll('figure').length, count)
     assert.doesNotMatch(page.querySelector('.vp-doc').innerHTML, /<(?:GraphGantt|GraphDiff|GraphWaterfall|Span|Line|Delta)\b/)
   }

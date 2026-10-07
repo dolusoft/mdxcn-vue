@@ -1,4 +1,4 @@
-# GraphBars
+# bars
 
 <GraphBars title="THROUGHPUT" palette="duo">
 

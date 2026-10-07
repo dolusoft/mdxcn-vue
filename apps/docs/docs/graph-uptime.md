@@ -1,4 +1,4 @@
-# GraphUptime
+# uptime
 
 <GraphUptime :title='"API"' :from='"Jun 1"' :to='"Aug 29"'>
 

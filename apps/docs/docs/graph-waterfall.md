@@ -1,4 +1,4 @@
-# GraphWaterfall
+# waterfall
 
 Write `label: value`. First and last rows default to `start` and `end`; intermediate signs choose `in` or `out`. Explicit `kind` overrides that choice. Changes accumulate; start/end rows reset the running value and use their supplied value rather than computing a total. Data `items` → explicit compiler `list` → nonempty runtime list → `Delta` items. Empty data/list arrays suppress fallback; null permits it. `ticks` defaults to 24; `display`, `glyphs`, and `palette` customize output. Numbers use upstream `en-US` formatting, including Unicode minus for outgoing values. Unicode minus in numeric input retains upstream parsing behavior (zero). Stagger is capped at 250 ms.
 

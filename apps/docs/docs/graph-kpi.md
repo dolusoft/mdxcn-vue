@@ -1,4 +1,4 @@
-# GraphKpi
+# kpi
 
 <GraphKpi title="READS">
 

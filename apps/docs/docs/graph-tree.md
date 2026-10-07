@@ -1,4 +1,4 @@
-# GraphTree
+# tree
 
 <GraphTree title="REGISTRY">
 

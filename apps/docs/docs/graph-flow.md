@@ -1,4 +1,4 @@
-# GraphFlow
+# flow
 
 <GraphFlow title="OPTIMISTIC UI">
 

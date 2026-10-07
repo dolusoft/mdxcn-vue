@@ -1,4 +1,4 @@
-# GraphCountdown
+# countdown
 
 <GraphCountdown :title='"LAUNCH"'>
 

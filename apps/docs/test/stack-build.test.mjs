@@ -8,7 +8,7 @@ import assert from 'node:assert/strict'
 import { test } from 'node:test'
 
 test('built GraphStack page renders all three inputs and token examples visibly', () => {
-  const html = readFileSync(new URL('../.vitepress/dist/components/graph-stack.html', import.meta.url), 'utf8')
+  const html = readFileSync(new URL('../.vitepress/dist/docs/graph-stack.html', import.meta.url), 'utf8')
   const figures = [...html.matchAll(/<figure\b[^>]*>[\s\S]*?<\/figure>/g)].map((match) => match[0])
   assert.equal(figures.length, 5)
   for (const figure of figures.slice(0, 3)) {

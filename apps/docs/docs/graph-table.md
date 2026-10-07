@@ -2,7 +2,7 @@
 import { Head } from 'mdxcn-vue'
 </script>
 
-# GraphTable
+# table
 
 Native tables from typed data, Markdown tables or declarative items. The first
 three examples use the pinned upstream `research cost` dataset.

@@ -1,4 +1,4 @@
-# GraphSpark
+# spark
 
 <GraphSpark title="DEPLOYS">
 

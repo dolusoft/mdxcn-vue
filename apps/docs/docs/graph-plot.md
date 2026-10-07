@@ -1,4 +1,4 @@
-# GraphPlot
+# plot
 
 <GraphPlot title="SIGNUPS" variant="line">
 

@@ -1,4 +1,4 @@
-# Changelog
+# changelog
 
 Release notes with added, changed, fixed, and removed states.
 

@@ -1,4 +1,4 @@
-# GraphScore
+# score
 
 Ratings as dots. `items` takes precedence over Markdown. Each row can override `max`; the first nonzero row maximum supplies the fallback before 5. Bold selects the accented row. Values clamp to the row maximum.
 

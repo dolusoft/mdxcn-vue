@@ -62,7 +62,7 @@ test('code-reader paths have identical visible SSR DOM and unique caption relati
 })
 test('new docs pages render all examples without nested or unresolved readers', () => {
   for (const slug of ['annotate', 'env']) {
-    const html = readFileSync(new URL(`../.vitepress/dist/components/${slug}.html`, import.meta.url), 'utf8')
+    const html = readFileSync(new URL(`../.vitepress/dist/docs/${slug}.html`, import.meta.url), 'utf8')
     const doc = new JSDOM(html).window.document
     assert.equal(doc.querySelectorAll('figure').length, 3)
     assert.equal(doc.querySelectorAll('figure figure').length, 0)

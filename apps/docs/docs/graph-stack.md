@@ -1,4 +1,4 @@
-# GraphStack
+# stack
 
 Stacked glyph tracks from typed rows, Markdown lists or declarative items. These
 examples use the pinned upstream `bundle` and `tokens` datasets.

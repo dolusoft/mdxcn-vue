@@ -1,4 +1,4 @@
-# GraphRank
+# rank
 
 Numbers as horizontal tracks. `items` takes precedence over a nonempty list, then `Rank` markers. Rows keep input order. `max` supplies the scale; otherwise the largest value (at least 1) does. The first token is preserved for display.
 

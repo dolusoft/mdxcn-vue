@@ -41,7 +41,7 @@ test('actual VitePress rules lose to graph resets and generated layered prose ut
       }
     })
   }
-  const html = readFileSync(new URL('../.vitepress/dist/components/endpoint.html', import.meta.url), 'utf8')
+  const html = readFileSync(new URL('../.vitepress/dist/docs/endpoint.html', import.meta.url), 'utf8')
   const document = new JSDOM(html).window.document
   const prose = document.querySelector('figure .leading-relaxed')
   assert.ok(prose)
@@ -72,7 +72,7 @@ test('actual VitePress rules lose to graph resets and generated layered prose ut
   ul.className = 'mt-1'
   assert.equal(resolve(ul, 'margin-top').layer, 'utilities')
   ul.className = ''
-  const checkPage = new JSDOM(readFileSync(new URL('../.vitepress/dist/components/graph-check.html', import.meta.url), 'utf8')).window.document
+  const checkPage = new JSDOM(readFileSync(new URL('../.vitepress/dist/docs/graph-check.html', import.meta.url), 'utf8')).window.document
   const nested = checkPage.querySelector('figure li ul.mt-1, figure li ol.mt-1')
   assert.ok(nested, 'graph-check needs a nested list')
   assert.equal(resolve(nested, 'margin-top').layer, 'utilities')
@@ -90,7 +90,7 @@ test('actual VitePress rules lose to graph resets and generated layered prose ut
   }
   li.className = ''
   for (const slug of ['graph-tree', 'graph-check', 'faq', 'graph-board', 'chat', 'steps', 'changelog', 'decision', 'env', 'keys', 'graph-stack', 'graph-score', 'graph-rank', 'graph-funnel', 'graph-stat', 'graph-slope', 'graph-bullet', 'graph-gantt', 'graph-diff', 'graph-waterfall']) {
-    const page = new JSDOM(readFileSync(new URL(`../.vitepress/dist/components/${slug}.html`, import.meta.url), 'utf8')).window.document
+    const page = new JSDOM(readFileSync(new URL(`../.vitepress/dist/docs/${slug}.html`, import.meta.url), 'utf8')).window.document
     const siblings = [...page.querySelectorAll('figure li + li')]
     if (slug === 'keys') {
       assert.equal(page.querySelectorAll('figure li').length, 0)
@@ -119,11 +119,11 @@ test('actual VitePress rules lose to graph resets and generated layered prose ut
   assert.equal(resolve(code, 'color').layer, 'utilities')
   assert.equal(resolve(code, 'font-weight').layer, 'utilities')
   assert.equal(resolve(prose.querySelector('p'), 'margin').layer, 'utilities')
-  const timerHtml = readFileSync(new URL('../.vitepress/dist/components/graph-timer.html', import.meta.url), 'utf8')
+  const timerHtml = readFileSync(new URL('../.vitepress/dist/docs/graph-timer.html', import.meta.url), 'utf8')
   const timer = new JSDOM(timerHtml).window.document.querySelector('figure .tabular-nums')
   assert.equal(resolve(timer, 'line-height').layer, 'utilities')
   assert.equal(resolve(a, 'color', true).layer, 'utilities')
-  const tableHtml = readFileSync(new URL('../.vitepress/dist/components/graph-table.html', import.meta.url), 'utf8')
+  const tableHtml = readFileSync(new URL('../.vitepress/dist/docs/graph-table.html', import.meta.url), 'utf8')
   const table = new JSDOM(tableHtml).window.document.querySelector('figure table')
   const th = table.querySelector('th[scope]')
   const td = table.querySelector('tbody td')
@@ -147,7 +147,7 @@ test('actual VitePress rules lose to graph resets and generated layered prose ut
   assert.equal(resolve(table, 'border-collapse').value, 'separate')
   assert.equal(resolve(table, 'border-spacing').value, '0')
   for (const slug of ['graph-sheet', 'graph-invoice']) {
-    const page = new JSDOM(readFileSync(new URL(`../.vitepress/dist/components/${slug}.html`, import.meta.url), 'utf8')).window.document
+    const page = new JSDOM(readFileSync(new URL(`../.vitepress/dist/docs/${slug}.html`, import.meta.url), 'utf8')).window.document
     const table = page.querySelector('figure table')
     assert.equal(resolve(table, 'display').value, 'table')
     assert.equal(resolve(table, 'border-collapse').value, 'separate')
@@ -166,7 +166,7 @@ test('actual VitePress rules lose to graph resets and generated layered prose ut
     }
   }
   for (const slug of ['graph-compare', 'graph-matrix', 'graph-heatmap']) {
-    const page = new JSDOM(readFileSync(new URL(`../.vitepress/dist/components/${slug}.html`, import.meta.url), 'utf8')).window.document
+    const page = new JSDOM(readFileSync(new URL(`../.vitepress/dist/docs/${slug}.html`, import.meta.url), 'utf8')).window.document
     const labeled = page.querySelector('figure table')
     assert.equal(resolve(labeled, 'display').value, 'table')
     assert.equal(resolve(labeled, 'border-collapse').value, 'separate')
@@ -189,7 +189,7 @@ test('actual VitePress rules lose to graph resets and generated layered prose ut
     if (slug === 'graph-matrix') assert.equal(resolve(labeled.querySelector('thead tr[aria-hidden] th'), 'padding').value, '0')
   }
   assert.equal(resolve(code, 'color', true).layer, 'utilities')
-  const quoteHtml = readFileSync(new URL('../.vitepress/dist/components/quote.html', import.meta.url), 'utf8')
+  const quoteHtml = readFileSync(new URL('../.vitepress/dist/docs/quote.html', import.meta.url), 'utf8')
   const quote = new JSDOM(quoteHtml).window.document.querySelector('figure blockquote')
   assert.equal(resolve(quote, 'margin').layer, 'utilities')
   assert.equal(resolve(quote, 'padding-left').layer, 'utilities')

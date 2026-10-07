@@ -21,7 +21,7 @@ test('uptime/countdown production compiler, runtime and direct props preserve DO
 })
 test('uptime/countdown docs render all five upstream examples visibly',()=> {
   for(const [slug,count] of [['graph-uptime',2],['graph-countdown',3]]) {
-    const figures=[...page('components/'+slug).querySelectorAll('figure')]
+    const figures=[...page('docs/'+slug).querySelectorAll('figure')]
     assert.equal(figures.length,count)
     for(const f of figures) assert.doesNotMatch(f.outerHTML,/header-anchor|opacity:0(?:;|"|$)|translateY|<(?:GraphUptime|GraphCountdown)\b/)
   }

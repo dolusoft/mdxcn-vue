@@ -20,8 +20,8 @@ test('three upstream written examples and series edges retain equal compiler/run
   assert.equal(figures[15].querySelector('p').textContent, '**bold** link')
 })
 test('two docs pages render all five upstream examples visibly with expected glyphs', () => {
-  const bars = [...page('components/graph-bars').querySelectorAll('figure')]
-  const spark = [...page('components/graph-spark').querySelectorAll('figure')]
+  const bars = [...page('docs/graph-bars').querySelectorAll('figure')]
+  const spark = [...page('docs/graph-spark').querySelectorAll('figure')]
   assert.equal(bars.length, 2)
   assert.equal(spark.length, 3)
   assert.deepEqual(spark.map((f) => f.querySelector('[class~="gap-0.5"]').textContent), ['▃▃▁▁▁▅▇▆█', '▂▃▄▃▅▅▇▆▇▅█▇', '▄▄▅▃▆▇▆█▇▆▅▆'])

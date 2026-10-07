@@ -1,4 +1,4 @@
-# GraphSpec
+# spec
 
 Rows take precedence over lists, then Field markers. Empty rows suppress the slot; null and undefined read it. Bold in the head accents the value. Inline code and links survive in list values; body paragraphs become notes.
 

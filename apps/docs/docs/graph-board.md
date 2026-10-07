@@ -1,4 +1,4 @@
-# GraphBoard
+# board
 
 Work columns from headings and lists, or typed `columns`.
 

@@ -1,4 +1,4 @@
-# GraphBullet
+# bullet
 
 Write `label: value / target of max`. Target and maximum are optional; the automatic scale includes the value, target and 1. The target marker is clamped to the track; overshoot uses the secondary tone. `ticks`, `glyphs` and `palette` customize the track.
 

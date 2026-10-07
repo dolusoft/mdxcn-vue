@@ -1,4 +1,4 @@
-# GraphMeter
+# meter
 
 <GraphMeter title="DISK">
 

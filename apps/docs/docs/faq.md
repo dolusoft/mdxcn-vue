@@ -1,4 +1,4 @@
-# Faq
+# faq
 
 Questions and always visible answers, from headings or typed `entries`.
 

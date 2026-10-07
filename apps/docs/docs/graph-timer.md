@@ -1,4 +1,4 @@
-# GraphTimer
+# timer
 
 Elapsed time, relative time or the local clock. These are the three pinned
 upstream examples: `incident`, `last deploy` and `local`.

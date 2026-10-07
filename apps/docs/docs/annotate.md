@@ -1,4 +1,4 @@
-# Annotate
+# annotate
 
 Code with numbered notes. End a line with a comment marker such as `// (1)` or
 `# (2)`. Marked lines stay bright; the rest recede. Notes keep rich inline content.

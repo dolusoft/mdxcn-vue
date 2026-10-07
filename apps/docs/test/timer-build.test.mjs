@@ -3,7 +3,7 @@ import assert from 'node:assert/strict'
 import { test } from 'node:test'
 
 test('built GraphTimer examples all use deterministic visible SSR placeholders', () => {
-  const html = readFileSync(new URL('../.vitepress/dist/components/graph-timer.html', import.meta.url), 'utf8')
+  const html = readFileSync(new URL('../.vitepress/dist/docs/graph-timer.html', import.meta.url), 'utf8')
   const figures = [...html.matchAll(/<figure\b[^>]*>[\s\S]*?<\/figure>/g)].map((match) => match[0])
   assert.equal(figures.length, 3)
   for (const [index, figure] of figures.entries()) {

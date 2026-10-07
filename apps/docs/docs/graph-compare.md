@@ -1,4 +1,4 @@
-# GraphCompare
+# compare
 
 <GraphCompare title="PLANS" accent="Studio">
 

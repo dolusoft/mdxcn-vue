@@ -1,4 +1,4 @@
-# Callout
+# callout
 
 An aside with a type glyph and a frame title. The pinned upstream examples use
 `warning` and a titled `tip`. The body is a prose slot; there are no item markers.

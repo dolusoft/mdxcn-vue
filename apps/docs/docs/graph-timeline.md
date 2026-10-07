@@ -1,4 +1,4 @@
-# GraphTimeline
+# timeline
 
 Events take precedence over lists, then Event markers. Empty events suppress the slot; null and undefined read it. Bold in the head marks now, italic marks next, and bold wins. Body paragraphs override an inline dash note. Dates are display strings, including time-of-day labels.
 

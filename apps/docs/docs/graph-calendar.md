@@ -1,4 +1,4 @@
-# GraphCalendar
+# calendar
 
 <GraphCalendar :year='2026' :month='3'>
 

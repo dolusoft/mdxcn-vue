@@ -1,4 +1,4 @@
-# Chat
+# chat
 
 A conversation from a speaker-prefixed Markdown list or typed turns.
 

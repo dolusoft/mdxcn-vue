@@ -1,4 +1,4 @@
-# Endpoint
+# endpoint
 
 One API route with parameters, prose and request/response blocks. This example
 uses the pinned upstream `one component` dataset. Repository Markdown is compiled
@@ -10,7 +10,7 @@ to typed props before heading anchors and syntax highlighting.
 
 GET /api/v1/components/:slug
 
-One component from the catalog, with its props. See the [catalog](/components/graph-table).
+One component from the catalog, with its props. See the [catalog](/docs/graph-table).
 
 | Param | Type | |
 | --- | --- | --- |
@@ -58,7 +58,7 @@ copy buttons and language labels are ignored.
     { label: 'json', code: '{ &quot;slug&quot;: &quot;graph-meter&quot;, &quot;name&quot;: &quot;GraphMeter&quot;, &quot;props&quot;: [ … ] }' }
   ]">
 
-One component from the catalog, with its props. See the [catalog](/components/graph-table).
+One component from the catalog, with its props. See the [catalog](/docs/graph-table).
 
 </Endpoint>
 
