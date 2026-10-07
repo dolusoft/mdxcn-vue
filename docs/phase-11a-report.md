@@ -1,140 +1,149 @@
-# Faz 11A — Yayın öncesi temizlik
+# Phase 11A — Pre-release cleanup
 
-Başlangıç `main`, `33c90b4`; çalışma ağacı temizdi. Sistem zamanı:
-2026-10-07 Çarşamba 05:31 (Europe/Istanbul).
+Starting point: `main`, `33c90b4`; the working tree was clean. System time:
+2026-10-07 Wednesday 05:31 (Europe/Istanbul).
 
-## Kök giriş noktasının tree-shaking davranışı
+## Tree-shaking behavior of the root entry point
 
-Brifingdeki 135.831 bayt eşitliği yeniden üretilemedi. Aynı koşullardaki yeni
-ölçümde iki bileşen zaten farklı boyuttaydı; ancak kullanılmayan item kayıtları
-ve frame yardımcıları bundle içinde kalıyordu. `sideEffects: ["**/*.css"]`
-zaten vardı; CSS kök JavaScript girişinden yüklenmiyordu. `graphComponents` ve
-knap fabrika çağrıları zaten `@__PURE__` işareti taşıyordu.
+The 135.831-byte equality in the briefing could not be reproduced. In the new
+measurement under the same conditions, the two components already differed in
+size; however, unused item registrations and frame helpers remained in the
+bundle. `sideEffects: ["**/*.css"]` already existed; CSS was not loaded from the
+root JavaScript entry. `graphComponents` and knap factory calls already carried
+the `@__PURE__` annotation.
 
-Eksik işaretler bileşenlerin `defineComponent`, item işaretçilerinin `defineItem`
-ve frame yardımcılarının `host` çağrılarındaydı. Bu çağrılar yalnız döndürdükleri
-nesneyi oluşturur. `defineItem` yalnız yeni nesnenin şemasını `WeakMap` içine
-yazar; kullanılmayan nesnenin kaydını atmak kullanılan nesnelerin kaydını etkilemez.
-Public API, kayıt yapısı ve CSS sözleşmesi korunarak bu çağrılar işaretlendi.
-Registry kaynak çıktıları yeniden üretildi.
+The missing annotations were on the components' `defineComponent`, the item
+markers' `defineItem`, and the frame helpers' `host` calls. These calls only
+create the object they return. `defineItem` only writes the new object's schema
+into a `WeakMap`; discarding the registration of an unused object does not affect
+the registrations of objects in use. These calls were annotated while preserving
+the public API, registration structure, and CSS contract. Registry source outputs
+were regenerated.
 
-`scripts/tree-shaking-check.mjs`, aynı Vue runtime ve `minify=false` ile Vite
-8.3.3/Rolldown production build çalıştırır. Tek girişin export değeri global
-bir alana atanır; böylece import tamamen atılamaz. “Tümü” kök export kümesinin
-tamamını canlı tutar. HTML, mount ve CSS bu ölçümde yoktur; Vue dahildir.
+`scripts/tree-shaking-check.mjs` runs a Vite 8.3.3/Rolldown production build with
+the same Vue runtime and `minify=false`. The export value of a single entry is
+assigned to a global field, so the import cannot be eliminated entirely. “All”
+keeps the entire root export set live. HTML, mount, and CSS are absent from this
+measurement; Vue is included.
 
-| Kök import | Önce (bayt) | Sonra (bayt) |
+| Root import | Before (bytes) | After (bytes) |
 | --- | ---: | ---: |
-| Tüm export değerleri | 258214 | 258797 |
+| All export values | 258214 | 258797 |
 | `GraphStack` | 74893 | 51045 |
 | `Footnotes` | 69472 | 45333 |
 
-Tek bileşen/tüm export oranı ve `GraphStack` bundle içindeki ilgisiz
-Footnotes/knap/Comark ile item/frame sembollerinin yokluğu otomatik sınanır.
-Kontrol `consumer:check` içine bağlandı; paketlenmiş tarball tüketicisinde de
-tek bileşen boyutu ve `Footnotes` için ayrı build sınanır.
+The single-component/all-export ratio and the absence of unrelated
+Footnotes/knap/Comark and item/frame symbols in the `GraphStack` bundle are tested
+automatically. The check was integrated into `consumer:check`; single-component
+size and a separate build for `Footnotes` are also tested in the packed tarball consumer.
 
-İlk doğrulama: Vue paketinde **900 test geçti**; tarball tüketici kontrolü
-**52 registry öğesi / 111 kaynak dosyası** ile geçti. Mount içeren tüketicide
-`minify=false`: tüm kullanılan bileşenler 300122, `GraphStack` 166498,
-`Footnotes` 160604 bayt. Bunlar yukarıdaki global export ölçümünden farklı
-girişlerdir; iki ölçüm birbirinin önce/sonra değeri olarak kullanılmaz.
+Initial verification: **900 tests passed** in the Vue package; the tarball
+consumer check passed with **52 registry items / 111 source files**. In the
+consumer with mount, `minify=false`: all used components 300122, `GraphStack`
+166498, `Footnotes` 160604 bytes. These are different entries from the global
+export measurement above; the two measurements are not used as before/after
+values for each other.
 
-## Doküman iddialarının doğrulanması
+## Verification of documentation claims
 
-Upstream checkout `16d817ad5ec54d89142e4c1cf26027b60d6df853` komutla doğrulandı.
-Activity kaynak dosyasındaki işlevler TypeScript ile derlenip çalıştırıldı:
-`days=[{date:'+275760-09-13',count:1}]`, `weekStartsOn=1` gerçekten
-`RangeError: Invalid time value` üretiyor. Brifingdeki `toISO(last)` kaynakta
-yoktur; hata döngüdeki `toISO(time)` çağrısındadır. Portun derlenmiş `parseUTC`
-işlevi aynı tarihi reddediyor; `buildWeeks` sonucu `[]`. Faz 9B raporu düzeltildi.
+The upstream checkout `16d817ad5ec54d89142e4c1cf26027b60d6df853` was verified
+by command. Functions in the Activity source file were compiled with TypeScript
+and executed: `days=[{date:'+275760-09-13',count:1}]`, `weekStartsOn=1` really
+produces `RangeError: Invalid time value`. The briefing's `toISO(last)` does not
+exist in the source; the error is in the loop's `toISO(time)` call. The port's
+compiled `parseUTC` function rejects the same date; `buildWeeks` returns `[]`.
+The Phase 9B report was corrected.
 
-Knap için `graph_meter({value:'oops'})` uyarısız `NaN%`,
-`graph_spec({rows:[{label:'x'},{label:'y',value:{x:1}}]})` uyarısız `undefined`
-ve `[object Object]` üretti. Doküman yalnız okuma hatası veya throw durumunda
-uyarı verildiğini söylüyor; şema doğrulaması iddiası kaldırıldı. Güvenilmeyen
-filtre girdisi ve daha uzun ASCII fence davranışı açıklandı.
+For Knap, `graph_meter({value:'oops'})` produced `NaN%` without warnings, and
+`graph_spec({rows:[{label:'x'},{label:'y',value:{x:1}}]})` produced `undefined`
+and `[object Object]` without warnings. The document says warnings are issued
+only on read errors or throws; the schema validation claim was removed.
+Untrusted filter input and the behavior of longer ASCII fences were explained.
 
-Comark 0.7.0 ile çalıştırılan gerçek parse çıktısı, `body` içindeki tek başına
-`::` satırından sonraki metnin blok dışında kaldığını, inline `::` ifadesinin
-blok içinde kaldığını gösterdi. `coerceProps` string `once`, `only`, `onclick`
-alanlarını attı. `security()` eklentisi çalıştırıldı; `javascript:` URL ve inline
-handler kaldırıldı, ancak seçeneksiz kullanımda `<script>` ve `<iframe>` etiketleri
-kalır (inceleme ile doğrulandı); doküman örneği `blockedTags` ile güncellendi.
+Actual parse output obtained with Comark 0.7.0 showed that text after a
+standalone `::` line in `body` remains outside the block, while inline `::`
+remains inside the block. `coerceProps` dropped the string fields `once`, `only`,
+and `onclick`. The `security()` plugin was executed; the `javascript:` URL and
+inline handler were removed, but `<script>` and `<iframe>` tags remain when used
+without options (verified by inspection); the documentation example was updated
+with `blockedTags`.
 
-Footnotes bilgisi ayrı bir sayfada değil `apps/docs/docs/mdx.md` içindedir;
-not oraya eklendi. Production HTML içinde iki backlink yalnız `↩︎` glifi
-taşıyor ve `aria-label` yok. Host bağlantılarını ve dilini değiştirmemek için
-bu kapsamda yeni bir label eklenmedi. Düzeltme (inceleme): bu eksik upstream ile
-ortak DEĞİL. Upstream mdxcn GFM dipnotlarını remark-gfm ile üretir ve geri
-bağlantıları `aria-label="Back to reference 1"` taşır (remark-gfm 4 ile
-doğrulandı); `markdown-it-footnote` bağlantıları yalnız `↩︎` içerir. Bu, Vue
-yolunun upstream'e göre erişilebilirlik farkıdır ve doküman bunu böyle söyler.
+Footnotes information is in `apps/docs/docs/mdx.md`, not a separate page; the
+note was added there. In the production HTML, two backlinks carry only the `↩︎`
+glyph and have no `aria-label`. No new label was added in this scope to avoid
+changing the host's links and language. Correction (review): this omission is
+NOT shared with upstream. Upstream mdxcn generates GFM footnotes with remark-gfm,
+and its backlinks carry `aria-label="Back to reference 1"` (verified with
+remark-gfm 4); `markdown-it-footnote` links contain only `↩︎`. This is an
+accessibility difference in the Vue path compared with upstream, and the document
+states it as such.
 
-Docs production build geçti. Kanıtlar yetkili scratch dizinindeki
-`f11a-docs-evidence.mjs`, `f11a-docs-evidence.log`, `f11a-docs-build.log`
-dosyalarındadır.
+The docs production build passed. Evidence is in `f11a-docs-evidence.mjs`,
+`f11a-docs-evidence.log`, and `f11a-docs-build.log` in the authorized scratch directory.
 
-## Knap fixture ve mutant kanıtları
+## Knap fixture and mutant evidence
 
-`scripts/capture-knap-edge-cases.mjs` upstream commit kimliğini doğrular ve
-yalnız upstream TypeScript kodunu çalıştırarak bağımsız fixture üretir.
-`knap-edge-cases.json` normal çıktıları upstream byte değerleriyle saklar.
-YAML anahtarlarında upstream zaten hatalı olduğu için upstream çıktısı ile
-elle tanımlanan düzeltme ayrı alanlardadır; port çıktısı fixture üretiminde
-kullanılmaz. Testler düzeltilmiş YAML değerini gerçek Comark parse sonucuyla
-da karşılaştırır. Funnel fixture için locale `en-US` altında sabitlenir;
-test ayrıca üretim çağrısının locale argümanı vermediğini doğrular. Böylece
-host varsayılan locale sözleşmesi korunur.
+`scripts/capture-knap-edge-cases.mjs` verifies the upstream commit ID and
+produces an independent fixture by running only upstream TypeScript code.
+`knap-edge-cases.json` stores normal outputs with upstream byte values.
+Because upstream is already incorrect for YAML keys, the upstream output and
+the manually defined correction are in separate fields; port output is not used
+in fixture generation. Tests also compare the corrected YAML value with real
+Comark parse output. The locale is fixed to `en-US` for the Funnel fixture;
+the test also verifies that the production call supplies no locale argument.
+This preserves the host default locale contract.
 
-| Geçici mutant | Fixture girdisi | Sonuç |
+| Temporary mutant | Fixture input | Result |
 | --- | --- | --- |
-| `padEnd` kırpmasını kaldır | `abcdef`, genişlik 3 → `abc` | Çıkış 1, assertion başarısız |
-| Funnel `toLocaleString()` yerine `String()` | `1234.5` → `1,234.5` | Çıkış 1, assertion başarısız |
-| Rank `Math.round` yerine `Math.floor` | `0.26`, `max=1`, `ticks=10` → 3 dolu hücre | Çıkış 1, assertion başarısız |
-| `flowMap` anahtar tırnaklamasını kaldır | `x, y` anahtarı | Çıkış 1, assertion başarısız |
-| İç içe scalar anahtar tırnaklamasını kaldır | `outer` altında `x: y` | Çıkış 1, assertion başarısız |
-| Map taşıyan anahtar tırnaklamasını kaldır | `x: y` altında `child` | Çıkış 1, assertion başarısız |
+| Remove `padEnd` truncation | `abcdef`, width 3 → `abc` | Exit 1, assertion failed |
+| Funnel `String()` instead of `toLocaleString()` | `1234.5` → `1,234.5` | Exit 1, assertion failed |
+| Rank `Math.floor` instead of `Math.round` | `0.26`, `max=1`, `ticks=10` → 3 filled cells | Exit 1, assertion failed |
+| Remove `flowMap` key quoting | Key `x, y` | Exit 1, assertion failed |
+| Remove nested scalar key quoting | `x: y` under `outer` | Exit 1, assertion failed |
+| Remove quoting of a key containing a map | `child` under `x: y` | Exit 1, assertion failed |
 
-Her mutant tek başına gerçek kaynakta uygulanıp test çalıştırıldı; hedef
-fixture assertion hatası doğrulandı. Kaynak her seferinde `finally` içinde
-byte düzeyinde geri yüklendi ve SHA-256 eşitliği sınandı. Ardından temiz
-kaynakla 19 yeni test tekrar geçti. Beş istenen kategori, iç içe anahtarların
-iki dalı nedeniyle altı mutant olarak sınandı. Kanıtlar scratch dizinindeki
-`f11a-mutations.mjs`, `f11a-mutants.json`, `f11a-mutant-0.log` …
-`f11a-mutant-5.log` ve `f11a-mutants-pristine.log` dosyalarındadır.
+Each mutant was applied individually to the real source and the test was run;
+the target fixture assertion failure was verified. Each time, the source was
+restored byte for byte inside `finally`, and SHA-256 equality was tested.
+Afterward, the 19 new tests passed again with pristine source. The five requested
+categories were tested as six mutants because of the two branches of nested
+keys. Evidence is in `f11a-mutations.mjs`, `f11a-mutants.json`,
+`f11a-mutant-0.log` … `f11a-mutant-5.log`, and `f11a-mutants-pristine.log` in the
+scratch directory.
 
-Waffle ASCII çıktısı `cells=0..10000`, `columns=1..200` tam sayı değerleriyle
-sınırlandı. Çok küçük pozitif kesirli `columns`, yalnız üst sınır konduğunda
-hâlâ çok uzun döngü üretebildiği için tam sayı şartı da gerekliydi. Sınır dışı
-girdiler tek `FILTER_WARNING` uyarısıyla özgün değeri döndürür. Bu upstream
-farkı docs içinde belgelenir. Üst sınırların hemen üzeri, çok büyük değerler,
-kesirli değerler, izin verilen sınırlar ve sıfır hücre sınandı. Registry
-payload tekrar üretildi. Yeni testler Activity tarih sınırını ve upstream'in
-uyarısız bozuk çıktısını da kapsar.
+Waffle ASCII output was limited to integer values `cells=0..10000`,
+`columns=1..200`. The integer requirement was also necessary because very small
+positive fractional `columns` could still produce a very long loop when only
+an upper bound was imposed. Out-of-range inputs return the original value with
+a single `FILTER_WARNING` warning. This upstream difference is documented in
+docs. Values just above the upper bounds, very large values, fractional values,
+allowed boundaries, and zero cells were tested. The registry payload was
+regenerated. The new tests also cover the Activity date boundary and upstream's
+malformed output without warnings.
 
-## Son kabul
+## Final acceptance
 
-`pnpm install --frozen-lockfile` mevcut lockfile ile geçti; lockfile değişmedi.
-Tüm workspace build işlemleri production modunda çalıştırıldı. Sonuçlar:
+`pnpm install --frozen-lockfile` passed with the existing lockfile; the lockfile
+was unchanged. All workspace builds were run in production mode. Results:
 
-| Kontrol | Çıktı |
+| Check | Output |
 | --- | --- |
-| Install | `Lockfile is up to date, resolution step is skipped`; çıkış 0 |
-| `pnpm -r build` | Vue, Markdown, docs production build; çıkış 0 |
-| `pnpm -r test` | Vue **919**, Markdown **374**, docs **78** geçti; toplam **1371** |
-| `pnpm lint` | ESLint; çıkış 0 |
-| `pnpm typecheck` | Üç workspace; çıkış 0 |
-| `pnpm format:check` | `All matched files use Prettier code style!`; çıkış 0 |
-| `pnpm consumer:check` | `CONSUMER CHECK PASSED`; 52 registry öğesi, 111 kaynak; çıkış 0 |
+| Install | `Lockfile is up to date, resolution step is skipped`; exit 0 |
+| `pnpm -r build` | Vue, Markdown, docs production build; exit 0 |
+| `pnpm -r test` | Vue **919**, Markdown **374**, docs **78** passed; total **1371** |
+| `pnpm lint` | ESLint; exit 0 |
+| `pnpm typecheck` | Three workspaces; exit 0 |
+| `pnpm format:check` | `All matched files use Prettier code style!`; exit 0 |
+| `pnpm consumer:check` | `CONSUMER CHECK PASSED`; 52 registry items, 111 sources; exit 0 |
 
-Kabul log dosyası: `C:/Users/zahid/source/github/tmp/mdxcn-vue/f11a-acceptance.log`.
-Başarısız veya atlanan kabul adımı yoktur. Rapor tamamlandıktan sonra format
-kontrolü yeniden çalıştırıldı. İlk commit sonrasındaki 258774 bayt “tümü”
-ölçümü Waffle sınır kontrolüyle 258797 oldu; tablo son kodu gösterir.
-Mevcut fixture fallback ve registry bağımlılık uyarıları test başarısızlığı
-değildir. Dev sunucusu ve npm yayını yapılmadı. Son diff; public API,
-`defineItem` kayıtlarının kullanılan nesneler için korunması, hata yolları,
-locale sözleşmesi ve registry eşitliği açısından incelendi. Açık bir kod
-bulgusu kalmadı. Üç commit açık izinle imzasız, hook atlamadan ve kalıcı Git
-config değişikliği olmadan oluşturulur; her commit hemen normal push edilir.
+Acceptance log file: `C:/Users/zahid/source/github/tmp/mdxcn-vue/f11a-acceptance.log`.
+No acceptance step failed or was skipped. The format check was run again after
+the report was completed. The 258774-byte “all” measurement after the first
+commit became 258797 with the Waffle boundary check; the table shows the final
+code. Existing fixture fallback and registry dependency warnings are not test
+failures. No dev server or npm publication was performed. The final diff was
+reviewed for the public API, preservation of `defineItem` registrations for
+objects in use, error paths, the locale contract, and registry equality. No open
+code finding remained. Three commits are created with explicit authorization,
+unsigned, without bypassing hooks or permanent Git config changes; each commit
+is immediately pushed normally.

@@ -1,112 +1,124 @@
-# Faz 2A raporu
+# Phase 2A report
 
-Doğrulama: 2026-10-06 Salı 21:43 (sistemden alınan Europe/Istanbul zamanı).
+Verification: 2026-10-06 Tuesday 21:43 (Europe/Istanbul time obtained from the system).
 
-Faz 1 temizliği ayrı commit olarak tamamlandı: cache takibi kaldırıldı,
-`.gitignore` düzeltildi, TypeScript sürüm gerekçesi eklendi, kökteki gereksiz
-DevTools bağımlılığı kaldırıldı ve README ağ erişimi notu eklendi. npm sorguları
-`typescript` latest `7.0.2` ve `typescript-eslint@8.71.1` peer tavanı `<6.1.0`
-değerlerini doğruladı. Geliştirme sürümü `6.0.3` kaldı.
+Phase 1 cleanup was completed as a separate commit: cache tracking was removed,
+`.gitignore` was corrected, the TypeScript version rationale was added, the
+unnecessary root DevTools dependency was removed, and a network access note was
+added to the README. npm queries confirmed `typescript` latest `7.0.2` and the
+`typescript-eslint@8.71.1` peer upper bound of `<6.1.0`. The development version
+remained `6.0.3`.
 
-Çekirdek; framework bağımsız prose/satır/segment modelini, upstream saf palet ve
-glif işlevlerini, sayı/etiket yardımcılarını ve bağımsız `paintRow` fixture'larını
-içerir. Dokuz frame bileşeni ile `GraphStack` render işlevleriyle yazıldı. Vue
-peer/external kaldı; `.d.ts` çıktıları üretildi. Üç CSS girişi export edildi,
-`sideEffects` korundu; dağıtılan `graph.css` içindeki `@source './'` yolu paket
-JavaScript çıktısını tarar. MIT lisansı paket içinde korunur; Svelte kaynak kodu
-alınmadı.
+The core includes the framework-independent prose/row/segment model, upstream
+pure palette and glyph functions, number/label helpers, and independent
+`paintRow` fixtures. The nine frame components and `GraphStack` were written
+using render functions. Vue remained peer/external; `.d.ts` outputs were
+generated. Three CSS entries were exported, and `sideEffects` was preserved;
+the `@source './'` path in the distributed `graph.css` scans the package's
+JavaScript output. The MIT license is preserved in the package; Svelte source
+code was not taken.
 
-## Kabul çıktısı
+## Acceptance output
 
-| Komut               | Sonuç                                                 |
-| ------------------- | ----------------------------------------------------- |
-| `pnpm install`      | `Already up to date`, çıkış 0                         |
-| `pnpm -r build`     | İki paket ve VitePress production build, çıkış 0      |
-| `pnpm -r test`      | 62 Vue + 1 Markdown iskeleti + 4 docs = 67 test geçti |
-| `pnpm lint`         | Hata/uyarı yok, çıkış 0                               |
-| `pnpm typecheck`    | Üç workspace projesi geçti, çıkış 0                   |
-| `pnpm format:check` | `All matched files use Prettier code style!`, çıkış 0 |
+| Command | Result |
+| --- | --- |
+| `pnpm install` | `Already up to date`, exit 0 |
+| `pnpm -r build` | Two packages and VitePress production build, exit 0 |
+| `pnpm -r test` | 62 Vue + 1 Markdown skeleton + 4 docs = 67 tests passed |
+| `pnpm lint` | No errors/warnings, exit 0 |
+| `pnpm typecheck` | Three workspace projects passed, exit 0 |
+| `pnpm format:check` | `All matched files use Prettier code style!`, exit 0 |
 
-`git ls-files apps/docs/.vitepress/cache` boş. Cache dosyaları yerelde korunur,
-Git takibinden çıkarılmıştır. Commit ve push sonrası çalışma ağacı ayrıca kontrol
-edilir; commit kimlikleri son kullanıcı raporunda verilir.
+`git ls-files apps/docs/.vitepress/cache` is empty. Cache files are preserved
+locally and have been removed from Git tracking. The working tree is also
+checked after commit and push; commit IDs are provided in the final user report.
 
-## Test listesi
+## Test list
 
-| Dosya                                        | Test sayısı | Doğrulanan davranış                                                                                                                                                                                                       |
-| -------------------------------------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `packages/mdxcn-vue/test/core.test.ts`       | 24          | Sayı dönüşümü (8), etiket ayırma (1), regex (5), prose dilimleme (1), dağıtım/legend (4), glif/palet/yoğunluk/track işlevleri (5)                                                                                         |
-| `packages/mdxcn-vue/test/stack.test.ts`      | 16          | Adaptör (6), DOM/tick/erişilebilirlik (1), keyed rows/item/Markdown güncellemesi (3), mono metin kontrastı (1), üç girişli SSR (3), SSR→hydration (1), frame/prose (1)                                                    |
-| `packages/mdxcn-vue/test/reveal.test.ts`     | 15          | Observer sırası, düşük kesişme oranı, opacity/stagger/transform, ilk viewport, reduced motion başlangıcı/değişimi/yeniden kontrolü, WAAPI iptali, unmount/bitiş temizliği, observer/animasyon hatası ve eksik API yolları |
-| `packages/mdxcn-vue/test/styles.test.ts`     | 5           | Light/dark kontrastı (2), CSS export/host sınırı (1), altı utility ve çerçeve (1), 14 kapsayıcı accent ve gradient (1)                                                                                                    |
-| `packages/mdxcn-vue/test/smoke.test.ts`      | 2           | Mevcut smoke varsayılan/özel metni                                                                                                                                                                                        |
-| `packages/mdxcn-markdown/test/index.test.ts` | 1           | Mevcut iskelet işareti; Markdown derlemesi değildir                                                                                                                                                                       |
-| `apps/docs/test/config.test.mjs`             | 2           | Development DevTools birlikte, production DevTools yok                                                                                                                                                                    |
-| `apps/docs/test/stack-build.test.mjs`        | 2           | Beş gerçek VitePress örneğinin HTML çıktısı, üç girişin aynı değerleri/tick sayısı, SSR görünürlüğü ve paket kaynak taramasından üretilen CSS                                                                             |
+| File | Test count | Verified behavior |
+| --- | --- | --- |
+| `packages/mdxcn-vue/test/core.test.ts` | 24 | Number conversion (8), label splitting (1), regex (5), prose slicing (1), distribution/legend (4), glyph/palette/density/track functions (5) |
+| `packages/mdxcn-vue/test/stack.test.ts` | 16 | Adapter (6), DOM/tick/accessibility (1), keyed rows/item/Markdown updates (3), mono text contrast (1), SSR with three input forms (3), SSR→hydration (1), frame/prose (1) |
+| `packages/mdxcn-vue/test/reveal.test.ts` | 15 | Observer order, low intersection ratio, opacity/stagger/transform, initial viewport, reduced motion initialization/change/recheck, WAAPI cancellation, unmount/completion cleanup, observer/animation errors and missing API paths |
+| `packages/mdxcn-vue/test/styles.test.ts` | 5 | Light/dark contrast (2), CSS export/host boundary (1), six utilities and frame (1), 14 container accents and gradient (1) |
+| `packages/mdxcn-vue/test/smoke.test.ts` | 2 | Existing smoke default/custom text |
+| `packages/mdxcn-markdown/test/index.test.ts` | 1 | Existing skeleton marker; not Markdown compilation |
+| `apps/docs/test/config.test.mjs` | 2 | Development includes DevTools, production has no DevTools |
+| `apps/docs/test/stack-build.test.mjs` | 2 | HTML output of five real VitePress examples, identical values/tick counts across three input forms, SSR visibility and CSS generated by scanning package sources |
 
-SSR→hydration testi jsdom içinde gerçek `renderToString` ve `createSSRApp.mount`
-kullanır; HTML ve caption kimliklerinin eşitliğini, hydration uyarısı olmadığını
-doğrular. Gerçek tarayıcı ölçümü yerine geçmez. WAAPI ve observer davranışı
-kontrollü taklitlerle sınandı; canlı animasyon ölçülmedi.
+The SSR→hydration test uses real `renderToString` and `createSSRApp.mount`
+inside jsdom; it verifies equality of HTML and caption IDs and the absence of
+hydration warnings. It does not replace real browser measurements. WAAPI and
+observer behavior were tested with controlled mocks; live animation was not
+measured.
 
-## Kararlar ve sınırlar
+## Decisions and limitations
 
-- Item adaptörü yalnız kayıtlı `Bar`/`Segment` türlerini kabul eder. `Fragment`
-  açılır; `Comment` elenir; ham string/number girdileri Text VNode biçimine alınır.
-  Kendi prop şeması kebab→camel dönüşümü, boolean boş değer ve varsayılanları
-  uygular. Slotlar her render sırasında okunur; `computed` kullanılmaz. Özel
-  wrapper bileşenlerin render ağacı açılmaz.
-- Markdown okuyucusu yalnız slot kökündeki `ul > li` yapısını kabul eder;
-  `p`/`span` ve text/strong/em/code/link içeriğini korur. Zengin satır etiketi
-  `labelContent` alanında, düz etiket `label` alanında taşınır. Düz Markdown
-  etiketine fazladan `labelContent` eklenmez; üç giriş biçimi model alanları
-  ayıklanmadan birebir eşitlikle sınanır. İç içe listeler ve genel VNode ağaçları
-  yorumlanmaz. Veri girdisinde Vue `children` yerine tipli
-  `segments` kullanılır. Aynı satır etiketlerinin benzersiz olması gerekir.
-- Girdi önceliği truthy `rows` (boş dizi dahil) → boş olmayan Markdown liste →
-  item satırları. Segment dizisi (boş olsa da) item segmentlerini bastırır.
-  `48 js, 22 css, 30 images` ve `1,200 js` düzeltildi. Negatif/yerel sayı biçimleri
-  ve çok kelimeli segment etiketleri bu regex için destek sözleşmesi değildir.
-- `v-reveal` SSR sırasında gizleyen stil üretmez. Observer başarıyla kurulunca
-  yalnız viewport dışındaki öğe gizlenir; ilk viewport içeriği yeniden gizlenmez.
-  `threshold: 0`, `rootMargin: 0px 0px -24px 0px`, 220ms, 8px ve
-  `cubic-bezier(.215,.61,.355,1)` kullanılır. `delay` milisaniyedir; satır stagger
-  değeri 50ms'dir. Hedef opacity ve mevcut transform korunur. Tercih değişimi
-  bekleyenleri açar ve aktif animasyonu iptal eder.
-- Normal metin için `--graph-muted` light `oklch(0.48 0 0)`, dark
-  `oklch(0.68 0 0)` seçildi. Nötr OKLCH için luminance `L³` üzerinden, arka plan
-  `0.985`/`0.11` ile kontrast **6.262:1 / 7.100:1** hesaplandı ve test edildi.
-  Lejant satırındaki `0.4` opacity metinden dekoratif glife taşındı; upstream'e
-  karşı bilinçli erişilebilirlik farkıdır. Özel host arka planı ayrıca ölçülmeli.
-- İnceleme, `text-graph-accent` utility sınıfının gradient başlığın transparent
-  rengini ezebildiğini gösterdi; birleşik seçiciyle öncelik düzeltildi ve production
-  CSS testine eklendi. Gradient preset'leri kapsayıcıda kendi değerlerini kurar;
-  solid preset'ler gradient değerini sıfırlar. Temanın varsayılan accent rengi
-  ocean; gradient başlık için ilgili `data-accent` preset'i kullanılır.
-- Mevcut İngilizce README/docs dili korundu; yeni faz raporu ve mimari sözleşme
-  Türkçe. ESLint yalnız bilinen upstream tek sözcüklü adları kabul eder;
-  render işlevi modülleri için SFC dosya/prop varsayılan kuralları uygulanmaz.
+- The item adapter accepts only registered `Bar`/`Segment` types. `Fragment`
+  is expanded; `Comment` is filtered out; raw string/number inputs are converted
+  to Text VNodes. Its own prop schema applies kebab→camel conversion, empty
+  boolean values, and defaults. Slots are read during every render; `computed`
+  is not used. The render trees of custom wrapper components are not expanded.
+- The Markdown reader accepts only the `ul > li` structure at the slot root;
+  it preserves `p`/`span` and text/strong/em/code/link content. The rich row label
+  is carried in `labelContent`, and the plain label in `label`. No extra
+  `labelContent` is added to a plain Markdown label; the three input forms are
+  tested for exact equality without stripping model fields. Nested lists and
+  general VNode trees are not interpreted. Data input uses typed `segments`
+  instead of Vue `children`. Labels of identical rows must be unique.
+- Input priority is truthy `rows` (including an empty array) → nonempty Markdown
+  list → item rows. A segment array (even when empty) overrides item segments.
+  `48 js, 22 css, 30 images` and `1,200 js` were fixed. Negative/local number
+  formats and multiword segment labels are not part of the support contract
+  for this regex.
+- `v-reveal` does not generate hiding styles during SSR. Once the observer is
+  successfully set up, only elements outside the viewport are hidden; initial
+  viewport content is not hidden again. It uses `threshold: 0`,
+  `rootMargin: 0px 0px -24px 0px`, 220ms, 8px, and
+  `cubic-bezier(.215,.61,.355,1)`. `delay` is in milliseconds; the row stagger
+  is 50ms. Target opacity and the existing transform are preserved. A preference
+  change reveals pending elements and cancels the active animation.
+- For normal text, `--graph-muted` was set to light `oklch(0.48 0 0)` and dark
+  `oklch(0.68 0 0)`. For neutral OKLCH, contrast of **6.262:1 / 7.100:1** was
+  calculated and tested using luminance `L³` against backgrounds `0.985`/`0.11`.
+  The legend row's `0.4` opacity was moved from text to the decorative glyph;
+  this is an intentional accessibility difference from upstream. Custom host
+  backgrounds must be measured separately.
+- Review showed that the `text-graph-accent` utility class could override the
+  gradient heading's transparent color; priority was corrected with a combined
+  selector and added to the production CSS test. Gradient presets set their own
+  values on the container; solid presets reset the gradient value. The theme's
+  default accent color is ocean; the corresponding `data-accent` preset is used
+  for a gradient heading.
+- The existing English README/docs language was preserved; the new phase report
+  and architectural contract are in Turkish. ESLint accepts only known upstream
+  single-word names; SFC file/prop default rules are not applied to render
+  function modules.
 
-## Tarayıcı ölçümü
+## Browser measurements
 
-Dev sunucusu başlatılmadı. Sayfa: `/components/graph-stack`.
+No dev server was started. Page: `/components/graph-stack`.
 
-1. 375/768/1280 genişliklerinde light/dark ölçümü: ilk üç BUNDLE örneği aynı
-   görünmeli; marketing 12/5/7, docs 7/4/13 tick; çerçeve 2px çizgi + 5px boşluk,
-   1px kalınlık, dört 16×16 köşe. Başlık/padding/taşma referansla karşılaştırılmalı.
-2. TOKENS: 28 tick için 17/8/3 dağıtımı; mono glifleri kısmen soluk, metin tam
-   opacity; scoped sunset örneğinde duo renk ve gradient başlık görülmeli.
-3. İlk viewport içeriği hydration sırasında gizlenmemeli; aşağıdaki satırlar
-   scroll ile 220ms/50ms animasyon yapmalı. Uzun öğe, JS yüklenme hatası, tercih
-   değişimi ve unmount sonrası aktif animasyon/dinleyici kontrol edilmeli.
-4. Kapsayıcı accent seçimi komşu örneğe taşmamalı. Geist Mono yüklenince font ve
-   glif ölçüsü referansla karşılaştırılmalı. Ekran okuyucuda caption ilişkisi ve
-   satır özetleri, dekoratif gliflerin okunmadığı doğrulanmalı.
+1. Light/dark measurements at widths 375/768/1280: the first three BUNDLE examples
+   should look identical; marketing 12/5/7, docs 7/4/13 ticks; frame 2px line +
+   5px gap, 1px thickness, four 16×16 corners. Heading/padding/overflow should be
+   compared with the reference.
+2. TOKENS: 17/8/3 distribution for 28 ticks; mono glyphs partially dimmed, text
+   at full opacity; the scoped sunset example should show duo colors and a
+   gradient heading.
+3. Initial viewport content should not be hidden during hydration; rows below
+   should animate on scroll at 220ms/50ms. A tall element, JS loading failure,
+   preference change, and active animation/listeners after unmount should be
+   checked.
+4. Container accent selection should not spill into the neighboring example.
+   Once Geist Mono loads, font and glyph dimensions should be compared with the
+   reference. In a screen reader, caption relationships and row summaries should
+   be checked, and decorative glyphs should be verified as not being read.
 
-## Faz 2B önerileri
+## Phase 2B recommendations
 
-`docs/markdown-contract.md` sözleşmesine göre `markdown-it` token → tipli props
-derlemesi; kaynak konumlu tanılar ve sayı grammar kararı; zengin prose ve güvenli
-link davranışı; temiz npm/registry tüketim fixture'ları; gerçek tarayıcı
-hydration/animasyon/görsel matris kapısı. Diğer bileşenler ve Comark bu fazda
-uygulanmadı.
+`markdown-it` token → typed props compilation according to the
+`docs/markdown-contract.md` contract; diagnostics with source locations and a
+number grammar decision; rich prose and safe link behavior; clean npm/registry
+consumer fixtures; a real browser hydration/animation/visual matrix gate. Other
+components and Comark were not implemented in this phase.
