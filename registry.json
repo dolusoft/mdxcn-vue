@@ -9,6 +9,270 @@
   "items": [
     {
       "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+      "name": "mdxcn-graph-tree",
+      "type": "registry:component",
+      "title": "mdxcn graph-tree",
+      "description": "Vue 3 graph-tree from the mdxcn-vue source tree.",
+      "dependencies": [
+        "vue@^3.5.0"
+      ],
+      "meta": {
+        "license": "MIT",
+        "notice": "MIT License\n\nCopyright (c) 2026 Keshav Bagaade (mdxcn, original React implementation)\nCopyright (c) 2026 Dolusoft (mdxcn-vue, Vue 3 port)\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.",
+        "upstream": "shadcn-labs/mdxcn@16d817a"
+      },
+      "docs": "Files use relative imports under src/components/mdxcn. Import styles/graph.css, host.css and optional theme.css from your Tailwind v4 CSS entry. Keep the full MIT notice with copied files.",
+      "files": [
+        {
+          "path": "packages/mdxcn-vue/src/adapters/code-readers.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/adapters/code-readers.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/adapters/items.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/adapters/items.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/adapters/nested-flow.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/adapters/nested-flow.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/adapters/stack.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/adapters/stack.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/adapters/state-list.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/adapters/state-list.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/components/graph-frame.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/components/graph-frame.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/components/graph-tree.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/components/graph-tree.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/core/markdown.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/core/markdown.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/core/model.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/core/model.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/core/motion.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/core/motion.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/core/nested-flow.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/core/nested-flow.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/core/stack.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/core/stack.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/core/state-list.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/core/state-list.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/directives/reveal.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/directives/reveal.ts"
+        }
+      ]
+    },
+    {
+      "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+      "name": "mdxcn-graph-check",
+      "type": "registry:component",
+      "title": "mdxcn graph-check",
+      "description": "Vue 3 graph-check from the mdxcn-vue source tree.",
+      "dependencies": [
+        "vue@^3.5.0"
+      ],
+      "meta": {
+        "license": "MIT",
+        "notice": "MIT License\n\nCopyright (c) 2026 Keshav Bagaade (mdxcn, original React implementation)\nCopyright (c) 2026 Dolusoft (mdxcn-vue, Vue 3 port)\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.",
+        "upstream": "shadcn-labs/mdxcn@16d817a"
+      },
+      "docs": "Files use relative imports under src/components/mdxcn. Import styles/graph.css, host.css and optional theme.css from your Tailwind v4 CSS entry. Keep the full MIT notice with copied files.",
+      "files": [
+        {
+          "path": "packages/mdxcn-vue/src/adapters/code-readers.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/adapters/code-readers.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/adapters/items.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/adapters/items.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/adapters/nested-flow.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/adapters/nested-flow.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/adapters/stack.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/adapters/stack.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/adapters/state-list.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/adapters/state-list.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/components/graph-check.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/components/graph-check.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/components/graph-frame.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/components/graph-frame.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/core/markdown.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/core/markdown.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/core/model.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/core/model.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/core/motion.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/core/motion.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/core/nested-flow.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/core/nested-flow.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/core/stack.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/core/stack.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/core/state-list.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/core/state-list.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/directives/reveal.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/directives/reveal.ts"
+        }
+      ]
+    },
+    {
+      "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+      "name": "mdxcn-graph-flow",
+      "type": "registry:component",
+      "title": "mdxcn graph-flow",
+      "description": "Vue 3 graph-flow from the mdxcn-vue source tree.",
+      "dependencies": [
+        "vue@^3.5.0"
+      ],
+      "meta": {
+        "license": "MIT",
+        "notice": "MIT License\n\nCopyright (c) 2026 Keshav Bagaade (mdxcn, original React implementation)\nCopyright (c) 2026 Dolusoft (mdxcn-vue, Vue 3 port)\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.",
+        "upstream": "shadcn-labs/mdxcn@16d817a"
+      },
+      "docs": "Files use relative imports under src/components/mdxcn. Import styles/graph.css, host.css and optional theme.css from your Tailwind v4 CSS entry. Keep the full MIT notice with copied files.",
+      "files": [
+        {
+          "path": "packages/mdxcn-vue/src/adapters/code-readers.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/adapters/code-readers.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/adapters/items.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/adapters/items.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/adapters/nested-flow.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/adapters/nested-flow.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/adapters/stack.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/adapters/stack.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/adapters/state-list.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/adapters/state-list.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/components/graph-flow.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/components/graph-flow.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/components/graph-frame.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/components/graph-frame.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/core/markdown.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/core/markdown.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/core/model.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/core/model.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/core/motion.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/core/motion.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/core/nested-flow.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/core/nested-flow.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/core/stack.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/core/stack.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/core/state-list.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/core/state-list.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/directives/reveal.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/directives/reveal.ts"
+        }
+      ]
+    },
+    {
+      "$schema": "https://shadcn-vue.com/schema/registry-item.json",
       "name": "mdxcn-graph-sheet",
       "type": "registry:component",
       "title": "mdxcn graph-sheet",
@@ -2746,6 +3010,11 @@
           "path": "packages/mdxcn-vue/src/core/model.ts",
           "type": "registry:file",
           "target": "~/src/components/mdxcn/core/model.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/core/nested-flow.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/core/nested-flow.ts"
         },
         {
           "path": "packages/mdxcn-vue/src/core/numeric-list.ts",

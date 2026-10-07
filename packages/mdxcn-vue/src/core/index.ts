@@ -1,5 +1,21 @@
 // Framework-independent helpers for adapters and advanced consumers.
 export type {
+  TreeNode,
+  CheckItem,
+  FlowTone,
+  FlowNode,
+  FlowRow,
+  NestedListItem,
+} from './nested-flow.js'
+export {
+  nestedList,
+  treesFromList,
+  checksFromList,
+  flattenTree,
+  flattenChecks,
+  flowNodes,
+} from './nested-flow.js'
+export type {
   SheetSection,
   SheetData,
   SheetModel,

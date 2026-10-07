@@ -1,4 +1,6 @@
 import type MarkdownIt from 'markdown-it'
+import type { TreeNode, CheckItem, FlowRow } from 'mdxcn-vue/core'
+import { nestedList, treesFromList, checksFromList, flowNodes } from 'mdxcn-vue/core'
 import type { SheetModel, InvoiceData } from 'mdxcn-vue/core'
 import { resolveSheet, invoiceItems, moneyLine } from 'mdxcn-vue/core'
 import type { BoardColumn, FaqEntry, ProseBlock } from 'mdxcn-vue/core'
@@ -21,6 +23,9 @@ import { bindingFromList } from 'mdxcn-vue/core'
 import type { ChatListItem, KeyBinding } from 'mdxcn-vue/core'
 
 export type ComponentName =
+  | 'GraphTree'
+  | 'GraphCheck'
+  | 'GraphFlow'
   | 'GraphSheet'
   | 'GraphInvoice'
   | 'Faq'
@@ -50,6 +55,9 @@ export type ComponentName =
   | 'GraphDiff'
   | 'GraphWaterfall'
 export type CompiledProps =
+  | { nodes: TreeNode[] }
+  | { items: CheckItem[] }
+  | { rows: FlowRow[] }
   | SheetModel
   | InvoiceData
   | { entries: FaqEntry[] }
@@ -86,12 +94,19 @@ function inline(
   renderLinks: boolean,
   line?: number,
   strike = false,
+  taskMarkers = false,
 ): ProseNode[] {
   const root: ProseNode[] = []
   const stack = [root]
   for (const [index, token] of tokens.entries()) {
     const children = stack.at(-1)!
-    if (token.type === 'text' && /\[[^\]]+\]/.test(token.content))
+    // VitePress task-list controls carry no label text. Completion is read at li depth.
+    if (taskMarkers && ['checkbox_input', 'label_open', 'label_close'].includes(token.type))
+      continue
+    if (
+      token.type === 'text' &&
+      /\[[^\]]+\]/.test(taskMarkers ? token.content.replace(/^\s*\[[xX ]\]\s*/, '') : token.content)
+    )
       throw new Error('Unresolved reference links require runtime resolution')
     if (['text', 'text_special', 'emoji', 'softbreak'].includes(token.type)) {
       let value = token.type === 'softbreak' ? '\n' : token.content
@@ -154,6 +169,7 @@ function blocks(
   orderedLists = false,
   strike = false,
   sections = false,
+  taskMarkers = false,
 ): Block[] {
   const root: Block[] = []
   const stack = [root]
@@ -172,6 +188,7 @@ function blocks(
           options.renderLinks ?? false,
           (token.map?.[0] ?? 0) + (options.lineOffset ?? 0) + 1,
           strike,
+          taskMarkers,
         ),
       })
     } else if (token.type === 'fence') stack.at(-1)!.push({ tag: 'fence', token, children: [] })
@@ -244,6 +261,52 @@ export function tokensToProps(
   env: object = {},
   options: TokenModelOptions = {},
 ): CompiledProps {
+  if (['GraphTree', 'GraphCheck', 'GraphFlow'].includes(name)) {
+    const tree = blocks(tokens, md, env, options, true, false, true, name === 'GraphCheck')
+    const hasFence = (nodes: readonly Block[]): boolean =>
+      nodes.some((block) => block.tag === 'fence' || hasFence(block.children))
+    if (hasFence(tree)) throw new Error(`${name} fences require runtime resolution`)
+    const cleanText = (nodes: readonly Block[]): string =>
+      nodes
+        .map((block) =>
+          block.tag === 'p' ? ` ${proseText(content(block))} ` : proseText(content(block)),
+        )
+        .join('')
+        .replace(/\s+/g, ' ')
+        .trim()
+    if (name === 'GraphFlow') {
+      const lists = tree.filter((block) => block.tag === 'ul' || block.tag === 'ol')
+      const paragraphs = tree.filter((block) => block.tag === 'p')
+      const rows = lists.length ? lists.flatMap((list) => list.children) : paragraphs
+      if (rows.length) return { rows: rows.map((row) => ({ nodes: flowNodes(content(row)) })) }
+      const text = tree
+        .map((block) => proseText(content(block)))
+        .join('')
+        .trim()
+      return {
+        rows: text
+          ? text.split(/\n+/).map((value) => ({ nodes: flowNodes([{ type: 'text', value }]) }))
+          : [],
+      }
+    }
+    const list = nestedList(tree, {
+      tag: (block) => block.tag,
+      children: (block) => block.children,
+      describe: (item) => ({
+        text: cleanText(item.children.filter((block) => block.tag !== 'ul' && block.tag !== 'ol')),
+        strong: bold(content(item)),
+        checked: Boolean(
+          item.children
+            .filter((block) => block.tag === 'inline' || (block.tag === 'p' && block.token.hidden))
+            .flatMap((block) => (block.tag === 'inline' ? [block] : block.children))
+            .flatMap((block) => block.token.children ?? [])
+            .find((token) => token.type === 'checkbox_input')
+            ?.attrGet('checked'),
+        ),
+      }),
+    })
+    return name === 'GraphTree' ? { nodes: treesFromList(list) } : { items: checksFromList(list) }
+  }
   if (name === 'GraphSheet' || name === 'GraphInvoice') {
     const tree = blocks(tokens, md, env, options, true, false, true)
     if (name === 'GraphSheet') {

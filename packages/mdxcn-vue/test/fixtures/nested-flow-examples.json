@@ -1,0 +1,230 @@
+[
+  {
+    "name": "GraphTree",
+    "props": {
+      "title": "REGISTRY"
+    },
+    "model": {
+      "nodes": [
+        {
+          "label": "registry/default",
+          "accent": true,
+          "children": [
+            {
+              "label": "graph-frame",
+              "accent": false,
+              "children": [
+                {
+                  "label": "graph-frame.tsx",
+                  "accent": false,
+                  "meta": "ui"
+                },
+                {
+                  "label": "graph-motion.ts",
+                  "accent": false,
+                  "meta": "lib"
+                }
+              ]
+            },
+            {
+              "label": "graph-tree",
+              "accent": true,
+              "children": [
+                {
+                  "label": "graph-tree.tsx",
+                  "accent": true,
+                  "meta": "ui"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "body": "\n- registry/default\n  - graph-frame\n    - graph-frame.tsx — ui\n    - graph-motion.ts — lib\n  - graph-tree\n    - **graph-tree.tsx** — ui\n",
+    "source": "<GraphTree title=\"REGISTRY\">\n\n- registry/default\n  - graph-frame\n    - graph-frame.tsx — ui\n    - graph-motion.ts — lib\n  - graph-tree\n    - **graph-tree.tsx** — ui\n\n</GraphTree>"
+  },
+  {
+    "name": "GraphTree",
+    "props": {
+      "title": "ON CALL"
+    },
+    "model": {
+      "nodes": [
+        {
+          "label": "platform",
+          "accent": true,
+          "children": [
+            {
+              "label": "api",
+              "accent": false,
+              "meta": "priya"
+            },
+            {
+              "label": "workers",
+              "accent": true,
+              "meta": "jon"
+            },
+            {
+              "label": "edge",
+              "accent": false,
+              "meta": "mina"
+            }
+          ]
+        }
+      ]
+    },
+    "body": "\n- platform\n  - api — priya\n  - **workers** — jon\n  - edge — mina\n",
+    "source": "<GraphTree title=\"ON CALL\">\n\n- platform\n  - api — priya\n  - **workers** — jon\n  - edge — mina\n\n</GraphTree>"
+  },
+  {
+    "name": "GraphCheck",
+    "props": {
+      "title": "LAUNCH"
+    },
+    "model": {
+      "items": [
+        {
+          "label": "freeze tokens",
+          "done": true
+        },
+        {
+          "label": "ship registry json",
+          "done": true
+        },
+        {
+          "label": "write the postmortem",
+          "done": false,
+          "note": "still open"
+        }
+      ]
+    },
+    "body": "\n- [x] freeze tokens\n- [x] ship registry json\n- [ ] write the postmortem — still open\n",
+    "source": "<GraphCheck title=\"LAUNCH\">\n\n- [x] freeze tokens\n- [x] ship registry json\n- [ ] write the postmortem — still open\n\n</GraphCheck>"
+  },
+  {
+    "name": "GraphCheck",
+    "props": {
+      "title": "REVIEW"
+    },
+    "model": {
+      "items": [
+        {
+          "label": "title is a sentence",
+          "done": true
+        },
+        {
+          "label": "numbers are tabular",
+          "done": true
+        },
+        {
+          "label": "motion respects reduced",
+          "done": false,
+          "note": "check the timer"
+        }
+      ]
+    },
+    "body": "\n- [x] title is a sentence\n- [x] numbers are tabular\n- [ ] motion respects reduced — check the timer\n",
+    "source": "<GraphCheck title=\"REVIEW\">\n\n- [x] title is a sentence\n- [x] numbers are tabular\n- [ ] motion respects reduced — check the timer\n\n</GraphCheck>"
+  },
+  {
+    "name": "GraphCheck",
+    "props": {
+      "title": "RELEASE"
+    },
+    "model": {
+      "items": [
+        {
+          "label": "freeze tokens",
+          "done": true
+        },
+        {
+          "label": "docs",
+          "done": false,
+          "items": [
+            {
+              "label": "grammar page",
+              "done": true
+            },
+            {
+              "label": "mdx page",
+              "done": false,
+              "note": "needs screenshots"
+            }
+          ]
+        },
+        {
+          "label": "tag 1.3.0",
+          "done": false
+        }
+      ]
+    },
+    "body": "\n- [x] freeze tokens\n- [ ] docs\n  - [x] grammar page\n  - [ ] mdx page — needs screenshots\n- [ ] tag 1.3.0\n",
+    "source": "<GraphCheck title=\"RELEASE\">\n\n- [x] freeze tokens\n- [ ] docs\n  - [x] grammar page\n  - [ ] mdx page — needs screenshots\n- [ ] tag 1.3.0\n\n</GraphCheck>"
+  },
+  {
+    "name": "GraphFlow",
+    "props": {
+      "title": "OPTIMISTIC UI"
+    },
+    "model": {
+      "rows": [
+        {
+          "nodes": [
+            {
+              "label": "tap"
+            },
+            {
+              "label": "server"
+            },
+            {
+              "label": "update"
+            }
+          ]
+        },
+        {
+          "nodes": [
+            {
+              "label": "tap"
+            },
+            {
+              "label": "update",
+              "tone": "accent"
+            },
+            {
+              "label": "server syncs",
+              "tone": "muted"
+            }
+          ]
+        }
+      ]
+    },
+    "body": "\ntap → server → update\n\ntap → **update** → *server syncs*\n",
+    "source": "<GraphFlow title=\"OPTIMISTIC UI\">\n\ntap → server → update\n\ntap → **update** → *server syncs*\n\n</GraphFlow>"
+  },
+  {
+    "name": "GraphFlow",
+    "props": {
+      "title": "PUBLISH PATH"
+    },
+    "model": {
+      "rows": [
+        {
+          "nodes": [
+            {
+              "label": "write"
+            },
+            {
+              "label": "review"
+            },
+            {
+              "label": "ship"
+            }
+          ]
+        }
+      ]
+    },
+    "body": "\nwrite → review → ship\n",
+    "source": "<GraphFlow title=\"PUBLISH PATH\">\n\nwrite → review → ship\n\n</GraphFlow>"
+  }
+]

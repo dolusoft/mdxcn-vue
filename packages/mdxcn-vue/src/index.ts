@@ -1,4 +1,12 @@
 // Public entry of `mdxcn-vue`; internal helpers belong to the core subpath.
+export { GraphTree, Node } from './components/graph-tree.js'
+export { GraphCheck, Task } from './components/graph-check.js'
+export { GraphFlow, Path } from './components/graph-flow.js'
+export type { GraphTreeProps } from './components/graph-tree.js'
+export type { GraphCheckProps } from './components/graph-check.js'
+export type { GraphFlowProps } from './components/graph-flow.js'
+export type { TreeNode, CheckItem, FlowTone, FlowNode, FlowRow } from './core/nested-flow.js'
+export type { NodeProps, PathProps } from './adapters/nested-flow.js'
 export { GraphSheet } from './components/graph-sheet.js'
 export { GraphInvoice } from './components/graph-invoice.js'
 export type { GraphSheetProps } from './components/graph-sheet.js'

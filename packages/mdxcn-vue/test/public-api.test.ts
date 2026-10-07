@@ -7,6 +7,12 @@ import ts from 'typescript'
 
 // Deliberately maintained independently of export declarations.
 const publicNames = [
+  'GraphTree',
+  'Node',
+  'GraphCheck',
+  'Task',
+  'GraphFlow',
+  'Path',
   'GraphSheet',
   'GraphInvoice',
   'Section',
@@ -139,6 +145,16 @@ it('exposes grammar and clock helpers only through core', () => {
 })
 
 const publicTypes = [
+  'GraphTreeProps',
+  'GraphCheckProps',
+  'GraphFlowProps',
+  'NodeProps',
+  'PathProps',
+  'TreeNode',
+  'CheckItem',
+  'FlowTone',
+  'FlowNode',
+  'FlowRow',
   'GraphSheetProps',
   'GraphInvoiceProps',
   'SectionProps',
@@ -251,6 +267,18 @@ const publicTypes = [
   'GraphTimerProps',
 ]
 const coreNames = [
+  'TreeNode',
+  'CheckItem',
+  'FlowTone',
+  'FlowNode',
+  'FlowRow',
+  'NestedListItem',
+  'nestedList',
+  'treesFromList',
+  'checksFromList',
+  'flattenTree',
+  'flattenChecks',
+  'flowNodes',
   'resolveSheet',
   'partyOf',
   'moneyLine',

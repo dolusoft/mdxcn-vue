@@ -31,6 +31,9 @@ export default tseslint.config(
         'error',
         {
           ignores: [
+            'Node',
+            'Task',
+            'Path',
             'Section',
             'From',
             'To',
