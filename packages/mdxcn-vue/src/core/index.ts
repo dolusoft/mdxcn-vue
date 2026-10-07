@@ -138,3 +138,6 @@ export type {
   CalendarMark,
   CalendarWrittenMark,
 } from './dated-calendar.js'
+
+export { uptimeDays, countdownWritten } from './uptime-countdown.js'
+export type { UptimeStatus, CountdownWritten } from './uptime-countdown.js'

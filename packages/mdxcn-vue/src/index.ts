@@ -229,3 +229,9 @@ export type {
   CalendarMark,
   CalendarWrittenMark,
 } from './core/dated-calendar.js'
+
+export { GraphUptime } from './components/graph-uptime.js'
+export { GraphCountdown } from './components/graph-countdown.js'
+export type { GraphUptimeProps } from './components/graph-uptime.js'
+export type { GraphCountdownProps } from './components/graph-countdown.js'
+export type { UptimeStatus, CountdownWritten } from './core/uptime-countdown.js'

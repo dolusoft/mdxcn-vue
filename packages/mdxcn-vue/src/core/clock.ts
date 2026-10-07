@@ -1,6 +1,18 @@
 /* Derived from mdxcn, Copyright (c) 2026 Keshav Bagaade. MIT; see LICENSE. */
-export function parseInstant(value: Date | number | string): number {
+export function parseInstant(value: Date | number | string, utc = false): number {
   if (value instanceof Date) return value.getTime()
+  // Opt-in ISO-only UTC parsing keeps existing timer callers unchanged.
+  if (utc && typeof value === 'string') {
+    if (
+      !/^\d{4}-\d{2}-\d{2}(?:T\d{2}:\d{2}(?::\d{2}(?:\.\d+)?)?(?:Z|[+-]\d{2}:?\d{2})?)?$/.test(
+        value,
+      )
+    )
+      return Number.NaN
+    return Date.parse(
+      value.includes('T') && !/(?:Z|[+-]\d{2}:?\d{2})$/.test(value) ? value + 'Z' : value,
+    )
+  }
   return typeof value === 'number'
     ? Number.isFinite(value)
       ? value

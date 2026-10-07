@@ -1,0 +1,179 @@
+[
+  {
+    "name": "GraphUptime",
+    "example": "ninety days",
+    "props": {
+      "title": "API",
+      "from": "Jun 1",
+      "to": "Aug 29"
+    },
+    "body": "ok*18 degraded ok*22 down*2 ok*17 degraded*2 ok*28",
+    "model": {
+      "days": [
+        "ok",
+        "ok",
+        "ok",
+        "ok",
+        "ok",
+        "ok",
+        "ok",
+        "ok",
+        "ok",
+        "ok",
+        "ok",
+        "ok",
+        "ok",
+        "ok",
+        "ok",
+        "ok",
+        "ok",
+        "ok",
+        "degraded",
+        "ok",
+        "ok",
+        "ok",
+        "ok",
+        "ok",
+        "ok",
+        "ok",
+        "ok",
+        "ok",
+        "ok",
+        "ok",
+        "ok",
+        "ok",
+        "ok",
+        "ok",
+        "ok",
+        "ok",
+        "ok",
+        "ok",
+        "ok",
+        "ok",
+        "ok",
+        "down",
+        "down",
+        "ok",
+        "ok",
+        "ok",
+        "ok",
+        "ok",
+        "ok",
+        "ok",
+        "ok",
+        "ok",
+        "ok",
+        "ok",
+        "ok",
+        "ok",
+        "ok",
+        "ok",
+        "ok",
+        "ok",
+        "degraded",
+        "degraded",
+        "ok",
+        "ok",
+        "ok",
+        "ok",
+        "ok",
+        "ok",
+        "ok",
+        "ok",
+        "ok",
+        "ok",
+        "ok",
+        "ok",
+        "ok",
+        "ok",
+        "ok",
+        "ok",
+        "ok",
+        "ok",
+        "ok",
+        "ok",
+        "ok",
+        "ok",
+        "ok",
+        "ok",
+        "ok",
+        "ok",
+        "ok",
+        "ok"
+      ]
+    },
+    "summary": "94 percent uptime over 90 days, Jun 1 to Aug 29",
+    "glyphs": "██████████████████▒██████████████████████··█████████████████▒▒████████████████████████████",
+    "rows": 3
+  },
+  {
+    "name": "GraphUptime",
+    "example": "incident window",
+    "props": {
+      "title": "WEBHOOKS",
+      "from": "Mon",
+      "to": "Fri",
+      "days": "ok ok ok degraded ok empty empty ok down ok ok ok"
+    },
+    "body": "",
+    "model": {
+      "days": ["ok", "ok", "ok", "degraded", "ok", "empty", "empty", "ok", "down", "ok", "ok", "ok"]
+    },
+    "summary": "80 percent uptime over 10 days, Mon to Fri",
+    "glyphs": "███▒█--█·███",
+    "rows": 1
+  },
+  {
+    "name": "GraphCountdown",
+    "example": "written",
+    "props": {
+      "title": "LAUNCH"
+    },
+    "body": "2027-01-15T09:00:00Z — until 2.0",
+    "model": {
+      "written": {
+        "label": "2027-01-15T09:00:00Z",
+        "rest": "until 2.0"
+      }
+    },
+    "summary": "remaining 14d 09:00:00",
+    "value": "14d 09:00:00"
+  },
+  {
+    "name": "GraphCountdown",
+    "example": "freeze",
+    "props": {
+      "title": "FREEZE",
+      "to": "2027-01-01T00:00:00Z",
+      "done": "open",
+      "caption": "until launch"
+    },
+    "body": "",
+    "model": {
+      "written": {
+        "label": "",
+        "rest": ""
+      }
+    },
+    "summary": "open",
+    "value": "open"
+  },
+  {
+    "name": "GraphCountdown",
+    "example": "closed",
+    "props": {
+      "title": "WINDOW",
+      "to": "2020-01-01T00:00:00Z",
+      "done": "closed"
+    },
+    "body": "",
+    "model": {
+      "written": {
+        "label": "",
+        "rest": ""
+      }
+    },
+    "summary": "closed",
+    "value": "closed"
+  }
+]

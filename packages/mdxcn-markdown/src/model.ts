@@ -30,10 +30,14 @@ import type { BarSeries, SeriesData, SeriesListItem } from 'mdxcn-vue/core'
 import { fractionOf, gridsFromList } from 'mdxcn-vue/core'
 import type { FractionData, CellGrid } from 'mdxcn-vue/core'
 
+import { uptimeDays, countdownWritten } from 'mdxcn-vue/core'
+import type { UptimeStatus, CountdownWritten } from 'mdxcn-vue/core'
 import { activityDays, calendarMark } from 'mdxcn-vue/core'
 import type { ActivityDay, CalendarWrittenMark } from 'mdxcn-vue/core'
 
 export type ComponentName =
+  | 'GraphUptime'
+  | 'GraphCountdown'
   | 'GraphActivity'
   | 'GraphCalendar'
   | 'GraphCells'
@@ -75,6 +79,8 @@ export type ComponentName =
   | 'GraphDiff'
   | 'GraphWaterfall'
 export type CompiledProps =
+  | { days: UptimeStatus[] }
+  | { written: CountdownWritten }
   | { days: ActivityDay[] }
   | { written: CalendarWrittenMark[] }
   | { items: CellGrid[] }
@@ -335,7 +341,7 @@ export function tokensToProps(
   env: object = {},
   options: TokenModelOptions = {},
 ): CompiledProps {
-  if (name === 'GraphActivity' || name === 'GraphCalendar') {
+  if (['GraphActivity', 'GraphCalendar', 'GraphUptime', 'GraphCountdown'].includes(name)) {
     const tree = blocks(tokens, md, env, options, true, true, true)
     const visible = (nodes: readonly Block[], source = false): string =>
       nodes
@@ -346,6 +352,8 @@ export function tokensToProps(
         })
         .join('')
     visible(tree)
+    if (name === 'GraphUptime') return { days: uptimeDays(visible(tree, true)) }
+    if (name === 'GraphCountdown') return { written: countdownWritten(visible(tree)) }
     const lists = tree.filter((b) => b.tag === 'ul' || b.tag === 'ol')
     const items = lists.length
       ? lists.flatMap((b) => b.children)

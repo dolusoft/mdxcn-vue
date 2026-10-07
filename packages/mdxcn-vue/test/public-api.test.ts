@@ -7,6 +7,8 @@ import ts from 'typescript'
 
 // Deliberately maintained independently of export declarations.
 const publicNames = [
+  'GraphUptime',
+  'GraphCountdown',
   'GraphActivity',
   'GraphCalendar',
   'GraphCells',
@@ -156,6 +158,10 @@ it('exposes grammar and clock helpers only through core', () => {
 })
 
 const publicTypes = [
+  'GraphUptimeProps',
+  'GraphCountdownProps',
+  'UptimeStatus',
+  'CountdownWritten',
   'GraphActivityProps',
   'GraphCalendarProps',
   'ActivityDay',
@@ -298,6 +304,10 @@ const publicTypes = [
   'GraphTimerProps',
 ]
 const coreNames = [
+  'uptimeDays',
+  'countdownWritten',
+  'UptimeStatus',
+  'CountdownWritten',
   'DAY_MS',
   'MONTH_NAMES',
   'parseUTC',
