@@ -114,3 +114,6 @@ export { headingSections, boardFromList, normalizeBoard } from './sections.js'
 
 export { seriesOf, barsFromList } from './series.js'
 export type { SeriesData, BarSeries, SeriesProps, SeriesListItem } from './series.js'
+
+export { kpiOf } from './kpi.js'
+export type { KpiData } from './kpi.js'

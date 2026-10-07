@@ -12,6 +12,8 @@ const useCli = process.argv.includes('--from-cli')
 const definitions = [
   ['graph-bars', ['components/graph-bars.ts']],
   ['graph-spark', ['components/graph-spark.ts']],
+  ['graph-plot', ['components/graph-plot.ts']],
+  ['graph-kpi', ['components/graph-kpi.ts']],
   ['graph-tree', ['components/graph-tree.ts']],
   ['graph-check', ['components/graph-check.ts']],
   ['graph-flow', ['components/graph-flow.ts']],

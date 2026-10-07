@@ -5,6 +5,7 @@ import { readerListItems } from './code-readers.js'
 import { hasStateHost } from './state-list.js'
 import { barsFromList, seriesOf } from '../core/series.js'
 import type { SeriesProps, SeriesListItem, BarSeries } from '../core/series.js'
+import { kpiOf } from '../core/kpi.js'
 import { numbers } from '../core/markdown.js'
 
 export const Series = defineItem<SeriesProps>('Series', {
@@ -59,4 +60,18 @@ export function barsModel(nodes: readonly VNode[]): BarSeries[] {
         values: numbers((item.props.values ?? visibleText(item.children)) as SeriesProps['values']),
         size: item.props.size as SeriesProps['size'],
       }))
+}
+
+/** Direct paragraphs break visible lines; source emphasis is not part of KPI values. */
+export function kpiModel(nodes: readonly VNode[]) {
+  const lines = (input: readonly VNode[]): string[] => {
+    const paragraphs = flattenNodes(input).filter((node) => node.type === 'p')
+    return paragraphs.length
+      ? paragraphs.flatMap((node) => lines(childrenOf(node)))
+      : visibleText(input)
+          .split('\n')
+          .map((line) => line.trim())
+          .filter(Boolean)
+  }
+  return kpiOf(lines(nodes))
 }

@@ -22,12 +22,16 @@ import type { StateListItem, DecisionOption } from 'mdxcn-vue/core'
 import { bindingFromList } from 'mdxcn-vue/core'
 import type { ChatListItem, KeyBinding } from 'mdxcn-vue/core'
 
+import { kpiOf } from 'mdxcn-vue/core'
+import type { KpiData } from 'mdxcn-vue/core'
 import { seriesOf, barsFromList } from 'mdxcn-vue/core'
 import type { BarSeries, SeriesData, SeriesListItem } from 'mdxcn-vue/core'
 
 export type ComponentName =
   | 'GraphBars'
   | 'GraphSpark'
+  | 'GraphPlot'
+  | 'GraphKpi'
   | 'GraphTree'
   | 'GraphCheck'
   | 'GraphFlow'
@@ -62,6 +66,7 @@ export type ComponentName =
 export type CompiledProps =
   | { series: BarSeries[] }
   | { written: SeriesData }
+  | { written: KpiData }
   | { nodes: TreeNode[] }
   | { items: CheckItem[] }
   | { rows: FlowRow[] }
@@ -268,11 +273,23 @@ export function tokensToProps(
   env: object = {},
   options: TokenModelOptions = {},
 ): CompiledProps {
-  if (name === 'GraphBars' || name === 'GraphSpark') {
+  if (['GraphBars', 'GraphSpark', 'GraphPlot', 'GraphKpi'].includes(name)) {
     const tree = blocks(tokens, md, env, options, true, true, true)
     const hasFence = (nodes: readonly Block[]): boolean =>
       nodes.some((b) => b.tag === 'fence' || hasFence(b.children))
     if (hasFence(tree)) throw new Error(name + ' fences require runtime resolution')
+    if (name === 'GraphKpi') {
+      const lines = (nodes: readonly Block[]): string[] => {
+        const paragraphs = nodes.filter((b) => b.tag === 'p')
+        return paragraphs.length
+          ? paragraphs.flatMap((b) => lines(b.children))
+          : proseText(nodes.flatMap(content))
+              .split('\n')
+              .map((line) => line.trim())
+              .filter(Boolean)
+      }
+      return { written: kpiOf(lines(tree)) }
+    }
     const lists = tree.filter((b) => b.tag === 'ul' || b.tag === 'ol')
     const items = lists.length
       ? lists.flatMap((b) => b.children)

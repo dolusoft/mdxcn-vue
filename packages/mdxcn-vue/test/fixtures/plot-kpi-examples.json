@@ -1,0 +1,86 @@
+[
+  {
+    "name": "GraphPlot",
+    "props": {
+      "title": "SIGNUPS",
+      "variant": "line"
+    },
+    "body": "- Mon: 12\n- Tue: 18\n- Wed: 15\n- Thu: 24\n- Fri: 31",
+    "model": {
+      "written": {
+        "data": [12, 18, 15, 24, 31],
+        "labels": ["Mon", "Tue", "Wed", "Thu", "Fri"]
+      }
+    },
+    "summary": "line plot, 5 points, min 0, max 31",
+    "caps": [2, 3, 3, 5, 6]
+  },
+  {
+    "name": "GraphPlot",
+    "props": {
+      "title": "P95",
+      "data": "2 3 3 5 4 7 6 8 5 9 7 6",
+      "labels": ["jan", "dec"]
+    },
+    "model": {},
+    "summary": "area plot, 12 points, min 0, max 9",
+    "caps": [1, 2, 2, 3, 3, 5, 4, 5, 3, 6, 5, 4]
+  },
+  {
+    "name": "GraphPlot",
+    "props": {
+      "title": "ERRORS",
+      "variant": "line",
+      "height": 5,
+      "progress": 0.7,
+      "data": [1, 1, 4, 2, 8, 3, 2, 1, 5, 2],
+      "labels": ["mon", "fri"]
+    },
+    "model": {},
+    "summary": "line plot, 10 points, min 0, max 8",
+    "caps": [1, 1, 2, 1, 4, 2, 1, null, null, null]
+  },
+  {
+    "name": "GraphKpi",
+    "props": {
+      "title": "READS"
+    },
+    "body": "**12,400** this week — +18%\n\n4 5 5 6 8 7 9 8 11 10 12 14",
+    "model": {
+      "written": {
+        "value": "12,400",
+        "label": "this week",
+        "hint": "+18%",
+        "data": [4, 5, 5, 6, 8, 7, 9, 8, 11, 10, 12, 14]
+      }
+    },
+    "summary": "12,400 this week. +18%",
+    "points": "▃▄▄▄▅▅▆▅▇▆▇█"
+  },
+  {
+    "name": "GraphKpi",
+    "props": {
+      "title": "READS",
+      "value": "12,400",
+      "label": "this week",
+      "hint": "+18%",
+      "data": "4 5 5 6 8 7 9 8 11 10 12 14"
+    },
+    "model": {},
+    "summary": "12,400 this week. +18%",
+    "points": "▃▄▄▄▅▅▆▅▇▆▇█"
+  },
+  {
+    "name": "GraphKpi",
+    "props": {
+      "title": "P95",
+      "value": "142ms",
+      "label": "read",
+      "hint": "−18ms",
+      "data": [8, 7, 9, 6, 5, 7, 4, 5, 3, 4, 3, 2]
+    },
+    "model": {},
+    "summary": "142ms read. −18ms",
+    "points": "▇▆█▆▅▆▄▅▃▄▃▃"
+  }
+]

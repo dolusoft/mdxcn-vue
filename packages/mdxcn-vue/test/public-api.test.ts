@@ -10,6 +10,8 @@ const publicNames = [
   'GraphBars',
   'Series',
   'GraphSpark',
+  'GraphPlot',
+  'GraphKpi',
   'GraphTree',
   'Node',
   'GraphCheck',
@@ -150,6 +152,9 @@ it('exposes grammar and clock helpers only through core', () => {
 const publicTypes = [
   'GraphBarsProps',
   'GraphSparkProps',
+  'GraphPlotProps',
+  'GraphKpiProps',
+  'KpiData',
   'BarSeries',
   'SeriesProps',
   'SeriesData',
@@ -276,6 +281,8 @@ const publicTypes = [
 ]
 const coreNames = [
   'seriesOf',
+  'kpiOf',
+  'KpiData',
   'barsFromList',
   'SeriesData',
   'BarSeries',

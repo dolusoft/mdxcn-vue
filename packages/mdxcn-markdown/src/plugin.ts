@@ -13,6 +13,8 @@ export interface MarkdownOptions extends WarningOptions {
 const dataFields: Record<ComponentName, string[]> = {
   GraphBars: ['from', 'to', 'series'],
   GraphSpark: ['data', 'caption', 'written'],
+  GraphPlot: ['data', 'labels', 'written'],
+  GraphKpi: ['value', 'label', 'hint', 'data', 'written'],
   GraphTree: ['nodes'],
   GraphCheck: ['items'],
   GraphFlow: ['rows'],
@@ -67,7 +69,7 @@ export function mdxcnMarkdown(md: MarkdownIt, options: MarkdownOptions = {}): vo
       let openingEnd = start
       let openingText = lineAt(start)
       const leading = openingText.match(
-        /^<(GraphBars|GraphSpark|GraphTree|GraphCheck|GraphFlow|GraphSheet|GraphInvoice|Faq|GraphBoard|GraphCompare|GraphMatrix|GraphHeatmap|GraphStack|GraphTable|Endpoint|Annotate|Env|Steps|Changelog|Decision|Chat|Keys|GraphTimeline|GraphSpec|GraphScore|GraphRank|GraphFunnel|GraphStat|GraphSlope|GraphBullet|GraphGantt|GraphDiff|GraphWaterfall)(?=\s|>|$)/,
+        /^<(GraphBars|GraphSpark|GraphPlot|GraphKpi|GraphTree|GraphCheck|GraphFlow|GraphSheet|GraphInvoice|Faq|GraphBoard|GraphCompare|GraphMatrix|GraphHeatmap|GraphStack|GraphTable|Endpoint|Annotate|Env|Steps|Changelog|Decision|Chat|Keys|GraphTimeline|GraphSpec|GraphScore|GraphRank|GraphFunnel|GraphStat|GraphSlope|GraphBullet|GraphGantt|GraphDiff|GraphWaterfall)(?=\s|>|$)/,
       )
       if (!leading || /\/>\s*$/.test(openingText)) return false
       const name = leading[1] as ComponentName
@@ -75,9 +77,9 @@ export function mdxcnMarkdown(md: MarkdownIt, options: MarkdownOptions = {}): vo
         if (!silent) emitWarning(options, state.env, state.src, start, name, reason)
       }
       const pattern =
-        /^<(GraphBars|GraphSpark|GraphTree|GraphCheck|GraphFlow|GraphSheet|GraphInvoice|Faq|GraphBoard|GraphCompare|GraphMatrix|GraphHeatmap|GraphStack|GraphTable|Endpoint|Annotate|Env|Steps|Changelog|Decision|Chat|Keys|GraphTimeline|GraphSpec|GraphScore|GraphRank|GraphFunnel|GraphStat|GraphSlope|GraphBullet|GraphGantt|GraphDiff|GraphWaterfall)(\s(?:[^"'<>]|"[^"]*"|'[^']*')*)?>\s*$/
+        /^<(GraphBars|GraphSpark|GraphPlot|GraphKpi|GraphTree|GraphCheck|GraphFlow|GraphSheet|GraphInvoice|Faq|GraphBoard|GraphCompare|GraphMatrix|GraphHeatmap|GraphStack|GraphTable|Endpoint|Annotate|Env|Steps|Changelog|Decision|Chat|Keys|GraphTimeline|GraphSpec|GraphScore|GraphRank|GraphFunnel|GraphStat|GraphSlope|GraphBullet|GraphGantt|GraphDiff|GraphWaterfall)(\s(?:[^"'<>]|"[^"]*"|'[^']*')*)?>\s*$/
       const inlineOpening = openingText.match(
-        /^<(GraphBars|GraphSpark|GraphTree|GraphCheck|GraphFlow|GraphSheet|GraphInvoice|Faq|GraphBoard|GraphCompare|GraphMatrix|GraphHeatmap|GraphStack|GraphTable|Endpoint|Annotate|Env|Steps|Changelog|Decision|Chat|Keys|GraphTimeline|GraphSpec|GraphScore|GraphRank|GraphFunnel|GraphStat|GraphSlope|GraphBullet|GraphGantt|GraphDiff|GraphWaterfall)(\s(?:[^"'<>]|"[^"]*"|'[^']*')*)?>(.*)$/,
+        /^<(GraphBars|GraphSpark|GraphPlot|GraphKpi|GraphTree|GraphCheck|GraphFlow|GraphSheet|GraphInvoice|Faq|GraphBoard|GraphCompare|GraphMatrix|GraphHeatmap|GraphStack|GraphTable|Endpoint|Annotate|Env|Steps|Changelog|Decision|Chat|Keys|GraphTimeline|GraphSpec|GraphScore|GraphRank|GraphFunnel|GraphStat|GraphSlope|GraphBullet|GraphGantt|GraphDiff|GraphWaterfall)(\s(?:[^"'<>]|"[^"]*"|'[^']*')*)?>(.*)$/,
       )
       if (inlineOpening?.[3]?.trim()) {
         warn('Opening tag and content must be on separate lines')
@@ -119,6 +121,8 @@ export function mdxcnMarkdown(md: MarkdownIt, options: MarkdownOptions = {}): vo
         ([
           'GraphBars',
           'GraphSpark',
+          'GraphPlot',
+          'GraphKpi',
           'GraphTree',
           'GraphCheck',
           'GraphFlow',
