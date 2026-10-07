@@ -2,11 +2,21 @@ import { expect, it } from 'vitest'
 import * as api from '../src'
 import * as core from '../src/core'
 import { existsSync, readFileSync } from 'node:fs'
-import { resolve } from 'node:path'
+import { dirname, resolve } from 'node:path'
 import ts from 'typescript'
 
 // Deliberately maintained independently of export declarations.
 const publicNames = [
+  'createGraphFilters',
+  'GRAPH_FILTER_SLUGS',
+  'graphFilterMetadata',
+  'graphFilterNames',
+  'graphFilters',
+  'CONTENT_SLUGS',
+  'filterName',
+  'GRAPH_VALUE_KEY',
+  'resolveGraphProps',
+  'Footnotes',
   'createGraphComponents',
   'graphComponents',
   'graphTags',
@@ -165,6 +175,12 @@ it('exposes grammar and clock helpers only through core', () => {
 })
 
 const publicTypes = [
+  'GraphFilterName',
+  'GraphFilterSlug',
+  'GraphFilter',
+  'GraphFilterContext',
+  'GraphFilterWarning',
+  'FootnotesProps',
   'GraphComponentMap',
   'NumericProps',
   'GraphAdapter',
@@ -489,6 +505,7 @@ it('matches every package export target and complete declaration export list', (
   expect(manifest.exports).toEqual({
     '.': { types: './dist/index.d.ts', import: './dist/index.js' },
     './core': { types: './dist/core/index.d.ts', import: './dist/core.js' },
+    './knap': { types: './dist/knap/graph-knap.d.ts', import: './dist/knap.js' },
     './graph.css': './dist/graph.css',
     './host.css': './dist/host.css',
     './theme.css': './dist/theme.css',
@@ -503,6 +520,23 @@ it('matches every package export target and complete declaration export list', (
       ).toBe(true)
     }
   }
+  // The print adapter must be usable by non-Vue hosts without loading Vue at all.
+  const visited = new Set<string>()
+  const inspectKnap = (path: string) => {
+    if (visited.has(path)) return
+    visited.add(path)
+    const source = ts.createSourceFile(path, readFileSync(path, 'utf8'), ts.ScriptTarget.Latest)
+    for (const statement of source.statements) {
+      if (!ts.isImportDeclaration(statement) || !ts.isStringLiteral(statement.moduleSpecifier))
+        continue
+      const specifier = statement.moduleSpecifier.text
+      expect(specifier.startsWith('.'), `Unexpected print-adapter dependency: ${specifier}`).toBe(
+        true,
+      )
+      inspectKnap(resolve(dirname(path), specifier))
+    }
+  }
+  inspectKnap(resolve(manifest.exports['./knap'].import))
   for (const [path, expected] of [
     ['dist/index.d.ts', [...publicNames, ...publicTypes]],
     ['dist/core/index.d.ts', coreNames],

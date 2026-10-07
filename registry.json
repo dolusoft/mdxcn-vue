@@ -9,6 +9,130 @@
   "items": [
     {
       "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+      "name": "mdxcn-graph-knap",
+      "type": "registry:lib",
+      "title": "mdxcn graph-knap",
+      "description": "Vue 3 graph-knap from the mdxcn-vue source tree.",
+      "dependencies": [],
+      "meta": {
+        "license": "MIT",
+        "notice": "MIT License\n\nCopyright (c) 2026 Keshav Bagaade (mdxcn, original React implementation)\nCopyright (c) 2026 Dolusoft (mdxcn-vue, Vue 3 port)\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.",
+        "upstream": "shadcn-labs/mdxcn@16d817a"
+      },
+      "docs": "Import knap/graph-knap.ts. Filters emit Markdown; no Vue, Knap or CSS dependency is required. Register custom filters with the host engine. Keep the full MIT notice with copied files.",
+      "files": [
+        {
+          "path": "packages/mdxcn-vue/src/knap/filters.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/knap/filters.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/knap/frame.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/knap/frame.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/knap/graph-knap.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/knap/graph-knap.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/knap/graphs.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/knap/graphs.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/knap/markdown.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/knap/markdown.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/knap/props.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/knap/props.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/knap/yaml.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/knap/yaml.ts"
+        }
+      ]
+    },
+    {
+      "$schema": "https://shadcn-vue.com/schema/registry-item.json",
+      "name": "mdxcn-mdx",
+      "type": "registry:component",
+      "title": "mdxcn mdx",
+      "description": "Vue 3 mdx from the mdxcn-vue source tree.",
+      "dependencies": [
+        "vue@^3.5.0"
+      ],
+      "meta": {
+        "license": "MIT",
+        "notice": "MIT License\n\nCopyright (c) 2026 Keshav Bagaade (mdxcn, original React implementation)\nCopyright (c) 2026 Dolusoft (mdxcn-vue, Vue 3 port)\n\nPermission is hereby granted, free of charge, to any person obtaining a copy\nof this software and associated documentation files (the \"Software\"), to deal\nin the Software without restriction, including without limitation the rights\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\ncopies of the Software, and to permit persons to whom the Software is\nfurnished to do so, subject to the following conditions:\n\nThe above copyright notice and this permission notice shall be included in all\ncopies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\nIMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\nFITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\nAUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\nLIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\nOUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\nSOFTWARE.",
+        "upstream": "shadcn-labs/mdxcn@16d817a"
+      },
+      "docs": "Register Footnotes, Callout, Quote and Terminal with your Vue host and configure withMdxcn from the separate mdxcn-markdown package. The host supplies a footnote parser. Import styles/graph.css and host.css. Keep the full MIT notice with copied files.",
+      "files": [
+        {
+          "path": "packages/mdxcn-vue/src/adapters/items.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/adapters/items.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/adapters/terminal.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/adapters/terminal.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/components/callout.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/components/callout.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/components/footnotes.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/components/footnotes.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/components/graph-frame.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/components/graph-frame.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/components/quote.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/components/quote.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/components/terminal.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/components/terminal.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/core/model.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/core/model.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/core/stack.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/core/stack.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/core/terminal.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/core/terminal.ts"
+        },
+        {
+          "path": "packages/mdxcn-vue/src/directives/reveal.ts",
+          "type": "registry:file",
+          "target": "~/src/components/mdxcn/directives/reveal.ts"
+        }
+      ]
+    },
+    {
+      "$schema": "https://shadcn-vue.com/schema/registry-item.json",
       "name": "mdxcn-graph-comark",
       "type": "registry:component",
       "title": "mdxcn graph-comark",

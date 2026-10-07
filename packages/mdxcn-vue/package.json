@@ -28,6 +28,10 @@
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
+    },
+    "./knap": {
+      "types": "./dist/knap/graph-knap.d.ts",
+      "import": "./dist/knap.js"
     }
   },
   "scripts": {

@@ -10,6 +10,16 @@ const check = process.argv.includes('--check')
 const cliOutput = process.argv[process.argv.indexOf('--from-cli') + 1]
 const useCli = process.argv.includes('--from-cli')
 const definitions = [
+  ['graph-knap', ['knap/graph-knap.ts']],
+  [
+    'mdx',
+    [
+      'components/footnotes.ts',
+      'components/callout.ts',
+      'components/quote.ts',
+      'components/terminal.ts',
+    ],
+  ],
   ['graph-comark', ['components/graph-comark.ts']],
   ['graph-uptime', ['components/graph-uptime.ts']],
   ['graph-countdown', ['components/graph-countdown.ts']],
@@ -98,13 +108,23 @@ function output(path, value) {
 const items = definitions.map(([name, entries]) => ({
   $schema: 'https://shadcn-vue.com/schema/registry-item.json',
   name: `mdxcn-${name}`,
-  type: name === 'css' ? 'registry:file' : name === 'core' ? 'registry:lib' : 'registry:component',
+  type:
+    name === 'css'
+      ? 'registry:file'
+      : ['core', 'graph-knap'].includes(name)
+        ? 'registry:lib'
+        : 'registry:component',
   title: `mdxcn ${name}`,
   description: `Vue 3 ${name} from the mdxcn-vue source tree.`,
-  dependencies: ['vue@^3.5.0'],
+  dependencies: name === 'graph-knap' ? [] : ['vue@^3.5.0'],
   ...(name === 'css' ? { devDependencies: ['tailwindcss@^4'] } : {}),
   meta: { license: 'MIT', notice: license, upstream: 'shadcn-labs/mdxcn@16d817a' },
-  docs: 'Files use relative imports under src/components/mdxcn. Import styles/graph.css, host.css and optional theme.css from your Tailwind v4 CSS entry. Keep the full MIT notice with copied files.',
+  docs:
+    name === 'graph-knap'
+      ? 'Import knap/graph-knap.ts. Filters emit Markdown; no Vue, Knap or CSS dependency is required. Register custom filters with the host engine. Keep the full MIT notice with copied files.'
+      : name === 'mdx'
+        ? 'Register Footnotes, Callout, Quote and Terminal with your Vue host and configure withMdxcn from the separate mdxcn-markdown package. The host supplies a footnote parser. Import styles/graph.css and host.css. Keep the full MIT notice with copied files.'
+        : 'Files use relative imports under src/components/mdxcn. Import styles/graph.css, host.css and optional theme.css from your Tailwind v4 CSS entry. Keep the full MIT notice with copied files.',
   files: [
     ...closure(entries).map((path) => ({
       path: `packages/mdxcn-vue/src/${path}`,

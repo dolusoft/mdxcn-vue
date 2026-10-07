@@ -1,7 +1,7 @@
 # Registry üretimi ve doğrulaması
 
 `pnpm registry:build` komutu kendi `scripts/registry-build.mjs` betiğimizle
-`registry.json` kaynak dizinini ve 40 `public/r/mdxcn-*.json` payload dosyasını
+`registry.json` kaynak dizinini ve 52 `public/r/mdxcn-*.json` payload dosyasını
 üretir. Kaynak dizini içerik taşımaz; gerçek TS/CSS dosyalarını gösterir.
 Payload dosyalarının `path` alanları kaynak diziniyle aynıdır; `.txt` gerekmez.
 `~/src/components/mdxcn/` hedefi, CLI'nin `src/` dizinini koruması için kalır.
@@ -34,3 +34,11 @@ Gerçek kurulumdan sonra `vue-tsc --noEmit` ve `vite build` komutları da çalı
 Fixture dizinleri, repo içindeki `vite@8.3.3` için mevcut
 `minimumReleaseAgeExclude` istisnasını aynen kullanır. Bu kayıt olmadan yeni
 tüketici kurulumu pnpm sürüm yaşı denetiminde durur; genel denetim kapatılmaz.
+
+## Entegrasyon öğeleri
+
+`mdxcn-graph-knap` saf TS `registry:lib` öğesidir; `knap/graph-knap.ts`
+girişini ve çizici kaynaklarını içerir. Vue runtime import etmez.
+`mdxcn-mdx`, `Footnotes`, `Callout`, `Quote`, `Terminal` ve bunların kaynak
+bağımlılıklarını dağıtır. Host ayrıca `mdxcn-markdown` paketindeki `withMdxcn`
+işlevini yapılandırır; registry ikinci bir Markdown compiler kopyalamaz.

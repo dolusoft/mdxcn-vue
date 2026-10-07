@@ -180,7 +180,11 @@ import vue from '@vitejs/plugin-vue';
 import tailwind from '@tailwindcss/vite';
 import {writeFileSync} from 'node:fs';
 export default defineConfig({plugins:[vue(),tailwind(),{
-  name:'consumer-modules', generateBundle() {writeFileSync('modules.json',JSON.stringify([...this.getModuleIds()]));}
+  name:'consumer-modules', generateBundle(_options,bundle) {
+    writeFileSync('modules.json',JSON.stringify([...this.getModuleIds()]));
+    const rendered=Object.values(bundle).filter(chunk=>chunk.type==='chunk').flatMap(chunk=>Object.entries(chunk.modules).filter(([,module])=>module.renderedLength>0).map(([id])=>id));
+    writeFileSync('rendered-modules.json',JSON.stringify(rendered));
+  }
 }],build:{minify:false,sourcemap:true}});
 `
 const app = join(root, 'vite-app')
@@ -226,7 +230,19 @@ write(
   'src/type-contract.ts',
   `import {splitLabel} from 'mdxcn-vue/core';
 import {createGraphComponents,graphComponents,coerceProps,GraphRow,PendingGraph,GRAPH_ADAPTERS,GraphStack} from 'mdxcn-vue';
-import type {GraphComponentMap,GraphTag,GraphAdapter,NumericProps} from 'mdxcn-vue';
+import type {GraphComponentMap,GraphTag,GraphAdapter,NumericProps,FootnotesProps} from 'mdxcn-vue';
+import {createGraphFilters, graphFilters, resolveGraphProps} from 'mdxcn-vue/knap';
+import type {GraphFilterContext, GraphFilterName} from 'mdxcn-vue/knap';
+const filterName:GraphFilterName='graph_meter';
+const filterContext:GraphFilterContext={rawValue:{value:0.5},reportWarning(w){void w.code;}};
+const footnotes:FootnotesProps={title:'Notes'};
+void [createGraphFilters([filterName]),graphFilters.graph_meter('0.5',undefined,filterContext),resolveGraphProps('graph-meter','0.5',undefined),footnotes];
+// @ts-expect-error Unknown filters must not enter a subset.
+createGraphFilters(['graph_unknown']);
+// @ts-expect-error Filter string input is required even when rawValue is supplied.
+graphFilters.graph_meter(0.5);
+// @ts-expect-error Footnotes title is a string.
+footnotes.title=2;
 const installed:GraphComponentMap={'graph-stack':GraphStack};
 const tag:GraphTag='graph-stack';
 const hints:GraphAdapter={numeric:['ticks'],required:['rows']};
@@ -423,7 +439,10 @@ write(
 import {createSSRApp,h} from 'vue';import {renderToString} from 'vue/server-renderer';
 import {parseMarkdown} from 'comark';import {MarkdownDocument} from '@comark/vue';
 import {graphComponents} from 'mdxcn-vue';
-const value=await parseMarkdown('::graph-meter{value=0.5 ticks=10}\\n---\\ncaption: packed Comark\\n---\\n::');
+const {graphFilters,createGraphFilters}=await import('mdxcn-vue/knap');
+assert.equal(createGraphFilters(['graph_meter']).graph_meter,graphFilters.graph_meter);
+assert.match(graphFilters.graph_meter('0.5','PACKED'),/50%/);
+const value=await parseMarkdown(graphFilters.graph_meter(JSON.stringify({value:0.5,ticks:10,caption:'packed Comark'}),'comark'));
 const html=await renderToString(createSSRApp({render:()=>h(MarkdownDocument,{value,components:graphComponents})}));
 assert.match(html,/<figure\\b/);assert.match(html,/packed Comark/);assert.match(html,/50%/);
 assert.doesNotMatch(html,/· · ·|<graph-meter\\b/);
@@ -494,7 +513,16 @@ const vueEntries = modules.filter((id) =>
   /\/vue\/dist\/vue\.runtime\.esm-bundler\.js$/.test(id.replaceAll('\\', '/')),
 )
 assert.equal(vueEntries.length, 1, 'Expected exactly one Vue runtime entry')
-assert.ok(!modules.some((id) => /mdxcn-markdown|markdown-it|@comark|shiki|knap/.test(id)))
+// getModuleIds includes the root entry's print-adapter chunk even after it is discarded.
+// Check emitted module bytes as well as the final JS, rather than parsed dependency IDs.
+const renderedModules = JSON.parse(readFileSync(join(app, 'rendered-modules.json'), 'utf8'))
+assert.ok(renderedModules.length > 0, 'Missing emitted module attribution')
+assert.ok(!renderedModules.some((id) => /mdxcn-markdown|markdown-it|@comark|shiki|knap/.test(id)))
+assert.ok(
+  !modules.some((id) =>
+    /mdxcn-markdown|markdown-it|@comark|shiki|[\\/]node_modules[\\/]knap[\\/]/.test(id),
+  ),
+)
 const stackBytes = Buffer.byteLength(stackBundle)
 console.log(
   `TREE-SHAKE full=${fullBytes} bytes GraphStack=${stackBytes} bytes removed=${fullBytes - stackBytes} bytes; Vue runtime entries=${vueEntries.length}`,
@@ -577,13 +605,13 @@ write(
   '.vitepress/config.ts',
   readFileSync(join(site, '.vitepress/config.ts'), 'utf8').replace(
     'md.use(withMdxcn,{warn:',
-    "md.use(withMdxcn,{components:['Callout','Quote','Terminal'],warn:",
+    "md.use(withMdxcn,{components:['Callout','Quote','Terminal','Footnotes'],warn:",
   ),
 )
 write(
   site,
   '.vitepress/theme/index.ts',
-  `import DefaultTheme from 'vitepress/theme';import {GraphUptime,GraphCountdown,GraphActivity,GraphCalendar,GraphCells,GraphMeter,GraphWaffle,Grid,GraphBars,GraphSpark,GraphPlot,GraphKpi,Series,GraphTree,GraphCheck,GraphFlow,Node,Task,Path,GraphSheet,GraphInvoice,Section,From,To,Meta,Item,Total,Faq,GraphBoard,GraphCompare,GraphMatrix,GraphHeatmap,Col,Row,GraphStack,GraphTable,Endpoint,Callout,Quote,Terminal,Annotate,Env,Steps,Step,Changelog,Change,Decision,Chat,Keys,GraphTimeline,Event,GraphSpec,Field,GraphScore,GraphRank,GraphFunnel,Rank,Stage,GraphStat,GraphSlope,GraphBullet,Stat,Slope,Target,GraphGantt,GraphDiff,GraphWaterfall,Span,Line,Delta} from 'mdxcn-vue';import './style.css';export default {...DefaultTheme,enhanceApp({app}) {for(const [name,component] of Object.entries({GraphUptime,GraphCountdown,GraphActivity,GraphCalendar,GraphCells,GraphMeter,GraphWaffle,Grid,GraphBars,GraphSpark,GraphPlot,GraphKpi,Series,GraphTree,GraphCheck,GraphFlow,Node,Task,Path,GraphSheet,GraphInvoice,Section,From,To,Meta,Item,Total,Faq,GraphBoard,GraphCompare,GraphMatrix,GraphHeatmap,Col,Row,GraphStack,GraphTable,Endpoint,Callout,Quote,Terminal,Annotate,Env,Steps,Step,Changelog,Change,Decision,Chat,Keys,GraphTimeline,Event,GraphSpec,Field,GraphScore,GraphRank,GraphFunnel,Rank,Stage,GraphStat,GraphSlope,GraphBullet,Stat,Slope,Target,GraphGantt,GraphDiff,GraphWaterfall,Span,Line,Delta}))app.component(name,component);}};`,
+  `import DefaultTheme from 'vitepress/theme';import {GraphUptime,GraphCountdown,GraphActivity,GraphCalendar,GraphCells,GraphMeter,GraphWaffle,Grid,GraphBars,GraphSpark,GraphPlot,GraphKpi,Series,GraphTree,GraphCheck,GraphFlow,Node,Task,Path,GraphSheet,GraphInvoice,Section,From,To,Meta,Item,Total,Faq,GraphBoard,GraphCompare,GraphMatrix,GraphHeatmap,Col,Row,GraphStack,GraphTable,Endpoint,Footnotes,Callout,Quote,Terminal,Annotate,Env,Steps,Step,Changelog,Change,Decision,Chat,Keys,GraphTimeline,Event,GraphSpec,Field,GraphScore,GraphRank,GraphFunnel,Rank,Stage,GraphStat,GraphSlope,GraphBullet,Stat,Slope,Target,GraphGantt,GraphDiff,GraphWaterfall,Span,Line,Delta} from 'mdxcn-vue';import './style.css';export default {...DefaultTheme,enhanceApp({app}) {for(const [name,component] of Object.entries({GraphUptime,GraphCountdown,GraphActivity,GraphCalendar,GraphCells,GraphMeter,GraphWaffle,Grid,GraphBars,GraphSpark,GraphPlot,GraphKpi,Series,GraphTree,GraphCheck,GraphFlow,Node,Task,Path,GraphSheet,GraphInvoice,Section,From,To,Meta,Item,Total,Faq,GraphBoard,GraphCompare,GraphMatrix,GraphHeatmap,Col,Row,GraphStack,GraphTable,Endpoint,Footnotes,Callout,Quote,Terminal,Annotate,Env,Steps,Step,Changelog,Change,Decision,Chat,Keys,GraphTimeline,Event,GraphSpec,Field,GraphScore,GraphRank,GraphFunnel,Rank,Stage,GraphStat,GraphSlope,GraphBullet,Stat,Slope,Target,GraphGantt,GraphDiff,GraphWaterfall,Span,Line,Delta}))app.component(name,component);}};`,
 )
 write(
   site,
@@ -600,10 +628,10 @@ write(
 const registeredOutput = run(['exec', 'vitepress', 'build'], site, true)
 assert.deepEqual(
   [...registeredOutput.matchAll(/EXPECTED_FALLBACK (\w+)/g)].map((match) => match[1]),
-  ['Footnotes'],
+  [],
 )
 const registeredHtml = readFileSync(join(site, '.vitepress/dist/index.html'), 'utf8')
-assert.equal((registeredHtml.match(/<figure\b/g) ?? []).length, 45)
+assert.equal((registeredHtml.match(/<figure\b/g) ?? []).length, 46)
 for (const value of [
   'consumer spark',
   'Sparkline with 2 points. consumer spark',
@@ -652,7 +680,7 @@ assert.doesNotMatch(
   /<(?:GraphUptime|GraphCountdown|GraphActivity|GraphCalendar|GraphCells|GraphMeter|GraphWaffle|Grid|GraphBars|GraphSpark|GraphPlot|GraphKpi|Series|Callout|Quote|Terminal|Footnotes|Annotate|Env|Steps|Step|Changelog|Change|Decision|Chat|Keys|GraphTimeline|Event|GraphSpec|Field|GraphScore|GraphRank|GraphFunnel|Rank|Stage|GraphStat|GraphSlope|GraphBullet|Stat|Slope|Target|GraphCompare|GraphMatrix|GraphHeatmap|Col|Row|GraphGantt|GraphDiff|GraphWaterfall|Span|Line|Delta)\b/,
 )
 console.log(
-  'REGISTERED VITEPRESS CONSUMER PASSED: 45 figures, Callout/Quote/Terminal/Annotate/Env/Steps/Changelog/Decision/Chat/Keys/GraphTimeline/GraphSpec/GraphScore/GraphRank/GraphFunnel/GraphBars/GraphSpark rendered; Footnotes fallback preserved',
+  'REGISTERED VITEPRESS CONSUMER PASSED: 46 figures, Callout/Quote/Terminal/Annotate/Env/Steps/Changelog/Decision/Chat/Keys/GraphTimeline/GraphSpec/GraphScore/GraphRank/GraphFunnel/GraphBars/GraphSpark rendered; Footnotes IDs and backlinks preserved',
 )
 
 // Install generated registry payloads with the real CLI, without a server.
@@ -695,6 +723,17 @@ write(
   "import {createApp} from 'vue';import App from './App.vue';import './style.css';createApp(App).mount('#app');",
 )
 const registryApp = readFileSync(join(app, 'src/App.vue'), 'utf8')
+  .replace(
+    '<script setup lang="ts">',
+    `<script setup lang="ts">
+import {Footnotes} from './components/mdxcn/components/footnotes';
+import {graphFilters} from './components/mdxcn/knap/graph-knap';
+const printed=graphFilters.graph_meter('0.5','REGISTRY');`,
+  )
+  .replace(
+    '<template>',
+    '<template><pre>{{printed}}</pre><Footnotes><ol><li id="registry-note">Registry note <a href="#registry-ref">Back</a></li></ol></Footnotes>',
+  )
   .replace(
     "import {GraphUptime,GraphCountdown,GraphActivity,GraphCalendar,GraphCells,GraphMeter,GraphWaffle,Grid,GraphBars,GraphSpark,GraphPlot,GraphKpi,Series,GraphTree,GraphCheck,GraphFlow,Node,Task,Path,GraphSheet,GraphInvoice,Section,From,To,Meta,Item,Total,Faq,GraphBoard,GraphCompare,GraphMatrix,GraphHeatmap,Col,Row,GraphStack,GraphTable,Endpoint,GraphTimer,Callout,Quote,Terminal,Annotate,Env,Steps,Step,Changelog,Change,Decision,Chat,Keys,GraphTimeline,Event,GraphSpec,Field,GraphScore,GraphRank,GraphFunnel,Rank,Stage,GraphStat,GraphSlope,GraphBullet,Stat,Slope,Target,GraphGantt,GraphDiff,GraphWaterfall,Span,Line,Delta} from 'mdxcn-vue';",
     "import {GraphUptime} from './components/mdxcn/components/graph-uptime';import {GraphCountdown} from './components/mdxcn/components/graph-countdown';import {GraphActivity} from './components/mdxcn/components/graph-activity';import {GraphCalendar} from './components/mdxcn/components/graph-calendar';import {GraphCells,Grid} from './components/mdxcn/components/graph-cells';import {GraphMeter} from './components/mdxcn/components/graph-meter';import {GraphWaffle} from './components/mdxcn/components/graph-waffle';import {GraphBars,Series} from './components/mdxcn/components/graph-bars';import {GraphSpark} from './components/mdxcn/components/graph-spark';import {GraphPlot} from './components/mdxcn/components/graph-plot';import {GraphKpi} from './components/mdxcn/components/graph-kpi';import {GraphTree,Node} from './components/mdxcn/components/graph-tree';import {GraphCheck,Task} from './components/mdxcn/components/graph-check';import {GraphFlow,Path} from './components/mdxcn/components/graph-flow';import {GraphSheet} from './components/mdxcn/components/graph-sheet';import {GraphInvoice} from './components/mdxcn/components/graph-invoice';import {Section,From,To,Meta,Item,Total} from './components/mdxcn/adapters/sheet-invoice';import {Faq} from './components/mdxcn/components/faq';import {GraphBoard} from './components/mdxcn/components/graph-board';import {GraphCompare,Col} from './components/mdxcn/components/graph-compare';import {GraphMatrix} from './components/mdxcn/components/graph-matrix';import {GraphHeatmap} from './components/mdxcn/components/graph-heatmap';import {Row} from './components/mdxcn/adapters/table';import {GraphStack} from './components/mdxcn/components/graph-stack';import {GraphTable} from './components/mdxcn/components/graph-table';import {Endpoint} from './components/mdxcn/components/endpoint';import {GraphTimer} from './components/mdxcn/components/graph-timer';import {Callout} from './components/mdxcn/components/callout';import {Quote} from './components/mdxcn/components/quote';import {Terminal} from './components/mdxcn/components/terminal';import {Annotate} from './components/mdxcn/components/annotate';import {Env} from './components/mdxcn/components/env';import {Steps,Step} from './components/mdxcn/components/steps';import {Changelog,Change} from './components/mdxcn/components/changelog';import {Decision} from './components/mdxcn/components/decision';import {Chat} from './components/mdxcn/components/chat';import {Keys} from './components/mdxcn/components/keys';import {GraphTimeline,Event} from './components/mdxcn/components/graph-timeline';import {GraphSpec,Field} from './components/mdxcn/components/graph-spec';import {GraphScore} from './components/mdxcn/components/graph-score';import {GraphRank,Rank} from './components/mdxcn/components/graph-rank';import {GraphFunnel,Stage} from './components/mdxcn/components/graph-funnel';import {GraphStat,Stat} from './components/mdxcn/components/graph-stat';import {GraphSlope,Slope} from './components/mdxcn/components/graph-slope';import {GraphBullet,Target} from './components/mdxcn/components/graph-bullet';import {GraphGantt,Span} from './components/mdxcn/components/graph-gantt';import {GraphDiff,Line} from './components/mdxcn/components/graph-diff';import {GraphWaterfall,Delta} from './components/mdxcn/components/graph-waterfall';",
@@ -757,7 +796,7 @@ const results = {
   stackLibraryBytes,
   vueRuntimeEntries: vueEntries.length,
   vitepressFigures: 3,
-  registeredVitepressFigures: 45,
+  registeredVitepressFigures: 46,
   upgradeFallbacks: fallbackNames,
   registryItems: registryPaths.length,
   registryFiles: copied.size,

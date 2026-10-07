@@ -1,0 +1,271 @@
+[
+  {
+    "name": "graph_table",
+    "value": "{\"headers\":[\"Name\",\"Count\"],\"rows\":[[\"Vue\",\"2\"],[\"Docs\",\"3\"]],\"footer\":[\"Sum\",\"5\"],\"align\":[\"left\",\"right\"]}",
+    "param": "TITLE",
+    "expected": "```\n+------------------- [ TITLE ] --------------------+\n|                                                  |\n| Name | Count                                     |\n| -----+------                                     |\n| Vue  |     2                                     |\n| Docs |     3                                     |\n| -----+------                                     |\n| Sum  |     5                                     |\n|                                                  |\n+--------------------------------------------------+\n```"
+  },
+  {
+    "name": "graph_sheet",
+    "value": "{\"headers\":[\"Name\",\"Count\"],\"sections\":[{\"title\":\"Now\",\"rows\":[[\"Vue\",\"2\"]]}],\"footer\":[\"Sum\",\"2\"]}",
+    "param": "TITLE",
+    "expected": "```\n+------------------- [ TITLE ] --------------------+\n|                                                  |\n| Name | Count                                     |\n| -----+------                                     |\n| Now                                              |\n| Vue  |     2                                     |\n| -----+------                                     |\n| Sum  |     2                                     |\n|                                                  |\n+--------------------------------------------------+\n```"
+  },
+  {
+    "name": "graph_invoice",
+    "value": "{\"from\":{\"name\":\"Studio\",\"lines\":[\"Road\"]},\"to\":{\"name\":\"Client\"},\"items\":[{\"description\":\"Docs\",\"qty\":\"2\",\"rate\":\"$3\",\"amount\":\"$6\"}],\"totals\":[{\"label\":\"Due\",\"value\":\"$6\"}]}",
+    "param": "TITLE",
+    "expected": "```\n+------------------- [ TITLE ] --------------------+\n|                                                  |\n| FROM      BILL TO                                |\n| Studio    Client                                 |\n| Road                                             |\n|                                                  |\n| Description | Qty | Rate | Amount                |\n| ------------+-----+------+-------                |\n| Docs        |   2 |   $3 |     $6                |\n| ------------+-----+------+-------                |\n|                           Due  $6                |\n|                                                  |\n+--------------------------------------------------+\n```"
+  },
+  {
+    "name": "graph_spec",
+    "value": "{\"rows\":[{\"label\":\"Path\",\"value\":\"src\",\"note\":\"Read docs\"}]}",
+    "param": "TITLE",
+    "expected": "```\n+------------------- [ TITLE ] --------------------+\n|                                                  |\n| Path  src                                        |\n|       Read docs                                  |\n|                                                  |\n+--------------------------------------------------+\n```"
+  },
+  {
+    "name": "graph_matrix",
+    "value": "{\"columns\":[\"A\",\"B\"],\"rows\":[{\"label\":\"R\",\"values\":[1000,2.5]}]}",
+    "param": "TITLE",
+    "expected": "```\n+------------------- [ TITLE ] --------------------+\n|                                                  |\n|   |     A |   B                                  |\n| --+-------+----                                  |\n| R | 1,000 | 2.5                                  |\n|                                                  |\n+--------------------------------------------------+\n```"
+  },
+  {
+    "name": "graph_compare",
+    "value": "{\"columns\":[\"A\",\"B\"],\"rows\":[{\"label\":\"R\",\"values\":[true,\"yes\"]}]}",
+    "param": "TITLE",
+    "expected": "```\n+------------------- [ TITLE ] --------------------+\n|                                                  |\n|   | A |   B                                      |\n| --+---+----                                      |\n| R | ✓ | yes                                      |\n|                                                  |\n+--------------------------------------------------+\n```"
+  },
+  {
+    "name": "graph_diff",
+    "value": "{\"rows\":[{\"label\":\"app\",\"value\":\"31 kb\",\"sign\":\"add\"}],\"footer\":{\"label\":\"total\",\"value\":\"31 kb\"}}",
+    "param": "TITLE",
+    "expected": "```\n+------------------- [ TITLE ] --------------------+\n|                                                  |\n| + app    31 kb                                   |\n| --------------                                   |\n|   total  31 kb                                   |\n|                                                  |\n+--------------------------------------------------+\n```"
+  },
+  {
+    "name": "graph_stat",
+    "value": "{\"items\":[{\"value\":\"142ms\",\"label\":\"read\",\"hint\":\"-18ms\"}]}",
+    "param": "TITLE",
+    "expected": "```\n+------------------- [ TITLE ] --------------------+\n|                                                  |\n| 142ms                                            |\n| read                                             |\n| -18ms                                            |\n|                                                  |\n+--------------------------------------------------+\n```"
+  },
+  {
+    "name": "graph_kpi",
+    "value": "{\"value\":\"12\",\"label\":\"reads\",\"hint\":\"+2\",\"data\":[1,3,2]}",
+    "param": "TITLE",
+    "expected": "```\n+------------------- [ TITLE ] --------------------+\n|                                                  |\n| 12                                               |\n| reads  +2                                        |\n| ▃█▆                                              |\n|                                                  |\n+--------------------------------------------------+\n```"
+  },
+  {
+    "name": "graph_spark",
+    "value": "{\"data\":[0,1,4,2],\"caption\":\"Now\"}",
+    "param": "TITLE",
+    "expected": "```\n+------------------- [ TITLE ] --------------------+\n|                                                  |\n| ▁▃█▅                                             |\n| Now                                              |\n|                                                  |\n+--------------------------------------------------+\n```"
+  },
+  {
+    "name": "graph_bars",
+    "value": "{\"from\":{\"label\":\"before\",\"values\":[1,2]},\"to\":{\"label\":\"after\",\"values\":[2,3]}}",
+    "param": "TITLE",
+    "expected": "```\n+------------------- [ TITLE ] --------------------+\n|                                                  |\n|   █            █                                 |\n|   █          █ █                                 |\n| █ █          █ █                                 |\n| █ █          █ █                                 |\n| █ █     -->  █ █                                 |\n| before       after                               |\n|                                                  |\n+--------------------------------------------------+\n```"
+  },
+  {
+    "name": "graph_slope",
+    "value": "{\"fromLabel\":\"before\",\"toLabel\":\"after\",\"items\":[{\"label\":\"read\",\"from\":1200,\"to\":1400}]}",
+    "param": "TITLE",
+    "expected": "```\n+------------------- [ TITLE ] --------------------+\n|                                                  |\n|       before     after                           |\n| read   1,200  →  1,400                           |\n|                                                  |\n+--------------------------------------------------+\n```"
+  },
+  {
+    "name": "graph_cells",
+    "value": "{\"items\":[{\"label\":\"grid\",\"cells\":[[1,0],[0,1]]}]}",
+    "param": "TITLE",
+    "expected": "```\n+------------------- [ TITLE ] --------------------+\n|                                                  |\n| █ ·                                              |\n| · █                                              |\n| grid                                             |\n|                                                  |\n+--------------------------------------------------+\n```"
+  },
+  {
+    "name": "graph_meter",
+    "value": "{\"value\":0.67,\"ticks\":10,\"caption\":\"shipped\"}",
+    "param": "TITLE",
+    "expected": "```\n+------------------- [ TITLE ] --------------------+\n|                                                  |\n| [=======---]  67%                                |\n| shipped                                          |\n|                                                  |\n+--------------------------------------------------+\n```"
+  },
+  {
+    "name": "graph_waffle",
+    "value": "{\"value\":0.73,\"cells\":12,\"columns\":5,\"caption\":\"shipped\"}",
+    "param": "TITLE",
+    "expected": "```\n+------------------- [ TITLE ] --------------------+\n|                                                  |\n| █ █ █ █ █                                        |\n| █ █ █ █ ░                                        |\n| ░ ░                                              |\n| 73%                                              |\n| shipped                                          |\n|                                                  |\n+--------------------------------------------------+\n```"
+  },
+  {
+    "name": "graph_stack",
+    "value": "{\"rows\":[{\"label\":\"docs\",\"segments\":[{\"label\":\"js\",\"value\":3},{\"label\":\"css\",\"value\":2}]}],\"ticks\":10}",
+    "param": "TITLE",
+    "expected": "```\n+------------------- [ TITLE ] --------------------+\n|                                                  |\n| docs  ██████▓▓▓▓                                 |\n|                                                  |\n| █ js  ▓ css                                      |\n|                                                  |\n+--------------------------------------------------+\n```"
+  },
+  {
+    "name": "graph_funnel",
+    "value": "{\"steps\":[{\"label\":\"read\",\"value\":1000,\"display\":\"1,000\"},{\"label\":\"ship\",\"value\":860,\"display\":\"860\"}]}",
+    "param": "TITLE",
+    "expected": "```\n+------------------- [ TITLE ] --------------------+\n|                                                  |\n| read  ████████████████████  1,000                |\n| ship  █████████████████---    860   86%          |\n|                                                  |\n+--------------------------------------------------+\n```"
+  },
+  {
+    "name": "graph_waterfall",
+    "value": "{\"items\":[{\"label\":\"Revenue\",\"value\":48},{\"label\":\"Refunds\",\"value\":-6},{\"label\":\"Profit\",\"value\":42}]}",
+    "param": "TITLE",
+    "expected": "```\n+------------------- [ TITLE ] --------------------+\n|                                                  |\n| Revenue  ████████████████████████  48            |\n| Refunds  ---------------------███  −6            |\n| -------------------------------------            |\n| Profit   █████████████████████---  42            |\n|                                                  |\n+--------------------------------------------------+\n```"
+  },
+  {
+    "name": "graph_rank",
+    "value": "{\"items\":[{\"label\":\"Docs\",\"value\":1200},{\"label\":\"Ship\",\"value\":860}],\"ticks\":10}",
+    "param": "TITLE",
+    "expected": "```\n+------------------- [ TITLE ] --------------------+\n|                                                  |\n| Docs  [==========]  1,200                        |\n| Ship  [=======---]    860                        |\n|                                                  |\n+--------------------------------------------------+\n```"
+  },
+  {
+    "name": "graph_bullet",
+    "value": "{\"items\":[{\"label\":\"CPU\",\"value\":72,\"target\":80,\"max\":100}]}",
+    "param": "TITLE",
+    "expected": "```\n+------------------- [ TITLE ] --------------------+\n|                                                  |\n| CPU  [==============--|---]  72 / 80             |\n|                                                  |\n+--------------------------------------------------+\n```"
+  },
+  {
+    "name": "graph_uptime",
+    "value": "{\"days\":[\"ok\",\"degraded\",\"down\",\"empty\",\"ok\"],\"from\":\"start\",\"to\":\"end\",\"columns\":3}",
+    "param": "TITLE",
+    "expected": "```\n+------------------- [ TITLE ] --------------------+\n|                                                  |\n| █▒·                                              |\n| -█                                               |\n| 50%  start  end                                  |\n| █ up  ▒ slow  · down                             |\n|                                                  |\n+--------------------------------------------------+\n```"
+  },
+  {
+    "name": "graph_tree",
+    "value": "{\"nodes\":[{\"label\":\"root\",\"children\":[{\"label\":\"leaf\",\"meta\":\"ui\"}]}]}",
+    "param": "TITLE",
+    "expected": "```\n+------------------- [ TITLE ] --------------------+\n|                                                  |\n| root                                             |\n| └─ leaf  ui                                      |\n|                                                  |\n+--------------------------------------------------+\n```"
+  },
+  {
+    "name": "graph_timeline",
+    "value": "{\"events\":[{\"date\":\"one\",\"label\":\"read\",\"state\":\"now\",\"note\":\"A note\"},{\"date\":\"two\",\"label\":\"ship\",\"state\":\"next\"}]}",
+    "param": "TITLE",
+    "expected": "```\n+------------------- [ TITLE ] --------------------+\n|                                                  |\n| ●  one  read                                     |\n| │       A note                                   |\n| │                                                |\n| ○  two  ship                                     |\n|                                                  |\n+--------------------------------------------------+\n```"
+  },
+  {
+    "name": "graph_gantt",
+    "value": "{\"items\":[{\"label\":\"build\",\"start\":0.2,\"end\":0.8,\"complete\":0.5}],\"ticks\":[\"0\",\"1\"],\"progress\":0.4,\"columns\":10}",
+    "param": "TITLE",
+    "expected": "```\n+------------------- [ TITLE ] --------------------+\n|                                                  |\n|            ▾                                     |\n| build  --███░░░--                                |\n|        0        1                                |\n|                                                  |\n+--------------------------------------------------+\n```"
+  },
+  {
+    "name": "graph_check",
+    "value": "{\"items\":[{\"label\":\"root\",\"done\":true,\"items\":[{\"label\":\"sub\",\"done\":false}]}]}",
+    "param": "TITLE",
+    "expected": "```\n+------------------- [ TITLE ] --------------------+\n|                                                  |\n| [x]  root                                        |\n|      [ ]  sub                                    |\n|                                                  |\n+--------------------------------------------------+\n```"
+  },
+  {
+    "name": "graph_board",
+    "value": "{\"columns\":[{\"title\":\"Now\",\"items\":[{\"label\":\"ship\",\"state\":\"now\",\"note\":\"A note\"}]}]}",
+    "param": "TITLE",
+    "expected": "```\n+------------------- [ TITLE ] --------------------+\n|                                                  |\n| Now  1                                           |\n| ------------                                     |\n| ● ship                                           |\n|   A note                                         |\n|                                                  |\n+--------------------------------------------------+\n```"
+  },
+  {
+    "name": "graph_score",
+    "value": "{\"items\":[{\"label\":\"Docs\",\"value\":2.5,\"max\":5}]}",
+    "param": "TITLE",
+    "expected": "```\n+------------------- [ TITLE ] --------------------+\n|                                                  |\n| Docs  ●●◐○○  2.5/5                               |\n|                                                  |\n+--------------------------------------------------+\n```"
+  },
+  {
+    "name": "graph_callout",
+    "value": "Read **docs**.",
+    "param": "TITLE",
+    "expected": "```\n+------------------- [ TITLE ] --------------------+\n|                                                  |\n| i  Read **docs**.                                |\n|                                                  |\n+--------------------------------------------------+\n```"
+  },
+  {
+    "name": "graph_quote",
+    "value": "A useful note.",
+    "param": "TITLE",
+    "expected": "```\n+------------------- [ TITLE ] --------------------+\n|                                                  |\n| “  A useful note.                                |\n|                                                  |\n+--------------------------------------------------+\n```"
+  },
+  {
+    "name": "graph_steps",
+    "value": "1. Copy — Run.\n2. **Register**",
+    "param": "TITLE",
+    "expected": "```\n+------------------- [ TITLE ] --------------------+\n|                                                  |\n| 1  Copy — Run.                                   |\n| │                                                |\n| 2  Register                                      |\n|                                                  |\n+--------------------------------------------------+\n```"
+  },
+  {
+    "name": "graph_terminal",
+    "value": "$ run\noutput",
+    "param": "TITLE",
+    "expected": "```\n+------------------- [ TITLE ] --------------------+\n|                                                  |\n| $ run                                            |\n| output                                           |\n|                                                  |\n+--------------------------------------------------+\n```"
+  },
+  {
+    "name": "graph_changelog",
+    "value": "- added: Vue\n- fixed: Test",
+    "param": "TITLE",
+    "expected": "```\n+------------------- [ TITLE ] --------------------+\n|                                                  |\n| +  added  Vue                                    |\n| *  fixed  Test                                   |\n|                                                  |\n+--------------------------------------------------+\n```"
+  },
+  {
+    "name": "graph_annotate",
+    "value": "```ts\nrun() // (1)\n```\n\n1. A note.",
+    "param": "TITLE",
+    "expected": "```\n+------------------- [ TITLE ] --------------------+\n|                                                  |\n| [1]  run()                                       |\n|                                                  |\n| [1]  A note.                                     |\n|                                                  |\n+--------------------------------------------------+\n```"
+  },
+  {
+    "name": "graph_decision",
+    "value": "- **Vue** — typed\n- React — upstream\n\nKeep prose.",
+    "param": "TITLE",
+    "expected": "```\n+------------------- [ TITLE ] --------------------+\n|                                                  |\n| ●  Vue    typed                                  |\n| ○  React  upstream                               |\n|                                                  |\n| Keep prose.                                      |\n|                                                  |\n+--------------------------------------------------+\n```"
+  },
+  {
+    "name": "graph_chat",
+    "value": "- you: Hello\n- agent: Hi",
+    "param": "TITLE",
+    "expected": "```\n+------------------- [ TITLE ] --------------------+\n|                                                  |\n| >  you    Hello                                  |\n|                                                  |\n|    agent  Hi                                     |\n|                                                  |\n+--------------------------------------------------+\n```"
+  },
+  {
+    "name": "graph_env",
+    "value": "```\n# Required\nAPI_KEY=one\n```",
+    "param": "TITLE",
+    "expected": "```\n+------------------- [ TITLE ] --------------------+\n|                                                  |\n| *  API_KEY  one                                  |\n|                                                  |\n| * required                                       |\n|                                                  |\n+--------------------------------------------------+\n```"
+  },
+  {
+    "name": "graph_endpoint",
+    "value": "POST /api/test\n\nAbout.\n\n| Name | Type | Description |\n| --- | --- | --- |\n| **key** | string | Key |\n\n```json\n{}\n```",
+    "param": "TITLE",
+    "expected": "```\n+------------------- [ TITLE ] --------------------+\n|                                                  |\n| POST  /api/test                                  |\n| About.                                           |\n|                                                  |\n| *  key  string  Key                              |\n|                                                  |\n| json                                             |\n| {}                                               |\n|                                                  |\n+--------------------------------------------------+\n```"
+  },
+  {
+    "name": "graph_keys",
+    "value": "- Ctrl+K: Search",
+    "param": "TITLE",
+    "expected": "```\n+------------------- [ TITLE ] --------------------+\n|                                                  |\n| [Ctrl][K]  Search                                |\n|                                                  |\n+--------------------------------------------------+\n```"
+  },
+  {
+    "name": "graph_faq",
+    "value": "### Install?\n\nRun the CLI.",
+    "param": "TITLE",
+    "expected": "```\n+------------------- [ TITLE ] --------------------+\n|                                                  |\n| ?  Install?                                      |\n|    Run the CLI.                                  |\n|                                                  |\n+--------------------------------------------------+\n```"
+  },
+  {
+    "name": "graph_plot",
+    "value": "{\"title\":\"TITLE\",\"body\":\"Read docs.\"}",
+    "expected": "::graph-plot\n---\ntitle: TITLE\n---\nRead docs.\n::"
+  },
+  {
+    "name": "graph_heatmap",
+    "value": "{\"title\":\"TITLE\",\"body\":\"Read docs.\"}",
+    "expected": "::graph-heatmap\n---\ntitle: TITLE\n---\nRead docs.\n::"
+  },
+  {
+    "name": "graph_activity",
+    "value": "{\"title\":\"TITLE\",\"body\":\"Read docs.\"}",
+    "expected": "::graph-activity\n---\ntitle: TITLE\n---\nRead docs.\n::"
+  },
+  {
+    "name": "graph_calendar",
+    "value": "{\"title\":\"TITLE\",\"body\":\"Read docs.\"}",
+    "expected": "::graph-calendar\n---\ntitle: TITLE\n---\nRead docs.\n::"
+  },
+  {
+    "name": "graph_flow",
+    "value": "{\"title\":\"TITLE\",\"body\":\"Read docs.\"}",
+    "expected": "::graph-flow\n---\ntitle: TITLE\n---\nRead docs.\n::"
+  },
+  {
+    "name": "graph_timer",
+    "value": "{\"title\":\"TITLE\",\"body\":\"Read docs.\"}",
+    "expected": "::graph-timer\n---\ntitle: TITLE\n---\nRead docs.\n::"
+  },
+  {
+    "name": "graph_countdown",
+    "value": "{\"title\":\"TITLE\",\"body\":\"Read docs.\"}",
+    "expected": "::graph-countdown\n---\ntitle: TITLE\n---\nRead docs.\n::"
+  }
+]

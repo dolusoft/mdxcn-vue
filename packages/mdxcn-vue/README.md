@@ -26,3 +26,13 @@ Full API and input contracts: [project README](https://github.com/dolusoft/mdxcn
 
 MIT. Copyright (c) 2026 Keshav Bagaade (mdxcn) and Dolusoft (Vue port).
 The full notice in LICENSE must accompany every copy.
+
+## Knap and Markdown upgrades
+
+`mdxcn-vue/knap` exports framework-independent `graphFilters`,
+`createGraphFilters`, metadata and `resolveGraphProps`. It emits upstream ASCII
+fences or Comark YAML; Knap remains an optional host dependency. See `/docs/knap`.
+
+Register `Footnotes` alongside `Callout`, `Quote` and `Terminal` when using
+`mdxcn-markdown`'s `withMdxcn` plugin. The `mdx` registry item copies these four
+components; the existing Markdown compiler stays in its own package.

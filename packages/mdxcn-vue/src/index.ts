@@ -241,3 +241,6 @@ export { GraphCountdown } from './components/graph-countdown.js'
 export type { GraphUptimeProps } from './components/graph-uptime.js'
 export type { GraphCountdownProps } from './components/graph-countdown.js'
 export type { UptimeStatus, CountdownWritten } from './core/uptime-countdown.js'
+
+export * from './knap/graph-knap.js'
+export { Footnotes, type FootnotesProps } from './components/footnotes.js'

@@ -228,3 +228,18 @@ Tek ön sürüm istisnası `vitepress@2.0.0-alpha.20` exact sürümüdür. Works
 `GraphSheet` ve `GraphInvoice` tamamlandı; yukarıdaki alan öncelikleri korundu. Ortak `headingSections`, `tableOf`, `cellsOf`, `alignsOf` ve `resolveTable` okuyucuları değişmedi. Markdown compiler içindeki mevcut tablo okuması `readTable` işlevine taşınarak üç bileşende kullanıldı. Sheet başlıksız tablolardan veri almaz; ilk bölüm boşsa sonraki tablo headers/align fallback sağlamaz. `Total` veya kalın son satır ortak okuyucu tarafından footer olarak ayrılır; Sheet ve Invoice bu Markdown footer değerini kullanmaz. Sheet footer yalnız prop/`Foot` girdisinden gelir. Invoice toplamları `Total` item veya para tutarlı paragraflardır; ara toplam/vergi hesabı, `Intl` veya locale dönüşümü yoktur. Tutarlar literal string kalır.
 
 İki yeni tablo upstream native DOM/a11y yapısını korur; GraphTable erişilebilirlik ekleri kopyalanmadı. `graph-sheet-table` ve `graph-invoice-table` sınıfları yalnız host CSS etkisini kaldırır. Sheet padding değerleri upstream birleşmiş sınıflarla doğrudan gövde kabına uygulanır. `vReveal` satır/toplam gecikmesi 40 ms artar, 240 ms tavanlıdır. Ayrıntılı kanıtlar `docs/phase-7c-report.md` içindedir.
+
+## Faz 10B entegrasyon kararı
+
+`graph-knap` tamamlandı: framework bağımsız TS filtreleri, `mdxcn-vue/knap`
+girişi ve registry kaynakları aynı çıktıyı verir. 46 filtre için bağımsız upstream
+fixture bulunur; 39 ASCII çizici ve yedi varsayılan Comark yolu kapsanır.
+Bu print şeması runtime Vue/compiler modellerinden ayrıdır; mevcut repo içinde
+önceden ASCII çizici yoktu. İç içe YAML nesneleri/string değerleri ve hata fallback
+sınırı upstream hatalarına karşı düzeltildi.
+
+`mdx` registry öğesi dört Vue bileşenini (`Footnotes`, `Callout`, `Quote`,
+`Terminal`) dağıtır. Markdown dönüşümü mevcut `mdxcn-markdown/withMdxcn`
+işlevinde kalır; ikinci compiler veya React component-map API'si eklenmez.
+`Footnotes` host heading/note kimliklerini ve backlink VNode içeriğini korur.
+Ayrıntılar [Faz 10B raporunda](phase-10b-report.md).

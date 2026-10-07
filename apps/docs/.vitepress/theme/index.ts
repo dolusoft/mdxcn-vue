@@ -1,6 +1,6 @@
 import type { Theme } from 'vitepress'
 import DefaultTheme from 'vitepress/theme'
-import { GraphUptime,GraphCountdown,GraphActivity,GraphCalendar,GraphCells,GraphMeter,GraphWaffle,Grid,GraphBars,GraphSpark,GraphPlot,GraphKpi,Series,GraphTree,GraphCheck,GraphFlow,Node,Task,Path,GraphSheet, GraphInvoice, Section, From, To, Meta, Item, Total, Faq, GraphBoard, GraphCompare, GraphMatrix, GraphHeatmap, Col, GraphGantt, GraphDiff, GraphWaterfall, Span, Line, Delta, GraphStat, GraphSlope, GraphBullet, Stat, Slope, Target, GraphScore, GraphRank, GraphFunnel, Rank, Stage, GraphTimeline, Event, GraphSpec, Field, Chat, Keys, Steps, Step, Changelog, Change, Decision, Annotate, Env, Bar, Callout, Quote, Terminal, Endpoint, GraphStack, GraphTable, GraphTimer, Head, Row, Foot, Cell, Segment } from 'mdxcn-vue'
+import { Footnotes, GraphUptime,GraphCountdown,GraphActivity,GraphCalendar,GraphCells,GraphMeter,GraphWaffle,Grid,GraphBars,GraphSpark,GraphPlot,GraphKpi,Series,GraphTree,GraphCheck,GraphFlow,Node,Task,Path,GraphSheet, GraphInvoice, Section, From, To, Meta, Item, Total, Faq, GraphBoard, GraphCompare, GraphMatrix, GraphHeatmap, Col, GraphGantt, GraphDiff, GraphWaterfall, Span, Line, Delta, GraphStat, GraphSlope, GraphBullet, Stat, Slope, Target, GraphScore, GraphRank, GraphFunnel, Rank, Stage, GraphTimeline, Event, GraphSpec, Field, Chat, Keys, Steps, Step, Changelog, Change, Decision, Annotate, Env, Bar, Callout, Quote, Terminal, Endpoint, GraphStack, GraphTable, GraphTimer, Head, Row, Foot, Cell, Segment } from 'mdxcn-vue'
 import './style.css'
 import '@fontsource/geist-mono/400.css'
 import '@fontsource/geist-mono/600.css'
@@ -22,6 +22,7 @@ export default {
     app.component('Decision', Decision)
     app.component('Annotate', Annotate)
     app.component('Env', Env)
+    app.component('Footnotes', Footnotes)
     app.component('Callout', Callout)
     app.component('Quote', Quote)
     app.component('Terminal', Terminal)

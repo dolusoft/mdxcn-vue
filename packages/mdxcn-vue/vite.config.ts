@@ -20,7 +20,7 @@ export default defineConfig({
   ],
   build: {
     lib: {
-      entry: { index: 'src/index.ts', core: 'src/core/index.ts' },
+      entry: { index: 'src/index.ts', core: 'src/core/index.ts', knap: 'src/knap/graph-knap.ts' },
       formats: ['es'],
       fileName: (_format, name) => `${name}.js`,
     },
