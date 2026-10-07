@@ -59,14 +59,21 @@ case. This includes event handlers and names such as `once` and `only`; function
 props remain supported. This adapter rule does not sanitize the whole document.
 
 For untrusted input, enable Comark's `security` plugin and configure its allowed
-tags and URL policies for your host:
+tags and URL policies for your host. With no options it drops `on*` handlers,
+`innerHTML`-style attributes and `javascript:` URLs, but it keeps tags such as
+`<script>` and `<iframe>`, so list the tags you do not want:
 
 ```ts
 import { createMarkdownParser } from 'comark'
 import security from 'comark/plugins/security'
 
-const parseMarkdown = createMarkdownParser({ plugins: [security()] })
+const parseMarkdown = createMarkdownParser({
+  plugins: [security({ blockedTags: ['script', 'iframe', 'style', 'object', 'embed'] })],
+})
 ```
+
+An `allowedTags` list is stricter; it must then include every graph tag, item tag
+and HTML tag your content uses.
 
 In a filter's Markdown `body`, a line containing only `::` closes the surrounding
 component block. Inline `::` remains text. Validate or constrain untrusted body

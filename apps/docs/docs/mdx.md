@@ -42,10 +42,13 @@ IDs, hidden heading IDs and every backlink, and supports VitePress's section
 wrapper. Its title defaults to the lowercased hidden heading or `footnotes`.
 
 The `markdown-it-footnote` backlinks (`↩︎`) have no descriptive accessible name:
-they contain only the return glyph and no `aria-label`. `Footnotes` preserves
-that upstream markup. This known accessibility limitation is retained to avoid
-rewriting host-owned links or choosing the host's language; configure your
-footnote renderer to supply descriptive labels when needed.
+they contain only the return glyph and no `aria-label`. Upstream mdxcn renders
+GFM footnotes through `remark-gfm`, whose backlinks carry
+`aria-label="Back to reference 1"`, so this is an accessibility difference from
+upstream. `Footnotes` preserves the host's link VNodes untouched to avoid
+rewriting host-owned links or choosing the host's language; override
+`footnote_anchor` in your `markdown-it-footnote` renderer to supply descriptive
+labels.
 
 The `mdx` registry item distributes these four Vue components and their source
 dependencies. Use `mdxcn-markdown` separately for compile-time transformations;

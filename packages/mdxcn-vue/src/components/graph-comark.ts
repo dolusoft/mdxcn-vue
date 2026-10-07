@@ -62,17 +62,18 @@ import { Section, From, To, Meta, Item, Total } from '../adapters/sheet-invoice.
 import { Node, Task, Path } from '../adapters/nested-flow.js'
 import { Series } from '../adapters/series.js'
 import { Grid } from '../adapters/grid-fraction.js'
-const tableItems = { head: Head, row: Row, foot: Foot, cell: Cell }
+// Object spreads are not removable by every bundler when the binding is unused, so each
+// entry lists its items explicitly and an unused registry tree-shakes away.
 const itemComponents: Partial<Record<GraphTag, Record<string, Component>>> = {
   steps: { step: Step },
   changelog: { change: Change },
   'graph-stack': { bar: Bar, segment: Segment },
-  'graph-table': tableItems,
-  'graph-sheet': { ...tableItems, section: Section },
+  'graph-table': { head: Head, row: Row, foot: Foot, cell: Cell },
+  'graph-sheet': { head: Head, row: Row, foot: Foot, cell: Cell, section: Section },
   'graph-invoice': { from: From, to: To, meta: Meta, item: Item, total: Total },
-  'graph-compare': { ...tableItems, col: Col },
-  'graph-matrix': { ...tableItems, col: Col },
-  'graph-heatmap': { ...tableItems, col: Col },
+  'graph-compare': { head: Head, row: Row, foot: Foot, cell: Cell, col: Col },
+  'graph-matrix': { head: Head, row: Row, foot: Foot, cell: Cell, col: Col },
+  'graph-heatmap': { head: Head, row: Row, foot: Foot, cell: Cell, col: Col },
   'graph-spec': { field: Field },
   'graph-timeline': { event: Event },
   'graph-score': { rank: Rank },

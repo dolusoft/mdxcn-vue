@@ -70,5 +70,6 @@ components and Vue `written`/`list` models are not interpreted. Invalid waffle
 dimensions fail with a warning. Unlike upstream, ASCII waffle dimensions must
 be integers: `cells` is limited to 0–10,000 and `columns` to 1–200. Larger or
 fractional dimensions return the original input with a warning to bound work
-and output size. Nested YAML objects and YAML-like string values
+and output size. The limit applies to the ASCII drawer only: the `comark` format
+and the `GraphWaffle` component render whatever dimensions they receive. Nested YAML objects and YAML-like string values
 are preserved, fixing upstream serialization errors.

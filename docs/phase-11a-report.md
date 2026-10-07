@@ -58,14 +58,18 @@ filtre girdisi ve daha uzun ASCII fence davranışı açıklandı.
 Comark 0.7.0 ile çalıştırılan gerçek parse çıktısı, `body` içindeki tek başına
 `::` satırından sonraki metnin blok dışında kaldığını, inline `::` ifadesinin
 blok içinde kaldığını gösterdi. `coerceProps` string `once`, `only`, `onclick`
-alanlarını attı. Dokümandaki `security()` eklentisi örneği çalıştırıldı;
-`javascript:` URL ve inline handler kaldırıldı.
+alanlarını attı. `security()` eklentisi çalıştırıldı; `javascript:` URL ve inline
+handler kaldırıldı, ancak seçeneksiz kullanımda `<script>` ve `<iframe>` etiketleri
+kalır (inceleme ile doğrulandı); doküman örneği `blockedTags` ile güncellendi.
 
 Footnotes bilgisi ayrı bir sayfada değil `apps/docs/docs/mdx.md` içindedir;
 not oraya eklendi. Production HTML içinde iki backlink yalnız `↩︎` glifi
 taşıyor ve `aria-label` yok. Host bağlantılarını ve dilini değiştirmemek için
-bu kapsamda yeni bir label eklenmedi; açıklayıcı erişilebilir ad eksikliği
-upstream ile ortak, bilinçli korunan bir sınırlama olarak belgelendi.
+bu kapsamda yeni bir label eklenmedi. Düzeltme (inceleme): bu eksik upstream ile
+ortak DEĞİL. Upstream mdxcn GFM dipnotlarını remark-gfm ile üretir ve geri
+bağlantıları `aria-label="Back to reference 1"` taşır (remark-gfm 4 ile
+doğrulandı); `markdown-it-footnote` bağlantıları yalnız `↩︎` içerir. Bu, Vue
+yolunun upstream'e göre erişilebilirlik farkıdır ve doküman bunu böyle söyler.
 
 Docs production build geçti. Kanıtlar yetkili scratch dizinindeki
 `f11a-docs-evidence.mjs`, `f11a-docs-evidence.log`, `f11a-docs-build.log`
