@@ -26,8 +26,11 @@ const cornerClass: Record<Corner, string> = {
     aria-hidden="true"
     :class="
       cn(
-        'pointer-events-none absolute z-20 flex size-4 items-center justify-center bg-background select-none',
-        props.tone === 'frame' ? 'text-graph-frame' : 'text-site-rail',
+        'pointer-events-none absolute z-20 flex size-4 items-center justify-center select-none',
+        // Rail marks sit on the translucent header and the sidebar edge, where an
+        // opaque `bg-background` box shows as a dark square; the plus alone covers
+        // the dotted rail. Frame marks keep the cut-out over figure borders.
+        props.tone === 'frame' ? 'bg-background text-graph-frame' : 'text-site-rail',
         cornerClass[corner],
         props.class,
       )

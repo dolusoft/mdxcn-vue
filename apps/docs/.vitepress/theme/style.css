@@ -123,6 +123,24 @@ html {
     display: none;
   }
 }
+
+/* The narrow-screen menu bar: no outline here either, and the page background
+   with a dotted rule instead of the default theme's grey bar. */
+.Layout .VPLocalNavOutlineDropdown {
+  display: none;
+}
+.Layout .VPLocalNav {
+  border-bottom: 0;
+  background-color: var(--background);
+  background-image: repeating-linear-gradient(
+    to right,
+    var(--site-rail) 0 1px,
+    transparent 1px 4px
+  );
+  background-position: bottom;
+  background-repeat: no-repeat;
+  background-size: 100% 1px;
+}
 /* Site-only tweak: mdxcn's dark rail (0.22 on a 0.11 background) is hard to
    see on low-contrast screens, so the docs site lifts it a little. */
 .dark {
