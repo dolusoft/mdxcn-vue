@@ -83,3 +83,40 @@ it('calendar condenses softbreaks and drops newline between inline hosts', () =>
     written: [{ day: 12, accent: true, label: undefined, today: true }],
   })
 })
+it.each([
+  ['### Commits\n\n2026-03-02: 1 2', 2],
+  ['> 2026-03-02: 1 2', 2],
+  ['| d |\n| - |\n| 2026-03-02: 1 2 |', 2],
+  ['2026-03-02: 1 2 3\n2026-03-16: 4 5', 5],
+] as const)('activity block boundaries do not glue text (%#)', (body, count) => {
+  const md = new MarkdownIt()
+  const model = tokensToProps('GraphActivity', md.parse(body, {}), md) as { days: unknown[] }
+  expect(model.days).toHaveLength(count)
+})
+it('activity splits plain rows before each date label after newline condensing', () => {
+  const md = new MarkdownIt()
+  const model = tokensToProps(
+    'GraphActivity',
+    md.parse('2026-03-02: 1 2 3\n2026-03-16: 4 5 6', {}),
+    md,
+  ) as { days: { date: string }[] }
+  expect(model.days.map((day) => day.date)).toEqual([
+    '2026-03-02',
+    '2026-03-03',
+    '2026-03-04',
+    '2026-03-16',
+    '2026-03-17',
+    '2026-03-18',
+  ])
+})
+it('calendar keeps a space between the paragraphs of one list item', () => {
+  const md = new MarkdownIt()
+  expect(
+    tokensToProps('GraphCalendar', md.parse('- 12: launch\n\n  more\n\n- 18: x', {}), md),
+  ).toEqual({
+    written: [
+      { day: 12, accent: true, label: 'launch more', today: false },
+      { day: 18, accent: true, label: 'x', today: false },
+    ],
+  })
+})

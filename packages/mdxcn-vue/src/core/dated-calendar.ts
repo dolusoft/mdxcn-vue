@@ -41,7 +41,9 @@ export function toISO(utc: number): string {
   return new Date(utc).toISOString().slice(0, 10)
 }
 export function activityDays(list: readonly string[], source = ''): ActivityDay[] {
-  return (list.length ? list : source.split('\n')).flatMap((row) => {
+  // Compiled templates condense newlines to spaces, so plain rows also split before each date label.
+  const plain = source.split('\n').flatMap((row) => row.split(/\s+(?=\d{4}-\d{2}-\d{2}:\s)/))
+  return (list.length ? list : plain).flatMap((row) => {
     const { label, rest } = splitLabel(row.trim())
     const start = parseUTC(label)
     return Number.isFinite(start)

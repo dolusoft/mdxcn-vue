@@ -3,15 +3,16 @@ export function parseInstant(value: Date | number | string, utc = false): number
   if (value instanceof Date) return value.getTime()
   // Opt-in ISO-only UTC parsing keeps existing timer callers unchanged.
   if (utc && typeof value === 'string') {
-    if (
-      !/^\d{4}-\d{2}-\d{2}(?:T\d{2}:\d{2}(?::\d{2}(?:\.\d+)?)?(?:Z|[+-]\d{2}:?\d{2})?)?$/.test(
-        value,
+    // Also accepts the RFC 3339 forms `2026-12-01 10:00`, `t` and `z`, and surrounding spaces.
+    const match = value
+      .trim()
+      .match(
+        /^(\d{4}-\d{2}-\d{2})(?:[Tt ](\d{2}:\d{2}(?::\d{2}(?:\.\d+)?)?)(?:([Zz])|([+-]\d{2}):?(\d{2}))?)?$/,
       )
-    )
-      return Number.NaN
-    return Date.parse(
-      value.includes('T') && !/(?:Z|[+-]\d{2}:?\d{2})$/.test(value) ? value + 'Z' : value,
-    )
+    if (!match) return Number.NaN
+    const [, date, time, , hours, minutes] = match
+    if (!time) return Date.parse(date!)
+    return Date.parse(`${date}T${time}${hours ? `${hours}:${minutes}` : 'Z'}`)
   }
   return typeof value === 'number'
     ? Number.isFinite(value)

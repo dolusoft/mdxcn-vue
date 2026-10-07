@@ -350,7 +350,9 @@ export function tokensToProps(
         .map((b) => {
           if (b.tag === 'fence') throw new Error('Dated fences require runtime resolution')
           const text = b.prose ? gridFractionInline(b.prose, source) : visible(b.children, source)
-          return source && ['p', 'li', 'br'].includes(b.tag) ? text + '\n' : text
+          // Compiled templates drop the whitespace between blocks; MDX keeps it. Pad every block.
+          const edge = blockBreak.test(b.tag) || b.tag === 'br'
+          return edge ? (source ? text + '\n' : ` ${text} `) : text
         })
         .join('')
     visible(tree)

@@ -253,3 +253,17 @@ it.each(['uptime', 'countdown'])('%s reveal delay never exceeds 240 ms', (name) 
   }
   w.unmount()
 })
+it.each([
+  ['2026-12-01 10:00', '2026-12-01T10:00:00Z'],
+  ['2026-12-01 10:00:30.5', '2026-12-01T10:00:30.500Z'],
+  ['2026-12-01t10:00:00z', '2026-12-01T10:00:00Z'],
+  [' 2026-12-01T10:00 ', '2026-12-01T10:00:00Z'],
+  ['2026-12-01T10:00:00+0300', '2026-12-01T07:00:00Z'],
+  ['2026-12-01 10:00+03:00', '2026-12-01T07:00:00Z'],
+])('UTC mode accepts the RFC 3339 form %s', (input, expected) =>
+  expect(parseInstant(input, true)).toBe(Date.parse(expected)),
+)
+it.each(['2026/12/01', 'Dec 1, 2026', '2026-12-01T10', '2026-12', '2026'])(
+  'UTC mode keeps %s at the placeholder',
+  (input) => expect(parseInstant(input, true)).toBeNaN(),
+)

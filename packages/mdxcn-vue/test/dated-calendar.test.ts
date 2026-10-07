@@ -327,3 +327,29 @@ it.each(['GraphActivity', 'GraphCalendar'])('%s reveal delay is capped at 240 ms
   w.unmount()
   spy.mockRestore()
 })
+it('activity plain rows split before each date label when a template condensed the newline', () => {
+  const rows = '2026-03-02: 1 2 3 2026-03-16: 4 5 6'
+  const expected = activityDays([], '2026-03-02: 1 2 3\n2026-03-16: 4 5 6')
+  expect(expected).toHaveLength(6)
+  expect(activityDays([], rows)).toEqual(expected)
+  expect(activityModel([h('p', rows)])).toEqual(expected)
+})
+it('numeric-string weekStartsOn "1" gives Monday-first labels and grid', () => {
+  const calendar = mount(GraphCalendar, { props: { year: 2026, month: 3, weekStartsOn: '1' } })
+  expect(calendar.findAll('.grid')[0]!.text()).toBe('MTWTFSS')
+  expect(calendar.findAll('.grid')[1]!.text().replace(/\s/g, '')).toBe('1')
+  calendar.unmount()
+  const activity = mount(GraphActivity, {
+    props: { title: 'A', days: [{ date: '2026-03-01', count: 1 }], weekStartsOn: '1' },
+  })
+  expect(activity.findAll('.w-\\[2ch\\] > span').map((n) => n.text())).toEqual([
+    'M',
+    '',
+    'W',
+    '',
+    'F',
+    '',
+    '',
+  ])
+  activity.unmount()
+})

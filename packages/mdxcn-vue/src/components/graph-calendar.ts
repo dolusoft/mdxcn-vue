@@ -13,7 +13,7 @@ export interface GraphCalendarProps {
   title?: string
   year: number | string
   month: number | string
-  weekStartsOn?: 0 | 1
+  weekStartsOn?: 0 | 1 | '0' | '1'
   marks?: readonly CalendarMark[] | readonly number[] | string | null
   today?: number | string | null
   written?: readonly CalendarWrittenMark[] | null
@@ -28,7 +28,7 @@ export const GraphCalendar = defineComponent({
     title: String,
     year: { type: [Number, String], required: true },
     month: { type: [Number, String], required: true },
-    weekStartsOn: { type: Number as PropType<0 | 1>, default: 1 },
+    weekStartsOn: { type: [Number, String] as PropType<0 | 1 | '0' | '1'>, default: 1 },
     marks: [Array, String] as PropType<GraphCalendarProps['marks']>,
     today: [Number, String] as PropType<GraphCalendarProps['today']>,
     written: Array as PropType<GraphCalendarProps['written']>,
@@ -55,14 +55,16 @@ export const GraphCalendar = defineComponent({
           typeof mark === 'number' ? mark : mark.day,
           typeof mark === 'number' ? true : (mark.accent ?? true),
         )
+      // A static template attribute (`week-starts-on="1"`) arrives as a string.
+      const weekStart = (
+        typeof props.weekStartsOn === 'string' ? Number(props.weekStartsOn) : props.weekStartsOn
+      ) as 0 | 1
       const year = Number(props.year),
         month = Number(props.month),
-        weeks = calendarWeeks(year, month, props.weekStartsOn),
+        weeks = calendarWeeks(year, month, weekStart),
         monthName = MONTH_NAMES[month - 1]
       const headers =
-        props.weekStartsOn === 1
-          ? ['M', 'T', 'W', 'T', 'F', 'S', 'S']
-          : ['S', 'M', 'T', 'W', 'T', 'F', 'S']
+        weekStart === 1 ? ['M', 'T', 'W', 'T', 'F', 'S', 'S'] : ['S', 'M', 'T', 'W', 'T', 'F', 'S']
       return h(
         Graph,
         mergeProps(

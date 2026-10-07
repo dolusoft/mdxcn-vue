@@ -11,7 +11,7 @@ import { Graph, GraphBody } from './graph-frame.js'
 export interface GraphActivityProps {
   title: string
   days?: readonly ActivityDay[] | null
-  weekStartsOn?: 0 | 1
+  weekStartsOn?: 0 | 1 | '0' | '1'
   max?: number | string
   legend?: boolean
   caption?: string | false | null
@@ -26,7 +26,7 @@ export const GraphActivity = defineComponent({
   props: {
     title: { type: String, required: true },
     days: Array as PropType<GraphActivityProps['days']>,
-    weekStartsOn: { type: Number as PropType<0 | 1>, default: 0 },
+    weekStartsOn: { type: [Number, String] as PropType<0 | 1 | '0' | '1'>, default: 0 },
     max: [Number, String],
     legend: { type: Boolean, default: true },
     caption: {
@@ -40,11 +40,15 @@ export const GraphActivity = defineComponent({
   },
   setup(props, { slots, attrs }) {
     return () => {
+      // A static template attribute (`week-starts-on="1"`) arrives as a string.
+      const weekStart = (
+        typeof props.weekStartsOn === 'string' ? Number(props.weekStartsOn) : props.weekStartsOn
+      ) as 0 | 1
       const days = props.days ?? activityModel(slots.default?.() ?? []),
-        weeks = buildWeeks(days, props.weekStartsOn),
+        weeks = buildWeeks(days, weekStart),
         months = activityMonths(weeks)
       const labels =
-        props.weekStartsOn === 1 ? ['M', '', 'W', '', 'F', '', ''] : ['', 'M', '', 'W', '', 'F', '']
+        weekStart === 1 ? ['M', '', 'W', '', 'F', '', ''] : ['', 'M', '', 'W', '', 'F', '']
       const peak =
         props.max == null ? Math.max(0, ...days.map((day) => day.count), 0) : Number(props.max)
       const total = days.reduce((sum, day) => sum + day.count, 0),

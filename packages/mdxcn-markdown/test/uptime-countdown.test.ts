@@ -53,3 +53,18 @@ it('countdown condenses softbreaks and multiple spaces while retaining caption w
     ),
   ).toContain('v-bind=')
 })
+it.each([
+  '### ok\n\ndown',
+  '> ok\n>\n> down',
+  '| a | b |\n| - | - |\n| ok | down |',
+  '- ok\n- down',
+])('uptime block boundaries do not glue status words (%#)', (body) => {
+  const md = new MarkdownIt()
+  expect(tokensToProps('GraphUptime', md.parse(body, {}), md)).toEqual({ days: ['ok', 'down'] })
+})
+it('countdown keeps the caption separator across paragraphs', () => {
+  const md = new MarkdownIt()
+  expect(tokensToProps('GraphCountdown', md.parse('2027-01-15\n\n— until launch', {}), md)).toEqual(
+    { written: { label: '2027-01-15', rest: 'until launch' } },
+  )
+})
