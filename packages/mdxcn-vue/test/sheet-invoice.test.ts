@@ -390,3 +390,22 @@ it.each(['GraphSheet', 'GraphInvoice', 'InvoiceTotals'])(
     vi.unstubAllGlobals()
   },
 )
+it('Invoice meta list items ignore nested lists and collapse wrapped text like upstream itemText', () => {
+  const nodes = [
+    h('ul', [
+      h('li', ['Invoice: INV-1', h('ul', [h('li', 'nested')])]),
+      h('li', ['Date: Mar\n   18  ', h('ol', [h('li', 'x: y')])]),
+    ]),
+  ]
+  expect(invoiceModel({}, nodes).meta).toEqual([
+    { label: 'Invoice', value: 'INV-1' },
+    { label: 'Date', value: 'Mar 18' },
+  ])
+})
+it('Sheet runtime section titles exclude the VitePress header-anchor permalink', () => {
+  const heading = h('h3', { id: 'scope' }, [
+    'Scope ',
+    h('a', { class: 'header-anchor', href: '#scope' }, '​'),
+  ])
+  expect(sheetModel({}, [heading, table(['A'], [['1']])]).sections[0]?.title).toBe('Scope')
+})

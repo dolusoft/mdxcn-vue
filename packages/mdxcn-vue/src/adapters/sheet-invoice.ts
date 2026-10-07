@@ -1,4 +1,5 @@
 /* Derived from mdxcn, Copyright (c) 2026 Keshav Bagaade. MIT; see LICENSE. */
+import { normalizeClass } from 'vue'
 import type { VNode } from 'vue'
 import type {
   SheetData,
@@ -63,13 +64,20 @@ export const Total = defineItem<TotalProps>('Total', {
   value: { type: 'string' },
   accent: { type: 'boolean' },
 })
+/** VitePress appends a zero-width permalink anchor inside every heading; it is not title text. */
+const isHeaderAnchor = (n: VNode) =>
+  n.type === 'a' && normalizeClass(n.props?.class).split(/\s+/).includes('header-anchor')
+const headingTitle = (n: VNode) => textOf(childrenOf(n).filter((c) => !isHeaderAnchor(c))).trim()
+/** Visible list item text: nested lists excluded, whitespace collapsed (upstream `itemText`). */
+const listItemText = (item: VNode) =>
+  textOf(childrenOf(item).filter((n) => n.type !== 'ul' && n.type !== 'ol'))
+    .replace(/\s+/g, ' ')
+    .trim()
 export function sheetModel(data: SheetData<VNode>, nodes: readonly VNode[]) {
   const markdown = headingSections(
     flattenNodes(nodes).filter((n) => typeof n.type !== 'symbol'),
     (n) =>
-      /^h[1-6]$/.test(String(n.type))
-        ? { title: textOf(childrenOf(n)).trim(), accent: false }
-        : undefined,
+      /^h[1-6]$/.test(String(n.type)) ? { title: headingTitle(n), accent: false } : undefined,
   ).map((s) => ({ title: s.title, table: tableOf(s.children) }))
   const head = childItems(nodes, Head)[0]
   const foot = childItems(nodes, Foot)[0]
@@ -133,7 +141,7 @@ export function invoiceModel(data: InvoiceData, nodes: readonly VNode[]) {
       (meta.length
         ? meta
         : readerListItems(nodes)
-            .map((e) => splitLabel(textOf(childrenOf(e))))
+            .map((e) => splitLabel(listItemText(e)))
             .filter((e) => e.rest)
             .map((e) => ({ label: e.label, value: e.rest }))),
     items: (data.items ?? (items.length ? items : invoiceItems(tableOf(nodes)))).map((e) => ({

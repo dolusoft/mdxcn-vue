@@ -328,7 +328,13 @@ export function tokensToProps(
       meta: tree
         .filter((b) => b.tag === 'ul' || b.tag === 'ol')
         .flatMap((b) => b.children)
-        .map((b) => splitLabel(proseText(content(b))))
+        .map((b) =>
+          splitLabel(
+            proseText(b.children.filter((c) => c.tag !== 'ul' && c.tag !== 'ol').flatMap(content))
+              .replace(/\s+/g, ' ')
+              .trim(),
+          ),
+        )
         .filter((e) => e.rest)
         .map((e) => ({ label: e.label, value: e.rest })),
       items: invoiceItems(table ? readTable(table) : null),

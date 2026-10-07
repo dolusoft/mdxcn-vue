@@ -90,3 +90,18 @@ it('Sheet uses only its first section headers and ignores leading or nested head
     ],
   })
 })
+it('Invoice meta ignores nested lists and collapses wrapped item text', () => {
+  const md = new MarkdownIt()
+  expect(
+    tokensToProps(
+      'GraphInvoice',
+      md.parse('- Invoice: INV-1\n  - nested\n- Date: Mar\n  18\n  1. x: y', {}),
+      md,
+    ),
+  ).toMatchObject({
+    meta: [
+      { label: 'Invoice', value: 'INV-1' },
+      { label: 'Date', value: 'Mar 18' },
+    ],
+  })
+})
