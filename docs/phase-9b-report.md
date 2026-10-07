@@ -60,7 +60,11 @@ Artık yıl, ay/yıl sınırı, DST günleri, boş aralık, malformed ISO, tekra
 tarih, ay taşması ve non-finite ay girdileri sınandı. Upstream `Date.UTC`
 normalizasyonu korunur: `2023-02-29` → `2023-03-01`, ay 13 sonraki yıl ve
 0001 yılı 1901 olur. Activity için biçimi geçersiz ISO girdileri atlanır;
-`RangeError` iddiası doğrulanamadığından kaldırıldı. Gerçek fark: doğrudan
+Upstream `days=[{date:'+275760-09-13',count:1}]`, `weekStartsOn=1` girdisinde
+haftanın son padding günü Date sınırını aştığı için `RangeError: Invalid time value`
+atar. Hata `buildWeeks` döngüsündeki `toISO(time)` çağrısındadır; brifingdeki
+`toISO(last)` çağrısı kaynakta yoktur. Port `parseUTC` ile genişletilmiş yıl
+biçimini reddeder ve boş ızgara döndürür. Ayrıca doğrudan
 `days` girdisindeki `2026-3-5` ve başında boşluk bulunan ` 2026-03-05`
 tarihlerini upstream aralığa katar, port atlar. Ham day toplamı ve sayısı korunur.
 Markdown listesindeki `- 2026-03-02: 1 2` ve devam satırındaki `3 4`, Vue

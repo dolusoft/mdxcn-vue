@@ -41,6 +41,12 @@ components retain native HTML and report a warning. `Footnotes` preserves note
 IDs, hidden heading IDs and every backlink, and supports VitePress's section
 wrapper. Its title defaults to the lowercased hidden heading or `footnotes`.
 
+The `markdown-it-footnote` backlinks (`↩︎`) have no descriptive accessible name:
+they contain only the return glyph and no `aria-label`. `Footnotes` preserves
+that upstream markup. This known accessibility limitation is retained to avoid
+rewriting host-owned links or choosing the host's language; configure your
+footnote renderer to supply descriptive labels when needed.
+
 The `mdx` registry item distributes these four Vue components and their source
 dependencies. Use `mdxcn-markdown` separately for compile-time transformations;
 the registry does not copy a second compiler. No React or MDX runtime is added.

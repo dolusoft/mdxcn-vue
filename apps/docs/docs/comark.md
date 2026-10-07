@@ -54,6 +54,24 @@ intact. Existing component rules decide whether explicit data, a Markdown body
 or item tags win. Item tags are converted in the owning graph's context;
 `row` is a table item inside a table and a responsive layout elsewhere.
 
+String attributes whose normalized names start with `on` are dropped, ignoring
+case. This includes event handlers and names such as `once` and `only`; function
+props remain supported. This adapter rule does not sanitize the whole document.
+
+For untrusted input, enable Comark's `security` plugin and configure its allowed
+tags and URL policies for your host:
+
+```ts
+import { createMarkdownParser } from 'comark'
+import security from 'comark/plugins/security'
+
+const parseMarkdown = createMarkdownParser({ plugins: [security()] })
+```
+
+In a filter's Markdown `body`, a line containing only `::` closes the surrounding
+component block. Inline `::` remains text. Validate or constrain untrusted body
+content when it must remain inside one component.
+
 `graphComponents` includes all 46 graphs and the `row` layout. Use
 `createGraphComponents` to register only the graphs you installed. The adapter
 itself needs only Vue; the host supplies Comark. Math, Mermaid and highlighting

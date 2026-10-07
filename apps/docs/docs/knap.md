@@ -52,10 +52,17 @@ string parameter overrides the title. `comark` selects a `::graph-*` YAML block.
 Content filters (`graph_callout`, `graph_steps`, and others) accept a Markdown
 string or `{ body, ...props }`. Use `body` for content; Vue slots and compiler
 models are not filter input. The 46 names cover 39 ASCII drawers. Plot, Heatmap,
-Activity, Calendar, Flow, Timer and Countdown emit Comark by default. Unknown or
-unrenderable data reports a warning through `context.reportWarning` and returns
-the original string. The output is trusted Markdown, with the host responsible
-for parsing and rendering it.
+Activity, Calendar, Flow, Timer and Countdown emit Comark by default. Unreadable
+input and thrown drawing or serialization errors report a warning through
+`context.reportWarning` and return the original string. This is not schema
+validation: malformed data that does not throw can silently print `undefined`,
+`NaN%` or `[object Object]`, matching upstream.
+
+Filter input may be untrusted. ASCII fences open with more backticks than any
+potential closing run in the drawing, so cell text cannot close the fence early.
+Comark output includes a Markdown `body`; a line containing only `::` closes its
+block. The host must validate data and configure its parser and renderer for
+untrusted Markdown; the filters are not a sanitizer. See [Comark](./comark).
 
 ASCII follows upstream's independent print schema and drawing grammar. For
 example, Bars uses `from` and `to`, Table uses `headers` and `rows`; runtime item
