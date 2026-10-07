@@ -27,9 +27,14 @@ export default defineConfig({
   vite: {
     // Vue DevTools: in-page overlay plus standalone UI at `/__devtools__/`.
     plugins: [tailwindcss(), vueDevTools()],
-    // The default sidebar scrolls natively; ours wraps it in the shadcn ScrollArea.
+    // Default theme parts swapped for shadcn-based ones: the sidebar scrolls in a
+    // ScrollArea, and the search box is a Dialog + Command.
     resolve: {
       alias: [
+        {
+          find: /^.*\/VPLocalSearchBox\.vue$/,
+          replacement: fileURLToPath(new URL('./theme/site/SiteSearch.vue', import.meta.url)),
+        },
         {
           find: /^.*\/VPSidebar\.vue$/,
           replacement: fileURLToPath(new URL('./theme/site/SiteSidebar.vue', import.meta.url)),
