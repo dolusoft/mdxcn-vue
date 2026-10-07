@@ -1,5 +1,9 @@
 @import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'shadcn-vue/tailwind.css';
 @import 'mdxcn-vue/theme.css';
+
+@custom-variant dark (&:is(.dark *));
 
 .vp-doc .graph-frame {
   margin: 2rem 0;
@@ -13,4 +17,16 @@
   descent-override: 21.92%;
   line-gap-override: 0%;
   size-adjust: 134.59%;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    @apply font-sans antialiased;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
 }

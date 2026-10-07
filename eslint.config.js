@@ -93,4 +93,12 @@ export default tseslint.config(
     },
   },
   prettier,
+  {
+    // shadcn-vue CLI output: kept as generated so shadcn-vue add can overwrite it.
+    files: ['**/components/ui/**/*.vue'],
+    rules: {
+      'vue/multi-word-component-names': 'off',
+      'vue/require-default-prop': 'off',
+    },
+  },
 )

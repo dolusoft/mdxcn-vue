@@ -1,3 +1,4 @@
+import { fileURLToPath } from 'node:url'
 import { defineConfig } from 'vite'
 
 /**
@@ -13,4 +14,6 @@ export default defineConfig({
   // `clientAuth: false` skips the one-time code prompt; the dev server only runs
   // on developer machines.
   devtools: { apply: 'serve', clientAuth: false },
+  // shadcn-vue components resolve `@/` to `.vitepress/`.
+  resolve: { alias: { '@': fileURLToPath(new URL('./.vitepress', import.meta.url)) } },
 })
