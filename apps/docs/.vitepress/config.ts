@@ -1,4 +1,5 @@
 import tailwindcss from '@tailwindcss/vite'
+import { fileURLToPath } from 'node:url'
 import { defineConfig } from 'vitepress'
 import vueDevTools from 'vite-plugin-vue-devtools'
 import { mdxcnMarkdown, withMdxcn } from 'mdxcn-markdown'
@@ -26,5 +27,14 @@ export default defineConfig({
   vite: {
     // Vue DevTools: in-page overlay plus standalone UI at `/__devtools__/`.
     plugins: [tailwindcss(), vueDevTools()],
+    // The default sidebar scrolls natively; ours wraps it in the shadcn ScrollArea.
+    resolve: {
+      alias: [
+        {
+          find: /^.*\/VPSidebar\.vue$/,
+          replacement: fileURLToPath(new URL('./theme/site/SiteSidebar.vue', import.meta.url)),
+        },
+      ],
+    },
   },
 })

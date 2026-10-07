@@ -58,7 +58,7 @@ onBeforeUnmount(() => observer?.disconnect())
 </script>
 
 <template>
-  <header ref="header" class="site-header sticky top-0 z-40 font-sans text-base">
+  <header ref="header" class="site-header fixed inset-x-0 top-0 z-40 font-sans text-base">
     <div aria-label="Announcement" class="relative bg-background" role="region">
       <div class="px-4 py-2 text-center sm:px-6">
         <div class="mx-auto max-w-6xl text-sm text-muted-foreground">

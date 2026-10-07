@@ -17,7 +17,7 @@ test('home renders populated Vue figures and genuine fenced filter output withou
   assert.match(html, /markdown-friendly/)
   assert.match(html, /pick a palette, copy the component/)
   assert.match(html, /one figure, two formats/)
-  assert.match(html, /npm install mdxcn-vue@\^0\.1\.1 mdxcn-markdown@\^0\.1\.1/)
+  assert.match(html, /npm install mdxcn-vue mdxcn-markdown/)
   assert.equal((html.match(/role="tablist"/g) ?? []).length, 3)
   assert.equal((html.match(/role="tabpanel"/g) ?? []).length, 6)
   assert.equal((html.match(/<figure\b/g) ?? []).length, 11)
@@ -26,7 +26,7 @@ test('home renders populated Vue figures and genuine fenced filter output withou
     JSON.stringify({ title: 'SHIPPED', value: 0.67, ticks: 14, caption: '8 of 12 milestones' }),
   )
   assert.ok(html.includes(escape(expected)), 'same meter props produce the displayed Markdown')
-  assert.match(html, /aria-label="Copy npm install command"/)
+  assert.match(html, /aria-label="copy install command"/)
   assert.match(html, /role="group" aria-label="Graph accent"/)
   assert.match(html, /Keshav Bagaade/)
   for (const id of ['shipped', 'bundle', 'reads']) {

@@ -93,3 +93,9 @@
 :root {
   --vp-nav-height: 0px;
 }
+
+html {
+  scrollbar-width: thin;
+  scrollbar-color: var(--graph-frame) transparent;
+}
+

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { Copy01Icon, Tick02Icon } from '@hugeicons/core-free-icons'
+import { HugeiconsIcon } from '@hugeicons/vue'
 import { ref } from 'vue'
 import { withBase } from 'vitepress'
 import {
@@ -14,10 +16,16 @@ import {
 } from 'mdxcn-vue'
 import { data } from '../home.data'
 import { bars, meter, table } from '../home-examples'
-import HomeCopy from './HomeCopy.vue'
 import HomeFigure from './HomeFigure.vue'
+import SiteCorners from './site/SiteCorners.vue'
 
-const install = 'npm install mdxcn-vue@^0.1.1 mdxcn-markdown@^0.1.1 vue@^3.5.0 markdown-it@^14'
+const install = 'npm install mdxcn-vue mdxcn-markdown'
+const copied = ref(false)
+async function copyInstall() {
+  await navigator.clipboard.writeText(install)
+  copied.value = true
+  setTimeout(() => (copied.value = false), 1500)
+}
 const accent = ref('mint')
 const accents = ['theme', 'mint', 'orange', 'green', 'cyan', 'blue', 'violet', 'pink', 'sunset']
 // Fixed example data keeps SSR and hydration identical.
@@ -62,14 +70,34 @@ const questions = [
   <main class="mdxcn-home" :data-accent="accent">
     <section class="home-hero" aria-labelledby="home-title">
       <p class="home-eyebrow">mdxcn / vue 3</p>
-      <h1 id="home-title">markdown-friendly<br />components for vue</h1>
-      <p class="home-lead">
-        Callouts, timelines, tables and charts drawn with text. Bring them to Vue and VitePress,
-        then carry the same data into a README or a pull request.
+      <h1
+        id="home-title"
+        class="font-sans text-4xl font-medium tracking-tighter text-balance sm:text-5xl md:text-6xl lg:text-7xl"
+      >
+        markdown-friendly components for vue
+      </h1>
+      <p
+        class="max-w-[56ch] font-sans text-base leading-relaxed text-pretty text-foreground/85 sm:text-[1.0625rem]"
+      >
+        callouts, timelines, tables and charts drawn with text. bring them to vue and vitepress,
+        then carry the same data into a readme or a pull request.
       </p>
-      <div class="home-install">
-        <pre><code>{{ install }}</code></pre>
-        <HomeCopy :text="install" label="Copy npm install command" />
+      <div class="mt-4 flex w-full max-w-xl sm:mt-6">
+        <button
+          :aria-label="copied ? 'copied' : 'copy install command'"
+          class="graph-frame relative isolate flex min-w-0 flex-1 items-center gap-2 px-3 text-left font-mono text-sm text-muted-foreground hover:bg-muted/40"
+          type="button"
+          @click="copyInstall"
+        >
+          <SiteCorners tone="frame" />
+          <pre class="min-w-0 flex-1 overflow-x-auto py-3"><code>{{ install }}</code></pre>
+          <HugeiconsIcon
+            class="pointer-events-none size-4 shrink-0"
+            :icon="copied ? Tick02Icon : Copy01Icon"
+            :size="16"
+            :stroke-width="1.5"
+          />
+        </button>
       </div>
       <div class="home-links">
         <a :href="withBase('/components/graph-stack')">browse components ↗</a
@@ -188,12 +216,6 @@ const questions = [
   padding: 0 24px;
   color: var(--vp-c-text-1);
   font-family: var(--font-mono);
-}
-.mdxcn-home h1 {
-  font-size: clamp(2rem, 5.5vw, 4.5rem);
-  font-weight: 500;
-  line-height: 1.12;
-  letter-spacing: -0.055em;
 }
 .mdxcn-home h2 {
   font-size: clamp(1.3rem, 3vw, 1.75rem);
