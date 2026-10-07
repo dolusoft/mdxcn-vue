@@ -126,5 +126,5 @@ html {
 /* Site-only tweak: mdxcn's dark rail (0.22 on a 0.11 background) is hard to
    see on low-contrast screens, so the docs site lifts it a little. */
 .dark {
-  --site-rail: oklch(0.3 0 0);
+  --site-rail: oklch(0.32 0 0);
 }
