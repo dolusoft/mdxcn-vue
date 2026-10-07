@@ -95,6 +95,9 @@
 }
 
 html {
+  /* The fixed header's height before `SiteHeader` measures it, so the page
+     does not paint under the header and then jump down after hydration. */
+  --vp-layout-top-height: 104px;
   scrollbar-width: thin;
   scrollbar-color: var(--graph-frame) transparent;
 }

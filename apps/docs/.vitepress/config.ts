@@ -20,7 +20,9 @@ export default defineConfig({
     ],
   ],
   transformHead: ({ assets }) => assets
-    .filter(asset => /geist-mono-latin-(?:400|600)-normal.*\.woff2$/.test(asset))
+    // Preloads the Latin faces drawn above the fold, so they do not swap in and
+    // shift the hero and the figures after first paint.
+    .filter(asset => /geist-(?:mono-)?latin-(?:400|500|600)-normal.*\.woff2$/.test(asset))
     .map(asset => ['link', {rel:'preload',as:'font',type:'font/woff2',crossorigin:'',href:asset}]),
   markdown: { config: (md) => {
     md.use(mdxcnMarkdown, { renderLinks: true })

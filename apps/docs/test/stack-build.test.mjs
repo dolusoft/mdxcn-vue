@@ -35,7 +35,8 @@ test('built CSS contains graph rules and the docs font', () => {
   assert.ok(styles.includes('size-adjust:134.59%'))
   const html = readFileSync(new URL('../.vitepress/dist/index.html', import.meta.url), 'utf8')
   const preloads = [...html.matchAll(/<link[^>]*rel="preload"[^>]*as="font"[^>]*href="([^"]+)"/g)]
-  assert.equal(preloads.length, 2)
+  assert.equal(preloads.length, 5)
+  assert.ok(!html.includes('inter-roman'), 'unused Inter font is preloaded')
   for (const [, href] of preloads) {
     assert.ok(!href.startsWith('//'), `Protocol-relative font preload: ${href}`)
     assert.ok(href.startsWith('/assets/'), `Unexpected font preload path: ${href}`)

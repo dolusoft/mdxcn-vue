@@ -2,7 +2,7 @@
 // The dashed rails of mdxcn's centred column (`app/docs/layout.tsx`), drawn
 // under the header for the whole page; on docs pages a mark joins the
 // sidebar rule to the header.
-import { useLayout } from 'vitepress/theme'
+import { useLayout } from 'vitepress/theme-without-fonts'
 import SiteCorners from './SiteCorners.vue'
 import SiteRule from './SiteRule.vue'
 
