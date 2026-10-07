@@ -237,7 +237,7 @@ prompt target `Terminal`. Unprompted shell scripts stay code. Host-generated
 footnote sections target `Footnotes`; the host must enable a footnote parser
 (VitePress already does). All four options default to `true`.
 
-`Callout`, `Quote` and `Terminal` are ported; `Footnotes` remains pending.
+`Callout`, `Quote`, `Terminal` and `Footnotes` are all ported.
 By default the plugin warns and renders
 native HTML: the original alert blockquote (or VitePress custom block), an
 attributed blockquote with its em dash, the host's code block and
@@ -310,7 +310,7 @@ cell text to screen readers while keeping the glyphs decorative. See
 ## shadcn-vue registry
 
 `pnpm registry:build` generates `registry.json` and 52 `public/r/mdxcn-*.json`
-items from the library sources, including all 46 graphs, integrations, shared frame, core and CSS.
+items from the library sources, including all 46 components, integrations, shared frame, core and CSS.
 The content-free build index references real files. The consumer check runs
 `shadcn-vue build registry.json` and verifies its output against the distributable
 payloads after adding the MIT notice. Our script generates `public/r`;

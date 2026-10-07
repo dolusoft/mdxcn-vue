@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict'
 import { spawnSync } from 'node:child_process'
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
-import { dirname, join, resolve } from 'node:path'
+import { basename, dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const repo = resolve(dirname(fileURLToPath(import.meta.url)), '..')
@@ -49,7 +49,11 @@ for (const pkg of packages) {
     `${pkg.name.replaceAll('/', '-').replace(/^@/, '')}-${pkg.version}.tgz`,
   )
   run(['pack', '--out', tarball], pkg.directory)
-  const listing = spawnSync('tar', ['-tzf', tarball], { encoding: 'utf8' })
+  // Relative archive name: GNU tar (Git Bash on Windows) reads `C:` as a remote host.
+  const listing = spawnSync('tar', ['-tzf', basename(tarball)], {
+    cwd: dirname(tarball),
+    encoding: 'utf8',
+  })
   assert.equal(listing.status, 0, listing.stderr)
   const files = listing.stdout
     .trim()

@@ -151,3 +151,14 @@ npm publish ../tmp/mdxcn-vue/phase-11b-pack/mdxcn-markdown-0.1.0.tgz --access pu
 
 Bu teslimatta `npm publish`, `npm login` veya `pnpm publish` çalıştırılmadı;
 dev sunucusu başlatılmadı.
+
+## Güncel durum (review sonrası)
+
+Bu bölüm yukarıdaki "izin bekleniyor" ve "CI çalışmış kabul edilmez" satırlarının yerine geçer.
+
+- `publint` (`npx`, geçici): iki tarball için "All good!".
+- `attw --profile esm-only`: `node16` (ESM) ve `bundler` çözümlemesi iki pakette yeşil. Yalnız yok sayılan profillerde uyarı var: paketler ESM-only olduğu için CJS `require` desteklenmiyor (bilinçli), `mdxcn-vue/knap` `node10` çözümlemesinde bulunmuyor.
+- Uzak CI `fcde81b` için matrisle birlikte yeşil.
+- `engines`: `mdxcn-vue` tarayıcı kodu olduğu için alan kaldırıldı; `mdxcn-markdown` Vite 8 ile aynı aralığa (`^20.19.0 || >=22.12.0`) çekildi.
+- Windows Git Bash'te GNU `tar` mutlak `C:` yolunu uzak host sanıyordu; `consumer-check` ve `release-check` göreli adla ve `cwd` ile koşuyor.
+- `phase-11b-handover.md` kapatıldı; açık iş yalnız Zahid'in kararları (scope, npm girişi, yayın onayı).

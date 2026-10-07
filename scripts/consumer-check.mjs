@@ -144,7 +144,9 @@ for (const name of ['mdxcn-vue', 'mdxcn-markdown']) {
   assert.match(readFileSync(join(cwd, 'LICENSE'), 'utf8'), /Keshav Bagaade/)
   assert.match(readFileSync(join(cwd, 'README.md'), 'utf8'), /Keshav Bagaade/)
   run(['pack', '--out', join(artifacts, `${name}.tgz`)], cwd)
-  const archive = spawnSync('tar', ['-tzf', join(artifacts, `${name}.tgz`)], {
+  // Relative archive name: GNU tar (Git Bash on Windows) reads `C:` as a remote host.
+  const archive = spawnSync('tar', ['-tzf', `${name}.tgz`], {
+    cwd: artifacts,
     encoding: 'utf8',
   })
   assert.equal(archive.status, 0, `Cannot inspect ${name} tarball: ${archive.stderr}`)
