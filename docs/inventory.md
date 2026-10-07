@@ -222,3 +222,9 @@ Tek ön sürüm istisnası `vitepress@2.0.0-alpha.20` exact sürümüdür. Works
 ## Faz 7A uygulama notu
 
 `GraphCompare`, `GraphMatrix` ve `GraphHeatmap` tamamlandı. Veri alanları bağımsız seçilir; boş diziler fallback girdisini bastırır, null fallback verir. Compiler `table` alanı ortak `TableModel` taşır; item satırları bundan önce gelir. `Col` yalnız Compare sütunlarını sağlar. Ortak tablo okuyucusu değişmedi. Upstream grid/liste yerine native `table`, `th scope` ve caption ile adlandırılan odaklanabilir kaydırma bölgesi bilinçli erişilebilirlik farkıdır. Heatmap glifleri dekoratif kalır; gerçek sayılar her hücrede `sr-only` metin olarak korunur. Matrix/Heatmap metin ayrıştırması boş hücreleri upstream gibi atlar.
+
+## Faz 7C uygulama notu
+
+`GraphSheet` ve `GraphInvoice` tamamlandı; yukarıdaki alan öncelikleri korundu. Ortak `headingSections`, `tableOf`, `cellsOf`, `alignsOf` ve `resolveTable` okuyucuları değişmedi. Markdown compiler içindeki mevcut tablo okuması `readTable` işlevine taşınarak üç bileşende kullanıldı. Sheet başlıksız tablolardan veri almaz; ilk bölüm boşsa sonraki tablo headers/align fallback sağlamaz. `Total` veya kalın son satır ortak okuyucu tarafından footer olarak ayrılır; Sheet ve Invoice bu Markdown footer değerini kullanmaz. Sheet footer yalnız prop/`Foot` girdisinden gelir. Invoice toplamları `Total` item veya para tutarlı paragraflardır; ara toplam/vergi hesabı, `Intl` veya locale dönüşümü yoktur. Tutarlar literal string kalır.
+
+İki yeni tablo upstream native DOM/a11y yapısını korur; GraphTable erişilebilirlik ekleri kopyalanmadı. `graph-sheet-table` ve `graph-invoice-table` sınıfları yalnız host CSS etkisini kaldırır. Sheet padding değerleri upstream birleşmiş sınıflarla doğrudan gövde kabına uygulanır. `vReveal` satır/toplam gecikmesi 40 ms artar, 240 ms tavanlıdır. Ayrıntılı kanıtlar `docs/phase-7c-report.md` içindedir.

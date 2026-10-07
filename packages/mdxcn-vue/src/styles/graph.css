@@ -1,6 +1,36 @@
 /* Derived from mdxcn, Copyright (c) 2026 Keshav Bagaade. MIT; see LICENSE. */
 @source "../";
 
+/* Sheet and Invoice preserve their distinct upstream cell utilities under host prose. */
+.graph-frame.graph-frame .graph-sheet-table,
+.graph-frame.graph-frame .graph-invoice-table {
+  display: table;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: 0;
+  overflow: visible;
+}
+.graph-frame.graph-frame .graph-sheet-table tr,
+.graph-frame.graph-frame .graph-sheet-table th,
+.graph-frame.graph-frame .graph-sheet-table td,
+.graph-frame.graph-frame .graph-invoice-table tr,
+.graph-frame.graph-frame .graph-invoice-table th,
+.graph-frame.graph-frame .graph-invoice-table td {
+  border: 0;
+  background: transparent;
+  font-size: inherit;
+}
+.graph-frame.graph-frame .graph-sheet-table th,
+.graph-frame.graph-frame .graph-sheet-table td,
+.graph-frame.graph-frame .graph-invoice-table th,
+.graph-frame.graph-frame .graph-invoice-table td {
+  padding: revert-layer;
+  color: revert-layer;
+  font-weight: revert-layer;
+  text-align: revert-layer;
+  line-height: revert-layer;
+}
+
 .graph-frame .graph-scroll-x:focus-visible {
   outline-offset: 3px;
 }

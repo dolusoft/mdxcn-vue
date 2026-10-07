@@ -1,4 +1,20 @@
 // Public entry of `mdxcn-vue`; internal helpers belong to the core subpath.
+export { GraphSheet } from './components/graph-sheet.js'
+export { GraphInvoice } from './components/graph-invoice.js'
+export type { GraphSheetProps } from './components/graph-sheet.js'
+export type { GraphInvoiceProps } from './components/graph-invoice.js'
+export { Section, From, To, Meta, Item, Total } from './adapters/sheet-invoice.js'
+export type { SectionProps, MetaProps, ItemProps, TotalProps } from './adapters/sheet-invoice.js'
+export type {
+  SheetSection,
+  SheetData,
+  SheetModel,
+  InvoiceParty,
+  InvoiceMeta,
+  InvoiceItem,
+  InvoiceTotal,
+  InvoiceData,
+} from './core/sheet-invoice.js'
 export { GraphCompare, Col } from './components/graph-compare.js'
 export { GraphMatrix } from './components/graph-matrix.js'
 export { GraphHeatmap } from './components/graph-heatmap.js'

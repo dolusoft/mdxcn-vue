@@ -136,6 +136,25 @@ test('actual VitePress rules lose to graph resets and generated layered prose ut
   assert.equal(resolve(table, 'display').value, 'table')
   assert.equal(resolve(table, 'border-collapse').value, 'separate')
   assert.equal(resolve(table, 'border-spacing').value, '0')
+  for (const slug of ['graph-sheet', 'graph-invoice']) {
+    const page = new JSDOM(readFileSync(new URL(`../.vitepress/dist/components/${slug}.html`, import.meta.url), 'utf8')).window.document
+    const table = page.querySelector('figure table')
+    assert.equal(resolve(table, 'display').value, 'table')
+    assert.equal(resolve(table, 'border-collapse').value, 'separate')
+    for (const cell of table.querySelectorAll('th,td')) {
+      for (const property of ['padding-bottom', 'color', 'font-weight', 'text-align']) {
+        const winner = resolve(cell, property)
+        assert.ok(!winner || winner.layer, `${slug} ${property} must use upstream cell utilities, preflight or inheritance`)
+      }
+      assert.equal(resolve(cell, 'border').value, '0')
+      assert.equal(resolve(cell, 'background').value, 'transparent')
+    }
+    assert.equal(resolve(table.querySelector('thead tr:last-child th'), 'padding').value, '0')
+    if (slug === 'graph-invoice') {
+      assert.equal(resolve(table.querySelector('thead th'), 'color').value, 'var(--graph-muted)')
+      assert.equal(resolve(table.querySelector('tbody td'), 'padding-left').value, '0')
+    }
+  }
   for (const slug of ['graph-compare', 'graph-matrix', 'graph-heatmap']) {
     const page = new JSDOM(readFileSync(new URL(`../.vitepress/dist/components/${slug}.html`, import.meta.url), 'utf8')).window.document
     const labeled = page.querySelector('figure table')

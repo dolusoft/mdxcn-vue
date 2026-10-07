@@ -31,6 +31,12 @@ export default tseslint.config(
         'error',
         {
           ignores: [
+            'Section',
+            'From',
+            'To',
+            'Meta',
+            'Item',
+            'Total',
             'Faq',
             'Graph',
             'Bar',

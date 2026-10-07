@@ -1,5 +1,16 @@
 // Framework-independent helpers for adapters and advanced consumers.
 export type {
+  SheetSection,
+  SheetData,
+  SheetModel,
+  InvoiceParty,
+  InvoiceMeta,
+  InvoiceItem,
+  InvoiceTotal,
+  InvoiceData,
+} from './sheet-invoice.js'
+export { resolveSheet, partyOf, moneyLine, invoiceItems } from './sheet-invoice.js'
+export type {
   CompareCell,
   CompareRow,
   MatrixRow,

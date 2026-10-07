@@ -1,4 +1,6 @@
 import type MarkdownIt from 'markdown-it'
+import type { SheetModel, InvoiceData } from 'mdxcn-vue/core'
+import { resolveSheet, invoiceItems, moneyLine } from 'mdxcn-vue/core'
 import type { BoardColumn, FaqEntry, ProseBlock } from 'mdxcn-vue/core'
 import { boardFromList, headingSections } from 'mdxcn-vue/core'
 import type Token from 'markdown-it/lib/token.mjs'
@@ -19,6 +21,8 @@ import { bindingFromList } from 'mdxcn-vue/core'
 import type { ChatListItem, KeyBinding } from 'mdxcn-vue/core'
 
 export type ComponentName =
+  | 'GraphSheet'
+  | 'GraphInvoice'
   | 'Faq'
   | 'GraphBoard'
   | 'GraphCompare'
@@ -46,6 +50,8 @@ export type ComponentName =
   | 'GraphDiff'
   | 'GraphWaterfall'
 export type CompiledProps =
+  | SheetModel
+  | InvoiceData
   | { entries: FaqEntry[] }
   | { columns: BoardColumn[] }
   | { table: TableModel }
@@ -202,6 +208,30 @@ const bold = (nodes: ProseNode[]): boolean =>
   nodes.some((node) => node.type !== 'text' && (node.type === 'strong' || bold(node.children)))
 const route = /^\s*(GET|POST|PUT|PATCH|DELETE|HEAD|OPTIONS|QUERY)\s+(\S+)\s*$/i
 
+function readTable(table: Block): TableModel | null {
+  const head = table.children.find((b) => b.tag === 'thead')?.children[0]
+  if (!head) return null
+  const rows = table.children.find((b) => b.tag === 'tbody')?.children ?? []
+  const last = rows.at(-1)
+  const first = last?.children[0] ? trim(content(last.children[0])) : []
+  const total =
+    rows.length > 1 &&
+    (/^total$/i.test(proseText(first)) || (first.length === 1 && first[0]?.type === 'strong'))
+  const align = head.children.map(
+    (b) =>
+      b.token.attrGet('style')?.match(/text-align:(left|right)/)?.[1] as
+        'left' | 'right' | undefined,
+  )
+  return {
+    headers: head.children.map((b) => proseText(normalizeProseWhitespace(content(b)))),
+    rows: (total ? rows.slice(0, -1) : rows).map((row) => row.children.map(cell)),
+    ...(total && last ? { footer: last.children.map(cell) } : {}),
+    ...(align.some(Boolean)
+      ? { align: align.map((v, i) => v ?? (i === 0 ? 'left' : 'right')) }
+      : {}),
+  }
+}
+
 /** Read raw block tokens before anchors, renderer wrappers, or highlighting. */
 export interface TokenModelOptions {
   renderLinks?: boolean
@@ -214,6 +244,38 @@ export function tokensToProps(
   env: object = {},
   options: TokenModelOptions = {},
 ): CompiledProps {
+  if (name === 'GraphSheet' || name === 'GraphInvoice') {
+    const tree = blocks(tokens, md, env, options, true, false, true)
+    if (name === 'GraphSheet') {
+      const sections = headingSections(tree, (b) =>
+        /^h[1-6]$/.test(b.tag) ? { title: proseText(content(b)).trim(), accent: false } : undefined,
+      )
+      return resolveSheet(
+        {},
+        { sections: [] },
+        sections.map((s) => {
+          const table = s.children.find((b) => b.tag === 'table')
+          return { title: s.title, table: table ? readTable(table) : null }
+        }),
+      )
+    }
+    const table = tree.find((b) => b.tag === 'table')
+    const paragraphs = tree.filter((b) => b.tag === 'p')
+    return {
+      meta: tree
+        .filter((b) => b.tag === 'ul' || b.tag === 'ol')
+        .flatMap((b) => b.children)
+        .map((b) => splitLabel(proseText(content(b))))
+        .filter((e) => e.rest)
+        .map((e) => ({ label: e.label, value: e.rest })),
+      items: invoiceItems(table ? readTable(table) : null),
+      totals: paragraphs.flatMap((p) => {
+        const parsed = moneyLine(proseText(content(p)).trim())
+        return parsed ? [{ ...parsed, accent: bold(content(p)) }] : []
+      }),
+      note: paragraphs.map((p) => proseText(content(p)).trim()).find((t) => t && !moneyLine(t)),
+    }
+  }
   if (name === 'Faq' || name === 'GraphBoard') {
     const tree = blocks(tokens, md, env, options, true, false, true)
     const has = (nodes: ProseNode[], type: 'strong' | 'em'): boolean =>
@@ -265,8 +327,13 @@ export function tokensToProps(
       })),
     }
   }
-  if (['GraphCompare', 'GraphMatrix', 'GraphHeatmap'].includes(name))
-    return { table: tokensToProps('GraphTable', tokens, md, env, options) as TableModel }
+  if (['GraphCompare', 'GraphMatrix', 'GraphHeatmap'].includes(name)) {
+    try {
+      return { table: tokensToProps('GraphTable', tokens, md, env, options) as TableModel }
+    } catch (error) {
+      throw new Error((error as Error).message.replaceAll('GraphTable', name), { cause: error })
+    }
+  }
   const stateList = [
     'Steps',
     'Changelog',
@@ -446,24 +513,7 @@ export function tokensToProps(
   const rows = table?.children.find((block) => block.tag === 'tbody')?.children ?? []
   if (name === 'GraphTable') {
     if (tree.length !== 1 || !head) throw new Error('GraphTable requires one Markdown table')
-    const last = rows.at(-1)
-    const first = last?.children[0] ? trim(content(last.children[0])) : []
-    const total =
-      rows.length > 1 &&
-      (/^total$/i.test(proseText(first)) || (first.length === 1 && first[0]?.type === 'strong'))
-    const align = head.children.map(
-      (block) =>
-        block.token.attrGet('style')?.match(/text-align:(left|right)/)?.[1] as
-          'left' | 'right' | undefined,
-    )
-    return {
-      headers: head.children.map((block) => proseText(normalizeProseWhitespace(content(block)))),
-      rows: (total ? rows.slice(0, -1) : rows).map((row) => row.children.map(cell)),
-      ...(total && last ? { footer: last.children.map(cell) } : {}),
-      ...(align.some(Boolean)
-        ? { align: align.map((value, index) => value ?? (index === 0 ? 'left' : 'right')) }
-        : {}),
-    }
+    return readTable(table!)!
   }
   if (tree.some((block) => !['p', 'table', 'fence'].includes(block.tag)) || tables.length > 1)
     throw new Error('Endpoint requires paragraphs, one parameter table, and fences')

@@ -7,6 +7,14 @@ import ts from 'typescript'
 
 // Deliberately maintained independently of export declarations.
 const publicNames = [
+  'GraphSheet',
+  'GraphInvoice',
+  'Section',
+  'From',
+  'To',
+  'Meta',
+  'Item',
+  'Total',
   'Faq',
   'GraphBoard',
   'GraphCompare',
@@ -131,6 +139,20 @@ it('exposes grammar and clock helpers only through core', () => {
 })
 
 const publicTypes = [
+  'GraphSheetProps',
+  'GraphInvoiceProps',
+  'SectionProps',
+  'MetaProps',
+  'ItemProps',
+  'TotalProps',
+  'SheetSection',
+  'SheetData',
+  'SheetModel',
+  'InvoiceParty',
+  'InvoiceMeta',
+  'InvoiceItem',
+  'InvoiceTotal',
+  'InvoiceData',
   'FaqProps',
   'GraphBoardProps',
   'FaqEntry',
@@ -229,6 +251,18 @@ const publicTypes = [
   'GraphTimerProps',
 ]
 const coreNames = [
+  'resolveSheet',
+  'partyOf',
+  'moneyLine',
+  'invoiceItems',
+  'SheetSection',
+  'SheetData',
+  'SheetModel',
+  'InvoiceParty',
+  'InvoiceMeta',
+  'InvoiceItem',
+  'InvoiceTotal',
+  'InvoiceData',
   'FaqEntry',
   'ProseBlock',
   'BoardItem',

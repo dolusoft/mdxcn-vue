@@ -1,0 +1,145 @@
+[
+  {
+    "name": "GraphSheet",
+    "props": {
+      "title": "RFC"
+    },
+    "source": "<GraphSheet title=\"RFC\">\n\n### Scope\n\n| Item | Owner | Status |\n| --- | --- | --- |\n| CLI copies files | priya | done |\n| Docs previews | jon | now |\n\n### Out of scope\n\n| Item | Owner | Status |\n| --- | --- | --- |\n| npm package | — | later |\n| Figma kit | — | later |\n\n</GraphSheet>",
+    "body": "\n\n### Scope\n\n| Item | Owner | Status |\n| --- | --- | --- |\n| CLI copies files | priya | done |\n| Docs previews | jon | now |\n\n### Out of scope\n\n| Item | Owner | Status |\n| --- | --- | --- |\n| npm package | — | later |\n| Figma kit | — | later |\n\n",
+    "model": {
+      "headers": ["Item", "Owner", "Status"],
+      "sections": [
+        {
+          "title": "Scope",
+          "rows": [
+            ["CLI copies files", "priya", "done"],
+            ["Docs previews", "jon", "now"]
+          ]
+        },
+        {
+          "title": "Out of scope",
+          "rows": [
+            ["npm package", "—", "later"],
+            ["Figma kit", "—", "later"]
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "GraphSheet",
+    "props": {
+      "title": "SURFACE"
+    },
+    "source": "<GraphSheet title=\"SURFACE\">\n\n### Frame\n\n| Name | Kind | Stable |\n| --- | --- | --- |\n| Graph | primitive | yes |\n| GraphBody | primitive | yes |\n\n### Charts\n\n| Name | Kind | Stable |\n| --- | --- | --- |\n| GraphTable | component | yes |\n| GraphSheet | component | new |\n\n</GraphSheet>",
+    "body": "\n\n### Frame\n\n| Name | Kind | Stable |\n| --- | --- | --- |\n| Graph | primitive | yes |\n| GraphBody | primitive | yes |\n\n### Charts\n\n| Name | Kind | Stable |\n| --- | --- | --- |\n| GraphTable | component | yes |\n| GraphSheet | component | new |\n\n",
+    "model": {
+      "headers": ["Name", "Kind", "Stable"],
+      "sections": [
+        {
+          "title": "Frame",
+          "rows": [
+            ["Graph", "primitive", "yes"],
+            ["GraphBody", "primitive", "yes"]
+          ]
+        },
+        {
+          "title": "Charts",
+          "rows": [
+            ["GraphTable", "component", "yes"],
+            ["GraphSheet", "component", "new"]
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "name": "GraphInvoice",
+    "props": {
+      "title": "INVOICE 0041",
+      "from": "mdxcn",
+      "to": "Acme Studio"
+    },
+    "source": "<GraphInvoice\n  title=\"INVOICE 0041\"\n  from=\"mdxcn\"\n  to=\"Acme Studio\"\n>\n\n- No.: 0041\n- Issued: Mar 12, 2026\n- Due: Apr 11, 2026\n\n| Description | Qty | Rate | Amount |\n| --- | --- | --- | --- |\n| Design system | 1 | 4,200 | 4,200 |\n| Motion pass | 1 | 1,800 | 1,800 |\n| Docs rewrite | 8h | 180 | 1,440 |\n\n**Amount due** 7,440\n\nNet 30. Wire to the account on file.\n\n</GraphInvoice>",
+    "body": "\n\n- No.: 0041\n- Issued: Mar 12, 2026\n- Due: Apr 11, 2026\n\n| Description | Qty | Rate | Amount |\n| --- | --- | --- | --- |\n| Design system | 1 | 4,200 | 4,200 |\n| Motion pass | 1 | 1,800 | 1,800 |\n| Docs rewrite | 8h | 180 | 1,440 |\n\n**Amount due** 7,440\n\nNet 30. Wire to the account on file.\n\n",
+    "model": {
+      "meta": [
+        {
+          "label": "No.",
+          "value": "0041"
+        },
+        {
+          "label": "Issued",
+          "value": "Mar 12, 2026"
+        },
+        {
+          "label": "Due",
+          "value": "Apr 11, 2026"
+        }
+      ],
+      "items": [
+        {
+          "description": "Design system",
+          "qty": "1",
+          "rate": "4,200",
+          "amount": "4,200"
+        },
+        {
+          "description": "Motion pass",
+          "qty": "1",
+          "rate": "1,800",
+          "amount": "1,800"
+        },
+        {
+          "description": "Docs rewrite",
+          "qty": "8h",
+          "rate": "180",
+          "amount": "1,440"
+        }
+      ],
+      "totals": [
+        {
+          "label": "Amount due",
+          "value": "7,440",
+          "accent": true
+        }
+      ],
+      "note": "Net 30. Wire to the account on file."
+    }
+  },
+  {
+    "name": "GraphInvoice",
+    "props": {
+      "title": "QUOTE",
+      "from": "mdxcn",
+      "to": "Northwind"
+    },
+    "source": "<GraphInvoice title=\"QUOTE\" from=\"mdxcn\" to=\"Northwind\">\n\n- Valid until: May 01\n\n| Description | Amount |\n| --- | --- |\n| Registry install | 0 |\n| Custom graph | 2,400 |\n\n**Estimate** 2,400\n\n</GraphInvoice>",
+    "body": "\n\n- Valid until: May 01\n\n| Description | Amount |\n| --- | --- |\n| Registry install | 0 |\n| Custom graph | 2,400 |\n\n**Estimate** 2,400\n\n",
+    "model": {
+      "meta": [
+        {
+          "label": "Valid until",
+          "value": "May 01"
+        }
+      ],
+      "items": [
+        {
+          "description": "Registry install",
+          "amount": "0"
+        },
+        {
+          "description": "Custom graph",
+          "amount": "2,400"
+        }
+      ],
+      "totals": [
+        {
+          "label": "Estimate",
+          "value": "2,400",
+          "accent": true
+        }
+      ]
+    }
+  }
+]
