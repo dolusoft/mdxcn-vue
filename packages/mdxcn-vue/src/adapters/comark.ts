@@ -19,6 +19,9 @@ export function coerceProps(raw: Record<string, unknown>, numeric: NumericProps 
     const key = /^(data|aria)-/.test(unprefixed)
       ? unprefixed
       : unprefixed.replace(/-([a-z])/g, (_, letter: string) => letter.toUpperCase())
+    // Markdown attributes are untrusted strings; `onclick="..."` would fall through to the
+    // figure as a live inline handler (SSR and client). Upstream React ignores them.
+    if (typeof rawValue === 'string' && /^on/i.test(key)) continue
     let value = rawValue === 'true' ? true : rawValue === 'false' ? false : rawValue
     if (numeric.includes(key) && typeof value === 'string' && value.trim() !== '') {
       const parsed = Number(value.trim())

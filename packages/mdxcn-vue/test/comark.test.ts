@@ -140,15 +140,51 @@ it('normalizes binding prefixes, kebab keys and exact booleans without mutating 
   expect(coerceProps({ rows }).rows).toBe(rows)
 })
 
+it('drops string event-handler attributes but keeps data, aria and function props', () => {
+  const handler = () => {}
+  expect(
+    coerceProps({
+      onclick: 'alert(1)',
+      onFocus: 'alert(2)',
+      ONMOUSEOVER: 'alert(3)',
+      'data-id': 'x',
+      'aria-label': 'y',
+      onToggle: handler,
+    }),
+  ).toEqual({ 'data-id': 'x', 'aria-label': 'y', onToggle: handler })
+})
+
+it('real Comark attribute handlers never reach the rendered figure', async () => {
+  const value = await parseMarkdown(
+    '::graph-meter{title="M" value=0.5 onclick="alert(1)" onfocus="alert(2)" data-id="m"}\n::',
+  )
+  const html = await renderToString(
+    createSSRApp({ render: () => h(MarkdownDocument, { value, components: graphComponents }) }),
+  )
+  expect(html).toContain('data-id="m"')
+  expect(html).not.toMatch(/\bon[a-z]+=/i)
+})
+
 it('prototype keys remain data properties', () => {
   const result = coerceProps(JSON.parse('{"__proto__":{"polluted":true}}'))
   expect(Object.getPrototypeOf(result)).toBe(Object.prototype)
   expect(Object.hasOwn(result, '__proto__')).toBe(true)
 })
 
+// Copied from upstream registry/default/graph-comark/adapters.ts, not derived from the port.
+const upstreamTags =
+  `callout quote steps terminal changelog annotate decision chat env endpoint keys faq
+graph-table graph-sheet graph-invoice graph-spec graph-matrix graph-compare graph-diff graph-stat graph-kpi
+graph-spark graph-plot graph-bars graph-slope graph-cells graph-meter graph-waffle graph-stack graph-funnel
+graph-waterfall graph-rank graph-bullet graph-heatmap graph-activity graph-calendar graph-uptime graph-flow
+graph-tree graph-timeline graph-gantt graph-check graph-board graph-score graph-timer graph-countdown row`
+    .split(/\s+/)
+    .sort()
+
 it('full map matches the independent upstream 46 graphs plus row', () => {
-  expect(graphTags).toHaveLength(47)
-  expect(graphTags.sort()).toEqual(Object.keys(GRAPH_ADAPTERS).sort())
+  expect(upstreamTags).toHaveLength(47)
+  expect([...graphTags].sort()).toEqual(upstreamTags)
+  expect(Object.keys(GRAPH_ADAPTERS).sort()).toEqual(upstreamTags)
   expect(Object.keys(createGraphComponents({ 'graph-stack': GraphStack }))).toEqual([
     'row',
     'graph-stack',

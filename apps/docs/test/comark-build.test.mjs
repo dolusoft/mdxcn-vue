@@ -18,7 +18,10 @@ test('built Comark page renders body, YAML, responsive row and pending frame', (
 
 test('Comark parser stays outside the production client bundle', () => {
   const assets = new URL('../.vitepress/dist/assets/', import.meta.url)
-  const js = readdirSync(assets).filter((name) => name.endsWith('.js'))
+  // Shared chunks live under assets/chunks; a top-level scan would miss a parser placed there.
+  const js = readdirSync(assets, { recursive: true })
+    .map(String)
+    .filter((name) => name.endsWith('.js'))
     .map((name) => readFileSync(new URL(name, assets), 'utf8')).join('\n')
   assert.doesNotMatch(js, /YAMLException|function parseMarkdown\(|micromark|parseComark/)
 })
