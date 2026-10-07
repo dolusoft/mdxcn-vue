@@ -172,6 +172,74 @@ html {
   gap: 2.5rem 2rem;
   margin: 2.5rem 0;
 }
+/* Mini tiles: narrow columns and tight padding; figures shrink with them. */
+.vp-doc .dashboard-mini {
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 10rem), 1fr));
+  gap: 1.75rem 1rem;
+}
+.vp-doc .dashboard-mini .graph-frame {
+  font-size: 0.75rem;
+}
+.vp-doc .dashboard-mini .graph-frame > div {
+  padding: 1.25rem 0.875rem 1rem;
+}
+/* Figures inside table cells: no frame margin, tight padding, mono rows. */
+.vp-doc .dashboard-table {
+  overflow-x: auto;
+}
+.vp-doc .dashboard-table table {
+  display: table;
+  width: 100%;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+}
+.vp-doc .dashboard-table td {
+  vertical-align: middle;
+}
+.vp-doc .dashboard-table td > p {
+  margin: 0;
+}
+/* The default theme's grey header and zebra rows read as a separate panel;
+   the table takes the page background so the figures sit on the same ground. */
+.vp-doc .dashboard-table tr,
+.vp-doc .dashboard-table th,
+.vp-doc .dashboard-table td {
+  background-color: var(--background);
+  border-color: var(--graph-frame);
+}
+.vp-doc .dashboard-table th {
+  color: var(--muted-foreground);
+}
+.vp-doc .dashboard-table td .graph-frame {
+  margin: 0;
+  min-width: 7rem;
+  font-size: 0.6875rem;
+}
+.vp-doc .dashboard-table td .graph-frame > div {
+  padding: 0.5rem 0.75rem;
+}
+/* In a row only the figure's first line stays: captions, the uptime percent
+   and legend would each add a line and stretch every row of the table. The
+   screen-reader sentence is kept. */
+.vp-doc .dashboard-table td .graph-frame > div > :not(:first-child):not(.sr-only),
+.vp-doc .dashboard-table td .graph-frame > div > div:first-child > :not(:first-child):not(.sr-only) {
+  display: none;
+}
+/* Compact rows: the frame, its corners and the uptime legend are dropped and
+   the padding cut, so a row with figures stays about one text line tall. */
+.vp-doc .dashboard-compact th,
+.vp-doc .dashboard-compact td {
+  padding: 0.25rem 0.75rem;
+}
+.vp-doc .dashboard-compact td .graph-frame {
+  background-image: none;
+}
+.vp-doc .dashboard-compact td .graph-frame > [aria-hidden='true'] {
+  display: none;
+}
+.vp-doc .dashboard-compact td .graph-frame > div {
+  padding: 0.125rem 0;
+}
 /* A tile whose labels need the full row, such as a slope chart. */
 .vp-doc .dashboard-wide {
   grid-column: 1 / -1;
