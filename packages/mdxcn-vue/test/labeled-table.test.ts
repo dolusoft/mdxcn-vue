@@ -175,7 +175,9 @@ it('matches compare palette and dim branches and matrix row accent for every pal
       },
     })
     expect(m.get('tbody th').classes()).toContain('text-graph-accent')
-    expect(m.findAll('tbody tr')[1]!.attributes('style')).toContain('opacity: 0.4')
+    for (const cell of m.findAll('tbody tr')[1]!.findAll('th, td'))
+      expect(cell.attributes('style')).toContain('opacity: 0.4')
+    expect(m.findAll('tbody tr')[1]!.attributes('style')).toBeUndefined()
     expect(m.findAll('tbody td .graph-rule-y')).toHaveLength(2)
     expect(m.findAll('.sr-only').at(-1)!.text()).toBe('Matrix with 2 rows and 1 columns')
     m.unmount()
@@ -315,3 +317,58 @@ it.each(Object.entries(components))(
     vi.unstubAllGlobals()
   },
 )
+it('keeps matrix row dim reactive after the reveal directive has run', async () => {
+  const observers: { target?: Element; callback: IntersectionObserverCallback }[] = []
+  vi.stubGlobal(
+    'IntersectionObserver',
+    class {
+      entry: { target?: Element; callback: IntersectionObserverCallback }
+      constructor(callback: IntersectionObserverCallback) {
+        this.entry = { callback }
+        observers.push(this.entry)
+      }
+      observe(target: Element) {
+        this.entry.target = target
+      }
+      disconnect() {}
+    },
+  )
+  vi.stubGlobal('matchMedia', () => ({
+    matches: false,
+    addEventListener() {},
+    removeEventListener() {},
+  }))
+  vi.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockReturnValue({
+    top: 10000,
+    bottom: 10020,
+    left: 0,
+    right: 100,
+  } as DOMRect)
+  Object.defineProperty(HTMLElement.prototype, 'animate', {
+    configurable: true,
+    value: () => ({ cancel() {}, onfinish: null }),
+  })
+  const w = mount(GraphMatrix, {
+    props: {
+      title: 'T',
+      columns: ['c'],
+      rows: [
+        { label: 'a', values: [1] },
+        { label: 'b', values: [2] },
+      ],
+    },
+  })
+  for (const tr of w.findAll('tbody tr'))
+    observers
+      .find((entry) => entry.target === tr.element)!
+      .callback([{ isIntersecting: true } as IntersectionObserverEntry], {} as IntersectionObserver)
+  const dimmed = () => w.findAll('tbody tr').map((tr) => tr.get('td').attributes('style') ?? '')
+  await w.setProps({ accent: 'a' })
+  expect(dimmed()).toEqual(['', 'opacity: 0.4;'])
+  await w.setProps({ accent: undefined })
+  expect(dimmed()).toEqual(['', ''])
+  w.unmount()
+  Reflect.deleteProperty(HTMLElement.prototype, 'animate')
+  vi.restoreAllMocks()
+  vi.unstubAllGlobals()
+})

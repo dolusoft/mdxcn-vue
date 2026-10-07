@@ -90,29 +90,31 @@ export const GraphMatrix = defineComponent({
                       rows.map((row, rowIndex) => {
                         const live = Boolean(props.accent) && row.label === props.accent,
                           dim = Boolean(props.accent) && !live,
-                          tone = live ? toneClass(props.palette, 'primary') : 'text-foreground'
+                          tone = live ? toneClass(props.palette, 'primary') : 'text-foreground',
+                          style = dim ? { opacity: DIM_OPACITY } : undefined
                         return withDirectives(
-                          h(
-                            'tr',
-                            { key: rowIndex, style: dim ? { opacity: DIM_OPACITY } : undefined },
-                            [
+                          h('tr', { key: rowIndex }, [
+                            h(
+                              'th',
+                              {
+                                scope: 'row',
+                                class: ['truncate py-2.5 pr-3 text-left', tone],
+                                style,
+                              },
+                              row.label,
+                            ),
+                            ...columns.map((_column, index) =>
                               h(
-                                'th',
-                                { scope: 'row', class: ['truncate py-2.5 pr-3 text-left', tone] },
-                                row.label,
+                                'td',
+                                {
+                                  key: index,
+                                  class: ['relative px-3 py-2.5 text-right tabular-nums', tone],
+                                  style,
+                                },
+                                [ruleY(), formatMatrixCell(row.values[index] ?? '')],
                               ),
-                              ...columns.map((_column, index) =>
-                                h(
-                                  'td',
-                                  {
-                                    key: index,
-                                    class: ['relative px-3 py-2.5 text-right tabular-nums', tone],
-                                  },
-                                  [ruleY(), formatMatrixCell(row.values[index] ?? '')],
-                                ),
-                              ),
-                            ],
-                          ),
+                            ),
+                          ]),
                           [[vReveal, { delay: Math.min(rowIndex, 5) * 40 }]],
                         )
                       }),
