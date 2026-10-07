@@ -60,8 +60,14 @@ Artık yıl, ay/yıl sınırı, DST günleri, boş aralık, malformed ISO, tekra
 tarih, ay taşması ve non-finite ay girdileri sınandı. Upstream `Date.UTC`
 normalizasyonu korunur: `2023-02-29` → `2023-03-01`, ay 13 sonraki yıl ve
 0001 yılı 1901 olur. Activity için biçimi geçersiz ISO girdileri atlanır;
-geçersiz girdiler upstream'deki olası `RangeError` yerine boş grid üretir.
-Bu bilinçli güvenilirlik farkıdır; ham day toplamı ve sayısı korunur.
+`RangeError` iddiası doğrulanamadığından kaldırıldı. Gerçek fark: doğrudan
+`days` girdisindeki `2026-3-5` ve başında boşluk bulunan ` 2026-03-05`
+tarihlerini upstream aralığa katar, port atlar. Ham day toplamı ve sayısı korunur.
+Markdown listesindeki `- 2026-03-02: 1 2` ve devam satırındaki `3 4`, Vue
+derleme yolunda dört güne açılır; upstream newline nedeniyle sıfır gün üretir.
+Bu, Vue template whitespace davranışına uyumlu bir iyileştirmedir. Ham VNode
+gövdesinde newline aynen bırakılırsa port da sıfır gün üretir; bu fark derlenmiş
+Markdown/template yolu içindir.
 Calendar geçersiz ayın grid hesabında UTC taşmasını korur; month adı summary'de
 upstream gibi boş, varsayılan title'da `undefined` kalır.
 

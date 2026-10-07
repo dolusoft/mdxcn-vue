@@ -83,7 +83,9 @@ Log: `C:/Users/zahid/source/github/tmp/mdxcn-vue/f9c-final-timezone-hydration.lo
 ## Bilinçli farklar
 
 - Countdown ISO tarih/saat string girdilerini UTC okur; timezone-free ISO saatine
-  `Z` eklenir. Explicit offset korunur. Locale veya timezone'a bağlı olabilecek
+  `Z` eklenir. Bu, süreçler arasında aynı hedef anını seçmek için tutarlılık
+  tercihidir; hydration zorunluluğu değildir. SSR sırasında `now` değeri yoktur
+  ve ilk görüntü her zaman `00:00:00` olur. Explicit offset korunur. Locale veya timezone'a bağlı olabilecek
   non-ISO string girdileri placeholder üretir. `Date` ve finite epoch değerleri
   korunur. Upstream'in `Date.parse` normalizasyonu korunur:
   `2023-02-29` → `2023-03-01`. Sayı metinleri locale'den bağımsızdır; ay adı
