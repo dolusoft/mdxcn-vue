@@ -102,7 +102,8 @@ export function numericSetup(
                     row.value.toLocaleString('en-US', {
                       maximumFractionDigits: Number.isInteger(row.value) ? 0 : 1,
                     })
-                  : (display ?? row.value.toLocaleString())
+                  : // Fixed locale keeps SSR and hydration output identical (upstream uses the host locale).
+                    (display ?? row.value.toLocaleString('en-US'))
               const filled = rank
                 ? Math.min(ticks, Math.round((Math.max(row.value, 0) / peak) * ticks))
                 : Math.max(1, Math.round((row.value / peak) * ticks))
