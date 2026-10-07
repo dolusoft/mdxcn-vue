@@ -133,9 +133,10 @@ export function waterfallSegments(items: readonly WaterfallRow[]): WaterfallSegm
       entry.kind ||
       (index === 0 ? 'start' : index === items.length - 1 ? 'end' : entry.value >= 0 ? 'in' : 'out')
     const magnitude = Math.abs(entry.value)
-    const from = kind === 'start' || kind === 'end' ? 0 : kind === 'in' ? run : run - magnitude
-    const to =
-      kind === 'start' || kind === 'end' ? entry.value : kind === 'in' ? run + magnitude : run
+    // Upstream resets the running total for every kind except `in` and `out`.
+    const delta = kind === 'in' || kind === 'out'
+    const from = !delta ? 0 : kind === 'in' ? run : run - magnitude
+    const to = !delta ? entry.value : kind === 'in' ? run + magnitude : run
     run = kind === 'out' ? from : to
     return { ...entry, kind, from, to }
   })

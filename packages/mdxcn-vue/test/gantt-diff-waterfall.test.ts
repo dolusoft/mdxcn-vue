@@ -202,6 +202,28 @@ it('matches cumulative Waterfall ranges including negative running totals and ex
   expect(w.findAll('li > .graph-rule')).toHaveLength(1)
   w.unmount()
 })
+it('treats an unknown Waterfall kind like upstream: reset the running total, no delta', () => {
+  const rows = normalizeWaterfall([
+    { label: 'a', value: 5 },
+    { label: 'z', value: 4, kind: 'bogus' as never },
+    { label: 'b', value: 3 },
+    { label: 'c', value: 9 },
+  ])
+  expect(waterfallSegments(rows).map((s) => [s.from, s.to])).toEqual([
+    [0, 5],
+    [0, 4],
+    [4, 7],
+    [0, 9],
+  ])
+  const w = mount(GraphWaterfall, { props: { title: 'T', ticks: 4, items: rows } })
+  expect(w.findAll('li > div > span:last-child').map((n) => n.classes('text-foreground'))).toEqual([
+    true,
+    false,
+    true,
+    false,
+  ])
+  w.unmount()
+})
 it('preserves Waterfall number grammar, formatting and zero/single/explicit reset behavior', () => {
   expect(
     normalizeWaterfall([

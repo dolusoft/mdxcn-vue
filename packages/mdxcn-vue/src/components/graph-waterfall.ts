@@ -103,7 +103,8 @@ export const GraphWaterfall = defineComponent({
                                 ? toneClass(props.palette, 'secondary')
                                 : segment.kind === 'end'
                                   ? toneClass(props.palette, 'primary')
-                                  : 'text-foreground',
+                                  : (segment.kind === 'start' || segment.kind === 'in') &&
+                                    'text-foreground',
                             ],
                           },
                           formatWaterfall(segment, segment.kind),
