@@ -111,6 +111,14 @@ it('Flow prioritizes lists and preserves mixed inline nodes and arrow forms', ()
     ],
   })
 })
+it('Flow reads a soft-wrapped paragraph as one text run, like the runtime and upstream readers', () => {
+  const md = new MarkdownIt()
+  expect(
+    tokensToProps('GraphFlow', md.parse('write → ship the\nrelease  now → done', {}), md),
+  ).toEqual({
+    rows: [{ nodes: [{ label: 'write' }, { label: 'ship the release now' }, { label: 'done' }] }],
+  })
+})
 it.each(['GraphTree', 'GraphCheck', 'GraphFlow'] as const)(
   '%s unsupported fences use warning and runtime fallback',
   (name) => {

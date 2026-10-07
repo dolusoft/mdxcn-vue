@@ -233,6 +233,24 @@ const cell = (block: Block): string | ProseNode[] => {
   const nodes = normalizeProseWhitespace(content(block))
   return nodes.some((node) => node.type !== 'text') ? nodes : proseText(nodes)
 }
+// markdown-it emits `softbreak` between two `text` tokens, while upstream reads one string per
+// text run, and the Vue template compiler condenses whitespace runs. Flow splits every text
+// node on arrows, so adjacent runs become one node with condensed whitespace.
+function joinText(nodes: ProseNode[]): ProseNode[] {
+  const out: ProseNode[] = []
+  for (const node of nodes) {
+    const last = out.at(-1)
+    if (node.type === 'text' && last?.type === 'text')
+      out[out.length - 1] = { type: 'text', value: last.value + node.value }
+    else out.push('children' in node ? { ...node, children: joinText(node.children) } : node)
+  }
+  return out.map((node) =>
+    node.type === 'text' ? { type: 'text', value: node.value.replace(/[ \t\r\n\f]+/g, ' ') } : node,
+  )
+}
+// Join per inline run only; separate paragraphs of one item stay separate text nodes.
+const flowContent = (block: Block): ProseNode[] =>
+  block.prose ? joinText(block.prose) : block.children.flatMap(flowContent)
 const bold = (nodes: ProseNode[]): boolean =>
   nodes.some((node) => node.type !== 'text' && (node.type === 'strong' || bold(node.children)))
 const route = /^\s*(GET|POST|PUT|PATCH|DELETE|HEAD|OPTIONS|QUERY)\s+(\S+)\s*$/i
@@ -345,7 +363,7 @@ export function tokensToProps(
       const lists = tree.filter((block) => block.tag === 'ul' || block.tag === 'ol')
       const paragraphs = tree.filter((block) => block.tag === 'p')
       const rows = lists.length ? lists.flatMap((list) => list.children) : paragraphs
-      if (rows.length) return { rows: rows.map((row) => ({ nodes: flowNodes(content(row)) })) }
+      if (rows.length) return { rows: rows.map((row) => ({ nodes: flowNodes(flowContent(row)) })) }
       const text = tree
         .map((block) => proseText(content(block)))
         .join('')
