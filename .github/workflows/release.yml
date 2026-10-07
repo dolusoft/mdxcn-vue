@@ -1,0 +1,81 @@
+name: Release
+
+# Publishes both packages to npm: push a tag `v<version>` that equals the
+# `version` of every packages/*/package.json. Authentication is npm trusted
+# publishing (OIDC): no token or OTP is stored in this repository. Each
+# package on npmjs.com must list this repository and `release.yml` as its
+# trusted publisher. Provenance is attached automatically.
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      id-token: write
+    env:
+      TAG: ${{ github.ref_name }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: pnpm
+          registry-url: https://registry.npmjs.org
+
+      # Trusted publishing needs npm 11.5.1 or later.
+      - run: npm install --global npm@latest
+
+      - name: Tag matches every package.json
+        run: |
+          for dir in packages/*/; do
+            own="$(node -p "require('./${dir}package.json').version")"
+            if [ "$TAG" != "v$own" ]; then
+              echo "::error::${dir}package.json is $own, the tag is $TAG."
+              exit 1
+            fi
+          done
+
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm lint
+      - run: pnpm format:check
+      - run: pnpm registry:check
+      - run: pnpm build
+      - run: pnpm typecheck
+      - run: pnpm test
+
+      # pnpm pack writes real versions in place of `workspace:` ranges.
+      - name: Pack
+        run: |
+          mkdir -p release
+          for pkg in mdxcn-vue mdxcn-markdown; do
+            (cd "packages/$pkg" && pnpm pack --pack-destination "$GITHUB_WORKSPACE/release")
+          done
+          ls release
+
+      # mdxcn-markdown depends on mdxcn-vue, so mdxcn-vue goes first. A
+      # version that is already on npm is skipped, so a re-run is safe.
+      - name: Publish
+        run: |
+          version="${TAG#v}"
+          for pkg in mdxcn-vue mdxcn-markdown; do
+            if npm view "$pkg@$version" version > /dev/null 2>&1; then
+              echo "$pkg@$version is already published: skipped."
+              continue
+            fi
+            npm publish "release/$pkg-$version.tgz" --access public
+          done
