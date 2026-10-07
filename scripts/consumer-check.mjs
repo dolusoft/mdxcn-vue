@@ -207,12 +207,12 @@ write(
   app,
   'src/App.vue',
   `<script setup lang="ts">
-import {GraphCompare,GraphMatrix,GraphHeatmap,Col,Row,GraphStack,GraphTable,Endpoint,GraphTimer,Callout,Quote,Terminal,Annotate,Env,Steps,Step,Changelog,Change,Decision,Chat,Keys,GraphTimeline,Event,GraphSpec,Field,GraphScore,GraphRank,GraphFunnel,Rank,Stage,GraphStat,GraphSlope,GraphBullet,Stat,Slope,Target,GraphGantt,GraphDiff,GraphWaterfall,Span,Line,Delta} from 'mdxcn-vue';
+import {Faq,GraphBoard,GraphCompare,GraphMatrix,GraphHeatmap,Col,Row,GraphStack,GraphTable,Endpoint,GraphTimer,Callout,Quote,Terminal,Annotate,Env,Steps,Step,Changelog,Change,Decision,Chat,Keys,GraphTimeline,Event,GraphSpec,Field,GraphScore,GraphRank,GraphFunnel,Rank,Stage,GraphStat,GraphSlope,GraphBullet,Stat,Slope,Target,GraphGantt,GraphDiff,GraphWaterfall,Span,Line,Delta} from 'mdxcn-vue';
 import {splitLabel} from 'mdxcn-vue/core';
 import type {StackRow,TableModel} from 'mdxcn-vue/core';
 const rows: StackRow[]=[{label:splitLabel('Web: 1 js').label,segments:[{label:'js',value:1}]}];
 const table:TableModel={headers:['A'],rows:[['B']]};
-</script><template><GraphStack title="STACK" :rows="rows"/><GraphTable title="TABLE" v-bind="table"/><Endpoint/><GraphTimer title="TIMER" kind="clock"/><Callout type="warning"><p>Registry source</p></Callout><Quote by="Paul Graham" source="Taste for Makers"><p>Voices in tune.</p></Quote><Terminal :text="'$ run'"/><Annotate code="run // (1)" :notes="['One']"/><Env :vars="[{name:'A',value:'one',required:true}]"/><Steps><Step title="Install" state="now">Run.</Step></Steps><Changelog version="1"><Change type="add">New.</Change></Changelog><Decision :options="[{label:'Vue',state:'chosen'}]"/><Chat :turns="[{by:'you',children:'hello'}]"/><Keys :bindings="[{keys:'Ctrl+K',action:'search'}]"/><GraphTimeline title="T"><Event date="one">Event</Event></GraphTimeline><GraphSpec title="S"><Field label="One" accent>Value</Field></GraphSpec><GraphScore title="SCORE" :items="[{label:'Docs',value:2.5,max:5}]"/><GraphRank title="RANK"><Rank value="1,200">Docs</Rank></GraphRank><GraphFunnel title="FUNNEL"><Stage :value="860">Ship</Stage></GraphFunnel><GraphStat title="STAT"><Stat value="142ms" hint="−18ms" accent>read</Stat></GraphStat><GraphSlope title="SLOPE" from-label="before" to-label="after"><Slope from="1,200" to="1,400">read</Slope></GraphSlope><GraphBullet title="BULLET"><Target value="72" target="80" max="100">CPU</Target></GraphBullet><GraphGantt title="GANTT"><Span start="0.2" end="0.8" complete="0.5" accent>build</Span></GraphGantt><GraphDiff title="DIFF"><Line value="31 kb" sign="add">app</Line><Line value="103 kb" total>shipped</Line></GraphDiff><GraphWaterfall title="WATERFALL"><Delta value="48">Revenue</Delta><Delta value="-6" kind="out">Refunds</Delta><Delta value="42">Profit</Delta></GraphWaterfall><GraphCompare title="COMPARE"><Col>A</Col><Row label="r">yes</Row></GraphCompare><GraphMatrix title="MATRIX" columns="a" :rows="[{label: 'r', values: [1]}]"/><GraphHeatmap title="HEAT" columns="a" :rows="[{label: 'r', values: [1]}]"/></template>`,
+</script><template><GraphStack title="STACK" :rows="rows"/><GraphTable title="TABLE" v-bind="table"/><Endpoint/><GraphTimer title="TIMER" kind="clock"/><Callout type="warning"><p>Registry source</p></Callout><Quote by="Paul Graham" source="Taste for Makers"><p>Voices in tune.</p></Quote><Terminal :text="'$ run'"/><Annotate code="run // (1)" :notes="['One']"/><Env :vars="[{name:'A',value:'one',required:true}]"/><Steps><Step title="Install" state="now">Run.</Step></Steps><Changelog version="1"><Change type="add">New.</Change></Changelog><Decision :options="[{label:'Vue',state:'chosen'}]"/><Chat :turns="[{by:'you',children:'hello'}]"/><Keys :bindings="[{keys:'Ctrl+K',action:'search'}]"/><GraphTimeline title="T"><Event date="one">Event</Event></GraphTimeline><GraphSpec title="S"><Field label="One" accent>Value</Field></GraphSpec><GraphScore title="SCORE" :items="[{label:'Docs',value:2.5,max:5}]"/><GraphRank title="RANK"><Rank value="1,200">Docs</Rank></GraphRank><GraphFunnel title="FUNNEL"><Stage :value="860">Ship</Stage></GraphFunnel><GraphStat title="STAT"><Stat value="142ms" hint="−18ms" accent>read</Stat></GraphStat><GraphSlope title="SLOPE" from-label="before" to-label="after"><Slope from="1,200" to="1,400">read</Slope></GraphSlope><GraphBullet title="BULLET"><Target value="72" target="80" max="100">CPU</Target></GraphBullet><GraphGantt title="GANTT"><Span start="0.2" end="0.8" complete="0.5" accent>build</Span></GraphGantt><GraphDiff title="DIFF"><Line value="31 kb" sign="add">app</Line><Line value="103 kb" total>shipped</Line></GraphDiff><GraphWaterfall title="WATERFALL"><Delta value="48">Revenue</Delta><Delta value="-6" kind="out">Refunds</Delta><Delta value="42">Profit</Delta></GraphWaterfall><Faq :entries="[{question: 'consumer question', answer: 'consumer answer'}]"/><GraphBoard title="BOARD" :columns="[{title: 'Now', items: ['consumer task']}]"/><GraphCompare title="COMPARE"><Col>A</Col><Row label="r">yes</Row></GraphCompare><GraphMatrix title="MATRIX" columns="a" :rows="[{label: 'r', values: [1]}]"/><GraphHeatmap title="HEAT" columns="a" :rows="[{label: 'r', values: [1]}]"/></template>`,
 )
 write(
   app,
@@ -224,7 +224,7 @@ write(
   'src/type-contract.ts',
   `import {splitLabel} from 'mdxcn-vue/core';
 import type {StackRow} from 'mdxcn-vue/core';
-import type {GraphCompareProps,GraphMatrixProps,GraphHeatmapProps,GraphStackProps,CalloutProps,QuoteProps,TerminalProps,AnnotateProps,EnvProps,StepsProps,StepProps,ChangelogProps,ChangeProps,DecisionProps,ChatProps,ChatTurn,KeysProps,KeyBinding,GraphTimelineProps,TimelineEvent,TimelineState,GraphSpecProps,SpecRow,GraphScoreProps,GraphRankProps,GraphFunnelProps,GraphStatProps,GraphSlopeProps,GraphBulletProps,GraphGanttProps,GraphDiffProps,GraphWaterfallProps} from 'mdxcn-vue';
+import type {FaqProps,GraphBoardProps,GraphCompareProps,GraphMatrixProps,GraphHeatmapProps,GraphStackProps,CalloutProps,QuoteProps,TerminalProps,AnnotateProps,EnvProps,StepsProps,StepProps,ChangelogProps,ChangeProps,DecisionProps,ChatProps,ChatTurn,KeysProps,KeyBinding,GraphTimelineProps,TimelineEvent,TimelineState,GraphSpecProps,SpecRow,GraphScoreProps,GraphRankProps,GraphFunnelProps,GraphStatProps,GraphSlopeProps,GraphBulletProps,GraphGanttProps,GraphDiffProps,GraphWaterfallProps} from 'mdxcn-vue';
 import {mdxcnMarkdown,withMdxcn} from 'mdxcn-markdown';
 import type {MdxcnOptions} from 'mdxcn-markdown';
 import MarkdownIt from 'markdown-it';
@@ -255,6 +255,12 @@ const slope:GraphSlopeProps={title:'T',fromLabel:'before',toLabel:'after',items:
 const bullet:GraphBulletProps={title:'T',items:[{value:72,target:'80',max:100}]};
 void [stat,slope,bullet];
 const gantt:GraphGanttProps={title:'G',items:[{start:'0.2',end:0.8,complete:0.5}],ticks:['mon','fri']};
+const faq:FaqProps={entries:[{question:'Q',answer:'A',accent:true}]};
+const board:GraphBoardProps={title:'B',columns:[{title:'C',items:[{label:'L',state:'now'}]}]};
+// @ts-expect-error FAQ accent is boolean.
+faq.entries=[{question:'Q',accent:'yes'}];
+// @ts-expect-error Board state is a closed union.
+board.columns=[{title:'C',items:[{label:'L',state:'later'}]}];
 const compare:GraphCompareProps={title:'C',columns:['a'],rows:[{label:'r',values:[true]}]};
 const matrix:GraphMatrixProps={title:'M',columns:['a'],rows:[{label:'r',values:[1]}]};
 const heat:GraphHeatmapProps={title:'H',columns:['a'],rows:[{label:'r',values:[1]}]};
@@ -446,7 +452,7 @@ export default defineConfig({markdown:{config:(md)=>{md.use(mdxcnMarkdown,{warn:
 write(
   site,
   '.vitepress/theme/index.ts',
-  `import DefaultTheme from 'vitepress/theme';import {GraphCompare,GraphMatrix,GraphHeatmap,Col,Row,GraphStack,GraphTable,Endpoint} from 'mdxcn-vue';import './style.css';export default {...DefaultTheme,enhanceApp({app}) {app.component('GraphStack',GraphStack);app.component('GraphTable',GraphTable);app.component('Endpoint',Endpoint);}};`,
+  `import DefaultTheme from 'vitepress/theme';import {Faq,GraphBoard,GraphCompare,GraphMatrix,GraphHeatmap,Col,Row,GraphStack,GraphTable,Endpoint} from 'mdxcn-vue';import './style.css';export default {...DefaultTheme,enhanceApp({app}) {app.component('GraphStack',GraphStack);app.component('GraphTable',GraphTable);app.component('Endpoint',Endpoint);}};`,
 )
 write(site, '.vitepress/theme/style.css', css)
 write(
@@ -480,7 +486,7 @@ for (const value of [
   'href="#footnote-ref1"',
 ])
   assert.ok(html.includes(value), `Missing upgrade fallback ${value}`)
-assert.doesNotMatch(html, /<(?:Callout|Quote|Terminal|Footnotes)\b/)
+assert.doesNotMatch(html, /<(?:Faq|GraphBoard|Callout|Quote|Terminal|Footnotes)\b/)
 console.log('VITEPRESS CONSUMER PASSED: 3 compiled figures, 4 warned native upgrade fallbacks')
 
 // The same packed packages must render registered upgrades as real Vue figures.
@@ -501,13 +507,13 @@ write(
 write(
   site,
   '.vitepress/theme/index.ts',
-  `import DefaultTheme from 'vitepress/theme';import {GraphCompare,GraphMatrix,GraphHeatmap,Col,Row,GraphStack,GraphTable,Endpoint,Callout,Quote,Terminal,Annotate,Env,Steps,Step,Changelog,Change,Decision,Chat,Keys,GraphTimeline,Event,GraphSpec,Field,GraphScore,GraphRank,GraphFunnel,Rank,Stage,GraphStat,GraphSlope,GraphBullet,Stat,Slope,Target,GraphGantt,GraphDiff,GraphWaterfall,Span,Line,Delta} from 'mdxcn-vue';import './style.css';export default {...DefaultTheme,enhanceApp({app}) {for(const [name,component] of Object.entries({GraphCompare,GraphMatrix,GraphHeatmap,Col,Row,GraphStack,GraphTable,Endpoint,Callout,Quote,Terminal,Annotate,Env,Steps,Step,Changelog,Change,Decision,Chat,Keys,GraphTimeline,Event,GraphSpec,Field,GraphScore,GraphRank,GraphFunnel,Rank,Stage,GraphStat,GraphSlope,GraphBullet,Stat,Slope,Target,GraphGantt,GraphDiff,GraphWaterfall,Span,Line,Delta}))app.component(name,component);}};`,
+  `import DefaultTheme from 'vitepress/theme';import {Faq,GraphBoard,GraphCompare,GraphMatrix,GraphHeatmap,Col,Row,GraphStack,GraphTable,Endpoint,Callout,Quote,Terminal,Annotate,Env,Steps,Step,Changelog,Change,Decision,Chat,Keys,GraphTimeline,Event,GraphSpec,Field,GraphScore,GraphRank,GraphFunnel,Rank,Stage,GraphStat,GraphSlope,GraphBullet,Stat,Slope,Target,GraphGantt,GraphDiff,GraphWaterfall,Span,Line,Delta} from 'mdxcn-vue';import './style.css';export default {...DefaultTheme,enhanceApp({app}) {for(const [name,component] of Object.entries({Faq,GraphBoard,GraphCompare,GraphMatrix,GraphHeatmap,Col,Row,GraphStack,GraphTable,Endpoint,Callout,Quote,Terminal,Annotate,Env,Steps,Step,Changelog,Change,Decision,Chat,Keys,GraphTimeline,Event,GraphSpec,Field,GraphScore,GraphRank,GraphFunnel,Rank,Stage,GraphStat,GraphSlope,GraphBullet,Stat,Slope,Target,GraphGantt,GraphDiff,GraphWaterfall,Span,Line,Delta}))app.component(name,component);}};`,
 )
 write(
   site,
   'index.md',
   readFileSync(join(site, 'index.md'), 'utf8') +
-    '\n\n<GraphCompare title="COMPARE">\n\n| | A |\n| --- | --- |\n| r | yes |\n\n</GraphCompare>\n\n<GraphMatrix title="MATRIX">\n\n| | A |\n| --- | --- |\n| r | 1 |\n\n</GraphMatrix>\n\n<GraphHeatmap title="HEAT">\n\n| | A |\n| --- | --- |\n| r | 1 |\n\n</GraphHeatmap>\n',
+    '\n\n<Faq>\n\n### consumer question\n\nconsumer answer\n\n</Faq>\n\n<GraphBoard title="BOARD">\n\n### Now\n- **consumer task**\n\n</GraphBoard>\n\n<GraphCompare title="COMPARE">\n\n| | A |\n| --- | --- |\n| r | yes |\n\n</GraphCompare>\n\n<GraphMatrix title="MATRIX">\n\n| | A |\n| --- | --- |\n| r | 1 |\n\n</GraphMatrix>\n\n<GraphHeatmap title="HEAT">\n\n| | A |\n| --- | --- |\n| r | 1 |\n\n</GraphHeatmap>\n',
 )
 const registeredOutput = run(['exec', 'vitepress', 'build'], site, true)
 assert.deepEqual(
@@ -515,8 +521,12 @@ assert.deepEqual(
   ['Footnotes'],
 )
 const registeredHtml = readFileSync(join(site, '.vitepress/dist/index.html'), 'utf8')
-assert.equal((registeredHtml.match(/<figure\b/g) ?? []).length, 27)
+assert.equal((registeredHtml.match(/<figure\b/g) ?? []).length, 29)
 for (const value of [
+  'consumer question',
+  'consumer answer',
+  'consumer task',
+  'Now: 1. 1 items.',
   'consumer event',
   'consumer note',
   '<code>consumer/code</code>',
@@ -558,7 +568,7 @@ assert.doesNotMatch(
   /<(?:Callout|Quote|Terminal|Footnotes|Annotate|Env|Steps|Step|Changelog|Change|Decision|Chat|Keys|GraphTimeline|Event|GraphSpec|Field|GraphScore|GraphRank|GraphFunnel|Rank|Stage|GraphStat|GraphSlope|GraphBullet|Stat|Slope|Target|GraphCompare|GraphMatrix|GraphHeatmap|Col|Row|GraphGantt|GraphDiff|GraphWaterfall|Span|Line|Delta)\b/,
 )
 console.log(
-  'REGISTERED VITEPRESS CONSUMER PASSED: 27 figures, Callout/Quote/Terminal/Annotate/Env/Steps/Changelog/Decision/Chat/Keys/GraphTimeline/GraphSpec/GraphScore/GraphRank/GraphFunnel rendered; Footnotes fallback preserved',
+  'REGISTERED VITEPRESS CONSUMER PASSED: 29 figures, Callout/Quote/Terminal/Annotate/Env/Steps/Changelog/Decision/Chat/Keys/GraphTimeline/GraphSpec/GraphScore/GraphRank/GraphFunnel rendered; Footnotes fallback preserved',
 )
 
 // Install generated registry payloads with the real CLI, without a server.
@@ -602,8 +612,8 @@ write(
 )
 const registryApp = readFileSync(join(app, 'src/App.vue'), 'utf8')
   .replace(
-    "import {GraphCompare,GraphMatrix,GraphHeatmap,Col,Row,GraphStack,GraphTable,Endpoint,GraphTimer,Callout,Quote,Terminal,Annotate,Env,Steps,Step,Changelog,Change,Decision,Chat,Keys,GraphTimeline,Event,GraphSpec,Field,GraphScore,GraphRank,GraphFunnel,Rank,Stage,GraphStat,GraphSlope,GraphBullet,Stat,Slope,Target,GraphGantt,GraphDiff,GraphWaterfall,Span,Line,Delta} from 'mdxcn-vue';",
-    "import {GraphCompare,Col} from './components/mdxcn/components/graph-compare';import {GraphMatrix} from './components/mdxcn/components/graph-matrix';import {GraphHeatmap} from './components/mdxcn/components/graph-heatmap';import {Row} from './components/mdxcn/adapters/table';import {GraphStack} from './components/mdxcn/components/graph-stack';import {GraphTable} from './components/mdxcn/components/graph-table';import {Endpoint} from './components/mdxcn/components/endpoint';import {GraphTimer} from './components/mdxcn/components/graph-timer';import {Callout} from './components/mdxcn/components/callout';import {Quote} from './components/mdxcn/components/quote';import {Terminal} from './components/mdxcn/components/terminal';import {Annotate} from './components/mdxcn/components/annotate';import {Env} from './components/mdxcn/components/env';import {Steps,Step} from './components/mdxcn/components/steps';import {Changelog,Change} from './components/mdxcn/components/changelog';import {Decision} from './components/mdxcn/components/decision';import {Chat} from './components/mdxcn/components/chat';import {Keys} from './components/mdxcn/components/keys';import {GraphTimeline,Event} from './components/mdxcn/components/graph-timeline';import {GraphSpec,Field} from './components/mdxcn/components/graph-spec';import {GraphScore} from './components/mdxcn/components/graph-score';import {GraphRank,Rank} from './components/mdxcn/components/graph-rank';import {GraphFunnel,Stage} from './components/mdxcn/components/graph-funnel';import {GraphStat,Stat} from './components/mdxcn/components/graph-stat';import {GraphSlope,Slope} from './components/mdxcn/components/graph-slope';import {GraphBullet,Target} from './components/mdxcn/components/graph-bullet';import {GraphGantt,Span} from './components/mdxcn/components/graph-gantt';import {GraphDiff,Line} from './components/mdxcn/components/graph-diff';import {GraphWaterfall,Delta} from './components/mdxcn/components/graph-waterfall';",
+    "import {Faq,GraphBoard,GraphCompare,GraphMatrix,GraphHeatmap,Col,Row,GraphStack,GraphTable,Endpoint,GraphTimer,Callout,Quote,Terminal,Annotate,Env,Steps,Step,Changelog,Change,Decision,Chat,Keys,GraphTimeline,Event,GraphSpec,Field,GraphScore,GraphRank,GraphFunnel,Rank,Stage,GraphStat,GraphSlope,GraphBullet,Stat,Slope,Target,GraphGantt,GraphDiff,GraphWaterfall,Span,Line,Delta} from 'mdxcn-vue';",
+    "import {Faq} from './components/mdxcn/components/faq';import {GraphBoard} from './components/mdxcn/components/graph-board';import {GraphCompare,Col} from './components/mdxcn/components/graph-compare';import {GraphMatrix} from './components/mdxcn/components/graph-matrix';import {GraphHeatmap} from './components/mdxcn/components/graph-heatmap';import {Row} from './components/mdxcn/adapters/table';import {GraphStack} from './components/mdxcn/components/graph-stack';import {GraphTable} from './components/mdxcn/components/graph-table';import {Endpoint} from './components/mdxcn/components/endpoint';import {GraphTimer} from './components/mdxcn/components/graph-timer';import {Callout} from './components/mdxcn/components/callout';import {Quote} from './components/mdxcn/components/quote';import {Terminal} from './components/mdxcn/components/terminal';import {Annotate} from './components/mdxcn/components/annotate';import {Env} from './components/mdxcn/components/env';import {Steps,Step} from './components/mdxcn/components/steps';import {Changelog,Change} from './components/mdxcn/components/changelog';import {Decision} from './components/mdxcn/components/decision';import {Chat} from './components/mdxcn/components/chat';import {Keys} from './components/mdxcn/components/keys';import {GraphTimeline,Event} from './components/mdxcn/components/graph-timeline';import {GraphSpec,Field} from './components/mdxcn/components/graph-spec';import {GraphScore} from './components/mdxcn/components/graph-score';import {GraphRank,Rank} from './components/mdxcn/components/graph-rank';import {GraphFunnel,Stage} from './components/mdxcn/components/graph-funnel';import {GraphStat,Stat} from './components/mdxcn/components/graph-stat';import {GraphSlope,Slope} from './components/mdxcn/components/graph-slope';import {GraphBullet,Target} from './components/mdxcn/components/graph-bullet';import {GraphGantt,Span} from './components/mdxcn/components/graph-gantt';import {GraphDiff,Line} from './components/mdxcn/components/graph-diff';import {GraphWaterfall,Delta} from './components/mdxcn/components/graph-waterfall';",
   )
   .replaceAll("'mdxcn-vue/core'", "'./components/mdxcn/core'")
 write(registry, 'src/App.vue', registryApp)
@@ -663,7 +673,7 @@ const results = {
   stackLibraryBytes,
   vueRuntimeEntries: vueEntries.length,
   vitepressFigures: 3,
-  registeredVitepressFigures: 27,
+  registeredVitepressFigures: 29,
   upgradeFallbacks: fallbackNames,
   registryItems: registryPaths.length,
   registryFiles: copied.size,

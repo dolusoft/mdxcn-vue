@@ -7,6 +7,8 @@ import ts from 'typescript'
 
 // Deliberately maintained independently of export declarations.
 const publicNames = [
+  'Faq',
+  'GraphBoard',
   'GraphCompare',
   'GraphMatrix',
   'GraphHeatmap',
@@ -129,6 +131,13 @@ it('exposes grammar and clock helpers only through core', () => {
 })
 
 const publicTypes = [
+  'FaqProps',
+  'GraphBoardProps',
+  'FaqEntry',
+  'ProseBlock',
+  'BoardItem',
+  'BoardColumn',
+  'BoardState',
   'GraphCompareProps',
   'GraphMatrixProps',
   'GraphHeatmapProps',
@@ -220,6 +229,14 @@ const publicTypes = [
   'GraphTimerProps',
 ]
 const coreNames = [
+  'FaqEntry',
+  'ProseBlock',
+  'BoardItem',
+  'BoardColumn',
+  'BoardState',
+  'headingSections',
+  'boardFromList',
+  'normalizeBoard',
   'CompareCell',
   'CompareRow',
   'MatrixRow',

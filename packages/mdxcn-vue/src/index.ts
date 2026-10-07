@@ -168,3 +168,9 @@ export type {
   WaterfallItem,
   WaterfallRow,
 } from './core/gantt-diff-waterfall.js'
+
+export { Faq } from './components/faq.js'
+export type { FaqProps } from './components/faq.js'
+export { GraphBoard } from './components/graph-board.js'
+export type { GraphBoardProps } from './components/graph-board.js'
+export type { FaqEntry, ProseBlock, BoardItem, BoardColumn, BoardState } from './core/sections.js'

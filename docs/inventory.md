@@ -6,6 +6,11 @@ Sayım: 46 kullanıcı bileşeni + `graph-frame` temel bileşeni (`Graph`) + `md
 
 ## Okuma kuralları
 
+- Faz 7B: `Faq` ve `GraphBoard` Vue portları tamamlandı. İkisi de
+  `sections` girdisi kullanır; Board tablo okumaz, Faq yanıtları sürekli
+  görünürdür. Açık veri (boş dizi dahil) → Markdown bölümleri; null fallback
+  verir. Upstream item bileşeni yoktur. [Faz 7B raporu](phase-7b-report.md).
+
 - Faz 6C: `GraphGantt`, `GraphDiff`, `GraphWaterfall` ve `Span`, `Line`, `Delta`
   Vue portları tamamlandı. Açık derleyici `list` girdisi runtime liste ve item
   girdilerinden önce gelir. Gantt sayısal kesirleri kullanır; tarih ayrıştırmaz.

@@ -81,3 +81,6 @@ export type {
   WaterfallRow,
   WaterfallSegment,
 } from './gantt-diff-waterfall.js'
+
+export type { FaqEntry, ProseBlock, BoardItem, BoardColumn, BoardState } from './sections.js'
+export { headingSections, boardFromList, normalizeBoard } from './sections.js'

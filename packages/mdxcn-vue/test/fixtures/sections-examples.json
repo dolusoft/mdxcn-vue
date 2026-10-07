@@ -1,0 +1,226 @@
+[
+  {
+    "name": "Faq",
+    "props": {},
+    "source": "<Faq>\n\n### Is this an npm package?\n\nNo. The CLI copies the source into `registry/default`. You own it.\n\n### Does it need MDX?\n\nNo. Comark reads `::graph-*` blocks from plain `.md`, and every figure has a fenced ASCII twin for GitHub.\n\n### **Why is my timeline empty?**\n\nYour `mdx-components.tsx` swaps `li` for its own component. Wrap the map in `withMdxcn`.\n\n</Faq>",
+    "entries": [
+      {
+        "question": "Is this an npm package?",
+        "accent": false,
+        "answer": [
+          {
+            "tag": "p",
+            "content": [
+              {
+                "type": "text",
+                "value": "No. The CLI copies the source into "
+              },
+              {
+                "type": "code",
+                "children": [
+                  {
+                    "type": "text",
+                    "value": "registry/default"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "value": ". You own it."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "question": "Does it need MDX?",
+        "accent": false,
+        "answer": [
+          {
+            "tag": "p",
+            "content": [
+              {
+                "type": "text",
+                "value": "No. Comark reads "
+              },
+              {
+                "type": "code",
+                "children": [
+                  {
+                    "type": "text",
+                    "value": "::graph-*"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "value": " blocks from plain "
+              },
+              {
+                "type": "code",
+                "children": [
+                  {
+                    "type": "text",
+                    "value": ".md"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "value": ", and every figure has a fenced ASCII twin for GitHub."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "question": "Why is my timeline empty?",
+        "accent": true,
+        "answer": [
+          {
+            "tag": "p",
+            "content": [
+              {
+                "type": "text",
+                "value": "Your "
+              },
+              {
+                "type": "code",
+                "children": [
+                  {
+                    "type": "text",
+                    "value": "mdx-components.tsx"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "value": " swaps "
+              },
+              {
+                "type": "code",
+                "children": [
+                  {
+                    "type": "text",
+                    "value": "li"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "value": " for its own component. Wrap the map in "
+              },
+              {
+                "type": "code",
+                "children": [
+                  {
+                    "type": "text",
+                    "value": "withMdxcn"
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "value": "."
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "body": "### Is this an npm package?\n\nNo. The CLI copies the source into `registry/default`. You own it.\n\n### Does it need MDX?\n\nNo. Comark reads `::graph-*` blocks from plain `.md`, and every figure has a fenced ASCII twin for GitHub.\n\n### **Why is my timeline empty?**\n\nYour `mdx-components.tsx` swaps `li` for its own component. Wrap the map in `withMdxcn`."
+  },
+  {
+    "name": "GraphBoard",
+    "props": {
+      "title": "ROADMAP"
+    },
+    "source": "<GraphBoard title=\"ROADMAP\">\n\n### Shipped\n- Callout, Steps, Terminal\n- Comark adapter\n\n### Now\n- **Children for every graph**\n- Board and Score — this drop\n\n### Later\n- *Figma kit*\n- *Vue port* — if someone asks twice\n\n</GraphBoard>",
+    "columns": [
+      {
+        "title": "Shipped",
+        "items": [
+          {
+            "label": "Callout, Steps, Terminal",
+            "state": "done"
+          },
+          {
+            "label": "Comark adapter",
+            "state": "done"
+          }
+        ]
+      },
+      {
+        "title": "Now",
+        "items": [
+          {
+            "label": "Children for every graph",
+            "state": "now"
+          },
+          {
+            "label": "Board and Score",
+            "note": "this drop",
+            "state": "done"
+          }
+        ]
+      },
+      {
+        "title": "Later",
+        "items": [
+          {
+            "label": "Figma kit",
+            "state": "next"
+          },
+          {
+            "label": "Vue port",
+            "note": "if someone asks twice",
+            "state": "next"
+          }
+        ]
+      }
+    ],
+    "body": "### Shipped\n- Callout, Steps, Terminal\n- Comark adapter\n\n### Now\n- **Children for every graph**\n- Board and Score — this drop\n\n### Later\n- *Figma kit*\n- *Vue port* — if someone asks twice"
+  },
+  {
+    "name": "GraphBoard",
+    "props": {
+      "title": "SPRINT 14",
+      "palette": "duo"
+    },
+    "source": "<GraphBoard title=\"SPRINT 14\" palette=\"duo\">\n\n### Todo\n- *Postmortem for the cache flag*\n\n### Doing\n- **Roll back cache.v2**\n\n### Done\n- Page the on-call\n- Freeze deploys\n\n</GraphBoard>",
+    "columns": [
+      {
+        "title": "Todo",
+        "items": [
+          {
+            "label": "Postmortem for the cache flag",
+            "state": "next"
+          }
+        ]
+      },
+      {
+        "title": "Doing",
+        "items": [
+          {
+            "label": "Roll back cache.v2",
+            "state": "now"
+          }
+        ]
+      },
+      {
+        "title": "Done",
+        "items": [
+          {
+            "label": "Page the on-call",
+            "state": "done"
+          },
+          {
+            "label": "Freeze deploys",
+            "state": "done"
+          }
+        ]
+      }
+    ],
+    "body": "### Todo\n- *Postmortem for the cache flag*\n\n### Doing\n- **Roll back cache.v2**\n\n### Done\n- Page the on-call\n- Freeze deploys"
+  }
+]

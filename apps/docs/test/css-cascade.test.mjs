@@ -79,7 +79,7 @@ test('actual VitePress rules lose to graph resets and generated layered prose ut
     assert.equal(winner.value, amount === '1' ? 'var(--spacing)' : 'calc(var(--spacing) * 4)')
   }
   li.className = ''
-  for (const slug of ['steps', 'changelog', 'decision', 'env', 'keys', 'graph-stack', 'graph-score', 'graph-rank', 'graph-funnel', 'graph-stat', 'graph-slope', 'graph-bullet', 'graph-gantt', 'graph-diff', 'graph-waterfall']) {
+  for (const slug of ['faq', 'graph-board', 'chat', 'steps', 'changelog', 'decision', 'env', 'keys', 'graph-stack', 'graph-score', 'graph-rank', 'graph-funnel', 'graph-stat', 'graph-slope', 'graph-bullet', 'graph-gantt', 'graph-diff', 'graph-waterfall']) {
     const page = new JSDOM(readFileSync(new URL(`../.vitepress/dist/components/${slug}.html`, import.meta.url), 'utf8')).window.document
     const siblings = [...page.querySelectorAll('figure li + li')]
     if (slug === 'keys') {
@@ -90,6 +90,16 @@ test('actual VitePress rules lose to graph resets and generated layered prose ut
     assert.ok(siblings.length, `${slug} needs adjacent list rows`)
     for (const row of siblings) {
       const winner = resolve(row, 'margin-top')
+      if (slug === 'chat' && row.classList.contains('mt-4')) {
+        assert.equal(winner.layer, 'utilities')
+        assert.equal(winner.value, 'calc(var(--spacing) * 4)')
+        continue
+      }
+      if (slug === 'chat' && row.classList.contains('mt-1')) {
+        assert.equal(winner.layer, 'utilities')
+        assert.equal(winner.value, 'var(--spacing)')
+        continue
+      }
       assert.equal(winner.layer, 'base', `${slug} must retain preflight spacing`)
       assert.equal(winner.value, '0')
     }

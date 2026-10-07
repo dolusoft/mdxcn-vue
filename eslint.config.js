@@ -31,6 +31,7 @@ export default tseslint.config(
         'error',
         {
           ignores: [
+            'Faq',
             'Graph',
             'Bar',
             'Segment',

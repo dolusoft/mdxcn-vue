@@ -1,4 +1,6 @@
 import type MarkdownIt from 'markdown-it'
+import type { BoardColumn, FaqEntry, ProseBlock } from 'mdxcn-vue/core'
+import { boardFromList, headingSections } from 'mdxcn-vue/core'
 import type Token from 'markdown-it/lib/token.mjs'
 import type { ProseNode, StackRow, TableModel } from 'mdxcn-vue/core'
 import {
@@ -17,6 +19,8 @@ import { bindingFromList } from 'mdxcn-vue/core'
 import type { ChatListItem, KeyBinding } from 'mdxcn-vue/core'
 
 export type ComponentName =
+  | 'Faq'
+  | 'GraphBoard'
   | 'GraphCompare'
   | 'GraphMatrix'
   | 'GraphHeatmap'
@@ -42,6 +46,8 @@ export type ComponentName =
   | 'GraphDiff'
   | 'GraphWaterfall'
 export type CompiledProps =
+  | { entries: FaqEntry[] }
+  | { columns: BoardColumn[] }
   | { table: TableModel }
   | { rows: StackRow[] }
   | TableModel
@@ -141,6 +147,7 @@ function blocks(
   options: TokenModelOptions,
   orderedLists = false,
   strike = false,
+  sections = false,
 ): Block[] {
   const root: Block[] = []
   const stack = [root]
@@ -164,14 +171,18 @@ function blocks(
     } else if (token.type === 'fence') stack.at(-1)!.push({ tag: 'fence', token, children: [] })
     else if (
       token.nesting === 1 &&
-      (allowed.has(token.tag) || (orderedLists && token.tag === 'ol'))
+      (allowed.has(token.tag) ||
+        (orderedLists && token.tag === 'ol') ||
+        (sections && /^(h[1-6]|blockquote)$/.test(token.tag)))
     ) {
       const block: Block = { tag: token.tag, token, children: [] }
       stack.at(-1)!.push(block)
       stack.push(block.children)
     } else if (
       token.nesting === -1 &&
-      (allowed.has(token.tag) || (orderedLists && token.tag === 'ol'))
+      (allowed.has(token.tag) ||
+        (orderedLists && token.tag === 'ol') ||
+        (sections && /^(h[1-6]|blockquote)$/.test(token.tag)))
     )
       stack.pop()
     else throw new Error(`Unsupported block token: ${token.type}`)
@@ -203,6 +214,57 @@ export function tokensToProps(
   env: object = {},
   options: TokenModelOptions = {},
 ): CompiledProps {
+  if (name === 'Faq' || name === 'GraphBoard') {
+    const tree = blocks(tokens, md, env, options, true, false, true)
+    const has = (nodes: ProseNode[], type: 'strong' | 'em'): boolean =>
+      nodes.some((node) => node.type !== 'text' && (node.type === type || has(node.children, type)))
+    const sections = headingSections(tree, (block) =>
+      /^h[1-6]$/.test(block.tag)
+        ? { title: proseText(content(block)).trim(), accent: has(content(block), 'strong') }
+        : undefined,
+    )
+    if (name === 'GraphBoard')
+      return {
+        columns: sections.map((section) => {
+          const lists = section.children.filter((block) => block.tag === 'ul' || block.tag === 'ol')
+          const items = (
+            lists.length ? lists.flatMap((list) => list.children) : section.children
+          ).filter((block) => block.tag === 'li')
+          return {
+            title: section.title,
+            items: items.map((item) => {
+              const visible = item.children
+                .filter((block) => block.tag !== 'ul' && block.tag !== 'ol')
+                .flatMap(content)
+              return boardFromList(
+                proseText(visible).replace(/\s+/g, ' ').trim(),
+                has(content(item), 'strong'),
+                has(content(item), 'em'),
+              )
+            }),
+          }
+        }),
+      }
+    const proseBlock = (block: Block): ProseBlock => {
+      if (!['p', 'ul', 'ol', 'li', 'blockquote'].includes(block.tag))
+        throw new Error(`Unsupported FAQ block: ${block.tag}`)
+      const start = block.token.attrGet('start')
+      return {
+        tag: block.tag === 'p' && block.token.hidden ? 'inline' : (block.tag as ProseBlock['tag']),
+        ...(start === null ? {} : { start: Number(start) }),
+        ...(block.children.every((child) => child.tag === 'inline')
+          ? { content: content(block) }
+          : { children: block.children.map(proseBlock) }),
+      }
+    }
+    return {
+      entries: sections.map((section) => ({
+        question: section.title,
+        accent: section.accent,
+        ...(section.children.length ? { answer: section.children.map(proseBlock) } : {}),
+      })),
+    }
+  }
   if (['GraphCompare', 'GraphMatrix', 'GraphHeatmap'].includes(name))
     return { table: tokensToProps('GraphTable', tokens, md, env, options) as TableModel }
   const stateList = [
