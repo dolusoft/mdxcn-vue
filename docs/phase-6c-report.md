@@ -99,7 +99,9 @@ bu test kırmızıyken atıldı; yanlış komut sırası kabul hatasını commit
 durdurmadı. Düzeltme ayrı commit ile push edildi; son zincir yeşil.
 
 Yeni Gantt testi duo palette için yanlış opacity beklentisi taşıyordu;
-upstream `seriesDim` yalnız mono palette için 0.4 uygular. Test iki durumu da
+upstream `seriesDim` yalnız mono palette için 0.4 tanımlar; ancak motion
+`show` varyantı opacity değerini 1 yaparak bu solukluğu kaldırır. Vue
+uygulamasında `stage` solukluğu kalıcıdır. Test iki durumu da
 doğrulayacak şekilde düzeltildi. Diff dekoratif `+` kontrolü graph köşelerini
 de içeriyordu; selector satır işaretlerine daraltıldı. Yeni Gantt playhead
 selector gerçek span track yapısına düzeltildi. Gereksiz regex escape lint

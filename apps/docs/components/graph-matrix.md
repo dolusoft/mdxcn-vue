@@ -27,6 +27,6 @@ Typed `columns` and `rows` take precedence independently over item rows and Mark
 
 Static Markdown compiles to a shared `table` model. Dynamic Markdown stays in the runtime reader. The native table has column/row headers and a keyboard-focusable scroll region named by its caption. This is a deliberate accessibility improvement over upstream grid/list DOM.
 
-`accent` selects a row; other rows use opacity 0.4 for every palette. Numbers use en-US formatting (at most one fractional digit). Empty text cells collapse like upstream; string data stays string.
+`accent` selects a row; other rows use opacity 0.4 for every palette. Intentional difference: the `accent` dimming works through reveal in Vue; upstream's `show` animation overwrites that opacity with 1. Numbers use en-US formatting (at most one fractional digit). Empty text cells collapse like upstream; string data stays string.
 
 Rows use `vReveal` with a 40 ms step and a 200 ms cap. SSR and reduced motion keep content visible.

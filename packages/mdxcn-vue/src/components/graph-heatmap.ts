@@ -59,7 +59,7 @@ export const GraphHeatmap = defineComponent({
                   'table',
                   {
                     class:
-                      'graph-table graph-labeled-table w-full min-w-lg table-fixed border-separate border-spacing-0',
+                      'graph-table graph-labeled-table w-full table-fixed border-separate border-spacing-0',
                     'aria-labelledby': captionId,
                   },
                   [

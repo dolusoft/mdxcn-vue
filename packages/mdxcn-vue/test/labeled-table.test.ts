@@ -372,3 +372,16 @@ it('keeps matrix row dim reactive after the reveal directive has run', async () 
   vi.restoreAllMocks()
   vi.unstubAllGlobals()
 })
+
+it('Heatmap keeps absolute screen reader cells inside its scroll region without a forced minimum width', () => {
+  const w = mount(GraphHeatmap, {
+    props: {
+      title: 'H',
+      columns: ['a', 'b', 'c', 'd', 'e', 'f'],
+      rows: [{ label: 'r', values: [1, 2, 3, 4, 5, 6] }],
+    },
+  })
+  expect(w.get('table').classes()).not.toContain('min-w-lg')
+  expect(w.findAll('.graph-scroll-x tbody .sr-only')).toHaveLength(6)
+  w.unmount()
+})

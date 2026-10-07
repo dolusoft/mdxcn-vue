@@ -214,6 +214,7 @@
 }
 
 @utility graph-scroll-x {
+  position: relative;
   overflow-x: auto;
   scrollbar-width: none;
 

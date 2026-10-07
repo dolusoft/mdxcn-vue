@@ -51,3 +51,5 @@ Use fractional `start` and `end` positions, optional `complete`, and text `ticks
 ```
 
 SSR content stays visible before animation setup. Frame props `corner`, `className`, and Vue attrs are supported.
+
+Intentional difference: the `stage` dimming works through reveal in Vue; upstream's `show` animation overwrites that opacity with 1.

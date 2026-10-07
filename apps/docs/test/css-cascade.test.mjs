@@ -168,6 +168,12 @@ test('actual VitePress rules lose to graph resets and generated layered prose ut
       assert.equal(resolve(element, 'border').value, '0')
       assert.equal(resolve(element, 'background').value, 'transparent')
     }
+    if (slug === 'graph-heatmap') {
+      const scroll = labeled.closest('.graph-scroll-x')
+      assert.equal(resolve(scroll, 'position').value, 'relative')
+      assert.equal(resolve(scroll, 'overflow-x').value, 'auto')
+      assert.equal(labeled.classList.contains('min-w-lg'), false)
+    }
     const ink = slug === 'graph-heatmap' ? labeled.querySelector('tbody td > [aria-hidden]') : labeled.querySelector('tbody td')
     assert.equal(resolve(ink, 'color').layer, 'utilities')
     if (slug === 'graph-matrix') assert.equal(resolve(labeled.querySelector('thead tr[aria-hidden] th'), 'padding').value, '0')
