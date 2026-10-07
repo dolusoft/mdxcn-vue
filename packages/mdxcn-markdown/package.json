@@ -1,6 +1,6 @@
 {
   "name": "mdxcn-markdown",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Build-time Markdown adapter for mdxcn-vue (markdown-it tokens to component props).",
   "license": "MIT",
   "type": "module",
@@ -29,12 +29,38 @@
   },
   "peerDependencies": {
     "markdown-it": "^14",
-    "mdxcn-vue": "*"
+    "mdxcn-vue": "^0.1.0"
   },
   "devDependencies": {
     "mdxcn-vue": "workspace:*",
     "vitepress": "2.0.0-alpha.20",
     "typescript": "6.0.3",
     "vitest": "5.0.3"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dolusoft/mdxcn-vue.git",
+    "directory": "packages/mdxcn-markdown"
+  },
+  "homepage": "https://github.com/dolusoft/mdxcn-vue#readme",
+  "bugs": {
+    "url": "https://github.com/dolusoft/mdxcn-vue/issues"
+  },
+  "keywords": [
+    "vue",
+    "vue3",
+    "mdxcn",
+    "markdown",
+    "ascii",
+    "graphs",
+    "vitepress",
+    "comark",
+    "knap"
+  ],
+  "author": "Dolusoft",
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.js"
 }

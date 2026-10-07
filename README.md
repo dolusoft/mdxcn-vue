@@ -4,14 +4,40 @@ Vue 3 port of [mdxcn](https://github.com/shadcn-labs/mdxcn) — ASCII-style grap
 prose components (tables, bars, timelines, invoices, terminals, ...) that can be fed
 by typed props, item components or Markdown.
 
-> **Status:** work in progress. Phase 7B includes the shared frame, typed core,
-> `v-reveal`, `GraphStack`, `GraphTable`, `Endpoint`, `GraphTimer`, `Callout`,
-> `Quote`, `Terminal`, `Annotate`, `Env`, `Steps`, `Changelog`, `Decision`, `Chat`,
-> `Keys`, `GraphTimeline`, `GraphSpec`, `GraphScore`, `GraphRank`, `GraphFunnel`,
-> `GraphStat`, `GraphSlope`, `GraphBullet`, `GraphGantt`, `GraphDiff`, `GraphWaterfall`,
-> `GraphCompare`, `GraphMatrix`, `GraphHeatmap`, `Faq`, and `GraphBoard`;
-> build-time Markdown and packaged consumer checks are available; the remaining
-> components are still pending.
+> **Status:** 0.1.0 release candidate; publication is pending. All 46 upstream
+> components are ported. Package names may change before the first publication.
+
+## Installation and requirements
+
+After publication (these names are currently provisional):
+
+```sh
+npm install mdxcn-vue@^0.1.0 vue@^3.5.0
+npm install mdxcn-markdown@^0.1.0 markdown-it@^14
+```
+
+Before publication, build this repository and install local `pnpm pack` tarballs.
+Node >=22.18 and Vue ^3.5 are required. CSS requires Tailwind v4 processing.
+Vite 8.3.3, TypeScript 6.0.3 and vue-tsc 3.3.12 are the verified consumer
+toolchain; older Vite/TypeScript versions have not been qualified. VitePress
+integration is verified with 2.0.0-alpha.20. Comark and Knap are optional host
+dependencies. See the package READMEs for
+[Vue](packages/mdxcn-vue/README.md) and [Markdown](packages/mdxcn-markdown/README.md)
+installation, registry paths and complete examples.
+
+## Trusted content and intentional differences
+
+`mdxcn-markdown` generates executable Vue templates for trusted repository
+Markdown. Do not compile untrusted input with it. Vue props are not a Markdown
+sanitizer. Comark requires a host security policy for tags, attributes and URLs;
+the default security plugin alone does not block every active HTML tag.
+See [Comark security](apps/docs/docs/comark.md) and
+[Markdown input contracts](docs/markdown-contract.md).
+
+The port uses Vue slots/item markers instead of React children, typed build-time
+Markdown models, native accessible tables and optional Comark/Knap adapters.
+Input precedence and the measured upstream differences are documented in
+[the inventory](docs/inventory.md) and [Phase 11A](docs/phase-11a-report.md).
 
 ## Upstream
 
@@ -45,7 +71,9 @@ Vite DevTools uses `clientAuth: false`; do not expose it to the network with `vi
 `apps/docs/vite.config.ts` configures Vite DevTools;
 `apps/docs/.vitepress/config.ts` configures Vue DevTools and Tailwind. The docs
 tests resolve development and production configs without starting a server;
-both tools are excluded from production builds. Browser verification is pending.
+both tools are excluded from production builds. Previous browser measurements
+are recorded in [Phase 10A](docs/phase-10a-report.md) and
+[Phase 11A](docs/phase-11a-report.md).
 
 ## GraphStack
 
@@ -73,6 +101,8 @@ const rows: StackRow[] = [
 
 ```css
 @import 'tailwindcss';
+@import 'mdxcn-vue/graph.css';
+@import 'mdxcn-vue/host.css';
 @import 'mdxcn-vue/theme.css';
 ```
 
@@ -92,9 +122,16 @@ tags. Empty `rows` suppress fallback inputs. See the
 ## GraphTable
 
 ```vue
-<GraphTable title="COST" :headers="['Agent', 'Tokens']"
-  :rows="[['Inks and paper', '115,207'], ['Overprint and drift', '135,218']]"
-  :footer="['Total', '250,425']" align="left right" />
+<GraphTable
+  title="COST"
+  :headers="['Agent', 'Tokens']"
+  :rows="[
+    ['Inks and paper', '115,207'],
+    ['Overprint and drift', '135,218'],
+  ]"
+  :footer="['Total', '250,425']"
+  align="left right"
+/>
 ```
 
 Import `GraphTable` from `mdxcn-vue`. The table accepts typed props, direct Markdown
@@ -110,9 +147,12 @@ share the figcaption's accessible name.
 ## Endpoint
 
 ```vue
-<Endpoint method="POST" path="/v1/graphs"
+<Endpoint
+  method="POST"
+  path="/v1/graphs"
   :params="[{ name: 'slug', type: 'string', required: true }]"
-  :blocks="[{ label: 'json', code: '{ &quot;ok&quot;: true }' }]" />
+  :blocks="[{ label: 'json', code: '{ &quot;ok&quot;: true }' }]"
+/>
 ```
 
 Import `Endpoint` from `mdxcn-vue`. It reads typed data or direct host paragraphs,
@@ -138,7 +178,9 @@ import { mdxcnMarkdown } from 'mdxcn-markdown'
 
 export default {
   markdown: {
-    config: (md) => { md.use(mdxcnMarkdown, { renderLinks: true }) },
+    config: (md) => {
+      md.use(mdxcnMarkdown, { renderLinks: true })
+    },
   },
 }
 ```
@@ -179,7 +221,10 @@ non-VitePress renderers without a div wrapper do not receive this attribute.
 import { withMdxcn } from 'mdxcn-markdown'
 
 md.use(withMdxcn, {
-  alerts: true, quotes: true, terminals: true, footnotes: true,
+  alerts: true,
+  quotes: true,
+  terminals: true,
+  footnotes: true,
   components: [], // Names explicitly registered by the host.
   warn: (warning) => console.warn(warning),
 })
@@ -264,8 +309,8 @@ cell text to screen readers while keeping the glyphs decorative. See
 
 ## shadcn-vue registry
 
-`pnpm registry:build` generates `registry.json` and thirty-one `public/r/mdxcn-*.json`
-items from the library sources: twenty-eight components, shared frame, core and CSS.
+`pnpm registry:build` generates `registry.json` and 52 `public/r/mdxcn-*.json`
+items from the library sources, including all 46 graphs, integrations, shared frame, core and CSS.
 The content-free build index references real files. The consumer check runs
 `shadcn-vue build registry.json` and verifies its output against the distributable
 payloads after adding the MIT notice. Our script generates `public/r`;
@@ -287,7 +332,7 @@ are treated as URLs by that CLI). Other project layouts can relocate
 the whole directory. CSS files need Tailwind v4 processing and imports from the
 host CSS entry; choose `host.css` and optional `theme.css` as with npm consumption.
 Each copied file and JSON payload retains the full MIT notice. The consumer
-check installs all twenty-eight items with the real CLI, then typechecks and builds.
+check installs all 52 items with the real CLI (111 source files), then typechecks and builds.
 
 ## License
 

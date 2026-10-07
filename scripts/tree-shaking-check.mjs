@@ -5,8 +5,8 @@ import { fileURLToPath } from 'node:url'
 import { build } from 'vite'
 
 const repo = resolve(dirname(fileURLToPath(import.meta.url)), '..')
-// Scratch output stays in the repo's ignored cache instead of a sibling directory.
-const scratch = resolve(repo, 'node_modules/.cache/tree-shaking-check')
+// Keep disposable artifacts under the authorized scratch directory.
+const scratch = resolve(repo, '../tmp/mdxcn-vue/tree-shaking-check')
 mkdirSync(scratch, { recursive: true })
 const results = {}
 // `Baseline` pulls only the Vue runtime APIs the library needs itself, so the library's own

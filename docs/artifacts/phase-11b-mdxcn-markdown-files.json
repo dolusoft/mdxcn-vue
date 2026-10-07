@@ -1,0 +1,15 @@
+[
+  "LICENSE",
+  "README.md",
+  "dist/diagnostics.d.ts",
+  "dist/diagnostics.js",
+  "dist/index.d.ts",
+  "dist/index.js",
+  "dist/model.d.ts",
+  "dist/model.js",
+  "dist/plugin.d.ts",
+  "dist/plugin.js",
+  "dist/upgrades.d.ts",
+  "dist/upgrades.js",
+  "package.json"
+]

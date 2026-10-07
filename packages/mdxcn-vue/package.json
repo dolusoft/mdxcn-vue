@@ -1,6 +1,6 @@
 {
   "name": "mdxcn-vue",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Vue 3 port of mdxcn: ASCII-style graph and prose components.",
   "license": "MIT",
   "type": "module",
@@ -53,5 +53,29 @@
     "vitest": "5.0.3",
     "vue": "3.5.43",
     "vue-tsc": "3.3.12"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dolusoft/mdxcn-vue.git",
+    "directory": "packages/mdxcn-vue"
+  },
+  "homepage": "https://github.com/dolusoft/mdxcn-vue#readme",
+  "bugs": {
+    "url": "https://github.com/dolusoft/mdxcn-vue/issues"
+  },
+  "keywords": [
+    "vue",
+    "vue3",
+    "mdxcn",
+    "markdown",
+    "ascii",
+    "graphs",
+    "vitepress",
+    "comark",
+    "knap"
+  ],
+  "author": "Dolusoft",
+  "publishConfig": {
+    "access": "public"
   }
 }

@@ -16,6 +16,7 @@
     "format:check": "prettier --check .",
     "typecheck": "pnpm -r typecheck",
     "consumer:check": "node scripts/consumer-check.mjs",
+    "release:check": "node scripts/release-check.mjs",
     "registry:build": "node scripts/registry-build.mjs",
     "registry:check": "node scripts/registry-build.mjs --check"
   },

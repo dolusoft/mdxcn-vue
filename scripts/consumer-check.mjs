@@ -12,7 +12,7 @@ mkdirSync(scratch, { recursive: true })
 const root = mkdtempSync(join(scratch, 'consumer-'))
 const pnpmCli = process.env.npm_execpath
 assert.ok(pnpmCli, 'Run this script with pnpm consumer:check')
-function run(args, cwd, capture = false) {
+function run(args, cwd, capture = false, allowedStatuses = [0]) {
   // pnpm 12 can expose a native executable (Windows .exe / Linux no suffix).
   const native = !/\.[cm]?js$/i.test(pnpmCli)
   const result = spawnSync(
@@ -29,7 +29,10 @@ function run(args, cwd, capture = false) {
   )
   if (!capture || result.status !== 0) process.stdout.write(result.stdout ?? '')
   if (result.stderr) process.stderr.write(result.stderr)
-  assert.equal(result.status, 0, `pnpm ${args.join(' ')} failed in ${cwd}: ${result.error ?? ''}`)
+  assert.ok(
+    allowedStatuses.includes(result.status),
+    `pnpm ${args.join(' ')} failed in ${cwd}: ${result.error ?? ''}`,
+  )
   return result.stdout
 }
 function write(dir, path, value) {
@@ -141,6 +144,21 @@ for (const name of ['mdxcn-vue', 'mdxcn-markdown']) {
   assert.match(readFileSync(join(cwd, 'LICENSE'), 'utf8'), /Keshav Bagaade/)
   assert.match(readFileSync(join(cwd, 'README.md'), 'utf8'), /Keshav Bagaade/)
   run(['pack', '--out', join(artifacts, `${name}.tgz`)], cwd)
+  const archive = spawnSync('tar', ['-tzf', join(artifacts, `${name}.tgz`)], {
+    encoding: 'utf8',
+  })
+  assert.equal(archive.status, 0, `Cannot inspect ${name} tarball: ${archive.stderr}`)
+  assert.deepEqual(
+    archive.stdout
+      .trim()
+      .split(/\r?\n/)
+      .map((path) => path.replace(/^package\//, ''))
+      .sort(),
+    [...names].sort(),
+    `${name}: actual tarball differs from dry-run inventory`,
+  )
+  write(scratch, `${name}-pack-files.json`, packed)
+  console.log(`TARBALL CONTENTS ${name}:\n${archive.stdout}`)
   console.log(`PACK ${name}: ${names.length} files, ${packed.size} bytes`)
 }
 const vueDist = join(repo, 'packages/mdxcn-vue/dist')
@@ -210,6 +228,12 @@ write(
   '<html><head></head><body><div id="app"></div><script type="module" src="/src/main.ts"></script></body></html>',
 )
 write(app, 'src/style.css', css)
+const readme = readFileSync(join(repo, 'packages/mdxcn-vue/README.md'), 'utf8')
+const example = readme.match(
+  /<!-- consumer-example -->\s*```vue\r?\n([\s\S]*?)```\s*<!-- \/consumer-example -->/,
+)
+assert.ok(example, 'Missing runnable README example')
+write(app, 'src/ReadmeExample.vue', example[1])
 write(
   app,
   'src/App.vue',
@@ -224,7 +248,7 @@ const table:TableModel={headers:['A'],rows:[['B']]};
 write(
   app,
   'src/main.ts',
-  "import {createApp} from 'vue';import App from './App.vue';import './style.css';createApp(App).mount('#app');",
+  "import {createApp} from 'vue';import App from './App.vue';import ReadmeExample from './ReadmeExample.vue';import './style.css';createApp(App).mount('#app');createApp(ReadmeExample).mount(document.body.appendChild(document.createElement('div')));",
 )
 write(
   app,
@@ -588,7 +612,31 @@ write(
 )
 writeInstallPolicy(site)
 run(['install'], site)
-run(['peers', 'check'], site)
+// pnpm 12.4.1 compares a tarball's file: locator instead of its manifest version.
+// Accept only that exact diagnostic, after verifying the installed manifests.
+const peerReport = JSON.parse(run(['peers', 'check', '--json'], site, true, [0, 1]))['.']
+assert.deepEqual(peerReport.missing, {})
+assert.deepEqual(peerReport.conflicts, [])
+assert.deepEqual(peerReport.intersections, {})
+const badPeers = peerReport.bad ?? {}
+assert.ok(Object.keys(badPeers).every((name) => name === 'mdxcn-vue'))
+for (const issue of badPeers['mdxcn-vue'] ?? []) {
+  assert.equal(issue.wantedRange, '^0.1.0')
+  assert.equal(issue.foundVersion, 'file:../artifacts/mdxcn-vue.tgz')
+  assert.deepEqual(issue.parents, [{ name: 'mdxcn-markdown', version: '0.1.0' }])
+  assert.equal(issue.optional, false)
+}
+const installedVue = JSON.parse(
+  readFileSync(join(site, 'node_modules/mdxcn-vue/package.json'), 'utf8'),
+)
+const installedMarkdown = JSON.parse(
+  readFileSync(join(site, 'node_modules/mdxcn-markdown/package.json'), 'utf8'),
+)
+assert.equal(installedVue.version, '0.1.0')
+assert.equal(installedMarkdown.peerDependencies['mdxcn-vue'], '^0.1.0')
+console.log(
+  'PACKED PEERS PASSED: installed 0.1.0 satisfies ^0.1.0; pnpm file-locator diagnostic isolated',
+)
 write(
   site,
   'index.md',
