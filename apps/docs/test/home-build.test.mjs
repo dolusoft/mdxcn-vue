@@ -27,7 +27,7 @@ test('home renders populated Vue figures and genuine fenced filter output withou
   )
   assert.ok(html.includes(escape(expected)), 'same meter props produce the displayed Markdown')
   assert.match(html, /aria-label="copy install command"/)
-  assert.match(html, /role="group" aria-label="Graph accent"/)
+  assert.match(html, /aria-label="accent color" class="[^"]*" role="radiogroup"/)
   assert.match(html, /Keshav Bagaade/)
   for (const id of ['shipped', 'bundle', 'reads']) {
     assert.ok(html.includes(`id="${id}-markdown-panel" hidden`))

@@ -17,6 +17,7 @@ import {
 import { data } from '../home.data'
 import { bars, meter, table } from '../home-examples'
 import HomeFigure from './HomeFigure.vue'
+import AccentPicker from './site/AccentPicker.vue'
 import SiteCorners from './site/SiteCorners.vue'
 
 const install = 'npm install mdxcn-vue mdxcn-markdown'
@@ -27,7 +28,6 @@ async function copyInstall() {
   setTimeout(() => (copied.value = false), 1500)
 }
 const accent = ref('mint')
-const accents = ['theme', 'mint', 'orange', 'green', 'cyan', 'blue', 'violet', 'pink', 'sunset']
 // Fixed example data keeps SSR and hydration identical.
 const activity = Array.from({ length: 91 }, (_, index) => ({
   date: new Date(Date.UTC(2026, 6, 1 + index)).toISOString().slice(0, 10),
@@ -113,18 +113,7 @@ const questions = [
         Text glyphs, your theme tokens, one shared frame. Try an accent, then explore a component.
         All figures below use populated example datasets.
       </p>
-      <div class="home-palettes" role="group" aria-label="Graph accent">
-        <button
-          v-for="color in accents"
-          :key="color"
-          type="button"
-          :data-accent="color"
-          :aria-pressed="accent === color"
-          @click="accent = color"
-        >
-          <span class="home-swatch" aria-hidden="true"></span>{{ color }}
-        </button>
-      </div>
+      <AccentPicker v-model="accent" class="mb-8" />
       <GraphActivity
         title="COMMITS"
         :days="activity"
@@ -270,8 +259,7 @@ const questions = [
   color: var(--vp-c-text-2);
 }
 .home-copy button,
-.home-tabs button,
-.home-palettes button {
+.home-tabs button {
   border: 1px solid var(--vp-c-divider);
   border-radius: 4px;
   padding: 8px 12px;
@@ -306,29 +294,12 @@ const questions = [
 .home-figure > div {
   min-width: 0;
 }
-.home-palettes,
 .home-links,
 .home-tabs {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
 }
-.home-palettes {
-  margin-bottom: 32px;
-}
-.home-palettes button {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 12px;
-}
-.home-swatch {
-  width: 10px;
-  height: 10px;
-  background: var(--graph-accent);
-  border-radius: 50%;
-}
-.home-palettes [aria-pressed='true'],
 .home-tabs [aria-selected='true'] {
   border-color: var(--vp-c-text-1);
   background: var(--vp-c-bg-soft);
