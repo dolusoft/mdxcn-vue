@@ -137,6 +137,16 @@ html {
 .Layout .VPLocalNavOutlineDropdown {
   display: none;
 }
+/* As in mdxcn's docs layout, the bar sits in the page flow and scrolls away, so
+   content passes behind the header's glass. Sticky, its padded surface stayed
+   under the header and the blur had nothing to show but a flat grey. */
+.Layout .VPLocalNav,
+.Layout .VPLocalNav.fixed {
+  position: relative;
+}
+.Layout .VPLocalNav::before {
+  display: none;
+}
 .Layout .VPLocalNav {
   border-bottom: 0;
   background-color: var(--background);
